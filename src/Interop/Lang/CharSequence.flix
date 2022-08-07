@@ -18,8 +18,8 @@ namespace Interop/Lang {
 
     /// Interface...
 
-    use Interop/Lang/WrappedRegion.StringWithRegion;
-    use Interop/Lang/WrappedRegion.StringWithRegion.{StringWithRegion};
+    use Interop/Flix/WrappedRegion.StringWithRegion;
+    use Interop/Flix/WrappedRegion.StringWithRegion.{StringWithRegion};
 
     pub enum CharSequence[_: Region](##java.lang.CharSequence)
 

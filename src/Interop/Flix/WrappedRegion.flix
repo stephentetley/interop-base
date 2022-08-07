@@ -16,7 +16,7 @@
 
 /// Move to a "base" namespace
 
-namespace Interop/Lang/WrappedRegion {
+namespace Interop/Flix/WrappedRegion {
 
 
     /// Flix cannot currently handle complex instances, must make a wrapper for each 
