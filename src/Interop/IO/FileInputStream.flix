@@ -53,7 +53,7 @@ namespace Interop/IO/FileInputStream {
             import new java.io.FileInputStream(##java.io.File): ##java.io.FileInputStream \ IO as newFileInputStream;
             FileInputStream(newFileInputStream(file)) |> Ok
         } catch {
-            case ex: ##java.io.IOException =>
+            case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String & r;
                 Err(getMessage(ex))
         }

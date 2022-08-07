@@ -18,6 +18,8 @@ namespace Interop/IO {
 
     use Interop/IO.Writer;
     use Interop/IO.Writer.{Writer};
+    use Interop/Lang.Appendable;
+    use Interop/Lang.Appendable.{Appendable};
 
     pub enum OutputStreamWriter[_: Region](##java.io.OutputStreamWriter)
 
@@ -32,6 +34,16 @@ namespace Interop/IO {
 
         pub def dcast(s: Writer[r]): OutputStreamWriter[r] = 
             let Writer(s1) = s;
+            OutputStreamWriter(s1 as ##java.io.OutputStreamWriter) 
+    }
+
+    instance Interop/Lang.ImpAppendable[OutputStreamWriter] {
+        pub def ucast(s: OutputStreamWriter[r]): Appendable[r] = 
+            let OutputStreamWriter(s1) = s;
+            Appendable(s1 as ##java.lang.Appendable)
+
+        pub def dcast(s: Appendable[r]): OutputStreamWriter[r] = 
+            let Appendable(s1) = s;
             OutputStreamWriter(s1 as ##java.io.OutputStreamWriter) 
     }
 
