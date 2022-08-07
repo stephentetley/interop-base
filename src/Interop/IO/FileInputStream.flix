@@ -43,15 +43,18 @@ namespace Interop/IO/FileInputStream {
 
     use Interop/IO.FileInputStream;
     use Interop/IO.FileInputStream.{FileInputStream};
+    use Interop/IO.File;
+    use Interop/IO.File.{File};
 
     pub def getHH(ins: FileInputStream[r]): ##java.io.FileInputStream = 
         let FileInputStream(ins1) = ins;
         ins1
 
-    pub def newFileInputStream(_: Region[r], file: ##java.io.File): Result[FileInputStream[r], String] \ {Write(r), IO} = 
+    pub def newFileInputStream(file: File[r]): Result[FileInputStream[r], String] \ {Write(r), IO} = 
         try {
             import new java.io.FileInputStream(##java.io.File): ##java.io.FileInputStream \ IO as newFileInputStream;
-            FileInputStream(newFileInputStream(file)) |> Ok
+            let file1 = Interop/IO/File.getHH(file);
+            FileInputStream(newFileInputStream(file1)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String & r;

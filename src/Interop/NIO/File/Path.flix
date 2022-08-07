@@ -31,6 +31,9 @@ namespace Interop/NIO/File/Path {
     use Interop/NIO/File.Path;
     use Interop/NIO/File.Path.{Path};
 
+    use Interop/IO.File;
+    use Interop/IO.File.{File};
+
     /// Note - current set of operations should be pure?
 
     /// Unwrap
@@ -146,5 +149,10 @@ namespace Interop/NIO/File/Path {
                 import java.lang.Throwable.getMessage(): String & Pure;
                 Err(getMessage(ex))
         }
+
+    pub def toFile(_: Region[r], path: Path): File[r] \ Write(r) =
+        import java.nio.file.Path.toFile(): ##java.io.File & Pure;
+        let Path(path1) = path;
+        File(toFile(path1)) as \ Write(r)
 
 }
