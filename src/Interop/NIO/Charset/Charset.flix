@@ -41,54 +41,32 @@ namespace Interop/NIO/Charset/Charset {
     use Interop/Util.Locale;
     use Interop/Util.Locale.{Locale};
 
-    pub def forName(name: String): Option[Charset] =
-        import static java.nio.charset.Charset.forName(String): ##java.nio.charset.Charset & Pure;
+    pub def forName(name: String): Result[Charset, String] =
         try {
-            Some(Charset(forName(name)))
+            import static java.nio.charset.Charset.forName(String): ##java.nio.charset.Charset & Pure;
+            Charset(forName(name)) |> Ok
         } catch {
-            case _: ##java.lang.Exception => None
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String & Pure;
+                Err(getMessage(ex))
         }
 
-    pub def forNameWithDefault(d: Charset, name: String): Charset =
-        forName(name) |> Option.getWithDefault(d)
 
 
-    pub def defaultCharset(): Charset & Impure =
-        import static java.nio.charset.Charset.defaultCharset(): ##java.nio.charset.Charset & Impure;
+    pub def defaultCharset(): Charset \ IO =
+        import static java.nio.charset.Charset.defaultCharset(): ##java.nio.charset.Charset \ IO;
         Charset(defaultCharset())
 
 
-    pub def isSupported(name: String): Bool =
-        import static java.nio.charset.Charset.isSupported(String): Bool & Pure;
+    pub def isSupported(name: String): Result[Bool, String] \ IO =
         try {
-            isSupported(name)
+            import static java.nio.charset.Charset.isSupported(String): Bool \ IO;
+            isSupported(name) |> Ok
         } catch {
-            case _: ##java.lang.Exception => false
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String & Pure;
+                Err(getMessage(ex))
         }
-
-    pub def iso_8859_1(): Charset =
-        import static get java.nio.charset.StandardCharsets.ISO_8859_1: ##java.nio.charset.Charset & Pure as get_ISO_8859_1;
-        Charset(get_ISO_8859_1())
-
-    pub def us_ascii(): Charset =
-        import static get java.nio.charset.StandardCharsets.US_ASCII: ##java.nio.charset.Charset & Pure as get_US_ASCII;
-        Charset(get_US_ASCII())
-
-    pub def utf_16(): Charset =
-        import static get java.nio.charset.StandardCharsets.UTF_16: ##java.nio.charset.Charset & Pure as get_UTF_16;
-        Charset(get_UTF_16())
-
-    pub def utf_16be(): Charset =
-        import static get java.nio.charset.StandardCharsets.UTF_16BE: ##java.nio.charset.Charset & Pure as get_UTF_16BE;
-        Charset(get_UTF_16BE())
-
-    pub def utf_16le(): Charset =
-        import static get java.nio.charset.StandardCharsets.UTF_16LE: ##java.nio.charset.Charset & Pure as get_UTF_16LE;
-        Charset(get_UTF_16LE())
-
-    pub def utf_8(): Charset =
-        import static get java.nio.charset.StandardCharsets.UTF_8: ##java.nio.charset.Charset & Pure as get_UTF_8;
-        Charset(get_UTF_8())
 
     pub def equals(x: Charset, y: Charset): Bool =
         import java.nio.charset.Charset.equals(##java.lang.Object): Bool & Pure;
