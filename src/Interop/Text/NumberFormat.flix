@@ -22,8 +22,8 @@ namespace Interop/Text {
     pub enum NumberFormat[_: Region](##java.text.NumberFormat)
 
     pub class SubNumberFormat[t: Region -> Type] {
-        pub def ucast[r: Region](s: t[r]): NumberFormat[r]
-        pub def dcast[r: Region](s: NumberFormat[r]): t[r]
+        pub def toNumberFormat[r: Region](s: t[r]): NumberFormat[r]
+        pub def fromNumberFormat[r: Region](s: NumberFormat[r]): t[r]
     }
 
 }

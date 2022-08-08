@@ -25,8 +25,8 @@ namespace Interop/IO {
     }
 
     pub class SubReader[t: Region -> Type] {
-        pub def ucast[r: Region](s: t[r]): Reader[r]
-        pub def dcast[r: Region](s: Reader[r]): t[r]
+        pub def toReader[r: Region](s: t[r]): Reader[r]
+        pub def fromReader[r: Region](s: Reader[r]): t[r]
     }
 
 }

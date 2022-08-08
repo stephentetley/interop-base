@@ -22,8 +22,8 @@ namespace Interop/Lang {
     pub enum Number(##java.lang.Number)
 
     pub class SubNumber[x: Type] {
-        pub def ucast(s: x): Number
-        pub def dcast(s: Number): x
+        pub def toNumber(s: x): Number
+        pub def fromNumber(s: Number): x
     }
 
 }

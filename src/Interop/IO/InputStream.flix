@@ -25,8 +25,8 @@ namespace Interop/IO {
     }
 
     pub class SubInputStream[t: Region -> Type] {
-        pub def ucast[r: Region](s: t[r]): InputStream[r]
-        pub def dcast[r: Region](s: InputStream[r]): t[r]
+        pub def toInputStream[r: Region](s: t[r]): InputStream[r]
+        pub def fromInputStream[r: Region](s: InputStream[r]): t[r]
     }
 
 

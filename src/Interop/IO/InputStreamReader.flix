@@ -26,11 +26,11 @@ namespace Interop/IO {
     }
 
     instance Interop/IO.SubReader[InputStreamReader] {
-        pub def ucast(s: InputStreamReader[r]): Reader[r] = 
+        pub def toReader(s: InputStreamReader[r]): Reader[r] = 
             let InputStreamReader(s1) = s;
             Reader(s1 as ##java.io.Reader)
 
-        pub def dcast(s: Reader[r]): InputStreamReader[r] = 
+        pub def fromReader(s: Reader[r]): InputStreamReader[r] = 
             let Reader(s1) = s;
             InputStreamReader(s1 as ##java.io.InputStreamReader) 
     }
@@ -51,7 +51,7 @@ namespace Interop/IO/InputStreamReader {
 
     pub def newInputStreamReader[r: Region, stream: Region -> Type](_: Region[r], ins: stream[r], cs: ##java.nio.charset.Charset): InputStreamReader[r] \ Write(r) with SubInputStream[stream] = 
         import new java.io.InputStreamReader(##java.io.InputStream, ##java.nio.charset.Charset): ##java.io.InputStreamReader & r as newInputStreamReader;
-        InputStreamReader(newInputStreamReader(Interop/IO/InputStream.getHH(Interop/IO/SubInputStream.ucast(ins)), cs))
+        InputStreamReader(newInputStreamReader(Interop/IO/InputStream.getHH(Interop/IO/SubInputStream.toInputStream(ins)), cs))
 
 
 }

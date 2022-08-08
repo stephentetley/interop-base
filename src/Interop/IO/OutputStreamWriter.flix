@@ -28,21 +28,21 @@ namespace Interop/IO {
     }
 
     instance Interop/IO.SubWriter[OutputStreamWriter] {
-        pub def ucast(s: OutputStreamWriter[r]): Writer[r] = 
+        pub def toWriter(s: OutputStreamWriter[r]): Writer[r] = 
             let OutputStreamWriter(s1) = s;
             Writer(s1 as ##java.io.Writer)
 
-        pub def dcast(s: Writer[r]): OutputStreamWriter[r] = 
+        pub def fromWriter(s: Writer[r]): OutputStreamWriter[r] = 
             let Writer(s1) = s;
             OutputStreamWriter(s1 as ##java.io.OutputStreamWriter) 
     }
 
     instance Interop/Lang.ImpAppendable[OutputStreamWriter] {
-        pub def ucast(s: OutputStreamWriter[r]): Appendable[r] = 
+        pub def toAppendable(s: OutputStreamWriter[r]): Appendable[r] = 
             let OutputStreamWriter(s1) = s;
             Appendable(s1 as ##java.lang.Appendable)
 
-        pub def dcast(s: Appendable[r]): OutputStreamWriter[r] = 
+        pub def fromAppendable(s: Appendable[r]): OutputStreamWriter[r] = 
             let Appendable(s1) = s;
             OutputStreamWriter(s1 as ##java.io.OutputStreamWriter) 
     }
@@ -65,7 +65,7 @@ namespace Interop/IO/OutputStreamWriter {
                                                                     ous: stream[r], 
                                                                     cs: ##java.nio.charset.Charset): OutputStreamWriter[r] \ Write(r) with SubOutputStream[stream] = 
         import new java.io.OutputStreamWriter(##java.io.OutputStream, ##java.nio.charset.Charset): ##java.io.OutputStreamWriter & r as newOutputStreamWriter;
-        OutputStreamWriter(newOutputStreamWriter(Interop/IO/OutputStream.getHH(Interop/IO/SubOutputStream.ucast(ous)), cs))
+        OutputStreamWriter(newOutputStreamWriter(Interop/IO/OutputStream.getHH(Interop/IO/SubOutputStream.toOutputStream(ous)), cs))
 
 
 }

@@ -28,17 +28,17 @@ namespace Interop/IO {
     }
 
     pub class SubWriter[t: Region -> Type] {
-        pub def ucast[r: Region](s: t[r]): Writer[r]
-        pub def dcast[r: Region](s: Writer[r]): t[r]
+        pub def toWriter[r: Region](s: t[r]): Writer[r]
+        pub def fromWriter[r: Region](s: Writer[r]): t[r]
     }
 
 
     instance Interop/Lang.ImpAppendable[Writer] {
-        pub def ucast(s: Writer[r]): Appendable[r] = 
+        pub def toAppendable(s: Writer[r]): Appendable[r] = 
             let Writer(s1) = s;
             Appendable(s1 as ##java.lang.Appendable)
 
-        pub def dcast(s: Appendable[r]): Writer[r] = 
+        pub def fromAppendable(s: Appendable[r]): Writer[r] = 
             let Appendable(s1) = s;
             Writer(s1 as ##java.io.Writer) 
     }

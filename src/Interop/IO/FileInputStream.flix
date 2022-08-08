@@ -27,11 +27,11 @@ namespace Interop/IO {
 
 
     instance Interop/IO.SubInputStream[FileInputStream] {
-        pub def ucast(s: FileInputStream[r]): InputStream[r] = 
+        pub def toInputStream(s: FileInputStream[r]): InputStream[r] = 
             let FileInputStream(s1) = s;
             InputStream(s1 as ##java.io.InputStream)
 
-        pub def dcast(s: InputStream[r]): FileInputStream[r] = 
+        pub def fromInputStream(s: InputStream[r]): FileInputStream[r] = 
             let InputStream(s1) = s;
             FileInputStream(s1 as ##java.io.FileInputStream) 
     }

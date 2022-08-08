@@ -23,11 +23,11 @@ namespace Interop/Text {
     pub enum DecimalFormat[_: Region](##java.text.DecimalFormat)
 
     instance SubNumberFormat[DecimalFormat] {
-        pub def ucast(o: DecimalFormat[r]): NumberFormat[r] = 
+        pub def toNumberFormat(o: DecimalFormat[r]): NumberFormat[r] = 
             let DecimalFormat(o1) = o;
             NumberFormat(o1 as ##java.text.NumberFormat)
 
-        pub def dcast(o: NumberFormat[r]): DecimalFormat[r] = 
+        pub def fromNumberFormat(o: NumberFormat[r]): DecimalFormat[r] = 
             let NumberFormat(o1) = o;
             DecimalFormat(o1 as ##java.text.DecimalFormat) 
     }

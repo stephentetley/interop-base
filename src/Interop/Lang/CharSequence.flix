@@ -28,26 +28,26 @@ namespace Interop/Lang {
     }
 
     pub class ImpCharSequence[t: Region -> Type] {
-        pub def ucast[r: Region](s: t[r]): CharSequence[r]
-        pub def dcast[r: Region](s: CharSequence[r]): t[r]
+        pub def toCharSequence[r: Region](s: t[r]): CharSequence[r]
+        pub def fromCharSequence[r: Region](s: CharSequence[r]): t[r]
     }
 
     instance Interop/Lang.ImpCharSequence[StringWithRegion] {
-        pub def ucast(s: StringWithRegion[r]): CharSequence[r] = 
+        pub def toCharSequence(s: StringWithRegion[r]): CharSequence[r] = 
             let StringWithRegion(s1) = s;
             CharSequence(s1 as ##java.lang.CharSequence)
 
-        pub def dcast(s: CharSequence[r]): StringWithRegion[r] = 
+        pub def fromCharSequence(s: CharSequence[r]): StringWithRegion[r] = 
             let CharSequence(s1) = s;
             StringWithRegion(s1 as ##java.lang.String) 
     }
 
     instance Interop/Lang.ImpCharSequence[StringBuilder] {
-        pub def ucast(s: StringBuilder[r]): CharSequence[r] = 
+        pub def toCharSequence(s: StringBuilder[r]): CharSequence[r] = 
             let StringBuilder(s1) = s;
             CharSequence(s1 as ##java.lang.CharSequence)
 
-        pub def dcast(s: CharSequence[r]): StringBuilder[r] = 
+        pub def fromCharSequence(s: CharSequence[r]): StringBuilder[r] = 
             let CharSequence(s1) = s;
             StringBuilder(s1 as ##java.lang.StringBuilder) 
     }
@@ -69,7 +69,7 @@ namespace Interop/Lang/CharSequence {
 
     pub def length[r: Region, t: Region -> Type](ss: t[r]): Int32 \ Read(r) with ImpCharSequence[t] = 
         import java.lang.CharSequence.length(): Int32 & r;
-        let CharSequence(ss1) = Interop/Lang/ImpCharSequence.ucast(ss);
+        let CharSequence(ss1) = Interop/Lang/ImpCharSequence.toCharSequence(ss);
         length(ss1)
 
 }

@@ -25,16 +25,16 @@ namespace Interop/Lang {
     }
 
     pub class ImpAppendable[t: Region -> Type] {
-        pub def ucast[r: Region](s: t[r]): Appendable[r]
-        pub def dcast[r: Region](s: Appendable[r]): t[r]
+        pub def toAppendable[r: Region](s: t[r]): Appendable[r]
+        pub def fromAppendable[r: Region](s: Appendable[r]): t[r]
     }
 
     instance Interop/Lang.ImpAppendable[StringBuilder] {
-        pub def ucast(s: StringBuilder[r]): Appendable[r] = 
+        pub def toAppendable(s: StringBuilder[r]): Appendable[r] = 
             let StringBuilder(s1) = s;
             Appendable(s1 as ##java.lang.Appendable)
 
-        pub def dcast(s: Appendable[r]): StringBuilder[r] = 
+        pub def fromAppendable(s: Appendable[r]): StringBuilder[r] = 
             let Appendable(s1) = s;
             StringBuilder(s1 as ##java.lang.StringBuilder) 
     }
@@ -58,7 +58,7 @@ namespace Interop/Lang/Appendable {
     pub def appendChar![r: Region, t: Region -> Type](c: Char, ss: t[r]): Result[Unit, String] \ Write(r) with ImpAppendable[t] = 
         try {
             import java.lang.Appendable.append(Char): ##java.lang.Appendable & r;
-            let Appendable(ss1) = Interop/Lang/ImpAppendable.ucast(ss);
+            let Appendable(ss1) = Interop/Lang/ImpAppendable.toAppendable(ss);
             discard append(ss1, c);
             Ok()
         } catch {
@@ -71,8 +71,8 @@ namespace Interop/Lang/Appendable {
                     ss: t2[r2]): Result[Unit, String] \ {Read(r1), Write(r2)} with ImpCharSequence[t1], ImpAppendable[t2] = 
         try {
             import java.lang.Appendable.append(##java.lang.CharSequence): ##java.lang.Appendable & r2;
-            let Appendable(ss1) = Interop/Lang/ImpAppendable.ucast(ss);
-            let CharSequence(cs1) = Interop/Lang/ImpCharSequence.ucast(cs);
+            let Appendable(ss1) = Interop/Lang/ImpAppendable.toAppendable(ss);
+            let CharSequence(cs1) = Interop/Lang/ImpCharSequence.toCharSequence(cs);
             discard append(ss1, cs1);
             Ok() as \ {Read(r1), Write(r2)} 
         } catch {
@@ -81,10 +81,10 @@ namespace Interop/Lang/Appendable {
                 Err(getMessage(ex))
         }
 
-    pub def appendString![r: Region, t: Region -> Type](s: String, ss: t[r]): Result[Unit, String] \ Write(r) with ImpAppendable[t] = 
-        region r1 {
-            let ws = Interop/Flix/WrappedRegion.newStringWithRegion(r1, s);
-            appendCharSequence!(ws, ss)
-        }
+    /// pub def appendString![r: Region, t: Region -> Type](s: String, ss: t[r]): Result[Unit, String] \ Write(r) with ImpAppendable[t] = 
+    ///     region r1 {
+    ///         let ws = Interop/Flix/WrappedRegion.newStringWithRegion(r1, s);
+    ///         appendCharSequence!(ws, ss)
+    ///     }
 
 }
