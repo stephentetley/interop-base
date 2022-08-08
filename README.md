@@ -1,7 +1,6 @@
-# interop-io-stream
+# interop-base
 
-Flix wrappers over `java.io.Writer`, `java.io.Reader`, 
-`java.io.OutputStream`, `java.io.InputStream` and related classes.
+Flix wrappers over classes and interfaces in the JDK.
 
 
 License: Apache 2.0
