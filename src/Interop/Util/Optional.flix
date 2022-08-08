@@ -35,7 +35,7 @@ namespace Interop/Util/Optional {
     use Interop/Util.Optional.{Optional};
     use Interop/Flix.Marshal;
 
-    pub def getOptional(o: Optional[a, r]): ##java.util.Optional = 
+    pub def getHH(o: Optional[a, r]): ##java.util.Optional = 
         let Optional(o1) = o;
         o1
 

@@ -19,30 +19,30 @@ namespace Interop/Util {
     ///
     /// Represents a Java Set.
     ///
-    pub enum RawSet[_a: Type, _r: Region](##java.util.Set)
+    pub enum SetZ[_a: Type, _r: Region](##java.util.Set)
 
 
 }
 
-namespace Interop/Util/RawSet {
+namespace Interop/Util/SetZ {
 
-    use Interop/Util.RawSet;
-    use Interop/Util.RawSet.{RawSet};
+    use Interop/Util.SetZ;
+    use Interop/Util.SetZ.{SetZ};
     use Interop/Flix.Marshal;
 
 
-    pub def getRawSet(m: RawSet[a, r]): ##java.util.Set = 
-        let RawSet(m1) = m;
+    pub def getHH(m: SetZ[a, r]): ##java.util.Set = 
+        let SetZ(m1) = m;
         m1
 
 
 
-    pub def new(_: Region[r], prim: ##java.util.Set): RawSet[a, r] = RawSet(prim)
+    pub def new(_: Region[r], prim: ##java.util.Set): SetZ[a, r] = SetZ(prim)
 
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def iterator(r1: Region[r1], s: RawSet[a, r2]): Iterator[a, r1] \ { Read(r2), Read(r1) } with Marshal[a] =
+    pub def iterator(r1: Region[r1], s: SetZ[a, r2]): Iterator[a, r1] \ { Read(r2), Read(r1) } with Marshal[a] =
         iteratorWith(r1, Interop/Flix/Marshal.fromJavaObject, s)
 
     ///
@@ -50,40 +50,40 @@ namespace Interop/Util/RawSet {
     ///
     pub def iteratorWith(r1: Region[r1], 
                             ocast: ##java.lang.Object -> a, 
-                            s: RawSet[a, r2]): Iterator[a, r1] \ { Read(r2), Read(r1) } with Marshal[a] =
+                            s: SetZ[a, r2]): Iterator[a, r1] \ { Read(r2), Read(r1) } with Marshal[a] =
         import java.util.Set.iterator(): ##java.util.Iterator & (r2 and r1) as iterator1;
-        let RawSet(s1) = s;
-        Interop/Util/RawIterator.new(r1, iterator1(s1)) |> Interop/Util/RawIterator.iteratorWith(ocast)
+        let SetZ(s1) = s;
+        Interop/Util/IteratorZ.new(r1, iterator1(s1)) |> Interop/Util/IteratorZ.iteratorWith(ocast)
 
-    pub def foldRawSet(f: (b, a) -> b & ef, s: b, rs: RawSet[a, r]): b \ { Read(r), ef } with Marshal[a] =
+    pub def foldSetZ(f: (b, a) -> b & ef, s: b, rs: SetZ[a, r]): b \ { Read(r), ef } with Marshal[a] =
         region r1 {
             let iter = iterator(r1, rs);
             Iterator.foldLeft(f, s, iter)
         }
 
-    pub def unfoldViaHashSet(_: Region[r], f: s -> Option[(a, s)] & ef, st: s): RawSet[a, r] \ { Write(r), ef } with Marshal[a] =
+    pub def unfoldViaHashSet(_: Region[r], f: s -> Option[(a, s)] & ef, st: s): SetZ[a, r] \ { Write(r), ef } with Marshal[a] =
         import new java.util.HashSet(): ##java.util.HashSet & r as newHashSet;
         import java.util.HashSet.add(##java.lang.Object): Bool & r as put; 
         def loop(st1, ac) = match f(st1) {
-            case None           => RawSet(ac as ##java.util.Set)
+            case None           => SetZ(ac as ##java.util.Set)
             case Some((a, st2)) => { discard put(ac, Interop/Flix/Marshal.toJavaObject(a)); loop(st2, ac) }
         };
         loop(st, newHashSet())
 
 
-    pub def fromSetViaHashSet(_: Region[r], s: Set[a]): RawSet[a, r] \ { Write(r) } with Order[a], Marshal[a] =
+    pub def fromSetViaHashSet(_: Region[r], s: Set[a]): SetZ[a, r] \ { Write(r) } with Order[a], Marshal[a] =
         import new java.util.HashSet(): ##java.util.HashSet & r as newHashSet;
         import java.util.HashSet.add(##java.lang.Object): Bool & r as put;
         let s1 = newHashSet();
         Set.foreach(a -> discard put(s1, Interop/Flix/Marshal.toJavaObject(a)), s);
-        RawSet(s1 as ##java.util.Set)
+        SetZ(s1 as ##java.util.Set)
 
-    pub def toSet(rs: RawSet[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
+    pub def toSet(rs: SetZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
         let step = (acc, a) -> Set.insert(a, acc);
-        foldRawSet(step, Set.empty(), rs)
+        foldSetZ(step, Set.empty(), rs)
 
     /// Shouldn't need Order instance in Flix but must be hashable in Java...
-    pub def fromListViaHashSet(r: Region[r], l: List[a]): RawSet[a, r] \ { Write(r) } with Marshal[a] =
+    pub def fromListViaHashSet(r: Region[r], l: List[a]): SetZ[a, r] \ { Write(r) } with Marshal[a] =
         let step = st -> match st {
             case a :: rs => Some((a, rs))
             case Nil     => None
@@ -91,8 +91,8 @@ namespace Interop/Util/RawSet {
         unfoldViaHashSet(r, step, l)
 
 
-    pub def toList(rs: RawSet[a, r]): List[a] \ { Read(r) } with Marshal[a] =
+    pub def toList(rs: SetZ[a, r]): List[a] \ { Read(r) } with Marshal[a] =
         let step = (k, a) -> ks -> k(a :: ks);
-        foldRawSet(step, ks -> ks, rs) |> f -> f(Nil)
+        foldSetZ(step, ks -> ks, rs) |> f -> f(Nil)
 
 }

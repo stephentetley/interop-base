@@ -17,9 +17,14 @@
 namespace Interop/Util {
 
     ///
-    /// Represents a Java Iterator.
+    /// Represents a Java Collection.
     ///
-    pub enum Collection[_a: Type, _r: Region](##java.util.Collection)
+    pub enum Collection[_: Type, _: Region](##java.util.Collection)
+
+    pub class ImpCollection[t: Type -> Region -> Type] {
+        pub def toCollection[a: Type, r: Region](s: t[a, r]): Collection[a, r]
+        pub def fromCollection[a: Type, r: Region](s: Collection[a, r]): t[a, r]
+    }
 
 
 }
@@ -31,7 +36,7 @@ namespace Interop/Util/Collection {
     use Interop/Flix.Marshal;
 
 
-    pub def getCollection(iter: Collection[a, r]): ##java.util.Collection = 
+    pub def getHH(iter: Collection[a, r]): ##java.util.Collection = 
         let Collection(iter1) = iter;
         iter1
 
@@ -46,7 +51,7 @@ namespace Interop/Util/Collection {
                             c: Collection[a, r2]): Iterator[a, r1] \ { Read(r2), Write(r1) } with Marshal[a] =
         import java.util.Collection.iterator(): ##java.util.Iterator & (r2 and r1) as iterator1;
         let Collection(c1) = c;
-        Interop/Util/RawIterator.new(r, iterator1(c1)) |> Interop/Util/RawIterator.iteratorWith(ocast)
+        Interop/Util/IteratorZ.new(r, iterator1(c1)) |> Interop/Util/IteratorZ.iteratorWith(ocast)
 
     /// pub def enumerator(r: Region[r1], c: Collection[a, r2]): Iterator[(a, Int32), r] \ { Read(r2), Write(r1) }  with Marshal[a] =
     ///     iterator(r, c) |> Iterator.enumerator

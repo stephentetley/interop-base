@@ -89,7 +89,7 @@ namespace Interop/Util/Locale/LanguageRange {
             try {
                 import static java.util.Locale$LanguageRange.parse(String): ##java.util.List & Pure;
                 let xs = parse(ranges);
-                let ans = Interop/Util/RawList.new(r1, xs) |> Interop/Util/RawList.toList;
+                let ans = Interop/Util/ListZ.new(r1, xs) |> Interop/Util/ListZ.toList;
                 Ok(ans)
             } catch {
                 case _: ##java.lang.IllegalArgumentException => Err("Ill-formed range/weight list")
@@ -100,9 +100,9 @@ namespace Interop/Util/Locale/LanguageRange {
         import static java.util.Locale$LanguageRange.parse(String, ##java.util.Map): ##java.util.List & Pure;
         region r1 {
             try {
-                let cs1 = Interop/Util/RawMap.fromMapViaHashMap(r1, customizations) |> Interop/Util/RawMap.getRawMap;
+                let cs1 = Interop/Util/MapZ.fromMapViaHashMap(r1, customizations) |> Interop/Util/MapZ.getHH;
                 let xs = parse(ranges, cs1);
-                let ans = Interop/Util/RawList.new(r1, xs) |> Interop/Util/RawList.toList;
+                let ans = Interop/Util/ListZ.new(r1, xs) |> Interop/Util/ListZ.toList;
                 Ok(ans)
             } catch {
                 case _: ##java.lang.IllegalArgumentException => Err("Ill-formed range/weight list")
@@ -113,10 +113,10 @@ namespace Interop/Util/Locale/LanguageRange {
         import static java.util.Locale$LanguageRange.mapEquivalents(##java.util.List, ##java.util.Map): ##java.util.List & Pure;
         region r1 {
             try {
-                let ps1 = Interop/Util/RawList.fromListViaArrayList(r1, priorityList) |> Interop/Util/RawList.getRawList;
-                let cs1 = Interop/Util/RawMap.fromMapViaHashMap(r1, customizations) |> Interop/Util/RawMap.getRawMap;
+                let ps1 = Interop/Util/ListZ.fromListViaArrayList(r1, priorityList) |> Interop/Util/ListZ.getHH;
+                let cs1 = Interop/Util/MapZ.fromMapViaHashMap(r1, customizations) |> Interop/Util/MapZ.getHH;
                 let xs = mapEquivalents(ps1, cs1);
-                let ans = Interop/Util/RawList.new(r1, xs) |> Interop/Util/RawList.toList;
+                let ans = Interop/Util/ListZ.new(r1, xs) |> Interop/Util/ListZ.toList;
                 Ok(ans)
             } catch {
                 case _: ##java.lang.IllegalArgumentException => Err("Ill-formed range/weight list")

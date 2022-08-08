@@ -41,6 +41,11 @@ namespace Interop/NIO/Charset/Charset {
     use Interop/Util.Locale;
     use Interop/Util.Locale.{Locale};
 
+    pub def getHH(cs: Charset): ##java.nio.charset.Charset = 
+        let Charset(cs1) = cs;
+        cs1
+
+
     pub def forName(name: String): Result[Charset, String] =
         try {
             import static java.nio.charset.Charset.forName(String): ##java.nio.charset.Charset & Pure;
@@ -137,7 +142,7 @@ namespace Interop/NIO/Charset/Charset {
         region r1 {
             let Charset(x1) = x;
             let s1 = aliases(x1); 
-            Interop/Util/RawSet.new(r1, s1) |> Interop/Util/RawSet.toSet
+            Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet
         }
 
     pub def availableCharsets(): Map[String, Charset] =

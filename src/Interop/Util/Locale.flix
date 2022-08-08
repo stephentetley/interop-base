@@ -97,6 +97,9 @@ namespace Interop/Util/Locale {
 
 
 
+    pub def getHH(loc: Locale): ##java.util.Locale = 
+        let Locale(loc1) = loc;
+        loc1
 
     /// Design note
     /// `new` functions should not return Result as there isn't a tangible notion of failure.
@@ -422,7 +425,7 @@ namespace Interop/Util/Locale {
             try {
                 let icc1 = marshalIsoCountryCode(icc);
                 let s1 = getISOCountries(icc1);
-                let ans = Interop/Util/RawSet.new(r1, s1) |> Interop/Util/RawSet.toSet;
+                let ans = Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet;
                 Ok(ans)
             } catch {
                 case _: ##java.lang.Exception => Err("getIsoCountriesWithIsoCountryCode")
@@ -457,7 +460,7 @@ namespace Interop/Util/Locale {
             try {
                 let Locale(x1) = x;
                 let s1 = getExtensionKeys(x1);
-                Interop/Util/RawSet.new(r1, s1) |> Interop/Util/RawSet.toSet
+                Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet
             } catch {
                 case _: ##java.lang.Exception => Set.empty()
             }
@@ -470,7 +473,7 @@ namespace Interop/Util/Locale {
             try {
                 let Locale(x1) = x;
                 let s1 = getUnicodeLocaleAttributes(x1);
-                let ans = Interop/Util/RawSet.new(r1, s1) |> Interop/Util/RawSet.toSet;
+                let ans = Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet;
                 Ok(ans)
             } catch {
                 case _: ##java.lang.Exception => Err("getUnicodeLocaleAttributes")
@@ -483,7 +486,7 @@ namespace Interop/Util/Locale {
             try {
                 let Locale(x1) = x;
                 let s1 = getUnicodeLocaleKeys(x1);
-                let ans = Interop/Util/RawSet.new(r1, s1) |> Interop/Util/RawSet.toSet;
+                let ans = Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet;
                 Ok(ans)
             } catch {
                 case _: ##java.lang.Exception => Err("getUnicodeLocaleKeys")
@@ -494,8 +497,8 @@ namespace Interop/Util/Locale {
         import static java.util.Locale.lookup(##java.util.List, ##java.util.Collection): ##java.util.Locale & Pure;
         region r1 {
             try {
-                let ls = Interop/Util/RawList.fromListViaArrayList(r1, priorityList) |> Interop/Util/RawList.getRawList;
-                let col = Interop/Util/Collection.fromList(r1, locales) |> Interop/Util/Collection.getCollection;
+                let ls = Interop/Util/ListZ.fromListViaArrayList(r1, priorityList) |> Interop/Util/ListZ.getHH;
+                let col = Interop/Util/Collection.fromList(r1, locales) |> Interop/Util/Collection.getHH;
                 let ans = lookup(ls, col);
                 if (Object.isNull(ans))
                     None
@@ -509,8 +512,8 @@ namespace Interop/Util/Locale {
         import static java.util.Locale.lookupTag(##java.util.List, ##java.util.Collection): String & Pure;
         region r1 {
             try {
-                let ls = Interop/Util/RawList.fromListViaArrayList(r1, priorityList) |> Interop/Util/RawList.getRawList;
-                let col = Interop/Util/Collection.fromList(r1, tags) |> Interop/Util/Collection.getCollection;
+                let ls = Interop/Util/ListZ.fromListViaArrayList(r1, priorityList) |> Interop/Util/ListZ.getHH;
+                let col = Interop/Util/Collection.fromList(r1, tags) |> Interop/Util/Collection.getHH;
                 let ans = lookupTag(ls, col);
                 if (Object.isNull(ans))
                     None
@@ -525,13 +528,13 @@ namespace Interop/Util/Locale {
         import static java.util.Locale.filter(##java.util.List, ##java.util.Collection): ##java.util.List & Pure;
         region r1 {
             try {
-                let ls = Interop/Util/RawList.fromListViaArrayList(r1, priorityList) |> Interop/Util/RawList.getRawList;
-                let col = Interop/Util/Collection.fromList(r1, locales) |> Interop/Util/Collection.getCollection;
+                let ls = Interop/Util/ListZ.fromListViaArrayList(r1, priorityList) |> Interop/Util/ListZ.getHH;
+                let col = Interop/Util/Collection.fromList(r1, locales) |> Interop/Util/Collection.getHH;
                 let ans = filter(ls, col);
                 if (Object.isNull(ans))
                     Nil
                 else 
-                    Interop/Util/RawList.new(r1, ans) |> Interop/Util/RawList.toList
+                    Interop/Util/ListZ.new(r1, ans) |> Interop/Util/ListZ.toList
             } catch {
                 case _: ##java.lang.Exception => Nil
             }
@@ -541,14 +544,14 @@ namespace Interop/Util/Locale {
         import static java.util.Locale.filter(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List & Pure;
         region r1 {
             try {
-                let ls = Interop/Util/RawList.fromListViaArrayList(r1, priorityList) |> Interop/Util/RawList.getRawList;
-                let col = Interop/Util/Collection.fromList(r1, locales) |> Interop/Util/Collection.getCollection;
+                let ls = Interop/Util/ListZ.fromListViaArrayList(r1, priorityList) |> Interop/Util/ListZ.getHH;
+                let col = Interop/Util/Collection.fromList(r1, locales) |> Interop/Util/Collection.getHH;
                 let mode1 = marshalFilteringMode(mode);
                 let ans = filter(ls, col, mode1);
                 if (Object.isNull(ans))
                     Nil
                 else 
-                    Interop/Util/RawList.new(r1, ans) |> Interop/Util/RawList.toList
+                    Interop/Util/ListZ.new(r1, ans) |> Interop/Util/ListZ.toList
             } catch {
                 case _: ##java.lang.Exception => Nil
             }
@@ -558,13 +561,13 @@ namespace Interop/Util/Locale {
         import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection): ##java.util.List & Pure;
         region r1 {
             try {
-                let ls = Interop/Util/RawList.fromListViaArrayList(r1, priorityList) |> Interop/Util/RawList.getRawList;
-                let col = Interop/Util/Collection.fromList(r1, tags) |> Interop/Util/Collection.getCollection;
+                let ls = Interop/Util/ListZ.fromListViaArrayList(r1, priorityList) |> Interop/Util/ListZ.getHH;
+                let col = Interop/Util/Collection.fromList(r1, tags) |> Interop/Util/Collection.getHH;
                 let prim = filterTags(ls, col);
                 if (Object.isNull(prim))
                     Nil
                 else 
-                    Interop/Util/RawList.new(r1, prim) |> Interop/Util/RawList.toList
+                    Interop/Util/ListZ.new(r1, prim) |> Interop/Util/ListZ.toList
             } catch {
                 case _: ##java.lang.Exception => Nil
             }
@@ -574,14 +577,14 @@ namespace Interop/Util/Locale {
         import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List & Pure;
         region r1 {
             try {
-                let ls = Interop/Util/RawList.fromListViaArrayList(r1, priorityList) |> Interop/Util/RawList.getRawList;
-                let col = Interop/Util/Collection.fromList(r1, tags) |> Interop/Util/Collection.getCollection;
+                let ls = Interop/Util/ListZ.fromListViaArrayList(r1, priorityList) |> Interop/Util/ListZ.getHH;
+                let col = Interop/Util/Collection.fromList(r1, tags) |> Interop/Util/Collection.getHH;
                 let mode1 = marshalFilteringMode(mode);
                 let ans = filterTags(ls, col, mode1);
                 if (Object.isNull(ans))
                     Nil
                 else 
-                    Interop/Util/RawList.new(r1, ans) |> Interop/Util/RawList.toList
+                    Interop/Util/ListZ.new(r1, ans) |> Interop/Util/ListZ.toList
             } catch {
                 case _: ##java.lang.Exception => Nil
             }

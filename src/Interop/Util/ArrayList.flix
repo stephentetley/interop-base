@@ -16,10 +16,24 @@
 
 namespace Interop/Util {
 
+    use Interop/Util.Collection;
+    use Interop/Util.Collection.{Collection};
+
     ///
     /// Represents a ArrayList.
     ///
     pub enum ArrayList[_: Type, _: Region](##java.util.ArrayList)
+
+    instance Interop/Util.ImpCollection[ArrayList] {
+        pub def toCollection(t: ArrayList[a, r]): Collection[a, r] = 
+            let ArrayList(t1) = t;
+            Collection(t1 as ##java.util.Collection)
+
+        pub def fromCollection(t: Collection[a, r]): ArrayList[a, r] = 
+            let Collection(t1) = t;
+            ArrayList(t1 as ##java.util.ArrayList) 
+    }
+
 
 }
 
@@ -30,7 +44,7 @@ namespace Interop/Util/ArrayList {
     use Interop/Flix.Marshal;
 
     
-    pub def getArrayList(arr: ArrayList[a, r]): ##java.util.ArrayList = 
+    pub def getHH(arr: ArrayList[a, r]): ##java.util.ArrayList = 
         let ArrayList(arr1) = arr;
         arr1
         
@@ -95,7 +109,7 @@ namespace Interop/Util/ArrayList {
                             arr: ArrayList[a, r2]): Iterator[a, r1] \ { Read(r2), Write(r1) } =
         import java.util.ArrayList.iterator(): ##java.util.Iterator & (r2 and r1) as iterator1;
         let ArrayList(arr1) = arr;
-        Interop/Util/RawIterator.new(r1, iterator1(arr1)) |> Interop/Util/RawIterator.iteratorWith(ocast)
+        Interop/Util/IteratorZ.new(r1, iterator1(arr1)) |> Interop/Util/IteratorZ.iteratorWith(ocast)
 
 
 

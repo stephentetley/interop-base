@@ -28,12 +28,12 @@ namespace Interop/Util/SortedMap {
 
     use Interop/Util.SortedMap;
     use Interop/Util.SortedMap.{SortedMap};
-    use Interop/Util/RawMap.MapEntry;
-    use Interop/Util/RawMap.MapEntry.{MapEntry};
+    use Interop/Util/MapZ.MapEntry;
+    use Interop/Util/MapZ.MapEntry.{MapEntry};
     use Interop/Flix.Marshal;
 
 
-    pub def getSortedMap(m: SortedMap[k, v, r]): ##java.util.SortedMap = 
+    pub def getHH(m: SortedMap[k, v, r]): ##java.util.SortedMap = 
         let SortedMap(m1) = m;
         m1
 
@@ -91,7 +91,7 @@ namespace Interop/Util/SortedMap {
         import java.util.Set.iterator(): ##java.util.Iterator & (r2 and r1);
         import java.util.Iterator.hasNext(): Bool & r1;
         import java.util.Iterator.next(): ##java.lang.Object & r1;
-        let set1 = entrySet(getSortedMap(m));
+        let set1 = entrySet(getHH(m));
         let iter = iterator(set1);
         let isDone = () -> { 
             let ans = hasNext(iter);
@@ -99,7 +99,7 @@ namespace Interop/Util/SortedMap {
         };
         let getNext = () -> {
             let o = next(iter);
-            Interop/Util/RawMap.unmarshalMapEntryWith(kcast, vcast, MapEntry(o as ##java.util.Map$Entry))
+            Interop/Util/MapZ.unmarshalMapEntryWith(kcast, vcast, MapEntry(o as ##java.util.Map$Entry))
         };
         Iterator(isDone, getNext)
 

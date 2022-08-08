@@ -19,28 +19,28 @@ namespace Interop/Util {
     ///
     /// Represents a Java Map.
     ///
-    pub enum RawMap[_k: Type, _v: Type, _r: Region](##java.util.Map)
+    pub enum MapZ[_k: Type, _v: Type, _r: Region](##java.util.Map)
 
 
 }
 
-namespace Interop/Util/RawMap {
+namespace Interop/Util/MapZ {
 
-    use Interop/Util.RawMap;
-    use Interop/Util.RawMap.{RawMap};
+    use Interop/Util.MapZ;
+    use Interop/Util.MapZ.{MapZ};
     use Interop/Flix.Marshal;
 
     pub enum MapEntry[_k: Type, _v: Type, _: Region](##java.util.Map$Entry)
 
 
 
-    pub def getRawMap(m: RawMap[k, v, r]): ##java.util.Map = 
-        let RawMap(m1) = m;
+    pub def getHH(m: MapZ[k, v, r]): ##java.util.Map = 
+        let MapZ(m1) = m;
         m1
 
-    pub def new(_: Region[r], prim: ##java.util.Map): RawMap[k, v, r] = RawMap(prim)
+    pub def new(_: Region[r], prim: ##java.util.Map): MapZ[k, v, r] = MapZ(prim)
 
-    pub def getRegionOf(_: RawMap[k, v, r]): Region[r] = () as Region[r]
+    pub def getRegionOf(_: MapZ[k, v, r]): Region[r] = () as Region[r]
 
     ///
     /// We don't need the inverse function `marshalMapEntry` because Java's API for building maps is `m.put(k, v)`
@@ -62,7 +62,7 @@ namespace Interop/Util/RawMap {
         (k1, v1)
 
 
-    pub def foldRawMap(f: (b, (k, v)) -> b & ef, s: b, m: RawMap[k, v, r]): b \ { Read(r), ef} with Order[k], Marshal[k], Marshal[v] = 
+    pub def foldMapZ(f: (b, (k, v)) -> b & ef, s: b, m: MapZ[k, v, r]): b \ { Read(r), ef} with Order[k], Marshal[k], Marshal[v] = 
         region r1 {
             let iter = iterator(r1, m);
             Iterator.foldLeft(f, s, iter)
@@ -70,34 +70,34 @@ namespace Interop/Util/RawMap {
         
 
 
-    pub def unfoldViaHashMap(_: Region[r], f: s -> Option[(k, v, s)] & ef, st: s): RawMap[k, v, r] \ { Write(r), ef } with Marshal[k], Marshal[v] =
+    pub def unfoldViaHashMap(_: Region[r], f: s -> Option[(k, v, s)] & ef, st: s): MapZ[k, v, r] \ { Write(r), ef } with Marshal[k], Marshal[v] =
         import new java.util.HashMap(): ##java.util.HashMap & r as newHashMap;
         import java.util.HashMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object & r as put; 
         def loop(st1, ac) = match f(st1) {
-            case None            => RawMap(ac as ##java.util.Map)
+            case None            => MapZ(ac as ##java.util.Map)
             case Some(k, v, st2) => { discard put(ac, Interop/Flix/Marshal.toJavaObject(k), Interop/Flix/Marshal.toJavaObject(v)); loop(st2, ac) }
         };
         loop(st, newHashMap())
 
-    pub def fromMapViaHashMap(r: Region[r], m: Map[k, v]): RawMap[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
+    pub def fromMapViaHashMap(r: Region[r], m: Map[k, v]): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
         let step = iter -> match Iterator.next(iter) {
             case Some(k, v)   => Some((k, v, iter))
             case None         => None
         };
         unfoldViaHashMap(r, step, Map.iterator(r, m))
 
-    pub def toMap(m: RawMap[k, v, r]): Map[k, v] \ { Read(r) } with Order[k], Marshal[k], Marshal[v] =
+    pub def toMap(m: MapZ[k, v, r]): Map[k, v] \ { Read(r) } with Order[k], Marshal[k], Marshal[v] =
         let step = (acc, entry) -> {
             let (k, v) = entry;
             Map.insert(k, v, acc)
         };
-        foldRawMap(step, Map.empty(), m)
+        foldMapZ(step, Map.empty(), m)
 
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     /// Can't use RawIterator because no Marshal instance for MapEntry
     ///
-    pub def iterator(r1: Region[r1], m: RawMap[k, v, r2]): Iterator[(k, v), r1] \ { Read(r2), Write(r1) } with Order[k], Marshal[k], Marshal[v] =
+    pub def iterator(r1: Region[r1], m: MapZ[k, v, r2]): Iterator[(k, v), r1] \ { Read(r2), Write(r1) } with Order[k], Marshal[k], Marshal[v] =
         iteratorWith(r1, Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)
 
     ///
@@ -107,12 +107,12 @@ namespace Interop/Util/RawMap {
     pub def iteratorWith(_r1: Region[r1], 
                             kcast: ##java.lang.Object -> k, 
                             vcast: ##java.lang.Object -> v, 
-                            m: RawMap[k, v, r2]): Iterator[(k, v), r1] \ { Read(r2), Write(r1) } with Order[k], Marshal[k], Marshal[v] =
+                            m: MapZ[k, v, r2]): Iterator[(k, v), r1] \ { Read(r2), Write(r1) } with Order[k], Marshal[k], Marshal[v] =
         import java.util.Map.entrySet(): ##java.util.Set & r2;
         import java.util.Set.iterator(): ##java.util.Iterator & (r2 and r1);
         import java.util.Iterator.hasNext(): Bool & r1;
         import java.util.Iterator.next(): ##java.lang.Object & r1;
-        let set1 = entrySet(getRawMap(m));
+        let set1 = entrySet(getHH(m));
         let iter = iterator(set1);
         let isDone = () -> { 
             let ans = hasNext(iter);
@@ -125,15 +125,15 @@ namespace Interop/Util/RawMap {
         Iterator(isDone, getNext)
 
 
-    pub def fromListViaHashMap(r: Region[r], l: List[(k, v)]): RawMap[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
+    pub def fromListViaHashMap(r: Region[r], l: List[(k, v)]): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
         let step = xs -> match xs {
             case kv :: rs => let (k,v) = kv; Some((k, v, rs))
             case Nil      => None
         };
         unfoldViaHashMap(r, step, l)
     
-    pub def toList(m: RawMap[k, v, r]): List[(k, v)] \ { Read(r) } with Order[k], Marshal[k], Marshal[v] =
+    pub def toList(m: MapZ[k, v, r]): List[(k, v)] \ { Read(r) } with Order[k], Marshal[k], Marshal[v] =
         let step = (k, entry) -> ks -> k(entry :: ks);
-        foldRawMap(step, ks -> ks, m) |> f -> f(Nil)
+        foldMapZ(step, ks -> ks, m) |> f -> f(Nil)
 
 }
