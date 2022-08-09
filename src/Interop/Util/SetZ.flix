@@ -21,6 +21,9 @@ namespace Interop/Util {
     ///
     pub enum SetZ[_a: Type, _r: Region](##java.util.Set)
 
+    instance Scoped[SetZ[a]] {
+        pub def regionOf(_: SetZ[a, r]): Region[r] = () as Region[r]
+    }
 
 }
 
@@ -35,6 +38,18 @@ namespace Interop/Util/SetZ {
         let SetZ(m1) = m;
         m1
 
+    /// via entrySet and set iterator...
+    /// cast must be Pure
+    pub def hhToSet(ocast: ##java.lang.Object -> a, s: ##java.util.Set): Set[a] with Order[a] = 
+        region r { 
+            let iter = hhToIterator(r, ocast, s);
+            Iterator.toSet(iter)
+        }
+
+    pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, s: ##java.util.Set): Iterator[a, r] \ { Write(r) } =
+        import java.util.Set.iterator(): ##java.util.Iterator \ Write(r) as iterator;
+        Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(s))
+
 
 
     pub def new(_: Region[r], prim: ##java.util.Set): SetZ[a, r] = SetZ(prim)
@@ -42,24 +57,26 @@ namespace Interop/Util/SetZ {
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def iterator(r1: Region[r1], s: SetZ[a, r2]): Iterator[a, r1] \ { Read(r2), Read(r1) } with Marshal[a] =
-        iteratorWith(r1, Interop/Flix/Marshal.fromJavaObject, s)
+    pub def iterator(s: SetZ[a, r]): Iterator[a, r] \ { Write(r) } with Marshal[a] =
+        iteratorWith(Interop/Flix/Marshal.fromJavaObject, s)
 
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def iteratorWith(r1: Region[r1], 
-                            ocast: ##java.lang.Object -> a, 
-                            s: SetZ[a, r2]): Iterator[a, r1] \ { Read(r2), Read(r1) } with Marshal[a] =
-        import java.util.Set.iterator(): ##java.util.Iterator & (r2 and r1) as iterator1;
+    pub def iteratorWith(ocast: ##java.lang.Object -> a, 
+                            s: SetZ[a, r]): Iterator[a, r] \ { Write(r) } =
+        import java.util.Set.iterator(): ##java.util.Iterator \ Write(r) as iterator;
         let SetZ(s1) = s;
-        Interop/Util/IteratorZ.new(r1, iterator1(s1)) |> Interop/Util/IteratorZ.iteratorWith(ocast)
+        let r = Scoped.regionOf(s);
+        Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(s1))
 
-    pub def foldSetZ(f: (b, a) -> b & ef, s: b, rs: SetZ[a, r]): b \ { Read(r), ef } with Marshal[a] =
-        region r1 {
-            let iter = iterator(r1, rs);
-            Iterator.foldLeft(f, s, iter)
-        }
+
+
+
+    pub def foldSetZ(f: (b, a) -> b & ef, st: b, s: SetZ[a, r]): b \ { Read(r), ef } with Marshal[a] =
+        let iter = iterator(s);
+        Iterator.foldLeft(f, st, iter)
+        
 
     pub def unfoldViaHashSet(_: Region[r], f: s -> Option[(a, s)] & ef, st: s): SetZ[a, r] \ { Write(r), ef } with Marshal[a] =
         import new java.util.HashSet(): ##java.util.HashSet & r as newHashSet;

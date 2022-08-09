@@ -28,15 +28,29 @@ namespace Interop/Util/MapZ {
 
     use Interop/Util.MapZ;
     use Interop/Util.MapZ.{MapZ};
+    use Interop/Util.MapEntry;
+    use Interop/Util.MapEntry.{MapEntry};
+
     use Interop/Flix.Marshal;
-
-    pub enum MapEntry[_k: Type, _v: Type, _: Region](##java.util.Map$Entry)
-
-
 
     pub def getHH(m: MapZ[k, v, r]): ##java.util.Map = 
         let MapZ(m1) = m;
         m1
+
+    /// via entrySet and set iterator...
+    pub def hhToMap(kcast: ##java.lang.Object -> k, vcast: ##java.lang.Object -> v, m: ##java.util.Map): Map[k, v] with Order[k] = 
+        let step = (acc, o) -> {
+            let me = o as ##java.util.Map$Entry;
+            let k = Interop/Util/MapEntry.hhToKey(kcast, me);
+            let v = Interop/Util/MapEntry.hhToValue(vcast, me);
+            Map.insert(k, v, acc)
+        };
+        region r { 
+            import java.util.Map.entrySet(): ##java.util.Set \ Write(r) as entrySet1;
+            let s1 = entrySet1(m);
+            Interop/Util/SetZ.hhToIterator(r, identity, s1) |> Iterator.foldLeft(step, Map.empty())
+        }
+
 
     pub def new(_: Region[r], prim: ##java.util.Map): MapZ[k, v, r] = MapZ(prim)
 

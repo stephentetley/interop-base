@@ -35,6 +35,22 @@ namespace Interop/Util/IteratorZ {
         let IteratorZ(iter1) = iter;
         iter1
 
+    /// Cast must be Pure!
+    pub def hhToIterator(_: Region[r], ocast: ##java.lang.Object -> a, iter: ##java.util.Iterator): Iterator[a, r] \ { Read(r), Write(r) }   =
+        import java.util.Iterator.hasNext(): Bool \ Read(r);
+        import java.util.Iterator.next(): ##java.lang.Object \ { Write(r) };
+        let isDone = () -> { 
+            let ans = hasNext(iter);
+            not ans
+        };
+        let getNext = () -> {
+            let a1 = next(iter);
+            ocast(a1)
+        };
+        Iterator(isDone, getNext) as \ { Read(r), Write(r) }
+
+
+
     pub def new(_: Region[r], iter: ##java.util.Iterator): IteratorZ[a, r] \ Write(r) = 
         IteratorZ(iter) as \ Write(r)
 
