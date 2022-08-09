@@ -284,8 +284,8 @@ namespace Interop/Util/Locale {
         Locale(get_US())
 
 
-    pub def getDefault(): Locale & Impure =
-        import static java.util.Locale.getDefault(): ##java.util.Locale & Impure;
+    pub def getDefault(): Locale \ IO =
+        import static java.util.Locale.getDefault(): ##java.util.Locale \ IO;
         Locale(getDefault())
 
     pub def getDefaultWithCategory(x: Category): Locale & Impure =
@@ -413,41 +413,44 @@ namespace Interop/Util/Locale {
 
 
     /// This marshals okay...
-    pub def getAvailableLocales(): Array[Locale, Static] & Impure =
-        import static java.util.Locale.getAvailableLocales(): Array[##java.util.Locale, Static] & Impure;
-        let arr = getAvailableLocales();
-        Array.map(Locale, arr)
+    pub def getAvailableLocales(): List[Locale] \ IO = region r {
+        import static java.util.Locale.getAvailableLocales(): Array[##java.util.Locale, r] \ { Write(r), IO } ;
+        let _ = [] @ r;
+        let xs = getAvailableLocales() |> Array.toList;
+        List.map(Locale, xs)
+    }
 
+    pub def getIsoCountries(): List[String] = region r {
+        import static java.util.Locale.getISOCountries(): Array[String, r] \ Write(r);
+        let _ = [] @ r;
+        getISOCountries() |> Array.toList
+    }
 
-    pub def getIsoCountries(): Array[String, Static] & Impure =
-        import static java.util.Locale.getISOCountries(): Array[String, Static] & Impure;
-        getISOCountries()
-
-    pub def getIsoCountriesWithIsoCountryCode(icc: IsoCountryCode): Result[Set[String], String] & Impure =
-        region r1 {
-            try {
-                import static java.util.Locale.getISOCountries(##java.util.Locale$IsoCountryCode): ##java.util.Set & Impure;
-                let icc1 = marshalIsoCountryCode(icc);
-                let s1 = getISOCountries(icc1);
-                let ans = Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet;
-                Ok(ans)
-            } catch {
-                case ex: ##java.lang.Exception =>
-                    import java.lang.Throwable.getMessage(): String & Pure;
-                    Err(getMessage(ex))
-            }
-        }
-
-    pub def getIsoLanguages(): Result[List[String], String] & Impure =
+    pub def getIsoCountriesWithIsoCountryCode(icc: IsoCountryCode): Result[Set[String], String] = region r {
         try {
-            import static java.util.Locale.getISOLanguages(): Array[String, Static] & Impure;
-            let arr = getISOLanguages();
-            Ok(Array.toList(arr))
+            import static java.util.Locale.getISOCountries(##java.util.Locale$IsoCountryCode): ##java.util.Set \ Write(r);
+            let _ = [] @ r;
+            let icc1 = marshalIsoCountryCode(icc);
+            let ans = getISOCountries(icc1) |> Interop/Util/SetZ.hhToSet(Interop/Flix/Marshal.fromJavaObject);
+            Ok(ans)
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String & Pure;
                 Err(getMessage(ex))
         }
+    }
+
+    pub def getIsoLanguages(): Result[List[String], String] = region r {
+        try {
+            import static java.util.Locale.getISOLanguages(): Array[String, r] \ Write(r);
+            let _ = [] @ r;            
+            getISOLanguages() |> Array.toList |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String & Pure;
+                Err(getMessage(ex))
+        }
+    }
 
     pub def getExtension(key: Char, x: Locale): Result[String, String] =
         import java.util.Locale.getExtension(Char): String & Pure;

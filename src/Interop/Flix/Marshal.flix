@@ -96,7 +96,6 @@ namespace Interop/Flix {
         pub def toJavaObject(o: Option[a]): ##java.lang.Object =
             Interop/Util/Optional.fromOption(o) as ##java.lang.Object
         
-        
         pub def fromJavaObject(o: ##java.lang.Object): Option[a] = 
             Interop/Util/Optional.hhToOption(Interop/Flix/Marshal.fromJavaObject, o as ##java.util.Optional)
             
