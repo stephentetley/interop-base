@@ -41,12 +41,14 @@ namespace Interop/Util/Locale/LanguageRange {
     ///
     /// Returns a new LanguageRange for the supplied `range`.
     ///
-    pub def newLanguageRange(range: String): Option[LanguageRange] =
-        import new java.util.Locale$LanguageRange(String): ##java.util.Locale$LanguageRange & Pure as new1;
+    pub def newLanguageRange(range: String): Result[LanguageRange, String] =
         try {
-            Some(LanguageRange(new1(range)))
+            import new java.util.Locale$LanguageRange(String): ##java.util.Locale$LanguageRange & Pure as new1;
+            LanguageRange(new1(range)) |> Ok
         } catch {
-            case _: ##java.lang.IllegalArgumentException => None
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String & Pure;
+                Err(getMessage(ex))
         }
 
     pub def equals(x: LanguageRange, y: LanguageRange): Bool =
@@ -92,34 +94,40 @@ namespace Interop/Util/Locale/LanguageRange {
                 let ans = Interop/Util/ListZ.new(r1, xs) |> Interop/Util/ListZ.toList;
                 Ok(ans)
             } catch {
-                case _: ##java.lang.IllegalArgumentException => Err("Ill-formed range/weight list")
+                case ex: ##java.lang.Exception =>
+                    import java.lang.Throwable.getMessage(): String & Pure;
+                    Err(getMessage(ex))
             }
         }
 
     pub def parseWithCustomizations(ranges: String, customizations: Map[String, List[String]]): Result[List[LanguageRange], String] =
-        import static java.util.Locale$LanguageRange.parse(String, ##java.util.Map): ##java.util.List & Pure;
         region r1 {
             try {
+                import static java.util.Locale$LanguageRange.parse(String, ##java.util.Map): ##java.util.List & Pure;
                 let cs1 = Interop/Util/MapZ.fromMapViaHashMap(r1, customizations) |> Interop/Util/MapZ.getHH;
                 let xs = parse(ranges, cs1);
                 let ans = Interop/Util/ListZ.new(r1, xs) |> Interop/Util/ListZ.toList;
                 Ok(ans)
             } catch {
-                case _: ##java.lang.IllegalArgumentException => Err("Ill-formed range/weight list")
+                case ex: ##java.lang.Exception =>
+                    import java.lang.Throwable.getMessage(): String & Pure;
+                    Err(getMessage(ex))
             }
         }
 
     pub def mapEquivalents(priorityList: List[LanguageRange], customizations: Map[String, List[String]]): Result[List[LanguageRange], String] =
-        import static java.util.Locale$LanguageRange.mapEquivalents(##java.util.List, ##java.util.Map): ##java.util.List & Pure;
         region r1 {
             try {
+                import static java.util.Locale$LanguageRange.mapEquivalents(##java.util.List, ##java.util.Map): ##java.util.List & Pure;
                 let ps1 = Interop/Util/ListZ.fromListViaArrayList(r1, priorityList) |> Interop/Util/ListZ.getHH;
                 let cs1 = Interop/Util/MapZ.fromMapViaHashMap(r1, customizations) |> Interop/Util/MapZ.getHH;
                 let xs = mapEquivalents(ps1, cs1);
                 let ans = Interop/Util/ListZ.new(r1, xs) |> Interop/Util/ListZ.toList;
                 Ok(ans)
             } catch {
-                case _: ##java.lang.IllegalArgumentException => Err("Ill-formed range/weight list")
+                case ex: ##java.lang.Exception =>
+                    import java.lang.Throwable.getMessage(): String & Pure;
+                    Err(getMessage(ex))
             }
         }
 

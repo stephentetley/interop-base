@@ -134,14 +134,16 @@ namespace Interop/Util/Locale {
 
 
 
-    pub def setJvmDefaultLocale!(x: Locale): Result[Unit, String] & Impure =
-        import static java.util.Locale.setDefault(##java.util.Locale): Unit & Impure;
+    pub def setJvmDefaultLocale!(x: Locale): Result[Unit, String] \ IO =
         try {
+            import static java.util.Locale.setDefault(##java.util.Locale): Unit \ IO;
             let Locale(x1) = x;
             setDefault(x1);
             Ok()
         } catch {
-            case _: ##java.lang.Exception => Err("setJvmDefaultLocale! failed")
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String & Pure;
+                Err(getMessage(ex))
         }
 
 
@@ -160,7 +162,9 @@ namespace Interop/Util/Locale {
             setDefault(cat1, x1);
             Ok()
         } catch {
-            case _: ##java.lang.Exception => Err("setDefaultWithCategory! failed")
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String & Pure;
+                Err(getMessage(ex))
         }
 
     pub def equals(x: Locale, y: Locale): Bool =
@@ -308,22 +312,26 @@ namespace Interop/Util/Locale {
         let Locale(x1) = x;
         getScript(x1)
 
-    pub def getISO3Country(x: Locale): Option[String] =
-        import java.util.Locale.getISO3Country(): String & Pure;
+    pub def getISO3Country(x: Locale): Result[String, String] =
         try {
+            import java.util.Locale.getISO3Country(): String & Pure;
             let Locale(x1) = x;
-            Some(getISO3Country(x1))
+            getISO3Country(x1) |> Ok
         } catch {
-            case _: ##java.util.MissingResourceException => None
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String & Pure;
+                Err(getMessage(ex))
         }
 
-    pub def getISO3Language(x: Locale): Option[String] =
-        import java.util.Locale.getISO3Language(): String & Pure;
+    pub def getISO3Language(x: Locale): Result[String, String] =
         try {
+            import java.util.Locale.getISO3Language(): String & Pure;
             let Locale(x1) = x;
-            Some(getISO3Language(x1))
+            getISO3Language(x1) |> Ok
         } catch {
-            case _: ##java.util.MissingResourceException => None
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String & Pure;
+                Err(getMessage(ex))
         }
 
     pub def getDisplayCountry(x: Locale): String =
@@ -413,87 +421,75 @@ namespace Interop/Util/Locale {
 
     pub def getIsoCountries(): Array[String, Static] & Impure =
         import static java.util.Locale.getISOCountries(): Array[String, Static] & Impure;
-        try {
-            getISOCountries()
-        } catch {
-            case _: ##java.lang.Exception => []
-        }
+        getISOCountries()
 
     pub def getIsoCountriesWithIsoCountryCode(icc: IsoCountryCode): Result[Set[String], String] & Impure =
-        import static java.util.Locale.getISOCountries(##java.util.Locale$IsoCountryCode): ##java.util.Set & Impure;
         region r1 {
             try {
+                import static java.util.Locale.getISOCountries(##java.util.Locale$IsoCountryCode): ##java.util.Set & Impure;
                 let icc1 = marshalIsoCountryCode(icc);
                 let s1 = getISOCountries(icc1);
                 let ans = Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet;
                 Ok(ans)
             } catch {
-                case _: ##java.lang.Exception => Err("getIsoCountriesWithIsoCountryCode")
+                case ex: ##java.lang.Exception =>
+                    import java.lang.Throwable.getMessage(): String & Pure;
+                    Err(getMessage(ex))
             }
         }
 
     pub def getIsoLanguages(): Result[List[String], String] & Impure =
-        import static java.util.Locale.getISOLanguages(): Array[String, Static] & Impure;
         try {
+            import static java.util.Locale.getISOLanguages(): Array[String, Static] & Impure;
             let arr = getISOLanguages();
             Ok(Array.toList(arr))
         } catch {
-            case _: ##java.lang.Exception => Err("getIsoLanguages")
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String & Pure;
+                Err(getMessage(ex))
         }
 
-    pub def getExtension(key: Char, x: Locale): Option[String] =
+    pub def getExtension(key: Char, x: Locale): Result[String, String] =
         import java.util.Locale.getExtension(Char): String & Pure;
         try {
             let Locale(x1) = x;
             let ext = getExtension(x1, key);
             if (Object.isNull(ext))
-                None
+                Ok("")
             else
-                Some(ext)
+                Ok(ext)
         } catch {
-            case _: ##java.lang.Exception => None
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String & Pure;
+                Err(getMessage(ex))
         }
 
-    pub def getExtensionKeys(x: Locale): Set[Char] & Impure =
-        import java.util.Locale.getExtensionKeys(): ##java.util.Set & Impure;
+    pub def getExtensionKeys(x: Locale): Set[Char] =
+        import java.util.Locale.getExtensionKeys(): ##java.util.Set & Pure;
         region r1 {
-            try {
-                let Locale(x1) = x;
-                let s1 = getExtensionKeys(x1);
-                Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet
-            } catch {
-                case _: ##java.lang.Exception => Set.empty()
-            }
+            let Locale(x1) = x;
+            let s1 = getExtensionKeys(x1);
+            Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet
         }
 
 
-    pub def getUnicodeLocaleAttributes(x: Locale): Result[Set[String], String] & Impure =
-        import java.util.Locale.getUnicodeLocaleAttributes(): ##java.util.Set & Impure;
+    pub def getUnicodeLocaleAttributes(x: Locale): Set[String] =
+        import java.util.Locale.getUnicodeLocaleAttributes(): ##java.util.Set & Pure;
         region r1 {
-            try {
-                let Locale(x1) = x;
-                let s1 = getUnicodeLocaleAttributes(x1);
-                let ans = Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet;
-                Ok(ans)
-            } catch {
-                case _: ##java.lang.Exception => Err("getUnicodeLocaleAttributes")
-            }
+            let Locale(x1) = x;
+            let s1 = getUnicodeLocaleAttributes(x1);
+            Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet
         }
 
-    pub def getUnicodeLocaleKeys(x: Locale): Result[Set[String], String] & Impure =
-        import java.util.Locale.getUnicodeLocaleKeys(): ##java.util.Set & Impure;
+    pub def getUnicodeLocaleKeys(x: Locale): Set[String] =
+        import java.util.Locale.getUnicodeLocaleKeys(): ##java.util.Set & Pure;
         region r1 {
-            try {
-                let Locale(x1) = x;
-                let s1 = getUnicodeLocaleKeys(x1);
-                let ans = Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet;
-                Ok(ans)
-            } catch {
-                case _: ##java.lang.Exception => Err("getUnicodeLocaleKeys")
-            }
+            let Locale(x1) = x;
+            let s1 = getUnicodeLocaleKeys(x1);
+            Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet
         }
 
-    pub def lookup(priorityList: List[LanguageRange], locales: List[Locale]): Option[Locale] = 
+    pub def lookup(priorityList: List[LanguageRange], locales: List[Locale]): Result[Option[Locale], String] = 
         import static java.util.Locale.lookup(##java.util.List, ##java.util.Collection): ##java.util.Locale & Pure;
         region r1 {
             try {
@@ -501,14 +497,17 @@ namespace Interop/Util/Locale {
                 let col = Interop/Util/Collection.fromList(r1, locales) |> Interop/Util/Collection.getHH;
                 let ans = lookup(ls, col);
                 if (Object.isNull(ans))
-                    None
+                    None |> Ok
                 else 
-                    Some(Locale(ans))
+                    Some(Locale(ans)) |> Ok
             } catch {
-                case _: ##java.lang.Exception => None
+                case ex: ##java.lang.Exception =>
+                    import java.lang.Throwable.getMessage(): String & Pure;
+                    Err(getMessage(ex))
             }
         }
-    pub def lookupTag(priorityList: List[LanguageRange], tags: List[String]): Option[String] = 
+
+    pub def lookupTag(priorityList: List[LanguageRange], tags: List[String]): Result[Option[String], String] = 
         import static java.util.Locale.lookupTag(##java.util.List, ##java.util.Collection): String & Pure;
         region r1 {
             try {
@@ -516,15 +515,17 @@ namespace Interop/Util/Locale {
                 let col = Interop/Util/Collection.fromList(r1, tags) |> Interop/Util/Collection.getHH;
                 let ans = lookupTag(ls, col);
                 if (Object.isNull(ans))
-                    None
+                    Ok(None)
                 else 
-                    Some(ans)
+                    Some(ans) |> Ok
             } catch {
-                case _: ##java.lang.Exception => None
+                case ex: ##java.lang.Exception =>
+                    import java.lang.Throwable.getMessage(): String & Pure;
+                    Err(getMessage(ex))
             }
         }
 
-    pub def filter(priorityList: List[LanguageRange], locales: List[Locale]): List[Locale] = 
+    pub def filter(priorityList: List[LanguageRange], locales: List[Locale]): Result[List[Locale], String] = 
         import static java.util.Locale.filter(##java.util.List, ##java.util.Collection): ##java.util.List & Pure;
         region r1 {
             try {
@@ -532,15 +533,17 @@ namespace Interop/Util/Locale {
                 let col = Interop/Util/Collection.fromList(r1, locales) |> Interop/Util/Collection.getHH;
                 let ans = filter(ls, col);
                 if (Object.isNull(ans))
-                    Nil
+                    Ok(Nil)
                 else 
-                    Interop/Util/ListZ.new(r1, ans) |> Interop/Util/ListZ.toList
+                    Interop/Util/ListZ.new(r1, ans) |> Interop/Util/ListZ.toList |> Ok
             } catch {
-                case _: ##java.lang.Exception => Nil
+                case ex: ##java.lang.Exception =>
+                    import java.lang.Throwable.getMessage(): String & Pure;
+                    Err(getMessage(ex))
             }
         }
 
-    pub def filterWithFilteringMode(priorityList: List[LanguageRange], mode: FilteringMode, locales: List[Locale]): List[Locale] = 
+    pub def filterWithFilteringMode(priorityList: List[LanguageRange], mode: FilteringMode, locales: List[Locale]): Result[List[Locale], String] = 
         import static java.util.Locale.filter(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List & Pure;
         region r1 {
             try {
@@ -549,15 +552,17 @@ namespace Interop/Util/Locale {
                 let mode1 = marshalFilteringMode(mode);
                 let ans = filter(ls, col, mode1);
                 if (Object.isNull(ans))
-                    Nil
+                    Ok(Nil)
                 else 
-                    Interop/Util/ListZ.new(r1, ans) |> Interop/Util/ListZ.toList
+                    Interop/Util/ListZ.new(r1, ans) |> Interop/Util/ListZ.toList |> Ok
             } catch {
-                case _: ##java.lang.Exception => Nil
+                case ex: ##java.lang.Exception =>
+                    import java.lang.Throwable.getMessage(): String & Pure;
+                    Err(getMessage(ex))
             }
         }
 
-    pub def filterTags(priorityList: List[LanguageRange], tags: List[String]): List[String] = 
+    pub def filterTags(priorityList: List[LanguageRange], tags: List[String]): Result[List[String], String] = 
         import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection): ##java.util.List & Pure;
         region r1 {
             try {
@@ -565,15 +570,17 @@ namespace Interop/Util/Locale {
                 let col = Interop/Util/Collection.fromList(r1, tags) |> Interop/Util/Collection.getHH;
                 let prim = filterTags(ls, col);
                 if (Object.isNull(prim))
-                    Nil
+                    Ok(Nil)
                 else 
-                    Interop/Util/ListZ.new(r1, prim) |> Interop/Util/ListZ.toList
+                    Interop/Util/ListZ.new(r1, prim) |> Interop/Util/ListZ.toList |> Ok
             } catch {
-                case _: ##java.lang.Exception => Nil
+                case ex: ##java.lang.Exception =>
+                    import java.lang.Throwable.getMessage(): String & Pure;
+                    Err(getMessage(ex))
             }
         }
 
-    pub def filterTagsWithFilteringMode(priorityList: List[LanguageRange], mode: FilteringMode, tags: List[String]): List[String] = 
+    pub def filterTagsWithFilteringMode(priorityList: List[LanguageRange], mode: FilteringMode, tags: List[String]): Result[List[String], String] = 
         import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List & Pure;
         region r1 {
             try {
@@ -582,11 +589,13 @@ namespace Interop/Util/Locale {
                 let mode1 = marshalFilteringMode(mode);
                 let ans = filterTags(ls, col, mode1);
                 if (Object.isNull(ans))
-                    Nil
+                    Ok(Nil)
                 else 
-                    Interop/Util/ListZ.new(r1, ans) |> Interop/Util/ListZ.toList
+                    Interop/Util/ListZ.new(r1, ans) |> Interop/Util/ListZ.toList |> Ok
             } catch {
-                case _: ##java.lang.Exception => Nil
+                case ex: ##java.lang.Exception =>
+                    import java.lang.Throwable.getMessage(): String & Pure;
+                    Err(getMessage(ex))
             }
         }
 }
