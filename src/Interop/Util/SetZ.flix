@@ -38,7 +38,7 @@ namespace Interop/Util/SetZ {
         let SetZ(m1) = m;
         m1
 
-    /// via entrySet and set iterator...
+    /// via iterator...
     /// cast must be Pure
     pub def hhToSet(ocast: ##java.lang.Object -> a, s: ##java.util.Set): Set[a] with Order[a] = 
         region r { 

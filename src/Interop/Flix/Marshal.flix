@@ -94,14 +94,12 @@ namespace Interop/Flix {
 
     instance Marshal[Option[a]] with Marshal[a] {
         pub def toJavaObject(o: Option[a]): ##java.lang.Object =
-            region r1 {
-                Interop/Util/Optional.fromOption(r1, o) as ##java.lang.Object
-            } 
+            Interop/Util/Optional.fromOption(o) as ##java.lang.Object
+        
         
         pub def fromJavaObject(o: ##java.lang.Object): Option[a] = 
-            region r1 {
-                Interop/Util/Optional.new(r1, o as ##java.util.Optional) |> Interop/Util/Optional.toOption(r1)
-            }
+            Interop/Util/Optional.hhToOption(Interop/Flix/Marshal.fromJavaObject, o as ##java.util.Optional)
+            
     }
 
 }

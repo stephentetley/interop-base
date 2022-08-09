@@ -47,7 +47,23 @@ namespace Interop/Util/ArrayList {
     pub def getHH(arr: ArrayList[a, r]): ##java.util.ArrayList = 
         let ArrayList(arr1) = arr;
         arr1
-        
+
+    /// via iterator...
+    /// cast must be Pure
+    pub def hhToList(ocast: ##java.lang.Object -> a, l: ##java.util.ArrayList): List[a] = 
+        region r { 
+            let iter = hhToIterator(r, ocast, l);
+            Iterator.toList(iter)
+        }
+
+    pub def hhToArray(r: Region[r], ocast: ##java.lang.Object -> a, l: ##java.util.ArrayList): Array[a, r] \ { Write(r) } = 
+        let iter = hhToIterator(r, ocast, l);
+        Iterator.toArray(r, iter)
+
+    pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, l: ##java.util.ArrayList): Iterator[a, r] \ { Write(r) } =
+        import java.util.ArrayList.iterator(): ##java.util.Iterator \ Write(r) as iterator;
+        Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(l))
+
     ///
     /// Returns a new mutable ArrayList.
     ///

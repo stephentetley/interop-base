@@ -40,6 +40,12 @@ namespace Interop/Util/Collection {
         let Collection(iter1) = iter;
         iter1
 
+    pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, l: ##java.util.Collection): Iterator[a, r] \ { Write(r) } =
+        import java.util.Collection.iterator(): ##java.util.Iterator \ Write(r) as iterator;
+        Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(l))
+
+
+
     pub def new(_: Region[r], iter: ##java.util.Collection): Collection[a, r] \ Write(r) = Collection(iter) as \Write(r)
 
 

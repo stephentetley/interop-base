@@ -47,6 +47,18 @@ namespace Interop/Util/ListZ {
         let ListZ(m1) = m;
         m1
 
+    /// via iterator...
+    /// cast must be Pure
+    pub def hhToList(ocast: ##java.lang.Object -> a, l: ##java.util.List): List[a] = 
+        region r { 
+            let iter = hhToIterator(r, ocast, l);
+            Iterator.toList(iter)
+        }
+
+    pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, l: ##java.util.List): Iterator[a, r] \ { Write(r) } =
+        import java.util.List.iterator(): ##java.util.Iterator \ Write(r) as iterator;
+        Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(l))
+
 
     pub def new(_: Region[r], prim: ##java.util.List): ListZ[a, r] = ListZ(prim)
 
