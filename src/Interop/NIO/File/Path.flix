@@ -54,7 +54,7 @@ namespace Interop/NIO/File/Path {
         try {
             import java.nio.file.Path.toAbsolutePath(): ##java.nio.file.Path & Pure;
             let Path(p1) = path;
-            Path(toAbsolutePath(p1)) |> Ok
+            toAbsolutePath(p1) |> Path |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String & Pure;
@@ -71,29 +71,17 @@ namespace Interop/NIO/File/Path {
     pub def getRoot(path: Path): Option[Path] =
         import java.nio.file.Path.getRoot(): ##java.nio.file.Path & Pure;
         let Path(path1) = path;
-        let root = getRoot(path1);
-        if (Object.isNull(root))
-            None
-        else
-            Path(root) |> Some
+        getRoot(path1) |> Object.toOption |> Option.map(Path)
 
     pub def getParent(path: Path): Option[Path] =
         import java.nio.file.Path.getParent(): ##java.nio.file.Path & Pure;
         let Path(path1) = path;
-        let parent = getParent(path1);
-        if (Object.isNull(parent))
-            None
-        else
-            Path(parent) |> Some
+        getParent(path1) |> Object.toOption |> Option.map(Path)
 
     pub def getFileName(path: Path): Option[Path] =
         import java.nio.file.Path.getFileName(): ##java.nio.file.Path & Pure;
         let Path(path1) = path;
-        let name = getFileName(path1);
-        if (Object.isNull(name))
-            None
-        else
-            Path(name) |> Some
+        getFileName(path1) |> Object.toOption |> Option.map(Path)
 
     /// TODO use a record to disambiguate
     pub def resolve(path: Path, other: Path): Path =
@@ -142,8 +130,7 @@ namespace Interop/NIO/File/Path {
         try {
             import java.nio.file.Path.getName(Int32): ##java.nio.file.Path & Pure;
             let Path(path1) = path;
-            let name1 = getName(path1, ix);
-            Path(name1) |> Ok
+            getName(path1, ix) |> Path |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String & Pure;

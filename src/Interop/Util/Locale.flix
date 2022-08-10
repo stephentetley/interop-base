@@ -447,83 +447,68 @@ namespace Interop/Util/Locale {
             getISOLanguages() |> Array.toList |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & Pure;
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
     }
 
     pub def getExtension(key: Char, x: Locale): Result[String, String] =
-        import java.util.Locale.getExtension(Char): String & Pure;
         try {
+            import java.util.Locale.getExtension(Char): String \ {};
             let Locale(x1) = x;
             let ext = getExtension(x1, key);
-            if (Object.isNull(ext))
-                Ok("")
-            else
-                Ok(ext)
+            Interop/Flix/Util.getStringWithoutNull(default = "", ext) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & Pure;
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
     pub def getExtensionKeys(x: Locale): Set[Char] =
-        import java.util.Locale.getExtensionKeys(): ##java.util.Set & Pure;
-        region r1 {
-            let Locale(x1) = x;
-            let s1 = getExtensionKeys(x1);
-            Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet
-        }
+        import java.util.Locale.getExtensionKeys(): ##java.util.Set \ {};
+        let Locale(x1) = x;
+        getExtensionKeys(x1) 
+            |> Interop/Util/SetZ.hhToSet(Interop/Flix/Marshal.fromJavaObject)
 
 
     pub def getUnicodeLocaleAttributes(x: Locale): Set[String] =
-        import java.util.Locale.getUnicodeLocaleAttributes(): ##java.util.Set & Pure;
-        region r1 {
-            let Locale(x1) = x;
-            let s1 = getUnicodeLocaleAttributes(x1);
-            Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet
-        }
+        import java.util.Locale.getUnicodeLocaleAttributes(): ##java.util.Set \ {};
+        let Locale(x1) = x;
+        getUnicodeLocaleAttributes(x1) 
+            |> Interop/Util/SetZ.hhToSet(Interop/Flix/Marshal.fromJavaObject)
 
     pub def getUnicodeLocaleKeys(x: Locale): Set[String] =
-        import java.util.Locale.getUnicodeLocaleKeys(): ##java.util.Set & Pure;
-        region r1 {
-            let Locale(x1) = x;
-            let s1 = getUnicodeLocaleKeys(x1);
-            Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet
-        }
+        import java.util.Locale.getUnicodeLocaleKeys(): ##java.util.Set \ {};
+        let Locale(x1) = x;
+        getUnicodeLocaleKeys(x1) 
+            |> Interop/Util/SetZ.hhToSet(Interop/Flix/Marshal.fromJavaObject)
 
-    pub def lookup(priorityList: List[LanguageRange], locales: List[Locale]): Result[Option[Locale], String] = 
-        import static java.util.Locale.lookup(##java.util.List, ##java.util.Collection): ##java.util.Locale & Pure;
+    pub def lookup(priorityList: List[LanguageRange], locales: List[Locale]): Result[Option[Locale], String] =         
         region r1 {
             try {
+                import static java.util.Locale.lookup(##java.util.List, ##java.util.Collection): ##java.util.Locale \ {};
                 let ls = Interop/Util/ListZ.fromListViaArrayList(r1, priorityList) |> Interop/Util/ListZ.getHH;
                 let col = Interop/Util/Collection.fromList(r1, locales) |> Interop/Util/Collection.getHH;
                 let ans = lookup(ls, col);
-                if (Object.isNull(ans))
-                    None |> Ok
-                else 
-                    Some(Locale(ans)) |> Ok
+                Object.toOption(ans) |> Option.map(Locale) |> Ok
             } catch {
                 case ex: ##java.lang.Exception =>
-                    import java.lang.Throwable.getMessage(): String & Pure;
+                    import java.lang.Throwable.getMessage(): String \ {};
                     Err(getMessage(ex))
             }
         }
 
-    pub def lookupTag(priorityList: List[LanguageRange], tags: List[String]): Result[Option[String], String] = 
-        import static java.util.Locale.lookupTag(##java.util.List, ##java.util.Collection): String & Pure;
+    pub def lookupTag(priorityList: List[LanguageRange], tags: List[String]): Result[Option[String], String] =
         region r1 {
-            try {
+            try { 
+                import static java.util.Locale.lookupTag(##java.util.List, ##java.util.Collection): String \ {};
                 let ls = Interop/Util/ListZ.fromListViaArrayList(r1, priorityList) |> Interop/Util/ListZ.getHH;
                 let col = Interop/Util/Collection.fromList(r1, tags) |> Interop/Util/Collection.getHH;
                 let ans = lookupTag(ls, col);
-                if (Object.isNull(ans))
-                    Ok(None)
-                else 
-                    Some(ans) |> Ok
+                Object.toOption(ans) |> Ok
             } catch {
                 case ex: ##java.lang.Exception =>
-                    import java.lang.Throwable.getMessage(): String & Pure;
+                    import java.lang.Throwable.getMessage(): String \ {};
                     Err(getMessage(ex))
             }
         }
