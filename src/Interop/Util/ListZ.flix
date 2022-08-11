@@ -57,20 +57,18 @@ namespace Interop/Util/ListZ {
     pub def toListHH[t: Type -> Region -> Type, a: Type, r: Region](list: t[a, r]): ##java.util.List with ImpListZ[t] = 
         Interop/Util/ImpListZ.toListZ(list) |> getHH
 
+
+    pub def hhToList(prim: ##java.util.List): List[a] with Marshal[a]=  
+        hhToListWith(Interop/Flix/Marshal.fromJavaObject, prim)
+
     /// via iterator...
     /// cast must be Pure
-    pub def hhToList(prim: ##java.util.List): List[a] with Marshal[a]=  
+    pub def hhToListWith(ocast: ##java.lang.Object -> a, prim: ##java.util.List): List[a] = 
         region r { 
             if (Object.isNull(prim))
                 Nil
             else 
-                hhToIterator(r, Interop/Flix/Marshal.fromJavaObject, prim) |> Iterator.toList
-        }
-
-    pub def hhToListWith(ocast: ##java.lang.Object -> a, l: ##java.util.List): List[a] = 
-        region r { 
-            let iter = hhToIterator(r, ocast, l);
-            Iterator.toList(iter)
+                hhToIterator(r, ocast, prim) |> Iterator.toList
         }
 
 

@@ -38,12 +38,18 @@ namespace Interop/Util/SetZ {
         let SetZ(m1) = m;
         m1
 
+
+    pub def hhToSet(prim: ##java.util.Set): Set[a] with Order[a], Marshal[a]=  
+        hhToSetWith(Interop/Flix/Marshal.fromJavaObject, prim)
+
     /// via iterator...
     /// cast must be Pure
-    pub def hhToSet(ocast: ##java.lang.Object -> a, s: ##java.util.Set): Set[a] with Order[a] = 
+    pub def hhToSetWith(ocast: ##java.lang.Object -> a, prim: ##java.util.Set): Set[a] with Order[a] = 
         region r { 
-            let iter = hhToIterator(r, ocast, s);
-            Iterator.toSet(iter)
+            if (Object.isNull(prim))
+                Set.empty()
+            else 
+                hhToIterator(r, ocast, prim) |> Iterator.toSet
         }
 
     pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, s: ##java.util.Set): Iterator[a, r] \ { Write(r) } =
