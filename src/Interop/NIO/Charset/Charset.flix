@@ -48,11 +48,11 @@ namespace Interop/NIO/Charset/Charset {
 
     pub def forName(name: String): Result[Charset, String] =
         try {
-            import static java.nio.charset.Charset.forName(String): ##java.nio.charset.Charset & Pure;
+            import static java.nio.charset.Charset.forName(String): ##java.nio.charset.Charset \ {};
             Charset(forName(name)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & Pure;
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
@@ -69,23 +69,23 @@ namespace Interop/NIO/Charset/Charset {
             isSupported(name) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & Pure;
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
     pub def equals(x: Charset, y: Charset): Bool =
-        import java.nio.charset.Charset.equals(##java.lang.Object): Bool & Pure;
+        import java.nio.charset.Charset.equals(##java.lang.Object): Bool \ {};
         let Charset(x1) = x;
         let Charset(y1) = y;
         equals(x1, y1 as ##java.lang.Object)
 
     pub def hashCode(cs: Charset): Int32 =
-        import java.nio.charset.Charset.hashCode(): Int32 & Pure;
+        import java.nio.charset.Charset.hashCode(): Int32 \ {};
         let Charset(cs1) = cs;
         hashCode(cs1)
 
     pub def compareTo(x: Charset, y: Charset): Int32 =
-        import java.nio.charset.Charset.compareTo(##java.nio.charset.Charset): Int32 & Pure;
+        import java.nio.charset.Charset.compareTo(##java.nio.charset.Charset): Int32 \ {};
         let Charset(x1) = x;
         let Charset(y1) = y;
         compareTo(x1, y1)
@@ -95,7 +95,7 @@ namespace Interop/NIO/Charset/Charset {
     /// Returns the canonical name of Charset `c`.
     /// 
     pub def name(c: Charset): String =
-        import java.nio.charset.Charset.name(): String & Pure;
+        import java.nio.charset.Charset.name(): String \ {};
         let Charset(c1) = c;
         name(c1)
 
@@ -104,8 +104,8 @@ namespace Interop/NIO/Charset/Charset {
     /// 
     /// The name is interpreted using the system's default locale.
     ///
-    pub def displayName(c: Charset): String =
-        import java.nio.charset.Charset.displayName(): String & Pure;
+    pub def displayName(c: Charset): String \ IO =
+        import java.nio.charset.Charset.displayName(): String \ IO;
         let Charset(c1) = c;
         displayName(c1)
 
@@ -115,24 +115,24 @@ namespace Interop/NIO/Charset/Charset {
     /// The name is interpreted using the supplied locale.
     ///    
     pub def displayNameWithLocale(c: Charset, locale: Locale): String =
-        import java.nio.charset.Charset.displayName(##java.util.Locale): String & Pure;
+        import java.nio.charset.Charset.displayName(##java.util.Locale): String \ {};
         let Charset(c1) = c;
         let Locale(locale1) = locale;
         displayName(c1, locale1)
 
     pub def isRegistered(cs: Charset): Bool =
-        import java.nio.charset.Charset.isRegistered(): Bool & Pure;
+        import java.nio.charset.Charset.isRegistered(): Bool \ {};
         let Charset(cs1) = cs;
         isRegistered(cs1)
 
     pub def canEncode(cs: Charset): Bool =
-        import java.nio.charset.Charset.canEncode(): Bool & Pure;
+        import java.nio.charset.Charset.canEncode(): Bool \ {};
         let Charset(cs1) = cs;
         canEncode(cs1)
 
 
     pub def contains(x: Charset, y: Charset): Bool =
-        import java.nio.charset.Charset.contains(##java.nio.charset.Charset): Bool & Pure;
+        import java.nio.charset.Charset.contains(##java.nio.charset.Charset): Bool \ {};
         let Charset(x1) = x;
         let Charset(y1) = y;
         contains(x1, y1)
@@ -148,6 +148,7 @@ namespace Interop/NIO/Charset/Charset {
         let prim = availableCharsets();
         Interop/Util/SortedMap.hhToMap(prim)
 
+    /// TODO wrap ByteBuffer and CharBuffer
 
     pub def encode(cs: Charset, s: String): ##java.nio.ByteBuffer = 
         import java.nio.charset.Charset.encode(String): ##java.nio.ByteBuffer & Pure;

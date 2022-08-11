@@ -32,13 +32,23 @@ namespace Interop/Util/MapEntry {
         let MapEntry(m1) = m;
         m1
 
+    pub def hhToKV(prim: ##java.util.Map$Entry): (k, v) with Marshal[k], Marshal[v] = 
+        (hhToKey(prim), hhToValue(prim))
 
-    pub def hhToKey(kcast: ##java.lang.Object -> k \ ef,  m: ##java.util.Map$Entry): k \ { ef }  = 
-        import java.util.Map$Entry.getKey(): ##java.lang.Object & Pure;
-        getKey(m) |> kcast
 
-    pub def hhToValue(vcast: ##java.lang.Object -> v \ ef,  m: ##java.util.Map$Entry): v \ { ef }  = 
-        import java.util.Map$Entry.getValue(): ##java.lang.Object & Pure;
-        getValue(m) |> vcast
+    pub def hhToKey(prim: ##java.util.Map$Entry): k with Marshal[k]  = 
+        hhToKeyWith(Interop/Flix/Marshal.fromJavaObject, prim)
 
+    pub def hhToValue(prim: ##java.util.Map$Entry): v with Marshal[v] = 
+        hhToValueWith(Interop/Flix/Marshal.fromJavaObject, prim)
+
+    pub def hhToKeyWith(kcast: ##java.lang.Object -> k,  prim: ##java.util.Map$Entry): k  = 
+        import java.util.Map$Entry.getKey(): ##java.lang.Object \ {};
+        getKey(prim) |> kcast
+
+    pub def hhToValueWith(vcast: ##java.lang.Object -> v,  prim: ##java.util.Map$Entry): v = 
+        import java.util.Map$Entry.getValue(): ##java.lang.Object \ {};
+        getValue(prim) |> vcast
+
+        
 }

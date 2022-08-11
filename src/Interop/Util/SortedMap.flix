@@ -58,8 +58,8 @@ namespace Interop/Util/SortedMap {
     pub def hhToMapWith(kcast: ##java.lang.Object -> k, vcast: ##java.lang.Object -> v, m: ##java.util.SortedMap): Map[k, v] with Order[k] = 
         let step = (acc, o) -> {
             let me = o as ##java.util.Map$Entry;
-            let k = Interop/Util/MapEntry.hhToKey(kcast, me);
-            let v = Interop/Util/MapEntry.hhToValue(vcast, me);
+            let k = Interop/Util/MapEntry.hhToKeyWith(kcast, me);
+            let v = Interop/Util/MapEntry.hhToValueWith(vcast, me);
             Map.insert(k, v, acc)
         };
         region r { 

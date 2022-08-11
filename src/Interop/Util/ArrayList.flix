@@ -60,17 +60,28 @@ namespace Interop/Util/ArrayList {
         let ArrayList(arr1) = arr;
         arr1
 
+    pub def hhToList(prim: ##java.util.ArrayList): List[a] with Marshal[a] = 
+        hhToListWith(Interop/Flix/Marshal.fromJavaObject, prim)
+
+
     /// via iterator...
     /// cast must be Pure
-    pub def hhToList(ocast: ##java.lang.Object -> a, l: ##java.util.ArrayList): List[a] = 
+    pub def hhToListWith(ocast: ##java.lang.Object -> a, prim: ##java.util.ArrayList): List[a] = 
         region r { 
-            let iter = hhToIterator(r, ocast, l);
-            Iterator.toList(iter)
+            if (Object.isNull(prim))
+                Nil
+            else 
+                hhToIterator(r, ocast, prim) |> Iterator.toList
         }
 
-    pub def hhToArray(r: Region[r], ocast: ##java.lang.Object -> a, l: ##java.util.ArrayList): Array[a, r] \ { Write(r) } = 
-        let iter = hhToIterator(r, ocast, l);
-        Iterator.toArray(r, iter)
+    pub def hhToArray(r: Region[r], prim: ##java.util.ArrayList): Array[a, r] \ { Write(r) } with Marshal[a] = 
+        hhToArrayWith(r, Interop/Flix/Marshal.fromJavaObject, prim)
+
+    pub def hhToArrayWith(r: Region[r], ocast: ##java.lang.Object -> a, prim: ##java.util.ArrayList): Array[a, r] \ { Write(r) } = 
+        if (Object.isNull(prim))
+            [] @ r
+        else         
+            hhToIterator(r, ocast, prim) |> Iterator.toArray(r)
 
     pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, l: ##java.util.ArrayList): Iterator[a, r] \ { Write(r) } =
         import java.util.ArrayList.iterator(): ##java.util.Iterator \ Write(r) as iterator;

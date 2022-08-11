@@ -49,19 +49,23 @@ namespace Interop/Util/MapZ {
     pub def toMapHH[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region](s: t[k, v, r]): ##java.util.Map with ImpMapZ[t] = 
         Interop/Util/ImpMapZ.toMapZ(s) |> getHH
 
+    pub def hhToMap(prim: ##java.util.Map): Map[k, v] with Order[k], Marshal[k], Marshal[v] = 
+        hhToMapWith(Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, prim)
 
     /// via entrySet and set iterator...
-    pub def hhToMap(kcast: ##java.lang.Object -> k, vcast: ##java.lang.Object -> v, m: ##java.util.Map): Map[k, v] with Order[k] = 
+    pub def hhToMapWith(kcast: ##java.lang.Object -> k, vcast: ##java.lang.Object -> v, prim: ##java.util.Map): Map[k, v] with Order[k] = 
         let step = (acc, o) -> {
             let me = o as ##java.util.Map$Entry;
-            let k = Interop/Util/MapEntry.hhToKey(kcast, me);
-            let v = Interop/Util/MapEntry.hhToValue(vcast, me);
+            let k = Interop/Util/MapEntry.hhToKeyWith(kcast, me);
+            let v = Interop/Util/MapEntry.hhToValueWith(vcast, me);
             Map.insert(k, v, acc)
         };
         region r { 
             import java.util.Map.entrySet(): ##java.util.Set \ Write(r) as entrySet1;
-            let s1 = entrySet1(m);
-            Interop/Util/SetZ.hhToIterator(r, identity, s1) |> Iterator.foldLeft(step, Map.empty())
+            if (Object.isNull(prim))
+                Map.empty()
+            else 
+                entrySet1(prim) |> Interop/Util/SetZ.hhToIterator(r, identity) |> Iterator.foldLeft(step, Map.empty())
         }
 
 
