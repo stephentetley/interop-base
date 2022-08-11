@@ -18,6 +18,7 @@ namespace Interop/Util {
 
     ///
     /// Represents a Java SortedMap.
+    /// Interface
     ///
     pub enum SortedMap[_: Type, _: Type, _: Region](##java.util.SortedMap)
 

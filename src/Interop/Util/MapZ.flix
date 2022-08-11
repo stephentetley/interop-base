@@ -22,6 +22,14 @@ namespace Interop/Util {
     pub enum MapZ[_k: Type, _v: Type, _r: Region](##java.util.Map)
 
 
+    pub class ImpMapZ[t: Type -> Type -> Region -> Type] {
+        pub def toMapZ[k: Type, v: Type, r: Region](m: t[k, v, r]): MapZ[k, v, r]
+        pub def fromMapZ[k: Type, v: Type, r: Region](m: MapZ[k, v, r]): t[k, v, r]
+    }
+
+
+    /// Cannot (easily) implement `ImpCollection` due to key and value polymorphism.
+
 }
 
 namespace Interop/Util/MapZ {
@@ -31,11 +39,17 @@ namespace Interop/Util/MapZ {
     use Interop/Util.MapEntry;
     use Interop/Util.MapEntry.{MapEntry};
 
+    use Interop/Util.ImpMapZ;
     use Interop/Flix.Marshal;
 
     pub def getHH(m: MapZ[k, v, r]): ##java.util.Map = 
         let MapZ(m1) = m;
         m1
+
+
+    pub def toMapHH[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region](s: t[k, v, r]): ##java.util.Map with ImpMapZ[t] = 
+        Interop/Util/ImpMapZ.toMapZ(s) |> getHH
+
 
     /// via entrySet and set iterator...
     pub def hhToMap(kcast: ##java.lang.Object -> k, vcast: ##java.lang.Object -> v, m: ##java.util.Map): Map[k, v] with Order[k] = 

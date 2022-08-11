@@ -18,12 +18,30 @@ namespace Interop/Util {
 
     ///
     /// Represents a Java Set.
+    /// Interface
     ///
     pub enum SetZ[_a: Type, _r: Region](##java.util.Set)
+
+    pub class ImpSetZ[t: Type -> Region -> Type] {
+        pub def toSetZ[a: Type, r: Region](s: t[a, r]): SetZ[a, r]
+        pub def fromSetZ[a: Type, r: Region](s: SetZ[a, r]): t[a, r]
+    }
+
 
     instance Scoped[SetZ[a]] {
         pub def regionOf(_: SetZ[a, r]): Region[r] = () as Region[r]
     }
+
+    instance Interop/Util.ImpCollection[SetZ] {
+        pub def toCollection(t: SetZ[a, r]): Collection[a, r] = 
+            let SetZ(t1) = t;
+            Collection(t1 as ##java.util.Collection)
+
+        pub def fromCollection(t: Collection[a, r]): SetZ[a, r] = 
+            let Collection(t1) = t;
+            SetZ(t1 as ##java.util.Set) 
+    }
+
 
 }
 
@@ -31,12 +49,17 @@ namespace Interop/Util/SetZ {
 
     use Interop/Util.SetZ;
     use Interop/Util.SetZ.{SetZ};
+    use Interop/Util.ImpSetZ;
     use Interop/Flix.Marshal;
 
 
     pub def getHH(m: SetZ[a, r]): ##java.util.Set = 
         let SetZ(m1) = m;
         m1
+
+
+    pub def toSetHH[t: Type -> Region -> Type, a: Type, r: Region](s: t[a, r]): ##java.util.Set with ImpSetZ[t] = 
+        Interop/Util/ImpSetZ.toSetZ(s) |> getHH
 
 
     pub def hhToSet(prim: ##java.util.Set): Set[a] with Order[a], Marshal[a]=  
