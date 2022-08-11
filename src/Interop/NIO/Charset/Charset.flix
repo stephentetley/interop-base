@@ -138,20 +138,15 @@ namespace Interop/NIO/Charset/Charset {
         contains(x1, y1)
 
     pub def aliases(x: Charset): Set[String] =
-        import java.nio.charset.Charset.aliases(): ##java.util.Set & Pure;
-        region r1 {
-            let Charset(x1) = x;
-            let s1 = aliases(x1); 
-            Interop/Util/SetZ.new(r1, s1) |> Interop/Util/SetZ.toSet
-        }
+        import java.nio.charset.Charset.aliases(): ##java.util.Set \ {};
+        let Charset(x1) = x;
+        let prim = aliases(x1); 
+        Interop/Util/SetZ.hhToSet(prim)
 
-    pub def availableCharsets(): Map[String, Charset] =
-        region r1 {
-            import static java.nio.charset.Charset.availableCharsets(): ##java.util.SortedMap & r1;
-            let sm = availableCharsets();
-            Interop/Util/SortedMap.new(r1, sm) |> Interop/Util/SortedMap.toMap
-        }
-
+    pub def availableCharsets(): Map[String, Charset] \ IO =
+        import static java.nio.charset.Charset.availableCharsets(): ##java.util.SortedMap \ IO;
+        let prim = availableCharsets();
+        Interop/Util/SortedMap.hhToMap(prim)
 
 
     pub def encode(cs: Charset, s: String): ##java.nio.ByteBuffer = 

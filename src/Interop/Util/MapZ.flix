@@ -28,7 +28,6 @@ namespace Interop/Util {
     }
 
 
-    /// Cannot (easily) implement `ImpCollection` due to key and value polymorphism.
 
 }
 

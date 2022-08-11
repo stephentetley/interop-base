@@ -22,6 +22,16 @@ namespace Interop/Util {
     ///
     pub enum SortedMap[_: Type, _: Type, _: Region](##java.util.SortedMap)
 
+    instance Interop/Util.ImpMapZ[SortedMap] {
+        pub def toMapZ(t: SortedMap[k, v, r]): MapZ[k, v, r] = 
+            let SortedMap(t1) = t;
+            MapZ(t1 as ##java.util.Map)
+
+        pub def fromMapZ(t: MapZ[k, v, r]): SortedMap[k, v, r] = 
+            let MapZ(t1) = t;
+            SortedMap(t1 as ##java.util.SortedMap) 
+    }
+
 
 }
 
@@ -41,8 +51,11 @@ namespace Interop/Util/SortedMap {
         m1
 
 
+    pub def hhToMap(m: ##java.util.SortedMap): Map[k, v] with Order[k], Marshal[k], Marshal[v] = 
+        hhToMapWith(Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)
+
     /// via entrySet and set iterator...
-    pub def hhToMap(kcast: ##java.lang.Object -> k, vcast: ##java.lang.Object -> v, m: ##java.util.SortedMap): Map[k, v] with Order[k] = 
+    pub def hhToMapWith(kcast: ##java.lang.Object -> k, vcast: ##java.lang.Object -> v, m: ##java.util.SortedMap): Map[k, v] with Order[k] = 
         let step = (acc, o) -> {
             let me = o as ##java.util.Map$Entry;
             let k = Interop/Util/MapEntry.hhToKey(kcast, me);
@@ -51,8 +64,12 @@ namespace Interop/Util/SortedMap {
         };
         region r { 
             import java.util.SortedMap.entrySet(): ##java.util.Set \ Write(r) as entrySet1;
-            let s1 = entrySet1(m);
-            Interop/Util/SetZ.hhToIterator(r, identity, s1) |> Iterator.foldLeft(step, Map.empty())
+            if (Object.isNull(m))
+                Map.empty()
+            else {
+                let s1 = entrySet1(m);
+                Interop/Util/SetZ.hhToIterator(r, identity, s1) |> Iterator.foldLeft(step, Map.empty())
+            }
         }
 
 
