@@ -22,7 +22,13 @@ namespace Interop/Util {
     ///
     /// Represents a Java List.
     ///
-    pub enum ListZ[_a: Type, _r: Region](##java.util.List)
+    pub enum ListZ[_: Type, _: Region](##java.util.List)
+
+    pub class ImpListZ[t: Type -> Region -> Type] {
+        pub def toListZ[a: Type, r: Region](s: t[a, r]): ListZ[a, r]
+        pub def fromListZ[a: Type, r: Region](s: ListZ[a, r]): t[a, r]
+    }
+
 
     instance Interop/Util.ImpCollection[ListZ] {
         pub def toCollection(t: ListZ[a, r]): Collection[a, r] = 
@@ -40,6 +46,7 @@ namespace Interop/Util/ListZ {
 
     use Interop/Util.ListZ;
     use Interop/Util.ListZ.{ListZ};
+    use Interop/Util.ImpListZ;
     use Interop/Flix.Marshal;
 
 
@@ -47,20 +54,31 @@ namespace Interop/Util/ListZ {
         let ListZ(m1) = m;
         m1
 
+    pub def toListHH[t: Type -> Region -> Type, a: Type, r: Region](list: t[a, r]): ##java.util.List with ImpListZ[t] = 
+        Interop/Util/ImpListZ.toListZ(list) |> getHH
+
     /// via iterator...
     /// cast must be Pure
-    pub def hhToList(ocast: ##java.lang.Object -> a, l: ##java.util.List): List[a] = 
+    pub def hhToList(prim: ##java.util.List): List[a] with Marshal[a]=  
+        region r { 
+            if (Object.isNull(prim))
+                Nil
+            else 
+                hhToIterator(r, Interop/Flix/Marshal.fromJavaObject, prim) |> Iterator.toList
+        }
+
+    pub def hhToListWith(ocast: ##java.lang.Object -> a, l: ##java.util.List): List[a] = 
         region r { 
             let iter = hhToIterator(r, ocast, l);
             Iterator.toList(iter)
         }
 
+
     pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, l: ##java.util.List): Iterator[a, r] \ { Write(r) } =
         import java.util.List.iterator(): ##java.util.Iterator \ Write(r) as iterator;
         Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(l))
 
-
-    pub def new(_: Region[r], prim: ##java.util.List): ListZ[a, r] = ListZ(prim)
+    /// No `new` - List is an interface so it has no constructor
 
     ///
     /// Returns an iterator over `l`.

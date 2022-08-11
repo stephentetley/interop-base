@@ -519,11 +519,8 @@ namespace Interop/Util/Locale {
             try {
                 let ls = Interop/Util/ListZ.fromListViaArrayList(r1, priorityList) |> Interop/Util/ListZ.getHH;
                 let col = Interop/Util/Collection.fromList(r1, locales) |> Interop/Util/Collection.getHH;
-                let ans = filter(ls, col);
-                if (Object.isNull(ans))
-                    Ok(Nil)
-                else 
-                    Interop/Util/ListZ.new(r1, ans) |> Interop/Util/ListZ.toList |> Ok
+                let prim = filter(ls, col);
+                Interop/Util/ListZ.hhToList(prim) |> Ok
             } catch {
                 case ex: ##java.lang.Exception =>
                     import java.lang.Throwable.getMessage(): String & Pure;
@@ -535,14 +532,11 @@ namespace Interop/Util/Locale {
         import static java.util.Locale.filter(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List & Pure;
         region r1 {
             try {
-                let ls = Interop/Util/ListZ.fromListViaArrayList(r1, priorityList) |> Interop/Util/ListZ.getHH;
-                let col = Interop/Util/Collection.fromList(r1, locales) |> Interop/Util/Collection.getHH;
-                let mode1 = marshalFilteringMode(mode);
-                let ans = filter(ls, col, mode1);
-                if (Object.isNull(ans))
-                    Ok(Nil)
-                else 
-                    Interop/Util/ListZ.new(r1, ans) |> Interop/Util/ListZ.toList |> Ok
+                let ls      = Interop/Util/ArrayList.fromList(r1, priorityList) |> Interop/Util/ListZ.toListHH;
+                let col     = Interop/Util/ArrayList.fromList(r1, locales)      |> Interop/Util/Collection.toCollectionHH;
+                let mode1   = marshalFilteringMode(mode);
+                let prim    = filter(ls, col, mode1);
+                Interop/Util/ListZ.hhToList(prim) |> Ok
             } catch {
                 case ex: ##java.lang.Exception =>
                     import java.lang.Throwable.getMessage(): String & Pure;
@@ -551,16 +545,13 @@ namespace Interop/Util/Locale {
         }
 
     pub def filterTags(priorityList: List[LanguageRange], tags: List[String]): Result[List[String], String] = 
-        import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection): ##java.util.List & Pure;
         region r1 {
             try {
-                let ls = Interop/Util/ListZ.fromListViaArrayList(r1, priorityList) |> Interop/Util/ListZ.getHH;
-                let col = Interop/Util/Collection.fromList(r1, tags) |> Interop/Util/Collection.getHH;
-                let prim = filterTags(ls, col);
-                if (Object.isNull(prim))
-                    Ok(Nil)
-                else 
-                    Interop/Util/ListZ.new(r1, prim) |> Interop/Util/ListZ.toList |> Ok
+            import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
+                let ls      = Interop/Util/ArrayList.fromList(r1, priorityList) |> Interop/Util/ListZ.toListHH;
+                let col     = Interop/Util/ArrayList.fromList(r1, tags)         |> Interop/Util/Collection.toCollectionHH;
+                let prim    = filterTags(ls, col);
+                Interop/Util/ListZ.hhToList(prim) |> Ok
             } catch {
                 case ex: ##java.lang.Exception =>
                     import java.lang.Throwable.getMessage(): String & Pure;
@@ -575,11 +566,8 @@ namespace Interop/Util/Locale {
                 let ls = Interop/Util/ListZ.fromListViaArrayList(r1, priorityList) |> Interop/Util/ListZ.getHH;
                 let col = Interop/Util/Collection.fromList(r1, tags) |> Interop/Util/Collection.getHH;
                 let mode1 = marshalFilteringMode(mode);
-                let ans = filterTags(ls, col, mode1);
-                if (Object.isNull(ans))
-                    Ok(Nil)
-                else 
-                    Interop/Util/ListZ.new(r1, ans) |> Interop/Util/ListZ.toList |> Ok
+                let prim    = filterTags(ls, col, mode1);
+                Interop/Util/ListZ.hhToList(prim) |> Ok
             } catch {
                 case ex: ##java.lang.Exception =>
                     import java.lang.Throwable.getMessage(): String & Pure;

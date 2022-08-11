@@ -82,14 +82,14 @@ namespace Interop/Flix {
 
     instance Marshal[List[a]] with Marshal[a] {
         pub def toJavaObject(l: List[a]): ##java.lang.Object =
-            region r1 {
-                Interop/Util/ListZ.fromListViaArrayList(r1, l) as ##java.lang.Object
+            region r {
+                let als = Interop/Util/ArrayList.fromList(r, l);
+                Interop/Util/ListZ.toListHH(als)  as ##java.lang.Object
             } 
         
         pub def fromJavaObject(o: ##java.lang.Object): List[a] = 
-            region r1 {
-                Interop/Util/ListZ.new(r1, o as ##java.util.List) |> Interop/Util/ListZ.toList
-            }
+            Interop/Util/ListZ.hhToList(o as ##java.util.List)
+            
     }
 
     instance Marshal[Option[a]] with Marshal[a] {

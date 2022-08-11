@@ -87,17 +87,14 @@ namespace Interop/Util/Locale/LanguageRange {
 
 
     pub def parse(ranges: String): Result[List[LanguageRange], String] =
-        region r1 {
-            try {
-                import static java.util.Locale$LanguageRange.parse(String): ##java.util.List & Pure;
-                let xs = parse(ranges);
-                let ans = Interop/Util/ListZ.new(r1, xs) |> Interop/Util/ListZ.toList;
-                Ok(ans)
-            } catch {
-                case ex: ##java.lang.Exception =>
-                    import java.lang.Throwable.getMessage(): String & Pure;
-                    Err(getMessage(ex))
-            }
+        try {
+            import static java.util.Locale$LanguageRange.parse(String): ##java.util.List \ {};
+            let prim = parse(ranges);
+            Interop/Util/ListZ.hhToList(prim) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
         }
 
     pub def parseWithCustomizations(ranges: String, customizations: Map[String, List[String]]): Result[List[LanguageRange], String] =
@@ -105,9 +102,8 @@ namespace Interop/Util/Locale/LanguageRange {
             try {
                 import static java.util.Locale$LanguageRange.parse(String, ##java.util.Map): ##java.util.List & Pure;
                 let cs1 = Interop/Util/MapZ.fromMapViaHashMap(r1, customizations) |> Interop/Util/MapZ.getHH;
-                let xs = parse(ranges, cs1);
-                let ans = Interop/Util/ListZ.new(r1, xs) |> Interop/Util/ListZ.toList;
-                Ok(ans)
+                let prim = parse(ranges, cs1);
+                Interop/Util/ListZ.hhToList(prim) |> Ok
             } catch {
                 case ex: ##java.lang.Exception =>
                     import java.lang.Throwable.getMessage(): String & Pure;
@@ -121,9 +117,8 @@ namespace Interop/Util/Locale/LanguageRange {
                 import static java.util.Locale$LanguageRange.mapEquivalents(##java.util.List, ##java.util.Map): ##java.util.List & Pure;
                 let ps1 = Interop/Util/ListZ.fromListViaArrayList(r1, priorityList) |> Interop/Util/ListZ.getHH;
                 let cs1 = Interop/Util/MapZ.fromMapViaHashMap(r1, customizations) |> Interop/Util/MapZ.getHH;
-                let xs = mapEquivalents(ps1, cs1);
-                let ans = Interop/Util/ListZ.new(r1, xs) |> Interop/Util/ListZ.toList;
-                Ok(ans)
+                let prim    = mapEquivalents(ps1, cs1);
+                Interop/Util/ListZ.hhToList(prim) |> Ok
             } catch {
                 case ex: ##java.lang.Exception =>
                     import java.lang.Throwable.getMessage(): String & Pure;

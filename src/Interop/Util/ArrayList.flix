@@ -18,6 +18,8 @@ namespace Interop/Util {
 
     use Interop/Util.Collection;
     use Interop/Util.Collection.{Collection};
+    use Interop/Util.ListZ;
+    use Interop/Util.ListZ.{ListZ};
 
     ///
     /// Represents a ArrayList.
@@ -34,6 +36,16 @@ namespace Interop/Util {
             ArrayList(t1 as ##java.util.ArrayList) 
     }
 
+
+    instance Interop/Util.ImpListZ[ArrayList] {
+        pub def toListZ(t: ArrayList[a, r]): ListZ[a, r] = 
+            let ArrayList(t1) = t;
+            ListZ(t1 as ##java.util.List)
+
+        pub def fromListZ(t: ListZ[a, r]): ArrayList[a, r] = 
+            let ListZ(t1) = t;
+            ArrayList(t1 as ##java.util.ArrayList) 
+    }
 
 }
 
@@ -64,17 +76,31 @@ namespace Interop/Util/ArrayList {
         import java.util.ArrayList.iterator(): ##java.util.Iterator \ Write(r) as iterator;
         Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(l))
 
-    ///
-    /// Returns a new mutable ArrayList.
-    ///
-    pub def new(_: Region[r], prim: ##java.util.ArrayList): ArrayList[a, r] = ArrayList(prim)
+
+
+    pub def fromArray(r: Region[r1], arr: Array[a, r2]): ArrayList[a, r1] \ { Read(r2), Write(r1) } with Marshal[a] =
+        let als = new(r);
+        Array.foreach(x -> discard add!(x, als), arr);
+        als
+
+    pub def fromList(r: Region[r1], l: List[a]): ArrayList[a, r1] \ { Write(r1) } with Marshal[a] =
+        let als = new(r);
+        List.foreach(x -> discard add!(x, als), l);
+        als
 
     ///
     /// Returns a new mutable ArrayList.
     ///
-    pub def empty(_: Region[r]): ArrayList[a, r] \ Write(r) =
+    pub def new(_: Region[r]): ArrayList[a, r] \ Write(r) =
         import new java.util.ArrayList(): ##java.util.ArrayList & r as newArrayList;
         ArrayList(newArrayList())
+
+    /// ///
+    /// /// Returns a new mutable ArrayList.
+    /// ///
+    /// pub def empty(_: Region[r]): ArrayList[a, r] \ Write(r) =
+    ///     import new java.util.ArrayList(): ##java.util.ArrayList & r as newArrayList;
+    ///     ArrayList(newArrayList())
 
 
 
@@ -172,22 +198,12 @@ namespace Interop/Util/ArrayList {
             aout
         }
 
-    pub def fromList(r: Region[r], l: List[a]): ArrayList[a, r] \ { Write(r) } with Marshal[a] =
-        let step = xs -> match xs {
-            case Nil     => None
-            case x :: rs => Some((x, rs))
-        };
-        unfoldArrayList(r, step, l)
 
     /// asc order?
     pub def fromSet(r: Region[r], s: Set[a]): ArrayList[a, r] \ { Write(r) } with Marshal[a] =
-        let arr = empty(r);
+        let arr = new(r);
         Set.foreach(x -> discard add!(x, arr), s);
         arr
 
-    pub def fromArray(r: Region[r1], s: Array[a, r2]): ArrayList[a, r1] \ { Read(r2), Write(r1) } with Marshal[a] =
-        let arr = empty(r);
-        Array.foreach(x -> discard add!(x, arr), s);
-        arr
 
 }

@@ -33,12 +33,18 @@ namespace Interop/Util/Collection {
 
     use Interop/Util.Collection;
     use Interop/Util.Collection.{Collection};
+    use Interop/Util.ImpCollection;
     use Interop/Flix.Marshal;
 
 
     pub def getHH(iter: Collection[a, r]): ##java.util.Collection = 
         let Collection(iter1) = iter;
         iter1
+
+
+    pub def toCollectionHH[t: Type -> Region -> Type, a: Type, r: Region](col: t[a, r]): ##java.util.Collection with ImpCollection[t] = 
+        Interop/Util/ImpCollection.toCollection(col) |> getHH
+
 
     pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, l: ##java.util.Collection): Iterator[a, r] \ { Write(r) } =
         import java.util.Collection.iterator(): ##java.util.Iterator \ Write(r) as iterator;
