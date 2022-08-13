@@ -50,18 +50,31 @@ namespace Interop/IO/BufferedReader {
 
     // read
 
-    pub def read!(rd: BufferedReader[r]): Result[Int32, String] \ IO = 
+    pub def read!(rd: BufferedReader[r]): Result[Option[Int32], String] \ IO = 
         try {
             import java.io.BufferedReader.read(): Int32 \ { IO };
             let BufferedReader(rd1) = rd;
-            read(rd1) |> Ok
+            match read(rd1) { 
+                case i if i < 0 => Ok(None)
+                case i          => Ok(Some(i))
+            }
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \{};
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
-    // read (into-array) to figure out...
+    // read (into-array)
+    pub def readIntoArrayWith!(buf: Array[Char, r2], offset: {offset :: Int32}, len: {len :: Int32}, rd: BufferedReader[r]): Result[Int32, String] \ { Write(r2), IO } = 
+        try {
+            import java.io.BufferedReader.read(Array[Char, r2], Int32, Int32): Int32 \ { IO };
+            let BufferedReader(rd1) = rd;
+            read(rd1, buf, offset.offset, len.len) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
     
     pub def readLine!(rd: BufferedReader[r]): Result[String, String] \ IO = 
@@ -71,7 +84,7 @@ namespace Interop/IO/BufferedReader {
             readLine(rd1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \{};
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
@@ -82,7 +95,7 @@ namespace Interop/IO/BufferedReader {
             ready(rd1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \{};
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
@@ -99,7 +112,7 @@ namespace Interop/IO/BufferedReader {
             mark(rd1, readAheadLimit) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \{};
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
@@ -110,7 +123,7 @@ namespace Interop/IO/BufferedReader {
             reset(rd1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \{};
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
@@ -121,7 +134,7 @@ namespace Interop/IO/BufferedReader {
             close(rd1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \{};
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
@@ -132,7 +145,7 @@ namespace Interop/IO/BufferedReader {
             lines(rd1) |> Stream |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \{};
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
