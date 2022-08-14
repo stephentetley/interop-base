@@ -77,7 +77,7 @@ namespace Interop/NIO/File/Path {
     ///
     pub def of(s: String, arr: Array[String, r]): Result[Path, String] \ {Read(r)}=
         try {
-            // import static java.nio.file.Path.of(String, Array[String, r]): ##java.nio.file.Path \ {Read(r)} as of1;
+            // Currently we have to use a wrapper due to java.nio.file.Path.of using varargs 
             import static flixinterop.nio.file.Pathz.ofArrayList(String, ##java.util.ArrayList): ##java.nio.file.Path \ {Read(r)} as of1;
             let r = Scoped.regionOf(arr);
             let arr1 = Interop/Util/ArrayList.fromArray(r, arr) |> Interop/Util/ArrayList.getHH;

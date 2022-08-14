@@ -73,6 +73,11 @@ namespace Interop/NIO/Charset/Charset {
                 Err(getMessage(ex))
         }
 
+    pub def toString(cs: Charset): String =
+        import java.nio.charset.Charset.toString(): String \ {};
+        let Charset(cs1) = cs;
+        toString(cs1)
+
     pub def equals(x: Charset, y: Charset): Bool =
         import java.nio.charset.Charset.equals(##java.lang.Object): Bool \ {};
         let Charset(x1) = x;
@@ -114,11 +119,11 @@ namespace Interop/NIO/Charset/Charset {
     /// 
     /// The name is interpreted using the supplied locale.
     ///    
-    pub def displayNameWithLocale(c: Charset, locale: Locale): String =
+    pub def displayNameWithLocale(locale: Locale, cs: Charset): String =
         import java.nio.charset.Charset.displayName(##java.util.Locale): String \ {};
-        let Charset(c1) = c;
+        let Charset(cs1) = cs;
         let Locale(locale1) = locale;
-        displayName(c1, locale1)
+        displayName(cs1, locale1)
 
     pub def isRegistered(cs: Charset): Bool =
         import java.nio.charset.Charset.isRegistered(): Bool \ {};

@@ -35,8 +35,6 @@ namespace Interop/Util/Locale/LanguageRange {
     use Interop/Util/Locale.LanguageRange;
     use Interop/Util/Locale.LanguageRange.{LanguageRange};
 
-    use Interop/Util.RawMap;
-
 
     ///
     /// Returns a new LanguageRange for the supplied `range`.

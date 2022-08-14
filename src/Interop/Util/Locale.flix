@@ -109,16 +109,16 @@ namespace Interop/Util/Locale {
     ///
     /// Returns a new Locale for the supplied language.
     ///
-    pub def newLocale(language: String): Locale =
-        import new java.util.Locale(String): ##java.util.Locale \ {} as new1;
-        Locale(new1(language))
+    pub def newLocale(lang: String): Locale =
+        import new java.util.Locale(String): ##java.util.Locale & Pure as new1;
+        Locale(new1(lang))
 
     ///
     /// Returns a new Locale for the supplied language and country.
     ///
-    pub def newLocaleWithCountry(r: {language :: String, country :: String}): Locale =
+    pub def newLocaleWithCountry(lang: {lang :: String}, country: {country :: String}): Locale =
         import new java.util.Locale(String, String): ##java.util.Locale \ {} as new1;
-        Locale(new1(r.language, r.country))
+        Locale(new1(lang.lang, country.country))
 
     ///
     /// Returns a new Locale for the supplied language, country and variant.
@@ -128,9 +128,9 @@ namespace Interop/Util/Locale {
     ///
     /// For guidelines to the formatting of a valid tag see the Javadoc for `java.util.Locale`.
     /// 
-    pub def newLocaleWithVariant(r: {language :: String, country :: String, variant :: String}): Locale =
+    pub def newLocaleWithVariant(lang: {lang :: String}, country: {country :: String}, variant: {variant :: String}): Locale =
         import new java.util.Locale(String, String, String): ##java.util.Locale \ {} as new1;
-        Locale(new1(r.language, r.country, r.variant))
+        Locale(new1(lang.lang, country.country, variant.variant))
 
 
 
