@@ -22,6 +22,14 @@ namespace Interop/NIO/File {
     /// Interface / Immutable
     pub enum Path(##java.nio.file.Path)
 
+    instance Interop/Flix.Marshal[Path] {
+        pub def toJavaObject(x: Path): ##java.lang.Object =
+            let Path(x1) = x;
+            x1 as ##java.lang.Object
+
+        pub def fromJavaObject(o: ##java.lang.Object): Path = 
+            Path(o as ##java.nio.file.Path)
+    }
 
 }
 
@@ -37,13 +45,53 @@ namespace Interop/NIO/File/Path {
     /// Note - current set of operations should be pure?
 
     /// Unwrap
-    pub def getHH(p: Path): ##java.nio.file.Path = 
-        let Path(p1) = p;
-        p1
+    pub def getHH(path: Path): ##java.nio.file.Path = 
+        let Path(path1) = path;
+        path1
+
+    pub def toString(path: Path): String = 
+        import java.nio.file.Path.toString(): String \ {};
+        let Path(path1) = path;
+        toString(path1)
+
+    pub def equals(x: Path, y: Path): Bool =
+        import java.nio.file.Path.equals(##java.lang.Object): Bool \ {};
+        let Path(x1) = x;
+        let Path(y1) = y;
+        equals(x1, y1 as ##java.lang.Object)
+
+    pub def compareTo(x: Path, y: Path): Int32 =
+        import java.nio.file.Path.compareTo(##java.nio.file.Path): Int32 \ {};
+        let Path(x1) = x;
+        let Path(y1) = y;
+        compareTo(x1, y1)
+
+    pub def hashCode(path: Path): Int32 =
+        import java.nio.file.Path.hashCode(): Int32 \ {};
+        let Path(path1) = path;
+        hashCode(path1)
+
+
+    ///
+    /// Returns a new FilePath.
+    ///
+    pub def of(s: String, arr: Array[String, r]): Result[Path, String] \ {Read(r)}=
+        try {
+            // import static java.nio.file.Path.of(String, Array[String, r]): ##java.nio.file.Path \ {Read(r)} as of1;
+            import static flixinterop.nio.file.Pathz.ofArrayList(String, ##java.util.ArrayList): ##java.nio.file.Path \ {Read(r)} as of1;
+            let r = Scoped.regionOf(arr);
+            let arr1 = Interop/Util/ArrayList.fromArray(r, arr) |> Interop/Util/ArrayList.getHH;
+            Path(of1(s, arr1)) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
 
 
     pub def normalize(path: Path): Path =
-        import java.nio.file.Path.normalize(): ##java.nio.file.Path & Pure;
+        import java.nio.file.Path.normalize(): ##java.nio.file.Path \ {};
         let Path(p1) = path;
         Path(normalize(p1))
 
@@ -52,40 +100,40 @@ namespace Interop/NIO/File/Path {
     /// Should this be Impure?
     pub def toAbsolutePath(path: Path): Result[Path, String] =        
         try {
-            import java.nio.file.Path.toAbsolutePath(): ##java.nio.file.Path & Pure;
+            import java.nio.file.Path.toAbsolutePath(): ##java.nio.file.Path \ {};
             let Path(p1) = path;
             toAbsolutePath(p1) |> Path |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & Pure;
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
 
     pub def isAbsolute(path: Path): Bool =
-        import java.nio.file.Path.isAbsolute(): Bool & Pure;
+        import java.nio.file.Path.isAbsolute(): Bool \ {};
         let Path(path1) = path;
         isAbsolute(path1)
 
 
     pub def getRoot(path: Path): Option[Path] =
-        import java.nio.file.Path.getRoot(): ##java.nio.file.Path & Pure;
+        import java.nio.file.Path.getRoot(): ##java.nio.file.Path \ {};
         let Path(path1) = path;
         getRoot(path1) |> Object.toOption |> Option.map(Path)
 
     pub def getParent(path: Path): Option[Path] =
-        import java.nio.file.Path.getParent(): ##java.nio.file.Path & Pure;
+        import java.nio.file.Path.getParent(): ##java.nio.file.Path \ {};
         let Path(path1) = path;
         getParent(path1) |> Object.toOption |> Option.map(Path)
 
     pub def getFileName(path: Path): Option[Path] =
-        import java.nio.file.Path.getFileName(): ##java.nio.file.Path & Pure;
+        import java.nio.file.Path.getFileName(): ##java.nio.file.Path \ {};
         let Path(path1) = path;
         getFileName(path1) |> Object.toOption |> Option.map(Path)
 
     /// TODO use a record to disambiguate
     pub def resolve(path: Path, other: Path): Path =
-        import java.nio.file.Path.resolve(##java.nio.file.Path): ##java.nio.file.Path & Pure;
+        import java.nio.file.Path.resolve(##java.nio.file.Path): ##java.nio.file.Path \ {};
         let Path(path1) = path;
         let Path(other1) = other;
         Path(resolve(path1, other1))
@@ -96,7 +144,7 @@ namespace Interop/NIO/File/Path {
     /// TODO use a record to disambiguate
     ///
     pub def relativize(path1: Path, path2: Path): Path =
-        import java.nio.file.Path.relativize(##java.nio.file.Path): ##java.nio.file.Path & Pure;
+        import java.nio.file.Path.relativize(##java.nio.file.Path): ##java.nio.file.Path \ {};
         let Path(p1) = path1;
         let Path(p2) = path2;
         Path(relativize(p1, p2))
@@ -106,7 +154,7 @@ namespace Interop/NIO/File/Path {
     /// Returns `true` if the filepath `path` starts with the Path `prefix`.
     ///
     pub def startsWith(prefix: {prefix :: Path}, path: Path): Bool =
-        import java.nio.file.Path.startsWith(##java.nio.file.Path): Bool & Pure;
+        import java.nio.file.Path.startsWith(##java.nio.file.Path): Bool \ {};
         let Path(p1) = path;
         let Path(prefix1) = prefix.prefix;
         startsWith(p1, prefix1)
@@ -115,30 +163,30 @@ namespace Interop/NIO/File/Path {
     /// Returns `true` if the filepath `path` starts with the String `prefix`.
     ///
     pub def startsWithString(prefix: {prefix :: String}, path: Path): Bool =
-        import java.nio.file.Path.startsWith(String): Bool & Pure;
+        import java.nio.file.Path.startsWith(String): Bool \ {};
         let Path(p1) = path;
         startsWith(p1, prefix.prefix)
 
 
     pub def getNameCount(path: Path): Int32 =
-        import java.nio.file.Path.getNameCount(): Int32 & Pure;
+        import java.nio.file.Path.getNameCount(): Int32 \ {};
         let Path(path1) = path;
         getNameCount(path1)
 
 
     pub def getNameAt(ix: Int32, path: Path): Result[Path, String] =
         try {
-            import java.nio.file.Path.getName(Int32): ##java.nio.file.Path & Pure;
+            import java.nio.file.Path.getName(Int32): ##java.nio.file.Path \ {};
             let Path(path1) = path;
             getName(path1, ix) |> Path |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & Pure;
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
     pub def toFile(_: Region[r], path: Path): File[r] \ Write(r) =
-        import java.nio.file.Path.toFile(): ##java.io.File & Pure;
+        import java.nio.file.Path.toFile(): ##java.io.File \ {};
         let Path(path1) = path;
         File(toFile(path1)) as \ Write(r)
 

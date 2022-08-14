@@ -99,6 +99,12 @@ namespace Interop/Util/ArrayList {
         List.foreach(x -> discard add!(x, als), l);
         als
 
+    pub def fromListWith(r: Region[r1], ocast: a -> ##java.lang.Object, l: List[a]): ArrayList[a, r1] \ { Write(r1) } =
+        let als = new(r);
+        List.foreach(x -> discard addWith!(x, ocast, als), l);
+        als
+
+
     ///
     /// Returns a new mutable ArrayList.
     ///
@@ -130,6 +136,13 @@ namespace Interop/Util/ArrayList {
         import java.util.ArrayList.add(##java.lang.Object): Bool & r;
         let ArrayList(arr1) = arr;
         add(arr1, Interop/Flix/Marshal.toJavaObject(x))
+
+    pub def addWith!(x: a, ocast: a -> ##java.lang.Object, arr: ArrayList[a, r]): Bool \ { Write(r) } = 
+        import java.util.ArrayList.add(##java.lang.Object): Bool & r;
+        let ArrayList(arr1) = arr;
+        add(arr1, ocast(x))
+
+
 
     ///
     /// Apply the effectful function `f` to all the elements in the array `a`.

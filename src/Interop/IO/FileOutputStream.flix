@@ -50,14 +50,49 @@ namespace Interop/IO/FileOutputStream {
         let FileOutputStream(ous1) = ous;
         ous1
 
-    pub def newFileOutputStream(file: File[r]): Result[FileOutputStream[r], String] \ {Write(r), IO} = 
+    pub def newWithFile(file: File[r]): Result[FileOutputStream[r], String] \ {Write(r), IO} = 
         try {
             import new java.io.FileOutputStream(##java.io.File): ##java.io.FileOutputStream \ IO as newOutputStream;
             let file1 = Interop/IO/File.getHH(file);
-            FileOutputStream(newOutputStream(file1)) |> Ok
+            newOutputStream(file1) |> FileOutputStream |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String & r;
+                Err(getMessage(ex))
+        }
+
+    pub def newWithPath(path: String): Result[FileOutputStream[r], String] \ {Write(r), IO} = 
+        try {
+            import new java.io.FileOutputStream(String): ##java.io.FileOutputStream \ IO as newOutputStream;
+            newOutputStream(path) |> FileOutputStream |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String & r;
+                Err(getMessage(ex))
+        }
+
+
+
+    pub def write!(b: Int32, fos: FileOutputStream[r]): Result[Unit, String] \ IO = 
+        try {
+            import java.io.FileOutputStream.write(Int32): Unit \ { IO };
+            let FileOutputStream(fos1) = fos;
+            write(fos1, b) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+
+    pub def close!(fos: FileOutputStream[r]): Result[Unit, String] \ IO = 
+        try {
+            import java.io.FileOutputStream.close(): Unit \ { IO };
+            let FileOutputStream(fos1) = fos;
+            close(fos1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 

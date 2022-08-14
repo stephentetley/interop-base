@@ -29,6 +29,10 @@ namespace Interop/Flix {
         pub def fromJavaObject(o: ##java.lang.Object): a
     }
 
+    instance Marshal[##java.lang.Object] {
+        pub def toJavaObject(x: ##java.lang.Object): ##java.lang.Object = x
+        pub def fromJavaObject(o: ##java.lang.Object): ##java.lang.Object = o
+    }
 
     instance Marshal[String] {
         pub def toJavaObject(x: String): ##java.lang.Object = x as ##java.lang.Object

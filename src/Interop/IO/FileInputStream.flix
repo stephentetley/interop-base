@@ -54,17 +54,17 @@ namespace Interop/IO/FileInputStream {
         try {
             import new java.io.FileInputStream(##java.io.File): ##java.io.FileInputStream \ IO as newFileInputStream;
             let file1 = Interop/IO/File.getHH(file);
-            FileInputStream(newFileInputStream(file1)) |> Ok
+            newFileInputStream(file1) |> FileInputStream |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String & r;
                 Err(getMessage(ex))
         }
 
-    pub def newWithString(path: String): Result[FileInputStream[r], String] \ {Write(r), IO} = 
+    pub def newWithPath(path: String): Result[FileInputStream[r], String] \ {Write(r), IO} = 
         try {
             import new java.io.FileInputStream(String): ##java.io.FileInputStream \ IO as newFileInputStream;
-            FileInputStream(newFileInputStream(path)) |> Ok
+            newFileInputStream(path) |> FileInputStream |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String & r;

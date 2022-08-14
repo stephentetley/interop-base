@@ -125,4 +125,30 @@ namespace Interop/Util/ListZ {
         let step = (acc, a) -> Set.insert(a, acc);
         foldListZ(step, Set.empty(), l)
 
+
+    /// TEMP ...
+
+    pub def fromArrayOfObject(arr: Array[##java.lang.Object, r1]): Result[ListZ[##java.lang.Object, r1], String] \ { Read(r1), Write(r1) } =
+        try {
+            import static java.util.Arrays.asList(Array[##java.lang.Object, r1]): ##java.util.List \ { Read(r1), Write(r1) };
+            asList(arr) |> ListZ |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def toArrayOfString(r1: Region[r1], l: ListZ[String, r2]): Result[Array[String, r1], String] \ { Read(r2), Write(r1) } =
+        try {
+            import java.util.List.toArray(): Array[String, r1] \ { Read(r2), Write(r1) };
+            let _ = [] @ r1;
+            let ListZ(l1) = l;
+            toArray(l1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+
 }
