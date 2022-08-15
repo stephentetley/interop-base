@@ -19,6 +19,9 @@ namespace Interop/Lang {
 
     pub enum ProcessBuilder[_: Region](##java.lang.ProcessBuilder)
 
+    instance Scoped[ProcessBuilder] {
+        pub def regionOf(_: ProcessBuilder[r]): Region[r] = () as Region[r]
+    }
 
 }
 
@@ -38,5 +41,27 @@ namespace Interop/Lang/ProcessBuilder {
         let ProcessBuilder(x1) = x;
         x1
 
+    pub def new(r: Region[r], l: List[String]): ProcessBuilder[r] \ Write(r) = 
+        import new java.lang.ProcessBuilder(##java.util.List): ##java.lang.ProcessBuilder \ r as newProcessBuilder;
+        let ls1 = Interop/Util/ArrayList.fromList(r, l) |> Interop/Util/ListZ.toListHH;
+        newProcessBuilder(ls1) |> ProcessBuilder
+
+    pub def command!(l: List[String], pb: ProcessBuilder[r]): ProcessBuilder[r] \ Write(r) = 
+        import java.lang.ProcessBuilder.command(##java.util.List): ##java.lang.ProcessBuilder \ r;
+        let ProcessBuilder(pb1) = pb;
+        let r = Scoped.regionOf(pb);
+        let ls1 = Interop/Util/ArrayList.fromList(r, l) |> Interop/Util/ListZ.toListHH;
+        command(pb1, ls1) |> ProcessBuilder
+
+
+    pub def inheritIO!(pb: ProcessBuilder[r]): ProcessBuilder[r] \ Write(r) = 
+        import java.lang.ProcessBuilder.inheritIO(): ##java.lang.ProcessBuilder \ r;
+        let ProcessBuilder(pb1) = pb;
+        inheritIO(pb1) |> ProcessBuilder
+
+    pub def start(pb: ProcessBuilder[r]): Process[r] \ Write(r) =
+        import java.lang.ProcessBuilder.start(): ##java.lang.Process \ r;
+        let ProcessBuilder(pb1) = pb;
+        start(pb1) |> Process
 
 }
