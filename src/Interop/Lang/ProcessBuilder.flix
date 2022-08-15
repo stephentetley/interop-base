@@ -31,11 +31,13 @@ namespace Interop/Lang/ProcessBuilder {
     use Interop/Lang.ProcessBuilder;
     use Interop/Lang.ProcessBuilder.{ProcessBuilder};
 
-    use Interop/NIO/File.Path;
-    use Interop/NIO/File.Path.{Path};
+    use Interop/IO.File;
+    use Interop/IO.File.{File};
     use Interop/Lang.Process;
     use Interop/Lang.Process.{Process};
-
+    use Interop/NIO/File.Path;
+    use Interop/NIO/File.Path.{Path};
+    
 
     pub def getHH(x: ProcessBuilder[r]): ##java.lang.ProcessBuilder = 
         let ProcessBuilder(x1) = x;
@@ -52,6 +54,28 @@ namespace Interop/Lang/ProcessBuilder {
         let r = Scoped.regionOf(pb);
         let ls1 = Interop/Util/ArrayList.fromList(r, l) |> Interop/Util/ListZ.toListHH;
         command(pb1, ls1) |> ProcessBuilder
+
+    pub def directory!(f: File[r1], pb: ProcessBuilder[r]): ProcessBuilder[r] \ { Write(r), Read(r1) } = 
+        import java.lang.ProcessBuilder.directory(##java.io.File): ##java.lang.ProcessBuilder \ {r, r1} ;
+        let ProcessBuilder(pb1) = pb;
+        let File(f1) = f;
+        directory(pb1, f1) |> ProcessBuilder
+
+    pub def getDirectory(pb: ProcessBuilder[r]): File[r] \ { Write(r) } = 
+        import java.lang.ProcessBuilder.directory(): ##java.io.File \ r;
+        let ProcessBuilder(pb1) = pb;
+        directory(pb1) |> File
+
+    pub def environment(pb: ProcessBuilder[r]): Result[Map[String, String], String] \ Read(r) = 
+        try {
+            import java.lang.ProcessBuilder.environment(): ##java.util.Map \ r;
+            let ProcessBuilder(pb1) = pb;
+            environment(pb1) |> Interop/Util/MapZ.hhToMap |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
 
     pub def inheritIO!(pb: ProcessBuilder[r]): ProcessBuilder[r] \ Write(r) = 

@@ -41,6 +41,19 @@ namespace Interop/IO/InputStream {
         let InputStream(ins1) = ins;
         ins1
 
+    pub def mkInputStream(_: Region[r], prim: ##java.io.InputStream): InputStream[r] \ Write(r) = 
+        InputStream(prim) as \ Write(r)
 
+
+    pub def readAllBytes(ins: InputStream[r]): Result[Array[Int8, r], String] \ IO = 
+        try {
+            import java.io.InputStream.readAllBytes(): Array[Int8, r] \ IO;
+            let InputStream(ins1) = ins;
+            readAllBytes(ins1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
 }

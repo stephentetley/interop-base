@@ -41,6 +41,8 @@ namespace Interop/IO/OutputStream {
         let OutputStream(ous1) = ous;
         ous1
 
+    pub def mkOutputStream(_: Region[r], prim: ##java.io.OutputStream): OutputStream[r] \ Write(r) = 
+        OutputStream(prim) as \ Write(r)
 
 
 }

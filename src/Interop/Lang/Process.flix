@@ -19,6 +19,9 @@ namespace Interop/Lang {
 
     pub enum Process[_: Region](##java.lang.Process)
 
+    instance Scoped[Process] {
+        pub def regionOf(_: Process[r]): Region[r] = () as Region[r]
+    }
 }
 
 
@@ -27,6 +30,10 @@ namespace Interop/Lang/Process {
     use Interop/NIO/Charset.Charset;
     use Interop/NIO/Charset.Charset.{Charset};
 
+    use Interop/IO.InputStream;
+    use Interop/IO.InputStream.{InputStream};
+    use Interop/IO.OutputStream;
+    use Interop/IO.OutputStream.{OutputStream};
     use Interop/Lang.Process;
     use Interop/Lang.Process.{Process};
     use Interop/Lang.ProcessBuilder;
@@ -48,43 +55,23 @@ namespace Interop/Lang/Process {
                 Err(getMessage(ex))
         }
 
-/*
-    pub def getInput(cs: Charset, p: Process): Result[String, String] & Impure =
-        import java.lang.Process.getInputStream(): ##java.io.InputStream & Impure;
-        import java.io.InputStream.readAllBytes(): Array[Int8, Static] & Impure;
-        import new java.lang.String(Array[Int8, Static], ##java.nio.charset.Charset): String & Impure as newString;
-        try {
-            let Process(p1) = p;
-            let Charset(cs1) = cs;
-            let strm = getInputStream(p1);
-            let bytes = readAllBytes(strm);
-            let s1 = newString(bytes, cs1);
-            Ok(s1)
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & Impure;
-                Err(getMessage(ex))
-        }
+    pub def getOutputStream(p: Process[r]): OutputStream[r] \ {Write(r), IO}=
+        import java.lang.Process.getOutputStream(): ##java.io.OutputStream \ IO;
+        let Process(p1) = p;
+        let r = Scoped.regionOf(p);
+        getOutputStream(p1) |> Interop/IO/OutputStream.mkOutputStream(r)
+
+    pub def getInputStream(p: Process[r]): InputStream[r] \ {Write(r), IO}=
+        import java.lang.Process.getInputStream(): ##java.io.InputStream \ IO;
+        let Process(p1) = p;
+        let r = Scoped.regionOf(p);
+        getInputStream(p1) |> Interop/IO/InputStream.mkInputStream(r)
+
+    pub def getErrorStream(p: Process[r]): InputStream[r] \ {Write(r), IO}=
+        import java.lang.Process.getErrorStream(): ##java.io.InputStream \ IO;
+        let Process(p1) = p;
+        let r = Scoped.regionOf(p);
+        getErrorStream(p1) |> Interop/IO/InputStream.mkInputStream(r)
 
 
-    pub def getError(cs: Charset, p: Process): Result[String, String] & Impure =        
-        import java.lang.Process.getErrorStream(): ##java.io.InputStream & Impure;
-        import java.io.InputStream.readAllBytes(): Array[Int8, Static] & Impure;
-        import new java.lang.String(Array[Int8, Static], ##java.nio.charset.Charset): String & Impure as newString;
-        try {
-            let Process(p1) = p;
-            let Charset(cs1) = cs;
-            let strm = getErrorStream(p1);
-            let bytes = readAllBytes(strm);
-            let s1 = newString(bytes, cs1);
-            Ok(s1)
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & Impure;
-                Err(getMessage(ex))
-        }
-
-
-
-*/
 }
