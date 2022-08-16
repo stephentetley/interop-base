@@ -17,11 +17,11 @@
 package flixinterop.nio.file;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.List;
 
 public final class Pathz {
 
-    public static Path ofArrayList(String first, ArrayList<String> more) throws Exception {
+    public static Path ofList(String first, List<String> more) throws Exception {
         String[] args = new String[more.size()];
         args = more.toArray(args);
         return Path.of(first, args);
