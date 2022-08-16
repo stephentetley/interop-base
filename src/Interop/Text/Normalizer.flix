@@ -19,47 +19,13 @@
 
 namespace Interop/Text/Normalizer {
 
-    ///
-    pub enum NormalizerForm with Eq, Order, ToString, Hash, Boxable {
-        case Nfc
-        case Nfd
-        case Nfkc
-        case Nfkd
-    }
-
-    pub def marshal(x: NormalizerForm): ##java.text.Normalizer$Form =
-        import static get java.text.Normalizer$Form.NFC: ##java.text.Normalizer$Form & Pure as getNFC;
-        import static get java.text.Normalizer$Form.NFD: ##java.text.Normalizer$Form & Pure as getNFD;
-        import static get java.text.Normalizer$Form.NFKC: ##java.text.Normalizer$Form & Pure as getNFKC;
-        import static get java.text.Normalizer$Form.NFKD: ##java.text.Normalizer$Form & Pure as getNFKD;
-        match x {
-            case Nfc    => getNFC()
-            case Nfd    => getNFD()
-            case Nfkc   => getNFKC()
-            case Nfkd   => getNFKD()
-        }
-
-    pub def unmarshal(x: ##java.text.Normalizer$Form): NormalizerForm =
-        import static get java.text.Normalizer$Form.NFC: ##java.text.Normalizer$Form & Pure as getNFC;
-        import static get java.text.Normalizer$Form.NFD: ##java.text.Normalizer$Form & Pure as getNFD;
-        import static get java.text.Normalizer$Form.NFKC: ##java.text.Normalizer$Form & Pure as getNFKC;
-        import static get java.text.Normalizer$Form.NFKD: ##java.text.Normalizer$Form & Pure as getNFKD;
-        match x {
-            case x1 if primEquals(x1, getNFC())    => Nfc
-            case x1 if primEquals(x1, getNFD())    => Nfd
-            case x1 if primEquals(x1, getNFKC())   => Nfkc
-            case x1 if primEquals(x1, getNFKD())   => Nfkd
-        }
-
-    /// Warning - is this reference equality or value equality?
-    def primEquals(x: ##java.text.Normalizer$Form, y: ##java.text.Normalizer$Form): Bool =
-        import java.lang.Enum.equals(##java.lang.Object): Bool & Pure;
-        equals(x as ##java.lang.Enum, y as ##java.lang.Object)
+    use Interop/Text.NormalizerForm;
+    use Interop/Text.NormalizerForm.{NormalizerForm};
 
     pub def normalize(nform: NormalizerForm, src: String): Result[String, String] =
         import static java.text.Normalizer.normalize(##java.lang.CharSequence, ##java.text.Normalizer$Form): String & Pure;
         try {
-            let nform1 = marshal(nform);
+            let NormalizerForm(nform1) = nform;
             normalize(src as ##java.lang.CharSequence, nform1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -70,7 +36,7 @@ namespace Interop/Text/Normalizer {
     pub def isNormalized(nform: NormalizerForm, src: String): Result[Bool, String] =
         import static java.text.Normalizer.isNormalized(##java.lang.CharSequence, ##java.text.Normalizer$Form): Bool & Pure;
         try {
-            let nform1 = marshal(nform);
+            let NormalizerForm(nform1) = nform;
             isNormalized(src as ##java.lang.CharSequence, nform1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
