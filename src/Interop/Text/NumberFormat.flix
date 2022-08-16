@@ -36,6 +36,8 @@ namespace Interop/Text/NumberFormat {
 
     use Interop/Lang.Number;
     use Interop/Lang.Number.{Number};
+    use Interop/Math.RoundingMode;
+    use Interop/Math.RoundingMode.{RoundingMode};
 
     pub def getHH(x: NumberFormat[r]): ##java.text.NumberFormat = 
         let NumberFormat(x1) = x;
@@ -43,46 +45,62 @@ namespace Interop/Text/NumberFormat {
 
     pub def parse(s: String, nf: NumberFormat[r]): Result[Number, String] \ Read(r) = 
         try {
-            import java.text.NumberFormat.parse(String): ##java.lang.Number & r;
+            import java.text.NumberFormat.parse(String): ##java.lang.Number \ r;
             let NumberFormat(nf1) = nf;
             Number(parse(nf1, s)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & r;
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
     pub def formatInt64(n: Int64, nf: NumberFormat[r]): Result[String, String] \ Read(r) = 
         try {
-            import java.text.NumberFormat.format(Int64): String & r;
+            import java.text.NumberFormat.format(Int64): String \ r;
             let NumberFormat(nf1) = nf;
             format(nf1, n) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & r;
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
     pub def formatFloat64(d: Float64, nf: NumberFormat[r]): Result[String, String] \ Read(r) = 
         try {
-            import java.text.NumberFormat.format(Float64): String & r;
+            import java.text.NumberFormat.format(Float64): String \ r;
             let NumberFormat(nf1) = nf;
             format(nf1, d) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & r;
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
     pub def isGroupingUsed(nf: NumberFormat[r]): Bool \ Read(r) = 
-        import java.text.NumberFormat.isGroupingUsed(): Bool & r;
+        import java.text.NumberFormat.isGroupingUsed(): Bool \ r;
         let NumberFormat(nf1) = nf;
         isGroupingUsed(nf1)
 
     pub def setGroupingUsed!(used: Bool, nf: NumberFormat[r]): Unit \ Write(r) = 
-        import java.text.NumberFormat.setGroupingUsed(Bool): Unit & r;
+        import java.text.NumberFormat.setGroupingUsed(Bool): Unit \ r;
         let NumberFormat(nf1) = nf;
         setGroupingUsed(nf1, used)
-        
+
+    pub def getRoundingMode(nf: NumberFormat[r]): RoundingMode \ Read(r) = 
+        import java.text.NumberFormat.getRoundingMode(): ##java.math.RoundingMode \ r;
+        let NumberFormat(nf1) = nf;
+        getRoundingMode(nf1) |> RoundingMode 
+   
+    pub def setRoundingMode!(mode: RoundingMode, nf: NumberFormat[r]): Result[Unit, String] \ Write(r) = 
+        try {
+            import java.text.NumberFormat.setRoundingMode(##java.math.RoundingMode): Unit \ r;
+            let NumberFormat(nf1) = nf;
+            let RoundingMode(mode1) = mode;
+            setRoundingMode(nf1, mode1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
 }

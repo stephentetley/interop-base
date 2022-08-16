@@ -85,6 +85,27 @@ namespace Interop/Text/DecimalFormat {
         let DecimalFormat(df1) = df;
         setMinimumFractionDigits(df1, n)
 
+
+    pub def setNegativePrefix!(s: String, df: DecimalFormat[r]): Unit \ Write(r) =
+        import java.text.DecimalFormat.setNegativePrefix(String): Unit & r;
+        let DecimalFormat(df1) = df;
+        setNegativePrefix(df1, s)
+
+    pub def setNegativeSuffix!(s: String, df: DecimalFormat[r]): Unit \ Write(r) =
+        import java.text.DecimalFormat.setNegativeSuffix(String): Unit & r;
+        let DecimalFormat(df1) = df;
+        setNegativeSuffix(df1, s)
+
+    pub def setPositivePrefix!(s: String, df: DecimalFormat[r]): Unit \ Write(r) =
+        import java.text.DecimalFormat.setPositivePrefix(String): Unit & r;
+        let DecimalFormat(df1) = df;
+        setPositivePrefix(df1, s)
+
+    pub def setPositiveSuffix!(s: String, df: DecimalFormat[r]): Unit \ Write(r) =
+        import java.text.DecimalFormat.setPositiveSuffix(String): Unit & r;
+        let DecimalFormat(df1) = df;
+        setPositiveSuffix(df1, s)
+
     ///
     /// Test equality of strings `s1` and `s2` with the collator `x``.
     ///
