@@ -185,9 +185,15 @@ namespace Interop/NIO/File/Path {
                 Err(getMessage(ex))
         }
 
-    pub def toFile(_: Region[r], path: Path): File[r] \ Write(r) =
-        import java.nio.file.Path.toFile(): ##java.io.File \ {};
-        let Path(path1) = path;
-        File(toFile(path1)) as \ Write(r)
+    pub def toFile(_: Region[r], path: Path): Result[File[r], String] \ Write(r) =
+        try {
+            import java.nio.file.Path.toFile(): ##java.io.File \ r;
+            let Path(path1) = path;
+            toFile(path1) |> File |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
 }

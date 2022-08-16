@@ -83,9 +83,14 @@ namespace Interop/Lang/ProcessBuilder {
         let ProcessBuilder(pb1) = pb;
         inheritIO(pb1) |> ProcessBuilder
 
-    pub def start(pb: ProcessBuilder[r]): Process[r] \ Write(r) =
-        import java.lang.ProcessBuilder.start(): ##java.lang.Process \ r;
-        let ProcessBuilder(pb1) = pb;
-        start(pb1) |> Process
-
+    pub def start(pb: ProcessBuilder[r]): Result[Process[r], String] \ Write(r) =
+        try {
+            import java.lang.ProcessBuilder.start(): ##java.lang.Process \ r;
+            let ProcessBuilder(pb1) = pb;
+            start(pb1) |> Process |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 }

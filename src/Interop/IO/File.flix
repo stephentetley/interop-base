@@ -33,7 +33,8 @@ namespace Interop/IO/File {
     use Interop/IO.File;
     use Interop/IO.File.{File};
 
-
+    use Interop/NIO/File.Path;
+    use Interop/NIO/File.Path.{Path};
 
     pub def getHH(wr: File[r]): ##java.io.File = 
         let File(wr1) = wr;
@@ -43,6 +44,17 @@ namespace Interop/IO/File {
         import new java.io.File(String): ##java.io.File \ { Write(r), IO } as newFile;
         File(newFile(path))
 
+
+    pub def toPath(file: File[r]): Result[Path, String] \ Read(r) =
+        try {
+            import java.io.File.toPath(): ##java.nio.file.Path \ r;
+            let File(file1) = file;
+            toPath(file1) |> Path |> Ok
+       } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
 
 }
