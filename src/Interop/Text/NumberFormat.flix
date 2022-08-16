@@ -74,5 +74,15 @@ namespace Interop/Text/NumberFormat {
                 Err(getMessage(ex))
         }
 
+    pub def isGroupingUsed(nf: NumberFormat[r]): Bool \ Read(r) = 
+        import java.text.NumberFormat.isGroupingUsed(): Bool & r;
+        let NumberFormat(nf1) = nf;
+        isGroupingUsed(nf1)
+
+    pub def setGroupingUsed!(used: Bool, nf: NumberFormat[r]): Unit \ Write(r) = 
+        import java.text.NumberFormat.setGroupingUsed(Bool): Unit & r;
+        let NumberFormat(nf1) = nf;
+        setGroupingUsed(nf1, used)
+        
 
 }

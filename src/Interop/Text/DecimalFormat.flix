@@ -49,13 +49,20 @@ namespace Interop/Text/DecimalFormat {
     ///
     pub def new(_: Region[r]): DecimalFormat[r] \ Write(r) =
         import new java.text.DecimalFormat(): ##java.text.DecimalFormat & r as newDecimalFormat;
-        DecimalFormat(newDecimalFormat())
+        newDecimalFormat() |> DecimalFormat
+
+    ///
+    /// Returns a new mutable DecimalFormat.
+    ///
+    pub def newWithPattern(_: Region[r], patt: String): DecimalFormat[r] \ Write(r) =
+        import new java.text.DecimalFormat(String): ##java.text.DecimalFormat & r as newDecimalFormat;
+        newDecimalFormat(patt) |> DecimalFormat
 
 
-    pub def setGroupingUsed!(b: Bool, df: DecimalFormat[r]): Unit \ Write(r) =
-        import java.text.DecimalFormat.setGroupingUsed(Bool): Unit & r;
+    pub def setGroupingSize!(sz: Int32, df: DecimalFormat[r]): Unit \ Write(r) =
+        import java.text.DecimalFormat.setGroupingSize(Int32): Unit & r;
         let DecimalFormat(df1) = df;
-        setGroupingUsed(df1, b)
+        setGroupingSize(df1, sz)
 
     pub def setMaximumIntegerDigits!(n: Int32, df: DecimalFormat[r]): Unit \ Write(r) =
         import java.text.DecimalFormat.setMaximumIntegerDigits(Int32): Unit & r;
