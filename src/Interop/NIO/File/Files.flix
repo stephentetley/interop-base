@@ -21,10 +21,26 @@ namespace Interop/NIO/File/Files {
     use Interop/NIO/Charset.Charset.{Charset};
     use Interop/NIO/File.Path;
     use Interop/NIO/File.Path.{Path};
+    use Interop/NIO/File.LinkOption;
     use Interop/NIO/File.OpenOption;
     use Interop/NIO/File.OpenOption.{OpenOption};
     use Interop/NIO/File.ImpOpenOption;
     use Interop/Lang.ImpCharSequence;
+
+
+    /// UTF_8
+    pub def exists(path: Path, opts: List[LinkOption]): Result[Bool, String] \ IO = region r {
+        try {
+            import static flixinterop.nio.file.Filesz.exists(##java.nio.file.Path, ##java.util.List): Bool \ IO;
+            let Path(path1) = path;
+            let opts1 = Interop/Util/ArrayList.fromList(r, opts) |> Interop/Util/ListZ.toListHH;
+            exists(path1, opts1)|> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+    }
 
     /// UTF_8
     pub def readString(path: Path): Result[String, String] \ IO = 

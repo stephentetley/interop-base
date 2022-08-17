@@ -18,11 +18,18 @@ package flixinterop.nio.file;
 
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.List;
 
 public final class Filesz {
+
+    public static boolean exists(Path path, List<LinkOption> options) throws Exception {
+        LinkOption[] args = new LinkOption[options.size()];
+        args = options.toArray(args);
+        return Files.exists(path, args);
+    }
 
     public static Path writeString(Path path, CharSequence csq, Charset cs, List<OpenOption> options) throws Exception {
         OpenOption[] args = new OpenOption[options.size()];
