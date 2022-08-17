@@ -50,6 +50,10 @@ namespace Interop/IO/FileOutputStream {
         let FileOutputStream(ous1) = ous;
         ous1
 
+    pub def mkFileOutputStream(_: Region[r], prim: ##java.io.FileOutputStream): FileOutputStream[r] \ Write(r) =
+        FileOutputStream(prim) as \ Write(r)
+
+
     pub def newWithFile(file: File[r]): Result[FileOutputStream[r], String] \ {Write(r), IO} = 
         try {
             import new java.io.FileOutputStream(##java.io.File): ##java.io.FileOutputStream \ IO as newOutputStream;

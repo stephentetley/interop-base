@@ -57,5 +57,7 @@ namespace Interop/IO/Writer {
         wr1
 
 
+    pub def mkWriter(_: Region[r], prim: ##java.io.Writer): Writer[r] \ Write(r) =
+        Writer(prim) as \ Write(r)
 
 }

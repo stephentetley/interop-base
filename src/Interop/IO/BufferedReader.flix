@@ -48,6 +48,10 @@ namespace Interop/IO/BufferedReader {
         let BufferedReader(rd1) = rd;
         rd1
 
+    pub def mkBufferedReader(_: Region[r], prim: ##java.io.BufferedReader): BufferedReader[r] \ Write(r) = 
+        BufferedReader(prim) as \ Write(r)
+
+
     // read
 
     pub def read!(rd: BufferedReader[r]): Result[Option[Int32], String] \ IO = 

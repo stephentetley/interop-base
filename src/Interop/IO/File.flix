@@ -40,6 +40,10 @@ namespace Interop/IO/File {
         let File(wr1) = wr;
         wr1
 
+    pub def mkFile(_: Region[r], prim: ##java.io.File): File[r] \ Write(r) = 
+        File(prim) as \ Write(r)
+
+
     pub def newFile[r: Region](_: Region[r], path: String): File[r] \ { Write(r), IO } = 
         import new java.io.File(String): ##java.io.File \ { Write(r), IO } as newFile;
         File(newFile(path))

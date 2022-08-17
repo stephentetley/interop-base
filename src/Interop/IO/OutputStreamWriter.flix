@@ -53,19 +53,24 @@ namespace Interop/IO/OutputStreamWriter {
 
     use Interop/IO.OutputStreamWriter;
     use Interop/IO.OutputStreamWriter.{OutputStreamWriter};
-
     use Interop/IO.SubOutputStream;
 
+    use Interop/NIO/Charset.Charset;
+    use Interop/NIO/Charset.Charset.{Charset};
 
     pub def getHH(wr: OutputStreamWriter[r]): ##java.io.OutputStreamWriter = 
         let OutputStreamWriter(wr1) = wr;
         wr1
 
+    pub def mkOutputStreamWriter(_: Region[r], prim: ##java.io.OutputStreamWriter): OutputStreamWriter[r] \ Write(r) =
+        OutputStreamWriter(prim) as \ Write(r)
+
     pub def newOutputStreamWriter[r: Region, stream: Region -> Type](_: Region[r], 
                                                                     ous: stream[r], 
-                                                                    cs: ##java.nio.charset.Charset): OutputStreamWriter[r] \ Write(r) with SubOutputStream[stream] = 
+                                                                    cs: Charset): OutputStreamWriter[r] \ Write(r) with SubOutputStream[stream] = 
         import new java.io.OutputStreamWriter(##java.io.OutputStream, ##java.nio.charset.Charset): ##java.io.OutputStreamWriter & r as newOutputStreamWriter;
-        OutputStreamWriter(newOutputStreamWriter(Interop/IO/OutputStream.getHH(Interop/IO/SubOutputStream.toOutputStream(ous)), cs))
+        let Charset(cs1) = cs;
+        OutputStreamWriter(newOutputStreamWriter(Interop/IO/OutputStream.getHH(Interop/IO/SubOutputStream.toOutputStream(ous)), cs1))
 
 
 }
