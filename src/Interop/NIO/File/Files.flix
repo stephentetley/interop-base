@@ -23,6 +23,7 @@ namespace Interop/NIO/File/Files {
     use Interop/NIO/File.Path.{Path};
     use Interop/NIO/File.OpenOption;
     use Interop/NIO/File.OpenOption.{OpenOption};
+    use Interop/NIO/File.ImpOpenOption;
     use Interop/Lang.ImpCharSequence;
 
     /// UTF_8
@@ -50,14 +51,16 @@ namespace Interop/NIO/File/Files {
         }
 
     /// UTF_8
-    pub def writeString[t: Region -> Type, r: Region](path: Path, cseq: t[r], opts: List[OpenOption]): Result[Path, String] \ IO with ImpCharSequence[t], Scoped[t] = 
+    pub def writeString[t: Region -> Type, r: Region, opt: Type](path: Path, 
+                                                                cseq: t[r], 
+                                                                opts: List[opt]): Result[Path, String] \ IO with ImpCharSequence[t], Scoped[t], ImpOpenOption[opt] = 
         try {
             import static flixinterop.nio.file.Filesz.writeString(##java.nio.file.Path, 
                             ##java.lang.CharSequence, ##java.util.List): ##java.nio.file.Path \ IO;
             let Path(path1) = path;
             let cseq1 = Interop/Lang/CharSequence.toCharSequenceHH(cseq);
             let r = Scoped.regionOf(cseq);
-            let opts1 = Interop/Util/ArrayList.fromList(r, opts) |> Interop/Util/ListZ.toListHH;
+            let opts1 = List.map(Interop/NIO/File/ImpOpenOption.toOpenOption, opts) |> Interop/Util/ArrayList.fromList(r) |> Interop/Util/ListZ.toListHH;
             writeString(path1, cseq1, opts1) |> Path |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -65,7 +68,10 @@ namespace Interop/NIO/File/Files {
                 Err(getMessage(ex))
         }
 
-    pub def writeStringWithCharset[t: Region -> Type, r: Region](path: Path, cseq: t[r], cs: Charset, opts: List[OpenOption]): Result[Path, String] \ IO with ImpCharSequence[t], Scoped[t] = 
+    pub def writeStringWithCharset[t: Region -> Type, r: Region, opt: Type](path: Path, 
+                                                                            cseq: t[r], 
+                                                                            cs: Charset, 
+                                                                            opts: List[opt]): Result[Path, String] \ IO with ImpCharSequence[t], Scoped[t], ImpOpenOption[opt] = 
         try {
             import static flixinterop.nio.file.Filesz.writeString(##java.nio.file.Path, 
                             ##java.lang.CharSequence, ##java.nio.charset.Charset, ##java.util.List): ##java.nio.file.Path \ IO;
@@ -73,7 +79,7 @@ namespace Interop/NIO/File/Files {
             let cseq1 = Interop/Lang/CharSequence.toCharSequenceHH(cseq);
             let Charset(cs1) = cs;
             let r = Scoped.regionOf(cseq);
-            let opts1 = Interop/Util/ArrayList.fromList(r, opts) |> Interop/Util/ListZ.toListHH;
+            let opts1 = List.map(Interop/NIO/File/ImpOpenOption.toOpenOption, opts) |> Interop/Util/ArrayList.fromList(r) |> Interop/Util/ListZ.toListHH;
             writeString(path1, cseq1, cs1, opts1) |> Path |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
