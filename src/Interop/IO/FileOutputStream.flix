@@ -61,7 +61,7 @@ namespace Interop/IO/FileOutputStream {
             newOutputStream(file1) |> FileOutputStream |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & r;
+                import java.lang.Throwable.getMessage(): String \ r;
                 Err(getMessage(ex))
         }
 

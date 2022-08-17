@@ -75,19 +75,18 @@ namespace Interop/NIO/File/Path {
     ///
     /// Returns a new FilePath.
     ///
-    pub def of(s: String, arr: Array[String, r]): Result[Path, String] \ {Read(r)}=
+    pub def of(s: String, l: List[String]): Result[Path, String] = region r {
         try {
             // Currently we have to use a wrapper due to java.nio.file.Path.of using varargs 
             import static flixinterop.nio.file.Pathz.ofList(String, ##java.util.List): ##java.nio.file.Path \ {Read(r)} as of1;
-            let r = Scoped.regionOf(arr);
-            let arr1 = Interop/Util/ArrayList.fromArray(r, arr) |> Interop/Util/ListZ.toListHH;
-            Path(of1(s, arr1)) |> Ok
+            let ls1 = Interop/Util/ArrayList.fromList(r, l) |> Interop/Util/ListZ.toListHH;
+            Path(of1(s, ls1)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
-
+    }
 
 
     pub def normalize(path: Path): Path =
