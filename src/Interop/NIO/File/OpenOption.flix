@@ -32,4 +32,5 @@ namespace Interop/NIO/File {
         pub def fromJavaObject(o: ##java.lang.Object): OpenOption = 
             OpenOption(o as ##java.nio.file.OpenOption)
     }
+
 }

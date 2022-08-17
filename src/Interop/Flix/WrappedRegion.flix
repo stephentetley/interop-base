@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-/// Move to a "base" namespace
 
 namespace Interop/Flix/WrappedRegion {
 
@@ -35,6 +34,10 @@ namespace Interop/Flix/WrappedRegion {
     /// ///
     /// pub def new(_: Region[r], a: t): WrappedRegion[t, r] \ Write(r) = WrappedRegion(a) as \ Write(r)
 
+
+    ///
+    /// Wrap String with a REgion so it can implement ImpCharSequence, ImpAppendable...
+    /// 
     pub enum StringWithRegion[_: Region] with Eq, Order, ToString { 
         case StringWithRegion(String) 
     }
@@ -46,9 +49,9 @@ namespace Interop/Flix/WrappedRegion {
 
 
     ///
-    /// Returns a new mutable WrappedRegion.
+    /// Returns a StringWithRegion.
     ///
-    pub def newStringWithRegion(_: Region[r], s: String): StringWithRegion[r] \ Write(r) = StringWithRegion(s) as \ Write(r)
+    pub def mkStringWithRegion(_: Region[r], s: String): StringWithRegion[r] \ Write(r) = StringWithRegion(s) as \ Write(r)
 
 
 

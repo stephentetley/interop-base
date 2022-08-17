@@ -25,7 +25,8 @@ namespace Interop/NIO/File/Files {
     use Interop/NIO/File.OpenOption.{OpenOption};
     use Interop/Lang.ImpCharSequence;
 
-    pub def readStringUtf8(path: Path): Result[String, String] \IO = 
+    /// UTF_8
+    pub def readString(path: Path): Result[String, String] \ IO = 
         try {
             import static java.nio.file.Files.readString(##java.nio.file.Path): String \ IO;
             let path1 = Interop/NIO/File/Path.getHH(path);
@@ -36,7 +37,7 @@ namespace Interop/NIO/File/Files {
                 Err(getMessage(ex))
         }
 
-    pub def readString(path: Path, cs: Charset): Result[String, String] \IO = 
+    pub def readStringWithCharset(path: Path, cs: Charset): Result[String, String] \IO = 
         try {
             import static java.nio.file.Files.readString(##java.nio.file.Path, ##java.nio.charset.Charset): String \ IO;
             let Path(path1) = path;
@@ -48,7 +49,23 @@ namespace Interop/NIO/File/Files {
                 Err(getMessage(ex))
         }
 
-    pub def writeString[t: Region -> Type, r: Region](path: Path, cseq: t[r], cs: Charset, opts: List[OpenOption]): Result[Path, String] \ IO with ImpCharSequence[t], Scoped[t] = 
+    /// UTF_8
+    pub def writeString[t: Region -> Type, r: Region](path: Path, cseq: t[r], opts: List[OpenOption]): Result[Path, String] \ IO with ImpCharSequence[t], Scoped[t] = 
+        try {
+            import static flixinterop.nio.file.Filesz.writeString(##java.nio.file.Path, 
+                            ##java.lang.CharSequence, ##java.util.List): ##java.nio.file.Path \ IO;
+            let Path(path1) = path;
+            let cseq1 = Interop/Lang/CharSequence.toCharSequenceHH(cseq);
+            let r = Scoped.regionOf(cseq);
+            let opts1 = Interop/Util/ArrayList.fromList(r, opts) |> Interop/Util/ListZ.toListHH;
+            writeString(path1, cseq1, opts1) |> Path |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def writeStringWithCharset[t: Region -> Type, r: Region](path: Path, cseq: t[r], cs: Charset, opts: List[OpenOption]): Result[Path, String] \ IO with ImpCharSequence[t], Scoped[t] = 
         try {
             import static flixinterop.nio.file.Filesz.writeString(##java.nio.file.Path, 
                             ##java.lang.CharSequence, ##java.nio.charset.Charset, ##java.util.List): ##java.nio.file.Path \ IO;

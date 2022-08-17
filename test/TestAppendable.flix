@@ -9,7 +9,7 @@ namespace TestAppendable {
         let step = () -> 
             region r1 {
                 let sb = StringBuilder.new(r1);
-                let* _ = Interop/Lang/Appendable.appendCharSequence!(Interop/Flix/WrappedRegion.newStringWithRegion(r1, "Hello world"), sb);
+                let* _ = Interop/Lang/Appendable.appendCharSequence!(Interop/Flix/WrappedRegion.mkStringWithRegion(r1, "Hello world"), sb);
                 let* _ = Interop/Lang/Appendable.appendChar!('!', sb);
                 println("test01: " + StringBuilder.toString(sb));
                 Ok(StringBuilder.toString(sb) == "Hello world!")
