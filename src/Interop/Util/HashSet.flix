@@ -62,4 +62,7 @@ namespace Interop/Util/HashSet {
         let HashSet(s1) = s;
         s1
 
+    pub def mkHashSet(_: Region[r], prim: ##java.util.HashSet): HashSet[a, r] \ Write(r) =
+        HashSet(prim) as \ Write(r)
+
 }

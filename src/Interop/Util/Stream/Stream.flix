@@ -35,7 +35,15 @@ namespace Interop/Util/Stream/Stream {
     use Interop/Util/Stream.Stream.{Stream};
     
     use Interop/Flix.Marshal;
-    
+
+    pub def getHH(x: Stream[a, r]): ##java.util.stream.Stream = 
+        let Stream(x1) = x;
+        x1
+
+    pub def mkStream(_: Region[r], prim: ##java.util.stream.Stream): Stream[a, r] \ Write(r) = 
+        Stream(prim) as \ Write(r)
+
+
     pub def iterator(s: Stream[a, r]): Iterator[a, r] \ Write(r) with Marshal[a] =
         iteratorWith(Interop/Flix/Marshal.fromJavaObject, s)
 

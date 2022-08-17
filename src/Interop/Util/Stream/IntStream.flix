@@ -43,7 +43,7 @@ namespace Interop/Util/Stream/Stream {
         let r = Scoped.regionOf(s);
         let IntStream(s1) = s;
         let iter1 = iterator(s1 as ##java.util.stream.BaseStream);
-        let iter2 = Interop/Util/IteratorZ.new(r, iter1);
+        let iter2 = Interop/Util/IteratorZ.mkIteratorZ(r, iter1);
         Interop/Util/IteratorZ.iterator(iter2)
 
 

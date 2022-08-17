@@ -50,6 +50,9 @@ namespace Interop/Util/SortedMap {
         let SortedMap(m1) = m;
         m1
 
+    pub def mkSortedMap(_: Region[r], prim: ##java.util.SortedMap): SortedMap[k, v, r] \ Write(r) =
+        SortedMap(prim) as \ Write(r)
+        
 
     pub def hhToMap(m: ##java.util.SortedMap): Map[k, v] with Order[k], Marshal[k], Marshal[v] = 
         hhToMapWith(Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)

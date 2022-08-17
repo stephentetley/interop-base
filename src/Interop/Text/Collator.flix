@@ -29,6 +29,9 @@ namespace Interop/Text/Collator {
     use Interop/Text.Collator;
     use Interop/Text.Collator.{Collator};
 
+    pub def getHH(c: Collator[r]): ##java.text.Collator = 
+        let Collator(c1) = c;
+        c1
 
 
     pub def no_decomposition(): Int32 = 

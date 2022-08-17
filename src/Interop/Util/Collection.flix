@@ -42,6 +42,10 @@ namespace Interop/Util/Collection {
         iter1
 
 
+    pub def mkCollection(_: Region[r], col: ##java.util.Collection): Collection[a, r] \ Write(r) = 
+        Collection(col) as \Write(r)
+
+
     pub def toCollectionHH[t: Type -> Region -> Type, a: Type, r: Region](col: t[a, r]): ##java.util.Collection with ImpCollection[t] = 
         Interop/Util/ImpCollection.toCollection(col) |> getHH
 
@@ -52,9 +56,6 @@ namespace Interop/Util/Collection {
 
 
 
-    pub def new(_: Region[r], iter: ##java.util.Collection): Collection[a, r] \ Write(r) = Collection(iter) as \Write(r)
-
-
     pub def iterator(r: Region[r1], c: Collection[a, r2]): Iterator[a, r1] \ { Read(r2), Write(r1) } with Marshal[a] =
         iteratorWith(r, Interop/Flix/Marshal.fromJavaObject, c)
         
@@ -63,7 +64,7 @@ namespace Interop/Util/Collection {
                             c: Collection[a, r2]): Iterator[a, r1] \ { Read(r2), Write(r1) } with Marshal[a] =
         import java.util.Collection.iterator(): ##java.util.Iterator & (r2 and r1) as iterator1;
         let Collection(c1) = c;
-        Interop/Util/IteratorZ.new(r, iterator1(c1)) |> Interop/Util/IteratorZ.iteratorWith(ocast)
+        Interop/Util/IteratorZ.mkIteratorZ(r, iterator1(c1)) |> Interop/Util/IteratorZ.iteratorWith(ocast)
 
     /// pub def enumerator(r: Region[r1], c: Collection[a, r2]): Iterator[(a, Int32), r] \ { Read(r2), Write(r1) }  with Marshal[a] =
     ///     iterator(r, c) |> Iterator.enumerator

@@ -60,6 +60,10 @@ namespace Interop/Util/ArrayList {
         let ArrayList(arr1) = arr;
         arr1
 
+    pub def mkArrayList(_: Region[r], prim: ##java.util.ArrayList): ArrayList[a, r] \ Write(r) =
+        ArrayList(prim) as \ Write(r)
+
+
     pub def hhToList(prim: ##java.util.ArrayList): List[a] with Marshal[a] = 
         hhToListWith(Interop/Flix/Marshal.fromJavaObject, prim)
 
@@ -175,7 +179,7 @@ namespace Interop/Util/ArrayList {
                             arr: ArrayList[a, r2]): Iterator[a, r1] \ { Read(r2), Write(r1) } =
         import java.util.ArrayList.iterator(): ##java.util.Iterator & (r2 and r1) as iterator1;
         let ArrayList(arr1) = arr;
-        Interop/Util/IteratorZ.new(r1, iterator1(arr1)) |> Interop/Util/IteratorZ.iteratorWith(ocast)
+        Interop/Util/IteratorZ.mkIteratorZ(r1, iterator1(arr1)) |> Interop/Util/IteratorZ.iteratorWith(ocast)
 
 
 

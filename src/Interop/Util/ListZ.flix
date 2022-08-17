@@ -54,6 +54,10 @@ namespace Interop/Util/ListZ {
         let ListZ(m1) = m;
         m1
 
+    pub def mkListZ(_: Region[r], prim: ##java.util.List): ListZ[a, r] \ Write(r) =
+        ListZ(prim) as \ Write(r)
+
+
     pub def toListHH[t: Type -> Region -> Type, a: Type, r: Region](list: t[a, r]): ##java.util.List with ImpListZ[t] = 
         Interop/Util/ImpListZ.toListZ(list) |> getHH
 
@@ -89,7 +93,7 @@ namespace Interop/Util/ListZ {
     pub def iteratorWith(r1: Region[r1], ocast: ##java.lang.Object -> a, l: ListZ[a, r2]): Iterator[a, r1] \ { Read(r2), Write(r1) } =
         import java.util.List.iterator(): ##java.util.Iterator & (r2 and r1) as iterator1;
         let ListZ(l1) = l;
-        Interop/Util/IteratorZ.new(r1, iterator1(l1)) |> Interop/Util/IteratorZ.iteratorWith(ocast)
+        Interop/Util/IteratorZ.mkIteratorZ(r1, iterator1(l1)) |> Interop/Util/IteratorZ.iteratorWith(ocast)
 
 
     pub def foldListZ(f: (b, a) -> b & ef, s: b, l: ListZ[a, r]): b \ { Read(r), ef } with Marshal[a] =

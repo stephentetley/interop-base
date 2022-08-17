@@ -53,4 +53,7 @@ namespace Interop/Util/HashMap {
         let HashMap(m1) = m;
         m1
 
+    pub def mkHashMap(_: Region[r], prim: ##java.util.HashMap): HashMap[k, v, r] \ Write(r) =
+        HashMap(prim) as \ Write(r)
+
 }

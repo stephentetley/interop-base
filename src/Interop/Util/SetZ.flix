@@ -56,6 +56,9 @@ namespace Interop/Util/SetZ {
     pub def getHH(m: SetZ[a, r]): ##java.util.Set = 
         let SetZ(m1) = m;
         m1
+        
+    pub def mkSetZ(_: Region[r], prim: ##java.util.Set): SetZ[a, r] \ Write(r) = 
+        SetZ(prim) as \ Write(r)
 
 
     pub def toSetHH[t: Type -> Region -> Type, a: Type, r: Region](s: t[a, r]): ##java.util.Set with ImpSetZ[t] = 
@@ -81,7 +84,6 @@ namespace Interop/Util/SetZ {
 
 
 
-    pub def new(_: Region[r], prim: ##java.util.Set): SetZ[a, r] = SetZ(prim)
 
     ///
     /// Returns an iterator over `s`.
