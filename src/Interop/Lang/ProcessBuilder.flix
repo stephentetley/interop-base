@@ -35,6 +35,8 @@ namespace Interop/Lang/ProcessBuilder {
     use Interop/IO.File.{File};
     use Interop/Lang.Process;
     use Interop/Lang.Process.{Process};
+    use Interop/Lang/ProcessBuilder.Redirect;
+    use Interop/Lang/ProcessBuilder.Redirect.{Redirect};
     use Interop/NIO/File.Path;
     use Interop/NIO/File.Path.{Path};
     
@@ -54,6 +56,12 @@ namespace Interop/Lang/ProcessBuilder {
         let r = Scoped.regionOf(pb);
         let ls1 = Interop/Util/ArrayList.fromList(r, l) |> Interop/Util/ListZ.toListHH;
         command(pb1, ls1) |> ProcessBuilder
+
+    pub def getCommand(pb: ProcessBuilder[r]): List[String] \ Read(r) = 
+        import java.lang.ProcessBuilder.command(): ##java.util.List \ r;
+        let ProcessBuilder(pb1) = pb;
+        command(pb1) |> Interop/Util/ListZ.hhToList
+
 
     pub def directory!(f: File[r1], pb: ProcessBuilder[r]): ProcessBuilder[r] \ { Write(r), Read(r1) } = 
         import java.lang.ProcessBuilder.directory(##java.io.File): ##java.lang.ProcessBuilder \ {r, r1} ;
@@ -82,6 +90,45 @@ namespace Interop/Lang/ProcessBuilder {
         import java.lang.ProcessBuilder.inheritIO(): ##java.lang.ProcessBuilder \ r;
         let ProcessBuilder(pb1) = pb;
         inheritIO(pb1) |> ProcessBuilder
+
+
+    pub def redirectError(red: Redirect, pb: ProcessBuilder[r]): ProcessBuilder[r] \ {Read(r1), Write(r)} = 
+        import java.lang.ProcessBuilder.redirectError(##java.lang.ProcessBuilder$Redirect): ##java.lang.ProcessBuilder \ {r1, r};
+        let ProcessBuilder(pb1) = pb;
+        let Redirect(red1) = red;
+        redirectError(pb1, red1) |> ProcessBuilder
+
+
+    pub def redirectErrorTo(file: File[r1], pb: ProcessBuilder[r]): ProcessBuilder[r] \ {Read(r1), Write(r)} = 
+        import java.lang.ProcessBuilder.redirectError(##java.io.File): ##java.lang.ProcessBuilder \ {r1, r};
+        let ProcessBuilder(pb1) = pb;
+        let File(file1) = file;
+        redirectError(pb1, file1) |> ProcessBuilder
+
+    pub def redirectInput(red: Redirect, pb: ProcessBuilder[r]): ProcessBuilder[r] \ {Read(r1), Write(r)} = 
+        import java.lang.ProcessBuilder.redirectInput(##java.lang.ProcessBuilder$Redirect): ##java.lang.ProcessBuilder \ {r1, r};
+        let ProcessBuilder(pb1) = pb;
+        let Redirect(red1) = red;
+        redirectInput(pb1, red1) |> ProcessBuilder
+
+    pub def redirectInputTo(file: File[r1], pb: ProcessBuilder[r]): ProcessBuilder[r] \ {Read(r1), Write(r)} = 
+        import java.lang.ProcessBuilder.redirectInput(##java.io.File): ##java.lang.ProcessBuilder \ {r1, r};
+        let ProcessBuilder(pb1) = pb;
+        let File(file1) = file;
+        redirectInput(pb1, file1) |> ProcessBuilder
+
+    pub def redirectOutput(red: Redirect, pb: ProcessBuilder[r]): ProcessBuilder[r] \ {Read(r1), Write(r)} = 
+        import java.lang.ProcessBuilder.redirectOutput(##java.lang.ProcessBuilder$Redirect): ##java.lang.ProcessBuilder \ {r1, r};
+        let ProcessBuilder(pb1) = pb;
+        let Redirect(red1) = red;
+        redirectOutput(pb1, red1) |> ProcessBuilder
+
+    pub def redirectOutputTo(file: File[r1], pb: ProcessBuilder[r]): ProcessBuilder[r] \ {Read(r1), Write(r)} = 
+        import java.lang.ProcessBuilder.redirectOutput(##java.io.File): ##java.lang.ProcessBuilder \ {r1, r};
+        let ProcessBuilder(pb1) = pb;
+        let File(file1) = file;
+        redirectOutput(pb1, file1) |> ProcessBuilder
+
 
     pub def start(pb: ProcessBuilder[r]): Result[Process[r], String] \ Write(r) =
         try {
