@@ -28,6 +28,8 @@ namespace Interop/Text/Collator {
 
     use Interop/Text.Collator;
     use Interop/Text.Collator.{Collator};
+    use Interop/Util.Locale;
+    use Interop/Util.Locale.{Locale};
 
     pub def getHH(c: Collator[r]): ##java.text.Collator = 
         let Collator(c1) = c;
@@ -69,14 +71,13 @@ namespace Interop/Text/Collator {
     ///
     pub def getInstance(_: Region[r]): Collator[r] \ {Write(r), IO} =
         import static java.text.Collator.getInstance(): ##java.text.Collator \ {r, IO};
-        Collator(getInstance())
+        getInstance() |> Collator
 
 
-    pub def getInstanceWithLocale(_: Region[r], loc: Interop/Util.Locale): Collator[r] \ Write(r) =
+    pub def getInstanceWithLocale(_: Region[r], loc: Locale): Collator[r] \ Write(r) =
         import static java.text.Collator.getInstance(##java.util.Locale): ##java.text.Collator \ r;
-        use Interop/Util.Locale.{Locale};
         let Locale(loc1) = loc;
-        Collator(getInstance(loc1))
+        getInstance(loc1) |> Collator
 
     /// TODO - instance with decomposition and strength?
 

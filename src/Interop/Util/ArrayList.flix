@@ -53,6 +53,7 @@ namespace Interop/Util/ArrayList {
 
     use Interop/Util.ArrayList;
     use Interop/Util.ArrayList.{ArrayList};
+    use Interop/Util.ImpCollection;
     use Interop/Flix.Marshal;
 
     
@@ -146,7 +147,19 @@ namespace Interop/Util/ArrayList {
         let ArrayList(arr1) = arr;
         add(arr1, ocast(x))
 
-
+    pub def addAll![t: Type -> Region -> Type, r: Region, a: Type](col: t[a, r], 
+                                                                    arr: ArrayList[a, r]): Result[Bool, String] \ { Write(r) } with ImpCollection[t] = 
+        try { 
+            import java.util.ArrayList.addAll(##java.util.Collection): Bool & r;
+            let ArrayList(arr1) = arr;
+            let col1 = Interop/Util/Collection.toCollectionHH(col);
+            addAll(arr1, col1) |> Ok 
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+        
 
     ///
     /// Apply the effectful function `f` to all the elements in the array `a`.
