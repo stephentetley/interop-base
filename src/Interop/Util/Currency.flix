@@ -22,6 +22,15 @@ namespace Interop/Util {
     pub enum Currency(##java.util.Currency)
 
 
+    instance Interop/Flix.Marshal[Currency] {
+        pub def toJavaObject(x: Currency): ##java.lang.Object =
+            let Currency(x1) = x;
+            x1 as ##java.lang.Object
+
+        pub def fromJavaObject(o: ##java.lang.Object): Currency = 
+            Currency(o as ##java.util.Currency)
+    }
+
 }
 
 
@@ -37,8 +46,15 @@ namespace Interop/Util/Currency {
         let Currency(o1) = o;
         o1
 
+    /// equals and hashCode not overriden from Object...
 
-    pub def getAvailableCurrencies(): Result[List[String], String] \ IO = region r {
+    pub def toString(x: Currency): String =
+        import java.util.Currency.toString(): String \ {};
+        let Currency(x1) = x;
+        toString(x1)
+
+
+    pub def getAvailableCurrencies(): Result[List[Currency], String] \ IO = region r {
         import static java.util.Currency.getAvailableCurrencies(): ##java.util.Set \ IO ;
         let s1 = getAvailableCurrencies() |> Interop/Util/SetZ.mkSetZ(r);
         let arr1 = Interop/Util/ArrayList.new(r);
@@ -76,10 +92,10 @@ namespace Interop/Util/Currency {
                 Err(getMessage(ex))
         }
 
-
-    pub def getInstanceWithLocale(loc: Locale): Result[Currency, String] =
+    /// In IO because we get an "instance"...
+    pub def getInstanceWithLocale(loc: Locale): Result[Currency, String] \ IO =
         try {
-            import static java.util.Currency.getInstance(##java.util.Locale): ##java.util.Currency \ {};
+            import static java.util.Currency.getInstance(##java.util.Locale): ##java.util.Currency \ IO;
             let Locale(loc1) = loc;
             getInstance(loc1) |> Currency |> Ok
         } catch {
