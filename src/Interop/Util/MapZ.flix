@@ -76,29 +76,6 @@ namespace Interop/Util/MapZ {
 
 
 
-    pub def foldMapZ(f: (b, (k, v)) -> b & ef, s: b, m: MapZ[k, v, r]): b \ { Write(r), ef} with Order[k], Marshal[k], Marshal[v] = 
-        iterator(m) |> Iterator.foldLeft(f, s)
-
-        
-
-
-    pub def unfoldViaHashMap(_: Region[r], f: s -> Option[(k, v, s)] & ef, st: s): MapZ[k, v, r] \ { Write(r), ef } with Marshal[k], Marshal[v] =
-        import new java.util.HashMap(): ##java.util.HashMap & r as newHashMap;
-        import java.util.HashMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object & r as put; 
-        def loop(st1, ac) = match f(st1) {
-            case None            => MapZ(ac as ##java.util.Map)
-            case Some(k, v, st2) => { discard put(ac, Interop/Flix/Marshal.toJavaObject(k), Interop/Flix/Marshal.toJavaObject(v)); loop(st2, ac) }
-        };
-        loop(st, newHashMap())
-
-    pub def fromMapViaHashMap(r: Region[r], m: Map[k, v]): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
-        let step = iter -> match Iterator.next(iter) {
-            case Some(k, v)   => Some((k, v, iter))
-            case None         => None
-        };
-        unfoldViaHashMap(r, step, Map.iterator(r, m))
-
-
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     ///
@@ -130,12 +107,6 @@ namespace Interop/Util/MapZ {
         Iterator(isDone, getNext)
 
 
-    pub def fromListViaHashMap(r: Region[r], l: List[(k, v)]): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
-        let step = xs -> match xs {
-            case kv :: rs => let (k,v) = kv; Some((k, v, rs))
-            case Nil      => None
-        };
-        unfoldViaHashMap(r, step, l)
     
     pub def toFlixMap(m: MapZ[k, v, r]): Map[k, v] \ { Read(r) } with Order[k], Marshal[k], Marshal[v] =
         let step = (acc, entry) -> {

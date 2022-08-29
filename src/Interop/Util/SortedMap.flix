@@ -121,13 +121,6 @@ namespace Interop/Util/SortedMap {
         };
         Iterator(isDone, getNext)
 
-
-    pub def fromListViaHashMap(r: Region[r], l: List[(k, v)]): SortedMap[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
-        let step = xs -> match xs {
-            case kv :: rs => let (k,v) = kv; Some((k, v, rs))
-            case Nil      => None
-        };
-        unfoldViaTreeMap(r, step, l)
     
     
     pub def toFlixMap(m: SortedMap[k, v, r]): Map[k, v] \ { Read(r) } with Order[k], Marshal[k], Marshal[v] =

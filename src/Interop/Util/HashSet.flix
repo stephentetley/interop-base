@@ -81,11 +81,19 @@ namespace Interop/Util/HashSet {
         let x1 = Interop/Flix/Marshal.toJavaObject(x);
         add(s1, x1)
 
-    pub def fromFlixFoldable(r: Region[r], l: t[a]): HashSet[a, r] \ Write(r) with Foldable[t], Marshal[a] =
-        let map1 = new(r);
-        let step = (_, x) -> discard add!(x, map1);
-        Foldable.foldLeft(step, (), l);
-        map1
+    pub def addWith!(x: a, ocast: a -> ##java.lang.Object, s: HashSet[a, r]): Bool \ { Write(r) } = 
+        import java.util.HashSet.add(##java.lang.Object): Bool & r;
+        let HashSet(s1) = s;
+        add(s1, ocast(x))
 
+    pub def fromFoldable(r: Region[r], t: t[a]): HashSet[a, r] \ Write(r) with Foldable[t], Marshal[a] =
+        let set1 = new(r);
+        Foldable.foreach(x -> discard add!(x, set1), t);
+        set1
+
+    pub def fromFoldableWith(r: Region[r], ocast: a -> ##java.lang.Object, t: t[a]): HashSet[a, r] \ { Write(r) } with Foldable[t] =
+        let set1 = new(r);
+        Foldable.foreach(x -> discard addWith!(x, ocast, set1), t);
+        set1
 
 }

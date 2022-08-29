@@ -73,12 +73,35 @@ namespace Interop/Util/HashMap {
         let v1 = Interop/Flix/Marshal.toJavaObject(v);
         put(m1, k1, v1) |> Interop/Flix/Marshal.fromJavaObject
 
-    pub def fromFlixFoldable(r: Region[r], l: t[(k, v)]): HashMap[k, v, r] \ Write(r) with Foldable[t], Marshal[k], Marshal[v] =
+    pub def putWith!(k: k, v: v, 
+                        kcast: k -> ##java.lang.Object, 
+                        vcast: v -> ##java.lang.Object, 
+                        m: HashMap[k, v, r]): Unit \  Write(r) =
+        import java.util.HashMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
+        let HashMap(m1) = m;
+        let k1 = kcast(k);
+        let v1 = vcast(v);
+        discard put(m1, k1, v1)
+
+
+    pub def fromFlixMap(r: Region[r], t: Map[k, v]): HashMap[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
         let map1 = new(r);
-        let step = (_, kv) -> {let (k, v) = kv; discard put!(k, v, map1)};
-        Foldable.foldLeft(step, (), l);
+        Map.foreach((k, v) -> discard put!(k, v, map1), t);
         map1
 
+
+    pub def fromFoldable(r: Region[r], t: t[(k, v)]): HashMap[k, v, r] \ Write(r) with Foldable[t], Marshal[k], Marshal[v] =
+        let map1 = new(r);
+        Foldable.foreach(match (k, v) -> discard put!(k, v, map1), t);
+        map1
+
+    pub def fromFoldableWith(r: Region[r], 
+                                kcast: k -> ##java.lang.Object, 
+                                vcast: v -> ##java.lang.Object, 
+                                t: t[(k, v)]): HashMap[k, v, r] \ { Write(r) } with Foldable[t] =
+        let map1 = new(r);
+        Foldable.foreach(match (k, v) -> putWith!(k, v, kcast, vcast, map1), t);
+        map1
 
 
 }

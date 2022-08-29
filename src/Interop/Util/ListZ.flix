@@ -87,27 +87,6 @@ namespace Interop/Util/ListZ {
                 |> Interop/Util/IteratorZ.toFlixIterator(ocast)
 
 
-    pub def foldListZ(f: (b, a) -> b & ef, s: b, l: ListZ[a, r]): b \ { Write(r), ef } with Marshal[a] =
-        iterator(l) |> Iterator.foldLeft(f, s)
-
-
-    pub def unfoldViaArrayList(_: Region[r], f: s -> Option[(a, s)] & ef, st: s): ListZ[a, r] \ { Write(r),  ef } with Marshal[a] =
-        import new java.util.ArrayList(): ##java.util.ArrayList & r as new1;
-        import java.util.ArrayList.add(##java.lang.Object): Bool & r as add1;
-        def loop(st1, acc) = match f(st1) {
-            case None         => ListZ(acc as ##java.util.List)
-            case Some(o, st2) => {discard add1(acc, Interop/Flix/Marshal.toJavaObject(o)); loop(st2, acc)}
-        };
-        loop(st, new1())
-
-
-    pub def fromListViaArrayList(r: Region[r], l: List[a]): ListZ[a, r] \ { Write(r) } with Marshal[a] =
-        let step = st -> match st {
-            case a :: rs => Some((a, rs))
-            case Nil     => None
-        };
-        unfoldViaArrayList(r, step, l)
-
 
     pub def toFlixList(l: ListZ[a, r]): List[a] \ { Read(r) } with Marshal[a] =
         region r2 {
@@ -115,8 +94,9 @@ namespace Interop/Util/ListZ {
         }
 
     pub def toSet(l: ListZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
-        let step = (acc, a) -> Set.insert(a, acc);
-        foldListZ(step, Set.empty(), l)
+        region r2 {
+            toFlixIterator(r2, Interop/Flix/Marshal.fromJavaObject, l) |> Iterator.toSet
+        }
 
 
     /// TEMP ...

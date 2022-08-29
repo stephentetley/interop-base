@@ -87,12 +87,12 @@ namespace Interop/Util/ArrayList {
         Iterator.foreach(x -> discard add!(x, als), iter1);
         als
 
-    pub def fromFoldable(r: Region[r1], t: t[a]): ArrayList[a, r1] \ { Write(r1) } with Foldable[t], Marshal[a] =
+    pub def fromFoldable(r: Region[r], t: t[a]): ArrayList[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
         let als = new(r);
         Foldable.foreach(x -> discard add!(x, als), t);
         als
 
-    pub def fromFoldableWith(r: Region[r1], ocast: a -> ##java.lang.Object, t: t[a]): ArrayList[a, r1] \ { Write(r1) } with Foldable[t] =
+    pub def fromFoldableWith(r: Region[r], ocast: a -> ##java.lang.Object, t: t[a]): ArrayList[a, r] \ { Write(r) } with Foldable[t] =
         let als = new(r);
         Foldable.foreach(x -> discard addWith!(x, ocast, als), t);
         als
@@ -132,22 +132,6 @@ namespace Interop/Util/ArrayList {
                 Err(getMessage(ex))
         }
         
-
-    ///
-    /// Apply the effectful function `f` to all the elements in the array `a`.
-    ///
-    pub def foreach(f: a -> Unit & ef, arr: ArrayList[a, r]): Unit \ { ef, Read(r) } with Marshal[a] =
-        let len = length(arr);
-        def loop(i) = {
-            if (i >= len)
-                ()
-            else {
-                let x = get(i, arr);
-                f(x);
-                loop(i + 1)
-            }
-        };
-        loop(0)
 
 
     ///
@@ -211,13 +195,6 @@ namespace Interop/Util/ArrayList {
             discard foldArrayList(step, 0, arr);
             aout
         }
-
-
-    /// asc order?
-    pub def fromSet(r: Region[r], s: Set[a]): ArrayList[a, r] \ { Write(r) } with Marshal[a] =
-        let arr = new(r);
-        Set.foreach(x -> discard add!(x, arr), s);
-        arr
 
 
 }

@@ -72,37 +72,6 @@ namespace Interop/Util/SetZ {
         toFlixIterator(Scoped.regionOf(s), Interop/Flix/Marshal.fromJavaObject, s)
 
 
-    pub def foldSetZ(f: (b, a) -> b & ef, st: b, s: SetZ[a, r]): b \ { Read(r), ef } with Marshal[a] =
-        let iter = iterator(s);
-        Iterator.foldLeft(f, st, iter)
-        
-
-    pub def unfoldViaHashSet(_: Region[r], f: s -> Option[(a, s)] & ef, st: s): SetZ[a, r] \ { Write(r), ef } with Marshal[a] =
-        import new java.util.HashSet(): ##java.util.HashSet & r as newHashSet;
-        import java.util.HashSet.add(##java.lang.Object): Bool & r as put; 
-        def loop(st1, ac) = match f(st1) {
-            case None           => SetZ(ac as ##java.util.Set)
-            case Some((a, st2)) => { discard put(ac, Interop/Flix/Marshal.toJavaObject(a)); loop(st2, ac) }
-        };
-        loop(st, newHashSet())
-
-
-    pub def fromSetViaHashSet(_: Region[r], s: Set[a]): SetZ[a, r] \ { Write(r) } with Order[a], Marshal[a] =
-        import new java.util.HashSet(): ##java.util.HashSet & r as newHashSet;
-        import java.util.HashSet.add(##java.lang.Object): Bool & r as put;
-        let s1 = newHashSet();
-        Set.foreach(a -> discard put(s1, Interop/Flix/Marshal.toJavaObject(a)), s);
-        SetZ(s1 as ##java.util.Set)
-
-
-    /// Shouldn't need Order instance in Flix but must be hashable in Java...
-    pub def fromListViaHashSet(r: Region[r], l: List[a]): SetZ[a, r] \ { Write(r) } with Marshal[a] =
-        let step = st -> match st {
-            case a :: rs => Some((a, rs))
-            case Nil     => None
-        };
-        unfoldViaHashSet(r, step, l)
-
     ///
     /// Returns an iterator over `s`.
     ///
