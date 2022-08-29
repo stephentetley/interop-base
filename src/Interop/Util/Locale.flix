@@ -426,16 +426,20 @@ namespace Interop/Util/Locale {
         getISOCountries() |> Array.toList
     }
 
-    pub def getIsoCountriesWithIsoCountryCode(icc: IsoCountryCode): Result[Set[String], String] =
+    pub def getIsoCountriesWithIsoCountryCode(icc: IsoCountryCode): Result[Set[String], String] = region r {
         try {
             import static java.util.Locale.getISOCountries(##java.util.Locale$IsoCountryCode): ##java.util.Set \ {};
             let icc1 = marshalIsoCountryCode(icc);
-            getISOCountries(icc1) |> Interop/Util/SetZ.hhToSet |> Ok
+            getISOCountries(icc1)             
+                |> Interop/Util/SetZ.wrapHH(r)
+                |> Interop/Util/SetZ.toFlixSet
+                |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
+    }
 
     pub def getIsoLanguages(): Result[List[String], String] = region r {
         try {
@@ -462,20 +466,31 @@ namespace Interop/Util/Locale {
         }
 
     pub def getExtensionKeys(x: Locale): Set[Char] =
-        import java.util.Locale.getExtensionKeys(): ##java.util.Set \ {};
-        let Locale(x1) = x;
-        getExtensionKeys(x1) |> Interop/Util/SetZ.hhToSet
-
+        region r {
+            import java.util.Locale.getExtensionKeys(): ##java.util.Set \ {};
+            let Locale(x1) = x;
+            getExtensionKeys(x1) 
+                |> Interop/Util/SetZ.wrapHH(r)
+                |> Interop/Util/SetZ.toFlixSet
+        }
 
     pub def getUnicodeLocaleAttributes(x: Locale): Set[String] =
-        import java.util.Locale.getUnicodeLocaleAttributes(): ##java.util.Set \ {};
-        let Locale(x1) = x;
-        getUnicodeLocaleAttributes(x1) |> Interop/Util/SetZ.hhToSet
+        region r {
+            import java.util.Locale.getUnicodeLocaleAttributes(): ##java.util.Set \ {};
+            let Locale(x1) = x;
+            getUnicodeLocaleAttributes(x1) 
+                |> Interop/Util/SetZ.wrapHH(r)
+                |> Interop/Util/SetZ.toFlixSet
+        }
 
     pub def getUnicodeLocaleKeys(x: Locale): Set[String] =
-        import java.util.Locale.getUnicodeLocaleKeys(): ##java.util.Set \ {};
-        let Locale(x1) = x;
-        getUnicodeLocaleKeys(x1) |> Interop/Util/SetZ.hhToSet
+        region r {
+            import java.util.Locale.getUnicodeLocaleKeys(): ##java.util.Set \ {};
+            let Locale(x1) = x;
+            getUnicodeLocaleKeys(x1) 
+                |> Interop/Util/SetZ.wrapHH(r)
+                |> Interop/Util/SetZ.toFlixSet
+        }
 
     pub def lookup(priorityList: List[LanguageRange], locales: List[Locale]): Result[Option[Locale], String] =         
         region r1 {
@@ -514,7 +529,9 @@ namespace Interop/Util/Locale {
                 let ls      = Interop/Util/ArrayList.fromList(r1, priorityList) |> Interop/Util/ListZ.toListHH;
                 let col     = Interop/Util/ArrayList.fromList(r1, locales)      |> Interop/Util/Collection.toCollectionHH;
                 let prim    = filter(ls, col);
-                Interop/Util/ListZ.hhToList(prim) |> Ok
+                Interop/Util/ListZ.wrapHH(r1, prim) 
+                    |> Interop/Util/ListZ.toFlixList
+                    |> Ok
             } catch {
                 case ex: ##java.lang.Exception =>
                     import java.lang.Throwable.getMessage(): String \ {};
@@ -530,7 +547,9 @@ namespace Interop/Util/Locale {
                 let col     = Interop/Util/ArrayList.fromList(r1, locales)      |> Interop/Util/Collection.toCollectionHH;
                 let mode1   = marshalFilteringMode(mode);
                 let prim    = filter(ps, col, mode1);
-                Interop/Util/ListZ.hhToList(prim) |> Ok
+                Interop/Util/ListZ.wrapHH(r1, prim) 
+                    |> Interop/Util/ListZ.toFlixList
+                    |> Ok
             } catch {
                 case ex: ##java.lang.Exception =>
                     import java.lang.Throwable.getMessage(): String \ {};
@@ -545,7 +564,9 @@ namespace Interop/Util/Locale {
                 let ls      = Interop/Util/ArrayList.fromList(r1, priorityList) |> Interop/Util/ListZ.toListHH;
                 let col     = Interop/Util/ArrayList.fromList(r1, tags)         |> Interop/Util/Collection.toCollectionHH;
                 let prim    = filterTags(ls, col);
-                Interop/Util/ListZ.hhToList(prim) |> Ok
+                Interop/Util/ListZ.wrapHH(r1, prim) 
+                    |> Interop/Util/ListZ.toFlixList
+                    |> Ok
             } catch {
                 case ex: ##java.lang.Exception =>
                     import java.lang.Throwable.getMessage(): String \ {};
@@ -561,7 +582,9 @@ namespace Interop/Util/Locale {
                 let col     = Interop/Util/ArrayList.fromList(r1, tags)         |> Interop/Util/Collection.toCollectionHH;
                 let mode1   = marshalFilteringMode(mode);
                 let prim    = filterTags(ls, col, mode1);
-                Interop/Util/ListZ.hhToList(prim) |> Ok
+                Interop/Util/ListZ.wrapHH(r1, prim) 
+                    |> Interop/Util/ListZ.toFlixList
+                    |> Ok
             } catch {
                 case ex: ##java.lang.Exception =>
                     import java.lang.Throwable.getMessage(): String \ {};

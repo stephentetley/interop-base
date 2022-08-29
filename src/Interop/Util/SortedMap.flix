@@ -58,25 +58,25 @@ namespace Interop/Util/SortedMap {
         SortedMap(prim) as \ Write(r)
         
 
-    pub def hhToMap(m: ##java.util.SortedMap): Map[k, v] with Order[k], Marshal[k], Marshal[v] = 
-        hhToMapWith(Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)
+    // pub def hhToMap(m: ##java.util.SortedMap): Map[k, v] with Order[k], Marshal[k], Marshal[v] = 
+    //     hhToMapWith(Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)
 
-    /// via entrySet and set iterator...
-    pub def hhToMapWith(kcast: ##java.lang.Object -> k, vcast: ##java.lang.Object -> v, m: ##java.util.SortedMap): Map[k, v] with Order[k] = 
-        region r { 
-            import java.util.SortedMap.entrySet(): ##java.util.Set \ Write(r) as entrySet1;
-            let step = (acc, o) -> {
-                let entry = Interop/Util/Map/Entry.castObject(r, o);
-                let (k, v) = Interop/Util/Map/Entry.toKeyValueWith(kcast, vcast, entry);
-                Map.insert(k, v, acc)
-            };
-            if (Object.isNull(m))
-                Map.empty()
-            else {
-                let s1 = entrySet1(m);
-                Interop/Util/SetZ.hhToIterator(r, identity, s1) |> Iterator.foldLeft(step, Map.empty())
-            }
-        }
+    // /// via entrySet and set iterator...
+    // pub def hhToMapWith(kcast: ##java.lang.Object -> k, vcast: ##java.lang.Object -> v, m: ##java.util.SortedMap): Map[k, v] with Order[k] = 
+    //     region r { 
+    //         import java.util.SortedMap.entrySet(): ##java.util.Set \ Write(r) as entrySet1;
+    //         let step = (acc, o) -> {
+    //             let entry = Interop/Util/Map/Entry.castObject(r, o);
+    //             let (k, v) = Interop/Util/Map/Entry.toKeyValueWith(kcast, vcast, entry);
+    //             Map.insert(k, v, acc)
+    //         };
+    //         if (Object.isNull(m))
+    //             Map.empty()
+    //         else {
+    //             let s1 = entrySet1(m);
+    //             Interop/Util/SetZ.hhToIterator(r, identity, s1) |> Iterator.foldLeft(step, Map.empty())
+    //         }
+    //     }
 
 
     /// Can't guaranteed `Ord[k]` at this point...
@@ -90,10 +90,8 @@ namespace Interop/Util/SortedMap {
 
 
     pub def foldMap(f: (b, (k, v)) -> b & ef, s: b, m: SortedMap[k, v, r]): b \ { Read(r), ef} with Order[k], Marshal[k], Marshal[v] = 
-        region r1 {
-            let iter = iterator(r1, m);
-            Iterator.foldLeft(f, s, iter)
-        }
+        iterator(m) |> Iterator.foldLeft(f, s)
+
         
 
 
@@ -113,31 +111,24 @@ namespace Interop/Util/SortedMap {
         };
         unfoldViaTreeMap(r, step, Map.iterator(r, m))
 
-    pub def toMap(m: SortedMap[k, v, r]): Map[k, v] \ { Read(r) } with Order[k], Marshal[k], Marshal[v] =
-        let step = (acc, entry) -> {
-            let (k, v) = entry;
-            Map.insert(k, v, acc)
-        };
-        foldMap(step, Map.empty(), m)
 
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     ///
-    pub def iterator(r1: Region[r1], 
-                        m: SortedMap[k, v, r2]): Iterator[(k, v), r1] \ { Read(r2), Write(r1) } with Order[k], Marshal[k], Marshal[v] =
-        iteratorWith(r1, Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)
+    pub def iterator(m: SortedMap[k, v, r]): Iterator[(k, v), r] \ { Write(r) } with Marshal[k], Marshal[v] =
+        toIterator(Scoped.regionOf(m), Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     /// Can't use RawIterator because no Marshal instance for MapEntry
     ///
-    pub def iteratorWith(r1: Region[r1],
-                            kcast: ##java.lang.Object -> k, 
-                            vcast: ##java.lang.Object -> v,  
-                            m: SortedMap[k, v, r2]): Iterator[(k, v), r1] \ { Read(r2), Write(r1) } with Order[k], Marshal[k], Marshal[v] =
-        import java.util.SortedMap.entrySet(): ##java.util.Set & r2;
-        import java.util.Set.iterator(): ##java.util.Iterator & (r2 and r1);
-        import java.util.Iterator.hasNext(): Bool & r1;
-        import java.util.Iterator.next(): ##java.lang.Object & r1;
+    pub def toIterator(r2: Region[r2],
+                        kcast: ##java.lang.Object -> k, 
+                        vcast: ##java.lang.Object -> v,  
+                        m: SortedMap[k, v, r]): Iterator[(k, v), r2] \ { Read(r), Write(r2) } =
+        import java.util.SortedMap.entrySet(): ##java.util.Set \ r;
+        import java.util.Set.iterator(): ##java.util.Iterator \ {r, r2};
+        import java.util.Iterator.hasNext(): Bool \ r2;
+        import java.util.Iterator.next(): ##java.lang.Object \ r2;
         let set1 = entrySet(getHH(m));
         let iter = iterator(set1);
         let isDone = () -> { 
@@ -145,7 +136,7 @@ namespace Interop/Util/SortedMap {
             not ans
         };
         let getNext = () -> {
-            let entry = next(iter) |> Interop/Util/Map/Entry.castObject(r1);
+            let entry = next(iter) |> Interop/Util/Map/Entry.castObject(r2);
             Interop/Util/Map/Entry.toKeyValueWith(kcast, vcast, entry)
         };
         Iterator(isDone, getNext)
@@ -158,8 +149,15 @@ namespace Interop/Util/SortedMap {
         };
         unfoldViaTreeMap(r, step, l)
     
-    pub def toList(m: SortedMap[k, v, r]): List[(k, v)] \ { Read(r) } with Order[k], Marshal[k], Marshal[v] =
-        let step = (k, entry) -> ks -> k(entry :: ks);
-        foldMap(step, ks -> ks, m) |> f -> f(Nil)
+    
+    pub def toFlixMap(m: SortedMap[k, v, r]): Map[k, v] \ { Read(r) } with Order[k], Marshal[k], Marshal[v] =
+        let step = (acc, entry) -> {
+            let (k, v) = entry;
+            Map.insert(k, v, acc)
+        };
+        iterator(m) |> Iterator.foldLeft(step, Map.empty())
+
+    pub def toFlixList(m: SortedMap[k, v, r]): List[(k, v)] \ { Read(r) } with Marshal[k], Marshal[v] =
+        iterator(m) |> Iterator.toList
 
 }

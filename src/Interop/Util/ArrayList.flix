@@ -23,6 +23,7 @@ namespace Interop/Util {
 
     ///
     /// Represents a ArrayList.
+    /// Class / Mutable
     ///
     pub enum ArrayList[_: Type, _: Region](##java.util.ArrayList)
 
@@ -69,32 +70,32 @@ namespace Interop/Util/ArrayList {
         ArrayList(prim) as \ Write(r)
 
 
-    pub def hhToList(prim: ##java.util.ArrayList): List[a] with Marshal[a] = 
-        hhToListWith(Interop/Flix/Marshal.fromJavaObject, prim)
+    // pub def hhToList(prim: ##java.util.ArrayList): List[a] with Marshal[a] = 
+    //     hhToListWith(Interop/Flix/Marshal.fromJavaObject, prim)
 
 
-    /// via iterator...
-    /// cast must be Pure
-    pub def hhToListWith(ocast: ##java.lang.Object -> a, prim: ##java.util.ArrayList): List[a] = 
-        region r { 
-            if (Object.isNull(prim))
-                Nil
-            else 
-                hhToIterator(r, ocast, prim) |> Iterator.toList
-        }
+    // /// via iterator...
+    // /// cast must be Pure
+    // pub def hhToListWith(ocast: ##java.lang.Object -> a, prim: ##java.util.ArrayList): List[a] = 
+    //     region r { 
+    //         if (Object.isNull(prim))
+    //             Nil
+    //         else 
+    //             hhToIterator(r, ocast, prim) |> Iterator.toList
+    //      }
 
-    pub def hhToArray(r: Region[r], prim: ##java.util.ArrayList): Array[a, r] \ { Write(r) } with Marshal[a] = 
-        hhToArrayWith(r, Interop/Flix/Marshal.fromJavaObject, prim)
+    // pub def hhToArray(r: Region[r], prim: ##java.util.ArrayList): Array[a, r] \ { Write(r) } with Marshal[a] = 
+    //     hhToArrayWith(r, Interop/Flix/Marshal.fromJavaObject, prim)
 
-    pub def hhToArrayWith(r: Region[r], ocast: ##java.lang.Object -> a, prim: ##java.util.ArrayList): Array[a, r] \ { Write(r) } = 
-        if (Object.isNull(prim))
-            [] @ r
-        else         
-            hhToIterator(r, ocast, prim) |> Iterator.toArray(r)
+    // pub def hhToArrayWith(r: Region[r], ocast: ##java.lang.Object -> a, prim: ##java.util.ArrayList): Array[a, r] \ { Write(r) } = 
+    //     if (Object.isNull(prim))
+    //         [] @ r
+    //     else         
+    //         hhToIterator(r, ocast, prim) |> Iterator.toArray(r)
 
-    pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, l: ##java.util.ArrayList): Iterator[a, r] \ { Write(r) } =
-        import java.util.ArrayList.iterator(): ##java.util.Iterator \ Write(r) as iterator;
-        Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(l))
+    // pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, l: ##java.util.ArrayList): Iterator[a, r] \ { Write(r) } =
+    //     import java.util.ArrayList.iterator(): ##java.util.Iterator \ Write(r) as iterator;
+    //     Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(l))
 
 
 
@@ -185,26 +186,31 @@ namespace Interop/Util/ArrayList {
     ///
     /// Returns an iterator over `arr`.
     ///
-    pub def iterator(r1: Region[r1], arr: ArrayList[a, r2]): Iterator[a, r1] \ { Read(r2), Write(r1) } with Marshal[a] =
-        iteratorWith(r1, Interop/Flix/Marshal.fromJavaObject, arr)
+    pub def iterator(arr: ArrayList[a, r]): Iterator[a, r] \ { Write(r) } with Marshal[a] =
+        toFlixIterator(Scoped.regionOf(arr), Interop/Flix/Marshal.fromJavaObject, arr)
 
     ///
     /// Returns an iterator over `arr`.
     ///
-    pub def iteratorWith(r1: Region[r1], 
+    pub def toFlixIterator(r2: Region[r2], 
                             ocast: ##java.lang.Object -> a, 
-                            arr: ArrayList[a, r2]): Iterator[a, r1] \ { Read(r2), Write(r1) } =
-        import java.util.ArrayList.iterator(): ##java.util.Iterator & (r2 and r1) as iterator1;
+                            arr: ArrayList[a, r]): Iterator[a, r2] \ { Read(r), Write(r2) } =
+        import java.util.ArrayList.iterator(): ##java.util.Iterator \ {r, r2} as iterator;
         let ArrayList(arr1) = arr;
-        Interop/Util/IteratorZ.wrapHH(r1, iterator1(arr1)) |> Interop/Util/IteratorZ.iteratorWith(ocast)
+        if (Object.isNull(arr1))
+            Iterator.new(r2)
+        else 
+            iterator(arr1) 
+                |> Interop/Util/IteratorZ.wrapHH(r2) 
+                |> Interop/Util/IteratorZ.toFlixIterator(ocast)
 
 
 
     ///
     /// Returns an iterator over `arr`.
     ///
-    pub def enumerator(r1: Region[r1], arr: ArrayList[a, r2]): Iterator[(a, Int32), r1] \ { Read(r2), Write(r1) } with Marshal[a] =
-        iterator(r1, arr) |> Iterator.enumerator
+    pub def enumerator(arr: ArrayList[a, r]): Iterator[(a, Int32), r] \ { Write(r) } with Marshal[a] =
+        iterator(arr) |> Iterator.enumerator
 
 
     pub def unfoldArrayList(_: Region[r], f: s -> Option[(a, s)] & ef, st: s): ArrayList[a, r] \ { Write(r),  ef } with Marshal[a] =
@@ -217,18 +223,14 @@ namespace Interop/Util/ArrayList {
         loop(st, new1())
 
     pub def foldArrayList(f: (b, a) -> b & ef, s: b, arr: ArrayList[a, r]): b \ { Read(r), ef } with Marshal[a] =
-        region r1 {
-            let iter = iterator(r1, arr);
-            Iterator.foldLeft(f, s, iter)
-        }
+        iterator(arr) |> Iterator.foldLeft(f, s)
 
-    pub def toList(arr: ArrayList[a, r]): List[a] \ { Read(r) } with Marshal[a] =
-        let step = (k, a) -> ks -> k(a :: ks);
-        foldArrayList(step, ks -> ks, arr) |> f -> f(Nil)
+    pub def toFlixList(arr: ArrayList[a, r]): List[a] \ { Read(r) } with Marshal[a] =
+        iterator(arr) |> Iterator.toList
 
-    pub def toSet(arr: ArrayList[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
+    pub def toFlixSet(arr: ArrayList[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
         let step = (acc, a) -> Set.insert(a, acc);
-        foldArrayList(step, Set.empty(), arr)
+        iterator(arr) |> Iterator.foldLeft(step, Set.empty())
 
 
     pub def toArray(r1: Region[r1], arr: ArrayList[a, r2]): Array[a, r1] \ { Read(r2), Write(r1) } with Marshal[a] =

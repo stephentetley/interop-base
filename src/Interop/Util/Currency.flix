@@ -59,7 +59,7 @@ namespace Interop/Util/Currency {
         let s1 = getAvailableCurrencies() |> Interop/Util/SetZ.wrapHH(r);
         let arr1 = Interop/Util/ArrayList.new(r);
         match Interop/Util/ArrayList.addAll!(s1, arr1) {
-            case Ok(_)    => arr1 |> Interop/Util/ArrayList.getHH |> Interop/Util/ArrayList.hhToList |> Ok
+            case Ok(_)    => arr1 |> Interop/Util/ArrayList.toFlixList |> Ok
             case Err(msg) => Err(msg)
         }
     }

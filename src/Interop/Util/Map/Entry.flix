@@ -17,7 +17,7 @@
 namespace Interop/Util/Map {
 
 
-    /// Mutable - see `java.util.Map.Entry.setValue`
+    /// Interface / Mutable - see `java.util.Map.Entry.setValue`
     pub enum Entry[_k: Type, _v: Type, _: Region](##java.util.Map$Entry)
     
     instance Scoped[Entry[k, v]] {
@@ -33,9 +33,9 @@ namespace Interop/Util/Map/Entry {
     use Interop/Util/Map.Entry.{Entry};
     use Interop/Flix.Marshal;
 
-    pub def getHH(m: Entry[k, v, r]): ##java.util.Map$Entry = 
-        let Entry(m1) = m;
-        m1
+    pub def getHH(ent: Entry[k, v, r]): ##java.util.Map$Entry = 
+        let Entry(ent1) = ent;
+        ent1
 
     pub def wrapHH(_: Region[r], ent: ##java.util.Map$Entry): Entry[k, v, r] \ Write(r) = 
         Entry(ent) as \ Write(r)
@@ -45,24 +45,26 @@ namespace Interop/Util/Map/Entry {
     pub def castObject(_: Region[r], o: ##java.lang.Object): Entry[k, v, r] \ Write(r) = 
         Entry(o as ##java.util.Map$Entry) as \ Write(r)
 
+    pub def equals(x: Entry[k, v, r], y: Entry[k, v, r]): Bool \ Read(r) = 
+        import java.util.Map$Entry.equals(##java.lang.Object): Bool \ r;
+        let Entry(x1) = x;
+        let Entry(y1) = y;
+        equals(x1, y1 as ##java.lang.Object) 
 
-    pub def hhToKV(prim: ##java.util.Map$Entry): (k, v) with Marshal[k], Marshal[v] = 
-        (hhToKey(prim), hhToValue(prim))
+    pub def hashCode(x: Entry[k, v, r]): Int32 \ Read(r) = 
+        import java.util.Map$Entry.hashCode(): Int32 \ r;
+        let Entry(x1) = x;
+        hashCode(x1) 
 
+    pub def getKey(ent: Entry[k, v, r]): k \ Read(r) with Marshal[k] = 
+        import java.util.Map$Entry.getKey(): ##java.lang.Object \ r;
+        let Entry(ent1) = ent;
+        getKey(ent1) |> Interop/Flix/Marshal.fromJavaObject
 
-    pub def hhToKey(prim: ##java.util.Map$Entry): k with Marshal[k]  = 
-        hhToKeyWith(Interop/Flix/Marshal.fromJavaObject, prim)
-
-    pub def hhToValue(prim: ##java.util.Map$Entry): v with Marshal[v] = 
-        hhToValueWith(Interop/Flix/Marshal.fromJavaObject, prim)
-
-    pub def hhToKeyWith(kcast: ##java.lang.Object -> k,  prim: ##java.util.Map$Entry): k  = 
-        import java.util.Map$Entry.getKey(): ##java.lang.Object \ {};
-        getKey(prim) |> kcast
-
-    pub def hhToValueWith(vcast: ##java.lang.Object -> v,  prim: ##java.util.Map$Entry): v = 
-        import java.util.Map$Entry.getValue(): ##java.lang.Object \ {};
-        getValue(prim) |> vcast
+    pub def getValue(ent: Entry[k, v, r]): v \ Read(r) with Marshal[v] = 
+        import java.util.Map$Entry.getValue(): ##java.lang.Object \ r;
+        let Entry(ent1) = ent;
+        getValue(ent1) |> Interop/Flix/Marshal.fromJavaObject
 
     ///
     /// We don't need the inverse function "Entry from (k,v)" because Java's API for building maps is `m.put(k, v)`

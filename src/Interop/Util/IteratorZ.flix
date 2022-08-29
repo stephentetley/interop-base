@@ -41,32 +41,13 @@ namespace Interop/Util/IteratorZ {
     pub def wrapHH(_: Region[r], iter: ##java.util.Iterator): IteratorZ[a, r] \ Write(r) = 
         IteratorZ(iter) as \ Write(r)
 
-
-    /// Cast must be Pure!
-    pub def hhToIterator(_: Region[r], ocast: ##java.lang.Object -> a, iter: ##java.util.Iterator): Iterator[a, r] \ { Read(r), Write(r) }   =
-        import java.util.Iterator.hasNext(): Bool \ Read(r);
-        import java.util.Iterator.next(): ##java.lang.Object \ { Write(r) };
-        let isDone = () -> { 
-            let ans = hasNext(iter);
-            not ans
-        };
-        let getNext = () -> {
-            let a1 = next(iter);
-            ocast(a1)
-        };
-        Iterator(isDone, getNext) as \ { Read(r), Write(r) }
-
-
-
-
-
     /// Mutable (raw) to mutable (Filx iterator) so Read/Write
     pub def iterator(iter: IteratorZ[a, r]): Iterator[a, r] \ { Read(r), Write(r) } with Marshal[a]  =
-        iteratorWith(Interop/Flix/Marshal.fromJavaObject, iter)
+        toFlixIterator(Interop/Flix/Marshal.fromJavaObject, iter)
         
 
-    /// iteratorWith ???
-    pub def iteratorWith(ocast: ##java.lang.Object -> a, iter: IteratorZ[a, r]): Iterator[a, r] \ { Read(r), Write(r) }   =
+    /// Cast must be Pure!
+    pub def toFlixIterator(ocast: ##java.lang.Object -> a, iter: IteratorZ[a, r]): Iterator[a, r] \ { Read(r), Write(r) }   =
         import java.util.Iterator.hasNext(): Bool \ Read(r);
         import java.util.Iterator.next(): ##java.lang.Object \ { Write(r) };
         let IteratorZ(iter1) = iter;
@@ -79,6 +60,11 @@ namespace Interop/Util/IteratorZ {
             ocast(a1)
         };
         Iterator(isDone, getNext) as \ { Read(r), Write(r) }
+
+
+
+
+
 
     pub def enumerator(iter: IteratorZ[a, r]): Iterator[(a, Int32), r] \ Write(r) with Marshal[a] =
         iterator(iter) |> Iterator.enumerator

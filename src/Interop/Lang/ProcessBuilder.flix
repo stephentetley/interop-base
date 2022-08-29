@@ -58,10 +58,13 @@ namespace Interop/Lang/ProcessBuilder {
         command(pb1, ls1) |> ProcessBuilder
 
     pub def getCommand(pb: ProcessBuilder[r]): List[String] \ Read(r) = 
-        import java.lang.ProcessBuilder.command(): ##java.util.List \ r;
-        let ProcessBuilder(pb1) = pb;
-        command(pb1) |> Interop/Util/ListZ.hhToList
-
+        region r1 {
+            import java.lang.ProcessBuilder.command(): ##java.util.List \ r;
+            let ProcessBuilder(pb1) = pb;
+            command(pb1) 
+                |> Interop/Util/ListZ.wrapHH(r1)
+                |> Interop/Util/ListZ.toFlixList
+        }
 
     pub def directory!(f: File[r1], pb: ProcessBuilder[r]): ProcessBuilder[r] \ { Write(r), Read(r1) } = 
         import java.lang.ProcessBuilder.directory(##java.io.File): ##java.lang.ProcessBuilder \ {r, r1} ;
@@ -75,16 +78,20 @@ namespace Interop/Lang/ProcessBuilder {
         directory(pb1) |> File
 
     pub def environment(pb: ProcessBuilder[r]): Result[Map[String, String], String] \ Read(r) = 
-        try {
-            import java.lang.ProcessBuilder.environment(): ##java.util.Map \ r;
-            let ProcessBuilder(pb1) = pb;
-            environment(pb1) |> Interop/Util/MapZ.hhToMap |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
+        region r1 {
+            try {
+                import java.lang.ProcessBuilder.environment(): ##java.util.Map \ r;
+                let ProcessBuilder(pb1) = pb;
+                environment(pb1) 
+                    |> Interop/Util/MapZ.wrapHH(r1)
+                    |> Interop/Util/MapZ.toFlixMap
+                    |> Ok
+            } catch {
+                case ex: ##java.lang.Exception =>
+                    import java.lang.Throwable.getMessage(): String \ {};
+                    Err(getMessage(ex))
+            }
         }
-
 
     pub def inheritIO!(pb: ProcessBuilder[r]): ProcessBuilder[r] \ Write(r) = 
         import java.lang.ProcessBuilder.inheritIO(): ##java.lang.ProcessBuilder \ r;

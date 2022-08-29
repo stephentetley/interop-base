@@ -88,11 +88,13 @@ namespace Interop/Flix {
         pub def toJavaObject(l: List[a]): ##java.lang.Object =
             region r {
                 let als = Interop/Util/ArrayList.fromList(r, l);
-                Interop/Util/ListZ.toListHH(als)  as ##java.lang.Object
+                Interop/Util/ListZ.toListHH(als) as ##java.lang.Object
             } 
         
         pub def fromJavaObject(o: ##java.lang.Object): List[a] = 
-            Interop/Util/ListZ.hhToList(o as ##java.util.List)
+            region r {
+                Interop/Util/ListZ.wrapHH(r, o as ##java.util.List) |> Interop/Util/ListZ.toFlixList
+            }
             
     }
 

@@ -65,22 +65,22 @@ namespace Interop/Util/SetZ {
         Interop/Util/ImpSetZ.toSetZ(s) |> getHH
 
 
-    pub def hhToSet(prim: ##java.util.Set): Set[a] with Order[a], Marshal[a]=  
-        hhToSetWith(Interop/Flix/Marshal.fromJavaObject, prim)
+    // pub def hhToSet(prim: ##java.util.Set): Set[a] with Order[a], Marshal[a]=  
+    //     hhToSetWith(Interop/Flix/Marshal.fromJavaObject, prim)
 
-    /// via iterator...
-    /// cast must be Pure
-    pub def hhToSetWith(ocast: ##java.lang.Object -> a, prim: ##java.util.Set): Set[a] with Order[a] = 
-        region r { 
-            if (Object.isNull(prim))
-                Set.empty()
-            else 
-                hhToIterator(r, ocast, prim) |> Iterator.toSet
-        }
+    // /// via iterator...
+    // /// cast must be Pure
+    // pub def hhToSetWith(ocast: ##java.lang.Object -> a, prim: ##java.util.Set): Set[a] with Order[a] = 
+    //     region r { 
+    //         if (Object.isNull(prim))
+    //             Set.empty()
+    //         else 
+    //             hhToIterator(r, ocast, prim) |> Iterator.toSet
+    //     }
 
-    pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, s: ##java.util.Set): Iterator[a, r] \ { Write(r) } =
-        import java.util.Set.iterator(): ##java.util.Iterator \ Write(r) as iterator;
-        Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(s))
+    // pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, s: ##java.util.Set): Iterator[a, r] \ { Write(r) } =
+    //     import java.util.Set.iterator(): ##java.util.Iterator \ Write(r) as iterator;
+    //     Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(s))
 
 
 
@@ -89,19 +89,7 @@ namespace Interop/Util/SetZ {
     /// Returns an iterator over `s`.
     ///
     pub def iterator(s: SetZ[a, r]): Iterator[a, r] \ { Write(r) } with Marshal[a] =
-        iteratorWith(Interop/Flix/Marshal.fromJavaObject, s)
-
-    ///
-    /// Returns an iterator over `s`.
-    ///
-    pub def iteratorWith(ocast: ##java.lang.Object -> a, 
-                            s: SetZ[a, r]): Iterator[a, r] \ { Write(r) } =
-        import java.util.Set.iterator(): ##java.util.Iterator \ Write(r) as iterator;
-        let SetZ(s1) = s;
-        let r = Scoped.regionOf(s);
-        Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(s1))
-
-
+        toFlixIterator(Scoped.regionOf(s), Interop/Flix/Marshal.fromJavaObject, s)
 
 
     pub def foldSetZ(f: (b, a) -> b & ef, st: b, s: SetZ[a, r]): b \ { Read(r), ef } with Marshal[a] =
@@ -126,9 +114,6 @@ namespace Interop/Util/SetZ {
         Set.foreach(a -> discard put(s1, Interop/Flix/Marshal.toJavaObject(a)), s);
         SetZ(s1 as ##java.util.Set)
 
-    pub def toSet(rs: SetZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
-        let step = (acc, a) -> Set.insert(a, acc);
-        foldSetZ(step, Set.empty(), rs)
 
     /// Shouldn't need Order instance in Flix but must be hashable in Java...
     pub def fromListViaHashSet(r: Region[r], l: List[a]): SetZ[a, r] \ { Write(r) } with Marshal[a] =
@@ -138,9 +123,29 @@ namespace Interop/Util/SetZ {
         };
         unfoldViaHashSet(r, step, l)
 
+    ///
+    /// Returns an iterator over `s`.
+    ///
+    pub def toFlixIterator(r2: Region[r2], 
+                            ocast: ##java.lang.Object -> a, 
+                            s: SetZ[a, r]): Iterator[a, r2] \ { Read(r), Write(r2) } =
+        import java.util.Set.iterator(): ##java.util.Iterator \ Write(r);
+        let SetZ(s1) = s;
+        if (Object.isNull(s1))
+            Iterator.new(r2)
+        else 
+            iterator(s1) 
+                |> Interop/Util/IteratorZ.wrapHH(r2)
+                |> Interop/Util/IteratorZ.toFlixIterator(ocast)
 
-    pub def toList(rs: SetZ[a, r]): List[a] \ { Read(r) } with Marshal[a] =
-        let step = (k, a) -> ks -> k(a :: ks);
-        foldSetZ(step, ks -> ks, rs) |> f -> f(Nil)
+    pub def toFlixSet(s: SetZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
+        region r2 {
+            toFlixIterator(r2, Interop/Flix/Marshal.fromJavaObject, s) |> Iterator.toSet
+        }
+
+    pub def toFlixList(s: SetZ[a, r]): List[a] \ { Read(r) } with Marshal[a] =
+        region r2 {
+            toFlixIterator(r2, Interop/Flix/Marshal.fromJavaObject, s) |> Iterator.toList
+        }
 
 }

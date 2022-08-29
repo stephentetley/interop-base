@@ -66,45 +66,47 @@ namespace Interop/Util/ListZ {
         Interop/Util/ImpListZ.toListZ(list) |> getHH
 
 
-    pub def hhToList(prim: ##java.util.List): List[a] with Marshal[a]=  
-        hhToListWith(Interop/Flix/Marshal.fromJavaObject, prim)
+    // pub def hhToList(prim: ##java.util.List): List[a] with Marshal[a]=  
+    //     hhToListWith(Interop/Flix/Marshal.fromJavaObject, prim)
 
-    /// via iterator...
-    /// cast must be Pure
-    pub def hhToListWith(ocast: ##java.lang.Object -> a, prim: ##java.util.List): List[a] = 
-        region r { 
-            if (Object.isNull(prim))
-                Nil
-            else 
-                hhToIterator(r, ocast, prim) |> Iterator.toList
-        }
+    // /// via iterator...
+    // /// cast must be Pure
+    // pub def hhToListWith(ocast: ##java.lang.Object -> a, prim: ##java.util.List): List[a] = 
+    //     region r { 
+    //         if (Object.isNull(prim))
+    //             Nil
+    //         else 
+    //             hhToIterator(r, ocast, prim) |> Iterator.toList
+    //     }
 
 
-    pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, l: ##java.util.List): Iterator[a, r] \ { Write(r) } =
-        import java.util.List.iterator(): ##java.util.Iterator \ Write(r) as iterator;
-        Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(l))
+    // pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, l: ##java.util.List): Iterator[a, r] \ { Write(r) } =
+    //     import java.util.List.iterator(): ##java.util.Iterator \ Write(r) as iterator;
+    //     Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(l))
 
     /// No `new` - List is an interface so it has no constructor
 
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def iterator(r1: Region[r1], l: ListZ[a, r2]): Iterator[a, r1] \ { Read(r2), Write(r1) } with Marshal[a] =
-        iteratorWith(r1, Interop/Flix/Marshal.fromJavaObject, l)
+    pub def iterator(l: ListZ[a, r]): Iterator[a, r] \ { Write(r) } with Marshal[a] =
+        toFlixIterator(Scoped.regionOf(l), Interop/Flix/Marshal.fromJavaObject, l)
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def iteratorWith(r1: Region[r1], ocast: ##java.lang.Object -> a, l: ListZ[a, r2]): Iterator[a, r1] \ { Read(r2), Write(r1) } =
-        import java.util.List.iterator(): ##java.util.Iterator & (r2 and r1) as iterator1;
+    pub def toFlixIterator(r2: Region[r2], ocast: ##java.lang.Object -> a, l: ListZ[a, r]): Iterator[a, r2] \ { Read(r), Write(r2) } =
+        import java.util.List.iterator(): ##java.util.Iterator \ {r, r2};
         let ListZ(l1) = l;
-        iterator1(l1) |> Interop/Util/IteratorZ.wrapHH(r1) |> Interop/Util/IteratorZ.iteratorWith(ocast)
+        if (Object.isNull(l1))
+            Iterator.new(r2)
+        else 
+            iterator(l1) 
+                |> Interop/Util/IteratorZ.wrapHH(r2)
+                |> Interop/Util/IteratorZ.toFlixIterator(ocast)
 
 
-    pub def foldListZ(f: (b, a) -> b & ef, s: b, l: ListZ[a, r]): b \ { Read(r), ef } with Marshal[a] =
-        region r1 {
-            let iter = iterator(r1, l);
-            Iterator.foldLeft(f, s, iter)
-        }
+    pub def foldListZ(f: (b, a) -> b & ef, s: b, l: ListZ[a, r]): b \ { Write(r), ef } with Marshal[a] =
+        iterator(l) |> Iterator.foldLeft(f, s)
 
 
     pub def unfoldViaArrayList(_: Region[r], f: s -> Option[(a, s)] & ef, st: s): ListZ[a, r] \ { Write(r),  ef } with Marshal[a] =
@@ -125,9 +127,10 @@ namespace Interop/Util/ListZ {
         unfoldViaArrayList(r, step, l)
 
 
-    pub def toList(l: ListZ[a, r]): List[a] \ { Read(r) } with Marshal[a] =
-        let step = (k, a) -> ks -> k(a :: ks);
-        foldListZ(step, ks -> ks, l) |> f -> f(Nil)
+    pub def toFlixList(l: ListZ[a, r]): List[a] \ { Read(r) } with Marshal[a] =
+        region r2 {
+            toFlixIterator(r2, Interop/Flix/Marshal.fromJavaObject, l) |> Iterator.toList
+        }
 
     pub def toSet(l: ListZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
         let step = (acc, a) -> Set.insert(a, acc);
