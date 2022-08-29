@@ -87,7 +87,7 @@ namespace Interop/Flix {
     instance Marshal[List[a]] with Marshal[a] {
         pub def toJavaObject(l: List[a]): ##java.lang.Object =
             region r {
-                let als = Interop/Util/ArrayList.fromList(r, l);
+                let als = Interop/Util/ArrayList.fromFoldable(r, l);
                 Interop/Util/ListZ.toListHH(als) as ##java.lang.Object
             } 
         

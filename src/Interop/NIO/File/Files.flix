@@ -33,7 +33,7 @@ namespace Interop/NIO/File/Files {
         try {
             import static flixinterop.nio.file.Filesz.exists(##java.nio.file.Path, ##java.util.List): Bool \ IO;
             let Path(path1) = path;
-            let opts1 = Interop/Util/ArrayList.fromList(r, opts) |> Interop/Util/ListZ.toListHH;
+            let opts1 = Interop/Util/ArrayList.fromFoldable(r, opts) |> Interop/Util/ListZ.toListHH;
             exists(path1, opts1)|> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -76,7 +76,9 @@ namespace Interop/NIO/File/Files {
             let Path(path1) = path;
             let cseq1 = Interop/Lang/CharSequence.toCharSequenceHH(cseq);
             let r = Scoped.regionOf(cseq);
-            let opts1 = List.map(Interop/NIO/File/ImpOpenOption.toOpenOption, opts) |> Interop/Util/ArrayList.fromList(r) |> Interop/Util/ListZ.toListHH;
+            let opts1 = List.map(Interop/NIO/File/ImpOpenOption.toOpenOption, opts) 
+                            |> Interop/Util/ArrayList.fromFoldable(r) 
+                            |> Interop/Util/ListZ.toListHH;
             writeString(path1, cseq1, opts1) |> Path |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -95,7 +97,9 @@ namespace Interop/NIO/File/Files {
             let cseq1 = Interop/Lang/CharSequence.toCharSequenceHH(cseq);
             let Charset(cs1) = cs;
             let r = Scoped.regionOf(cseq);
-            let opts1 = List.map(Interop/NIO/File/ImpOpenOption.toOpenOption, opts) |> Interop/Util/ArrayList.fromList(r) |> Interop/Util/ListZ.toListHH;
+            let opts1 = List.map(Interop/NIO/File/ImpOpenOption.toOpenOption, opts)
+                            |> Interop/Util/ArrayList.fromFoldable(r) 
+                            |> Interop/Util/ListZ.toListHH;
             writeString(path1, cseq1, cs1, opts1) |> Path |> Ok
         } catch {
             case ex: ##java.lang.Exception =>

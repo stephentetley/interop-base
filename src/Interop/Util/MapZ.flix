@@ -76,25 +76,6 @@ namespace Interop/Util/MapZ {
 
 
 
-
-    // pub def hhToMap(prim: ##java.util.Map): Map[k, v] with Order[k], Marshal[k], Marshal[v] = 
-    //     hhToMapWith(Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, prim)
-
-    // /// via entrySet and set iterator...
-    // pub def hhToMapWith(kcast: ##java.lang.Object -> k, vcast: ##java.lang.Object -> v, prim: ##java.util.Map): Map[k, v] with Order[k] = 
-    //     region r { 
-    //         import java.util.Map.entrySet(): ##java.util.Set \ Write(r) as entrySet1;
-    //         let step = (acc, o) -> {
-    //             let entry = Interop/Util/Map/Entry.castObject(r, o);
-    //             let (k, v) = Interop/Util/Map/Entry.toKeyValueWith(kcast, vcast, entry);
-    //             Map.insert(k, v, acc)
-    //         };
-    //         if (Object.isNull(prim))
-    //             Map.empty()
-    //         else 
-    //             entrySet1(prim) |> Interop/Util/SetZ.hhToIterator(r, identity) |> Iterator.foldLeft(step, Map.empty())
-    //     }
-
     pub def foldMapZ(f: (b, (k, v)) -> b & ef, s: b, m: MapZ[k, v, r]): b \ { Write(r), ef} with Order[k], Marshal[k], Marshal[v] = 
         iterator(m) |> Iterator.foldLeft(f, s)
 
@@ -117,12 +98,6 @@ namespace Interop/Util/MapZ {
         };
         unfoldViaHashMap(r, step, Map.iterator(r, m))
 
-    pub def toMap(m: MapZ[k, v, r]): Map[k, v] \ { Read(r) } with Order[k], Marshal[k], Marshal[v] =
-        let step = (acc, entry) -> {
-            let (k, v) = entry;
-            Map.insert(k, v, acc)
-        };
-        foldMapZ(step, Map.empty(), m)
 
     ///
     /// Returns an iterator over all key-value pairs in `m`.

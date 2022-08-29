@@ -496,8 +496,8 @@ namespace Interop/Util/Locale {
         region r1 {
             try {
                 import static java.util.Locale.lookup(##java.util.List, ##java.util.Collection): ##java.util.Locale \ {};
-                let ls  = Interop/Util/ArrayList.fromList(r1, priorityList) |> Interop/Util/ListZ.toListHH;
-                let col = Interop/Util/ArrayList.fromList(r1, locales)      |> Interop/Util/Collection.toCollectionHH;
+                let ls  = Interop/Util/ArrayList.fromFoldable(r1, priorityList) |> Interop/Util/ListZ.toListHH;
+                let col = Interop/Util/ArrayList.fromFoldable(r1, locales)      |> Interop/Util/Collection.toCollectionHH;
                 let ans = lookup(ls, col);
                 Object.toOption(ans) |> Option.map(Locale) |> Ok
             } catch {
@@ -511,8 +511,8 @@ namespace Interop/Util/Locale {
         region r1 {
             try { 
                 import static java.util.Locale.lookupTag(##java.util.List, ##java.util.Collection): String \ {};
-                let ls      = Interop/Util/ArrayList.fromList(r1, priorityList) |> Interop/Util/ListZ.toListHH;
-                let col     = Interop/Util/ArrayList.fromList(r1, tags)         |> Interop/Util/Collection.toCollectionHH;
+                let ls      = Interop/Util/ArrayList.fromFoldable(r1, priorityList) |> Interop/Util/ListZ.toListHH;
+                let col     = Interop/Util/ArrayList.fromFoldable(r1, tags)         |> Interop/Util/Collection.toCollectionHH;
                 let ans     = lookupTag(ls, col);
                 Object.toOption(ans) |> Ok
             } catch {
@@ -526,8 +526,8 @@ namespace Interop/Util/Locale {
         import static java.util.Locale.filter(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
         region r1 {
             try {
-                let ls      = Interop/Util/ArrayList.fromList(r1, priorityList) |> Interop/Util/ListZ.toListHH;
-                let col     = Interop/Util/ArrayList.fromList(r1, locales)      |> Interop/Util/Collection.toCollectionHH;
+                let ls      = Interop/Util/ArrayList.fromFoldable(r1, priorityList) |> Interop/Util/ListZ.toListHH;
+                let col     = Interop/Util/ArrayList.fromFoldable(r1, locales)      |> Interop/Util/Collection.toCollectionHH;
                 let prim    = filter(ls, col);
                 Interop/Util/ListZ.wrapHH(r1, prim) 
                     |> Interop/Util/ListZ.toFlixList
@@ -543,8 +543,8 @@ namespace Interop/Util/Locale {
         region r1 {
             try {
                 import static java.util.Locale.filter(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};
-                let ps      = Interop/Util/ArrayList.fromList(r1, priorityList) |> Interop/Util/ListZ.toListHH;
-                let col     = Interop/Util/ArrayList.fromList(r1, locales)      |> Interop/Util/Collection.toCollectionHH;
+                let ps      = Interop/Util/ArrayList.fromFoldable(r1, priorityList) |> Interop/Util/ListZ.toListHH;
+                let col     = Interop/Util/ArrayList.fromFoldable(r1, locales)      |> Interop/Util/Collection.toCollectionHH;
                 let mode1   = marshalFilteringMode(mode);
                 let prim    = filter(ps, col, mode1);
                 Interop/Util/ListZ.wrapHH(r1, prim) 
@@ -561,8 +561,8 @@ namespace Interop/Util/Locale {
         region r1 {
             try {
             import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
-                let ls      = Interop/Util/ArrayList.fromList(r1, priorityList) |> Interop/Util/ListZ.toListHH;
-                let col     = Interop/Util/ArrayList.fromList(r1, tags)         |> Interop/Util/Collection.toCollectionHH;
+                let ls      = Interop/Util/ArrayList.fromFoldable(r1, priorityList) |> Interop/Util/ListZ.toListHH;
+                let col     = Interop/Util/ArrayList.fromFoldable(r1, tags)         |> Interop/Util/Collection.toCollectionHH;
                 let prim    = filterTags(ls, col);
                 Interop/Util/ListZ.wrapHH(r1, prim) 
                     |> Interop/Util/ListZ.toFlixList
@@ -578,8 +578,8 @@ namespace Interop/Util/Locale {
         region r1 {
             try {
                 import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};
-                let ls      = Interop/Util/ArrayList.fromList(r1, priorityList) |> Interop/Util/ListZ.toListHH;
-                let col     = Interop/Util/ArrayList.fromList(r1, tags)         |> Interop/Util/Collection.toCollectionHH;
+                let ls      = Interop/Util/ArrayList.fromFoldable(r1, priorityList) |> Interop/Util/ListZ.toListHH;
+                let col     = Interop/Util/ArrayList.fromFoldable(r1, tags)         |> Interop/Util/Collection.toCollectionHH;
                 let mode1   = marshalFilteringMode(mode);
                 let prim    = filterTags(ls, col, mode1);
                 Interop/Util/ListZ.wrapHH(r1, prim) 

@@ -65,4 +65,20 @@ namespace Interop/Util/HashMap {
         import new java.util.HashMap(): ##java.util.HashMap & r as newHashMap;
         newHashMap() |> HashMap
 
+
+    pub def put!(k: k, v: v, m: HashMap[k, v, r]): v \  Write(r) with Marshal[k], Marshal[v] =
+        import java.util.HashMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
+        let HashMap(m1) = m;
+        let k1 = Interop/Flix/Marshal.toJavaObject(k);
+        let v1 = Interop/Flix/Marshal.toJavaObject(v);
+        put(m1, k1, v1) |> Interop/Flix/Marshal.fromJavaObject
+
+    pub def fromFlixFoldable(r: Region[r], l: t[(k, v)]): HashMap[k, v, r] \ Write(r) with Foldable[t], Marshal[k], Marshal[v] =
+        let map1 = new(r);
+        let step = (_, kv) -> {let (k, v) = kv; discard put!(k, v, map1)};
+        Foldable.foldLeft(step, (), l);
+        map1
+
+
+
 }

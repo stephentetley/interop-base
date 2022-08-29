@@ -70,49 +70,6 @@ namespace Interop/Util/ArrayList {
         ArrayList(prim) as \ Write(r)
 
 
-    // pub def hhToList(prim: ##java.util.ArrayList): List[a] with Marshal[a] = 
-    //     hhToListWith(Interop/Flix/Marshal.fromJavaObject, prim)
-
-
-    // /// via iterator...
-    // /// cast must be Pure
-    // pub def hhToListWith(ocast: ##java.lang.Object -> a, prim: ##java.util.ArrayList): List[a] = 
-    //     region r { 
-    //         if (Object.isNull(prim))
-    //             Nil
-    //         else 
-    //             hhToIterator(r, ocast, prim) |> Iterator.toList
-    //      }
-
-    // pub def hhToArray(r: Region[r], prim: ##java.util.ArrayList): Array[a, r] \ { Write(r) } with Marshal[a] = 
-    //     hhToArrayWith(r, Interop/Flix/Marshal.fromJavaObject, prim)
-
-    // pub def hhToArrayWith(r: Region[r], ocast: ##java.lang.Object -> a, prim: ##java.util.ArrayList): Array[a, r] \ { Write(r) } = 
-    //     if (Object.isNull(prim))
-    //         [] @ r
-    //     else         
-    //         hhToIterator(r, ocast, prim) |> Iterator.toArray(r)
-
-    // pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, l: ##java.util.ArrayList): Iterator[a, r] \ { Write(r) } =
-    //     import java.util.ArrayList.iterator(): ##java.util.Iterator \ Write(r) as iterator;
-    //     Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(l))
-
-
-
-    pub def fromArray(r: Region[r1], arr: Array[a, r2]): ArrayList[a, r1] \ { Read(r2), Write(r1) } with Marshal[a] =
-        let als = new(r);
-        Array.foreach(x -> discard add!(x, als), arr);
-        als
-
-    pub def fromList(r: Region[r1], l: List[a]): ArrayList[a, r1] \ { Write(r1) } with Marshal[a] =
-        let als = new(r);
-        List.foreach(x -> discard add!(x, als), l);
-        als
-
-    pub def fromListWith(r: Region[r1], ocast: a -> ##java.lang.Object, l: List[a]): ArrayList[a, r1] \ { Write(r1) } =
-        let als = new(r);
-        List.foreach(x -> discard addWith!(x, ocast, als), l);
-        als
 
 
     ///
@@ -122,13 +79,23 @@ namespace Interop/Util/ArrayList {
         import new java.util.ArrayList(): ##java.util.ArrayList & r as newArrayList;
         ArrayList(newArrayList())
 
-    /// ///
-    /// /// Returns a new mutable ArrayList.
-    /// ///
-    /// pub def empty(_: Region[r]): ArrayList[a, r] \ Write(r) =
-    ///     import new java.util.ArrayList(): ##java.util.ArrayList & r as newArrayList;
-    ///     ArrayList(newArrayList())
 
+    pub def fromIterable[a: Type, t: Type -> Region -> Type, r: Region, r2: Region]
+                        (r: Region[r2], t: t[a, r]): ArrayList[a, r2] \ { Read(r), Write(r2) } with Iterable[t], Marshal[a] =
+        let als = new(r);
+        let iter1 = Iterable.iterator(t);
+        Iterator.foreach(x -> discard add!(x, als), iter1);
+        als
+
+    pub def fromFoldable(r: Region[r1], t: t[a]): ArrayList[a, r1] \ { Write(r1) } with Foldable[t], Marshal[a] =
+        let als = new(r);
+        Foldable.foreach(x -> discard add!(x, als), t);
+        als
+
+    pub def fromFoldableWith(r: Region[r1], ocast: a -> ##java.lang.Object, t: t[a]): ArrayList[a, r1] \ { Write(r1) } with Foldable[t] =
+        let als = new(r);
+        Foldable.foreach(x -> discard addWith!(x, ocast, als), t);
+        als
 
 
     pub def length(arr: ArrayList[a, r]): Int32 \ Read(r) = 

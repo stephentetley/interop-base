@@ -58,26 +58,6 @@ namespace Interop/Util/SortedMap {
         SortedMap(prim) as \ Write(r)
         
 
-    // pub def hhToMap(m: ##java.util.SortedMap): Map[k, v] with Order[k], Marshal[k], Marshal[v] = 
-    //     hhToMapWith(Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)
-
-    // /// via entrySet and set iterator...
-    // pub def hhToMapWith(kcast: ##java.lang.Object -> k, vcast: ##java.lang.Object -> v, m: ##java.util.SortedMap): Map[k, v] with Order[k] = 
-    //     region r { 
-    //         import java.util.SortedMap.entrySet(): ##java.util.Set \ Write(r) as entrySet1;
-    //         let step = (acc, o) -> {
-    //             let entry = Interop/Util/Map/Entry.castObject(r, o);
-    //             let (k, v) = Interop/Util/Map/Entry.toKeyValueWith(kcast, vcast, entry);
-    //             Map.insert(k, v, acc)
-    //         };
-    //         if (Object.isNull(m))
-    //             Map.empty()
-    //         else {
-    //             let s1 = entrySet1(m);
-    //             Interop/Util/SetZ.hhToIterator(r, identity, s1) |> Iterator.foldLeft(step, Map.empty())
-    //         }
-    //     }
-
 
     /// Can't guaranteed `Ord[k]` at this point...
     pub def entrySet(m: SortedMap[k, v, r]): SetZ[Entry[k, v, r], r] \ {Write(r)}= 

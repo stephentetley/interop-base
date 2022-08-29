@@ -55,9 +55,6 @@ namespace Interop/Util/Collection {
         Interop/Util/ImpCollection.toCollection(col) |> getHH
 
 
-    // pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, l: ##java.util.Collection): Iterator[a, r] \ { Write(r) } =
-    //     import java.util.Collection.iterator(): ##java.util.Iterator \ Write(r) as iterator;
-    //     Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(l))
 
     pub def size[t: Type -> Region -> Type, a: Type, r: Region](col: t[a, r]): Int32 \ { Read(r) } with ImpCollection[t] =
         import java.util.Collection.size(): Int32 \ r;

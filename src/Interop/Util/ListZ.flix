@@ -21,6 +21,7 @@ namespace Interop/Util {
 
     ///
     /// Represents a Java List.
+    /// Interface / Mutable
     ///
     pub enum ListZ[_: Type, _: Region](##java.util.List)
 
@@ -66,25 +67,6 @@ namespace Interop/Util/ListZ {
         Interop/Util/ImpListZ.toListZ(list) |> getHH
 
 
-    // pub def hhToList(prim: ##java.util.List): List[a] with Marshal[a]=  
-    //     hhToListWith(Interop/Flix/Marshal.fromJavaObject, prim)
-
-    // /// via iterator...
-    // /// cast must be Pure
-    // pub def hhToListWith(ocast: ##java.lang.Object -> a, prim: ##java.util.List): List[a] = 
-    //     region r { 
-    //         if (Object.isNull(prim))
-    //             Nil
-    //         else 
-    //             hhToIterator(r, ocast, prim) |> Iterator.toList
-    //     }
-
-
-    // pub def hhToIterator(r: Region[r], ocast: ##java.lang.Object -> a, l: ##java.util.List): Iterator[a, r] \ { Write(r) } =
-    //     import java.util.List.iterator(): ##java.util.Iterator \ Write(r) as iterator;
-    //     Interop/Util/IteratorZ.hhToIterator(r, ocast, iterator(l))
-
-    /// No `new` - List is an interface so it has no constructor
 
     ///
     /// Returns an iterator over `l`.

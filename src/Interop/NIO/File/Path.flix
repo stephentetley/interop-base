@@ -79,7 +79,7 @@ namespace Interop/NIO/File/Path {
         try {
             // Currently we have to use a wrapper due to java.nio.file.Path.of using varargs 
             import static flixinterop.nio.file.Pathz.ofList(String, ##java.util.List): ##java.nio.file.Path \ {Read(r)} as of1;
-            let ls1 = Interop/Util/ArrayList.fromList(r, l) |> Interop/Util/ListZ.toListHH;
+            let ls1 = Interop/Util/ArrayList.fromFoldable(r, l) |> Interop/Util/ListZ.toListHH;
             Path(of1(s, ls1)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
