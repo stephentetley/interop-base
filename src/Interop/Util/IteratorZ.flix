@@ -21,6 +21,9 @@ namespace Interop/Util {
     ///
     pub enum IteratorZ[_a: Type, _r: Region](##java.util.Iterator)
 
+    instance Scoped[IteratorZ[a]] {
+        pub def regionOf(_: IteratorZ[a, r]): Region[r] = () as Region[r]
+    }
 
 }
 
@@ -35,7 +38,7 @@ namespace Interop/Util/IteratorZ {
         let IteratorZ(iter1) = iter;
         iter1
 
-    pub def mkIteratorZ(_: Region[r], iter: ##java.util.Iterator): IteratorZ[a, r] \ Write(r) = 
+    pub def wrapHH(_: Region[r], iter: ##java.util.Iterator): IteratorZ[a, r] \ Write(r) = 
         IteratorZ(iter) as \ Write(r)
 
 

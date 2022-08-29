@@ -21,7 +21,10 @@ namespace Interop/Text {
     /// Mutable
     ///
     pub enum Collator[_: Region](##java.text.Collator)
-    
+
+    instance Scoped[Collator] {
+        pub def regionOf(_: Collator[r]): Region[r] = () as Region[r]
+    }
 }
 
 namespace Interop/Text/Collator {

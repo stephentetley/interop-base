@@ -18,9 +18,13 @@ namespace Interop/Util {
 
     ///
     /// Represents a Java Map.
+    /// Iterface / Mutable (some implementations may not be mutable)
     ///
     pub enum MapZ[_k: Type, _v: Type, _r: Region](##java.util.Map)
 
+    instance Scoped[MapZ[k, v]] {
+        pub def regionOf(_: MapZ[k, v, r]): Region[r] = () as Region[r]
+    }
 
     pub class ImpMapZ[t: Type -> Type -> Region -> Type] {
         pub def toMapZ[k: Type, v: Type, r: Region](m: t[k, v, r]): MapZ[k, v, r]
@@ -46,56 +50,50 @@ namespace Interop/Util/MapZ {
         m1
 
 
-    pub def mkMapZ(_: Region[r], prim: ##java.util.Map): MapZ[k, v, r] \ Write(r) =
+    pub def wrapHH(_: Region[r], prim: ##java.util.Map): MapZ[k, v, r] \ Write(r) =
         MapZ(prim) as \ Write(r)
 
 
-    pub def toMapHH[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region](s: t[k, v, r]): ##java.util.Map with ImpMapZ[t] = 
+    pub def toMapZHH[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region](s: t[k, v, r]): ##java.util.Map with ImpMapZ[t] = 
         Interop/Util/ImpMapZ.toMapZ(s) |> getHH
+
+
+    pub def size[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region]
+                (m: t[k, v, r]): Int32 \ { Read(r) } with ImpMapZ[t] =
+        import java.util.Map.size(): Int32 \ r;
+        toMapZHH(m) |> size
+
+    pub def isEmpty[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region]
+                    (m: t[k, v, r]): Bool \ { Read(r) } with ImpMapZ[t] =
+        import java.util.Map.isEmpty(): Bool \ r;
+        toMapZHH(m) |> isEmpty
+
+
+    pub def hashCode[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region]
+                    (m: t[k, v, r]): Int32 \ { Read(r) } with ImpMapZ[t] =
+        import java.util.Map.hashCode(): Int32 \ r;
+        toMapZHH(m) |> hashCode
+
+
+
 
     pub def hhToMap(prim: ##java.util.Map): Map[k, v] with Order[k], Marshal[k], Marshal[v] = 
         hhToMapWith(Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, prim)
 
     /// via entrySet and set iterator...
     pub def hhToMapWith(kcast: ##java.lang.Object -> k, vcast: ##java.lang.Object -> v, prim: ##java.util.Map): Map[k, v] with Order[k] = 
-        let step = (acc, o) -> {
-            let me = o as ##java.util.Map$Entry;
-            let k = Interop/Util/MapEntry.hhToKeyWith(kcast, me);
-            let v = Interop/Util/MapEntry.hhToValueWith(vcast, me);
-            Map.insert(k, v, acc)
-        };
         region r { 
             import java.util.Map.entrySet(): ##java.util.Set \ Write(r) as entrySet1;
+            let step = (acc, o) -> {
+                let entry = Interop/Util/Map/Entry.castObject(r, o);
+                let (k, v) = Interop/Util/Map/Entry.toKeyValueWith(kcast, vcast, entry);
+                Map.insert(k, v, acc)
+            };
             if (Object.isNull(prim))
                 Map.empty()
             else 
                 entrySet1(prim) |> Interop/Util/SetZ.hhToIterator(r, identity) |> Iterator.foldLeft(step, Map.empty())
         }
-
-
-    pub def new(_: Region[r], prim: ##java.util.Map): MapZ[k, v, r] = MapZ(prim)
-
-    pub def getRegionOf(_: MapZ[k, v, r]): Region[r] = () as Region[r]
-
-    ///
-    /// We don't need the inverse function `marshalMapEntry` because Java's API for building maps is `m.put(k, v)`
-    /// so we never need to create a MapEntry.
-    ///
-    pub def unmarshalMapEntry(entry: MapEntry[k, v, r]): (k, v) \ Read(r) with Marshal[k], Marshal[v] =
-        unmarshalMapEntryWith(Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, entry)
-
-    pub def unmarshalMapEntryWith(kcast:  ##java.lang.Object -> k, 
-                                    vcast: ##java.lang.Object -> v,
-                                    entry: MapEntry[k, v, r]): (k, v) \ Read(r) with Marshal[k], Marshal[v] =
-        import java.util.Map$Entry.getKey(): ##java.lang.Object & r;
-        import java.util.Map$Entry.getValue(): ##java.lang.Object & r;
-        let MapEntry(entry1) = entry;
-        let k = getKey(entry1);
-        let v = getValue(entry1);                
-        let k1 = kcast(k);
-        let v1 = vcast(v);
-        (k1, v1)
-
 
     pub def foldMapZ(f: (b, (k, v)) -> b & ef, s: b, m: MapZ[k, v, r]): b \ { Read(r), ef} with Order[k], Marshal[k], Marshal[v] = 
         region r1 {
@@ -139,7 +137,7 @@ namespace Interop/Util/MapZ {
     /// Returns an iterator over all key-value pairs in `m`.
     /// Can't use RawIterator because no Marshal instance for MapEntry
     ///
-    pub def iteratorWith(_r1: Region[r1], 
+    pub def iteratorWith(r1: Region[r1], 
                             kcast: ##java.lang.Object -> k, 
                             vcast: ##java.lang.Object -> v, 
                             m: MapZ[k, v, r2]): Iterator[(k, v), r1] \ { Read(r2), Write(r1) } with Order[k], Marshal[k], Marshal[v] =
@@ -154,8 +152,8 @@ namespace Interop/Util/MapZ {
             not ans
         };
         let getNext = () -> {
-            let o = next(iter);
-            unmarshalMapEntryWith(kcast, vcast, MapEntry(o as ##java.util.Map$Entry))
+            let entry = next(iter) |> Interop/Util/Map/Entry.castObject(r1);
+            Interop/Util/Map/Entry.toKeyValueWith(kcast, vcast, entry)
         };
         Iterator(isDone, getNext)
 

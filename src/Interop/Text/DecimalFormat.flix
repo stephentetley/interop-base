@@ -21,6 +21,10 @@ namespace Interop/Text {
     /// Imperative.
     ///
     pub enum DecimalFormat[_: Region](##java.text.DecimalFormat)
+    
+    instance Scoped[DecimalFormat] {
+        pub def regionOf(_: DecimalFormat[r]): Region[r] = () as Region[r]
+    }
 
     instance SubNumberFormat[DecimalFormat] {
         pub def toNumberFormat(o: DecimalFormat[r]): NumberFormat[r] = 

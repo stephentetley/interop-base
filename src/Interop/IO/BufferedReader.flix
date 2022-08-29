@@ -48,7 +48,7 @@ namespace Interop/IO/BufferedReader {
         let BufferedReader(rd1) = rd;
         rd1
 
-    pub def mkBufferedReader(_: Region[r], prim: ##java.io.BufferedReader): BufferedReader[r] \ Write(r) = 
+    pub def wrapHH(_: Region[r], prim: ##java.io.BufferedReader): BufferedReader[r] \ Write(r) = 
         BufferedReader(prim) as \ Write(r)
 
 

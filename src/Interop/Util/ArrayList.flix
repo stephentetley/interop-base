@@ -26,6 +26,10 @@ namespace Interop/Util {
     ///
     pub enum ArrayList[_: Type, _: Region](##java.util.ArrayList)
 
+    instance Scoped[ArrayList[a]] {
+        pub def regionOf(_: ArrayList[a, r]): Region[r] = () as Region[r]
+    }
+
     instance Interop/Util.ImpCollection[ArrayList] {
         pub def toCollection(t: ArrayList[a, r]): Collection[a, r] = 
             let ArrayList(t1) = t;
@@ -61,7 +65,7 @@ namespace Interop/Util/ArrayList {
         let ArrayList(arr1) = arr;
         arr1
 
-    pub def mkArrayList(_: Region[r], prim: ##java.util.ArrayList): ArrayList[a, r] \ Write(r) =
+    pub def wrapHH(_: Region[r], prim: ##java.util.ArrayList): ArrayList[a, r] \ Write(r) =
         ArrayList(prim) as \ Write(r)
 
 
@@ -192,7 +196,7 @@ namespace Interop/Util/ArrayList {
                             arr: ArrayList[a, r2]): Iterator[a, r1] \ { Read(r2), Write(r1) } =
         import java.util.ArrayList.iterator(): ##java.util.Iterator & (r2 and r1) as iterator1;
         let ArrayList(arr1) = arr;
-        Interop/Util/IteratorZ.mkIteratorZ(r1, iterator1(arr1)) |> Interop/Util/IteratorZ.iteratorWith(ocast)
+        Interop/Util/IteratorZ.wrapHH(r1, iterator1(arr1)) |> Interop/Util/IteratorZ.iteratorWith(ocast)
 
 
 

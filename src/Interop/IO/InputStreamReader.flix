@@ -50,7 +50,7 @@ namespace Interop/IO/InputStreamReader {
         let InputStreamReader(rd1) = rd;
         rd1
 
-    pub def mkInputStreamReader(_: Region[r], prim: ##java.io.InputStreamReader): InputStreamReader[r] \ Write(r) =
+    pub def wrapHH(_: Region[r], prim: ##java.io.InputStreamReader): InputStreamReader[r] \ Write(r) =
         InputStreamReader(prim) as \ Write(r)
 
     pub def newInputStreamReader[r: Region, stream: Region -> Type](_: Region[r], 

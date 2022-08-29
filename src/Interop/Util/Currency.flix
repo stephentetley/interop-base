@@ -56,7 +56,7 @@ namespace Interop/Util/Currency {
 
     pub def getAvailableCurrencies(): Result[List[Currency], String] \ IO = region r {
         import static java.util.Currency.getAvailableCurrencies(): ##java.util.Set \ IO ;
-        let s1 = getAvailableCurrencies() |> Interop/Util/SetZ.mkSetZ(r);
+        let s1 = getAvailableCurrencies() |> Interop/Util/SetZ.wrapHH(r);
         let arr1 = Interop/Util/ArrayList.new(r);
         match Interop/Util/ArrayList.addAll!(s1, arr1) {
             case Ok(_)    => arr1 |> Interop/Util/ArrayList.getHH |> Interop/Util/ArrayList.hhToList |> Ok

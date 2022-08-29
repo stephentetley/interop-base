@@ -19,11 +19,9 @@ namespace Interop/NIO/File {
 
     use Interop/Lang.Enum;
     use Interop/Lang.Enum.{Enum};
-    use Interop/Lang.SubEnum;
 
     use Interop/NIO/File.OpenOption;
     use Interop/NIO/File.OpenOption.{OpenOption};
-    use Interop/NIO/File.ImpOpenOption;
 
     pub enum StandardOpenOption(##java.nio.file.StandardOpenOption)
 
@@ -37,7 +35,7 @@ namespace Interop/NIO/File {
     }
 
 
-    instance ImpOpenOption[StandardOpenOption] {
+    instance Interop/NIO/File.ImpOpenOption[StandardOpenOption] {
         pub def toOpenOption(x: StandardOpenOption): OpenOption = 
             let StandardOpenOption(x1) = x;
             OpenOption(x1 as ##java.nio.file.OpenOption)
@@ -47,7 +45,7 @@ namespace Interop/NIO/File {
             StandardOpenOption(x1 as ##java.nio.file.StandardOpenOption) 
     }
 
-    instance SubEnum[StandardOpenOption] {
+    instance Interop/Lang.SubEnum[StandardOpenOption] {
         pub def toEnum(x: StandardOpenOption): Enum[a] = 
             let StandardOpenOption(x1) = x;
             Enum(x1 as ##java.lang.Enum)

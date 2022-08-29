@@ -42,7 +42,7 @@ namespace Interop/IO/Reader {
         let Reader(rd1) = rd;
         rd1
 
-    pub def mkReader(_: Region[r], prim: ##java.io.Reader): Reader[r] \ Write(r) =
+    pub def wrapHH(_: Region[r], prim: ##java.io.Reader): Reader[r] \ Write(r) =
         Reader(prim) as \ Write(r)
 
 

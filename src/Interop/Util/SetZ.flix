@@ -57,7 +57,7 @@ namespace Interop/Util/SetZ {
         let SetZ(m1) = m;
         m1
         
-    pub def mkSetZ(_: Region[r], prim: ##java.util.Set): SetZ[a, r] \ Write(r) = 
+    pub def wrapHH(_: Region[r], prim: ##java.util.Set): SetZ[a, r] \ Write(r) = 
         SetZ(prim) as \ Write(r)
 
 

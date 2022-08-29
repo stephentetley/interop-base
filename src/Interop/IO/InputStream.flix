@@ -41,7 +41,7 @@ namespace Interop/IO/InputStream {
         let InputStream(ins1) = ins;
         ins1
 
-    pub def mkInputStream(_: Region[r], prim: ##java.io.InputStream): InputStream[r] \ Write(r) = 
+    pub def wrapHH(_: Region[r], prim: ##java.io.InputStream): InputStream[r] \ Write(r) = 
         InputStream(prim) as \ Write(r)
 
 

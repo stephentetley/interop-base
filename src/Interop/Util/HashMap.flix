@@ -22,7 +22,9 @@ namespace Interop/Util {
     ///
     pub enum HashMap[_k: Type, _v: Type, _r: Region](##java.util.HashMap)
 
-
+    instance Newable[HashMap[k, v]] {
+        pub def new(r: Region[r]): HashMap[k, v, r] \ Write(r) = Interop/Util/HashMap.new(r)
+    }
 
     instance Scoped[HashMap[k, v]] {
         pub def regionOf(_: HashMap[k, v, r]): Region[r] = () as Region[r]
@@ -53,7 +55,14 @@ namespace Interop/Util/HashMap {
         let HashMap(m1) = m;
         m1
 
-    pub def mkHashMap(_: Region[r], prim: ##java.util.HashMap): HashMap[k, v, r] \ Write(r) =
+    pub def wrapHH(_: Region[r], prim: ##java.util.HashMap): HashMap[k, v, r] \ Write(r) =
         HashMap(prim) as \ Write(r)
+
+    ///
+    /// Returns a new mutable HashMap.
+    ///
+    pub def new(_: Region[r]): HashMap[k, v, r] \ Write(r) =
+        import new java.util.HashMap(): ##java.util.HashMap & r as newHashMap;
+        newHashMap() |> HashMap
 
 }

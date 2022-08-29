@@ -59,19 +59,21 @@ namespace Interop/Lang/Process {
         import java.lang.Process.getOutputStream(): ##java.io.OutputStream \ IO;
         let Process(p1) = p;
         let r = Scoped.regionOf(p);
-        getOutputStream(p1) |> Interop/IO/OutputStream.mkOutputStream(r)
+        getOutputStream(p1) |> Interop/IO/OutputStream.wrapHH(r)
+
 
     pub def getInputStream(p: Process[r]): InputStream[r] \ {Write(r), IO}=
         import java.lang.Process.getInputStream(): ##java.io.InputStream \ IO;
         let Process(p1) = p;
         let r = Scoped.regionOf(p);
-        getInputStream(p1) |> Interop/IO/InputStream.mkInputStream(r)
+        getInputStream(p1) |> Interop/IO/InputStream.wrapHH(r)
+
 
     pub def getErrorStream(p: Process[r]): InputStream[r] \ {Write(r), IO}=
         import java.lang.Process.getErrorStream(): ##java.io.InputStream \ IO;
         let Process(p1) = p;
         let r = Scoped.regionOf(p);
-        getErrorStream(p1) |> Interop/IO/InputStream.mkInputStream(r)
+        getErrorStream(p1) |> Interop/IO/InputStream.wrapHH(r)
 
 
 }

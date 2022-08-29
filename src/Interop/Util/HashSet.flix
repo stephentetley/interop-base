@@ -18,11 +18,14 @@ namespace Interop/Util {
 
     ///
     /// Represents a Java HashSet.
-    /// Mutable
+    /// Class / Mutable
     ///
     pub enum HashSet[_a: Type, _r: Region](##java.util.HashSet)
 
 
+    instance Newable[HashSet[a]] {
+        pub def new(r: Region[r]): HashSet[a, r] \ Write(r) = Interop/Util/HashSet.new(r)
+    }
 
     instance Scoped[HashSet[a]] {
         pub def regionOf(_: HashSet[a, r]): Region[r] = () as Region[r]
@@ -62,7 +65,14 @@ namespace Interop/Util/HashSet {
         let HashSet(s1) = s;
         s1
 
-    pub def mkHashSet(_: Region[r], prim: ##java.util.HashSet): HashSet[a, r] \ Write(r) =
+    pub def wrapHH(_: Region[r], prim: ##java.util.HashSet): HashSet[a, r] \ Write(r) =
         HashSet(prim) as \ Write(r)
+
+    ///
+    /// Returns a new mutable HashSet.
+    ///
+    pub def new(_: Region[r]): HashSet[a, r] \ Write(r) =
+        import new java.util.HashSet(): ##java.util.HashSet & r as newHashSet;
+        newHashSet() |> HashSet
 
 }

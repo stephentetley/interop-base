@@ -20,6 +20,10 @@ namespace Interop/Text {
     /// Represents a NumberFormat.
     /// Mutable
     pub enum NumberFormat[_: Region](##java.text.NumberFormat)
+    
+    instance Scoped[NumberFormat] {
+        pub def regionOf(_: NumberFormat[r]): Region[r] = () as Region[r]
+    }
 
     pub class SubNumberFormat[t: Region -> Type] {
         pub def toNumberFormat[r: Region](s: t[r]): NumberFormat[r]

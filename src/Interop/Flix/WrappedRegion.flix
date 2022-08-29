@@ -51,7 +51,7 @@ namespace Interop/Flix/WrappedRegion {
     ///
     /// Returns a StringWithRegion.
     ///
-    pub def mkStringWithRegion(_: Region[r], s: String): StringWithRegion[r] \ Write(r) = StringWithRegion(s) as \ Write(r)
+    pub def wrapStringWithRegion(_: Region[r], s: String): StringWithRegion[r] \ Write(r) = StringWithRegion(s) as \ Write(r)
 
 
 

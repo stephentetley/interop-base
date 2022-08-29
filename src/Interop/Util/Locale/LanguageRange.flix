@@ -41,45 +41,45 @@ namespace Interop/Util/Locale/LanguageRange {
     ///
     pub def newLanguageRange(range: String): Result[LanguageRange, String] =
         try {
-            import new java.util.Locale$LanguageRange(String): ##java.util.Locale$LanguageRange & Pure as new1;
+            import new java.util.Locale$LanguageRange(String): ##java.util.Locale$LanguageRange \ {} as new1;
             LanguageRange(new1(range)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & Pure;
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
     pub def equals(x: LanguageRange, y: LanguageRange): Bool =
-        import java.util.Locale$LanguageRange.equals(##java.lang.Object): Bool & Pure;
+        import java.util.Locale$LanguageRange.equals(##java.lang.Object): Bool \ {};
         let LanguageRange(x1) = x;
         let LanguageRange(y1) = y;
         equals(x1, y1 as ##java.lang.Object)
 
     pub def toString(x: LanguageRange): String =
-        import java.util.Locale$LanguageRange.toString(): String & Pure;
+        import java.util.Locale$LanguageRange.toString(): String \ {};
         let LanguageRange(x1) = x;
         toString(x1)
 
     pub def hashCode(x: LanguageRange): Int32 =
-        import java.util.Locale$LanguageRange.hashCode(): Int32 & Pure;
+        import java.util.Locale$LanguageRange.hashCode(): Int32 \ {};
         let LanguageRange(x1) = x;
         hashCode(x1)
 
     pub def maxWeight(): Float64 =
-        import static get java.util.Locale$LanguageRange.MAX_WEIGHT: Float64 & Pure as get_MAX_WEIGHT;
+        import static get java.util.Locale$LanguageRange.MAX_WEIGHT: Float64 \ {} as get_MAX_WEIGHT;
         get_MAX_WEIGHT()
 
     pub def minWeight(): Float64 =
-        import static get java.util.Locale$LanguageRange.MIN_WEIGHT: Float64 & Pure as get_MIN_WEIGHT;
+        import static get java.util.Locale$LanguageRange.MIN_WEIGHT: Float64 \ {} as get_MIN_WEIGHT;
         get_MIN_WEIGHT()
 
     pub def getRange(x: LanguageRange): String =
-        import java.util.Locale$LanguageRange.getRange(): String & Pure;
+        import java.util.Locale$LanguageRange.getRange(): String \ {};
         let LanguageRange(x1) = x;
         getRange(x1)
 
     pub def getWeight(x: LanguageRange): Float64 =
-        import java.util.Locale$LanguageRange.getWeight(): Float64 & Pure;
+        import java.util.Locale$LanguageRange.getWeight(): Float64 \ {};
         let LanguageRange(x1) = x;
         getWeight(x1)
 
@@ -98,13 +98,13 @@ namespace Interop/Util/Locale/LanguageRange {
     pub def parseWithCustomizations(ranges: String, customizations: Map[String, List[String]]): Result[List[LanguageRange], String] =
         region r1 {
             try {
-                import static java.util.Locale$LanguageRange.parse(String, ##java.util.Map): ##java.util.List & Pure;
+                import static java.util.Locale$LanguageRange.parse(String, ##java.util.Map): ##java.util.List \ {};
                 let cs1 = Interop/Util/MapZ.fromMapViaHashMap(r1, customizations) |> Interop/Util/MapZ.getHH;
                 let prim = parse(ranges, cs1);
                 Interop/Util/ListZ.hhToList(prim) |> Ok
             } catch {
                 case ex: ##java.lang.Exception =>
-                    import java.lang.Throwable.getMessage(): String & Pure;
+                    import java.lang.Throwable.getMessage(): String \ {};
                     Err(getMessage(ex))
             }
         }
@@ -112,14 +112,14 @@ namespace Interop/Util/Locale/LanguageRange {
     pub def mapEquivalents(priorityList: List[LanguageRange], customizations: Map[String, List[String]]): Result[List[LanguageRange], String] =
         region r1 {
             try {
-                import static java.util.Locale$LanguageRange.mapEquivalents(##java.util.List, ##java.util.Map): ##java.util.List & Pure;
+                import static java.util.Locale$LanguageRange.mapEquivalents(##java.util.List, ##java.util.Map): ##java.util.List \ {};
                 let ps1 = Interop/Util/ListZ.fromListViaArrayList(r1, priorityList) |> Interop/Util/ListZ.getHH;
                 let cs1 = Interop/Util/MapZ.fromMapViaHashMap(r1, customizations) |> Interop/Util/MapZ.getHH;
                 let prim    = mapEquivalents(ps1, cs1);
                 Interop/Util/ListZ.hhToList(prim) |> Ok
             } catch {
                 case ex: ##java.lang.Exception =>
-                    import java.lang.Throwable.getMessage(): String & Pure;
+                    import java.lang.Throwable.getMessage(): String \ {};
                     Err(getMessage(ex))
             }
         }

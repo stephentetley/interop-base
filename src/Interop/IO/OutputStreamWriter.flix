@@ -62,7 +62,7 @@ namespace Interop/IO/OutputStreamWriter {
         let OutputStreamWriter(wr1) = wr;
         wr1
 
-    pub def mkOutputStreamWriter(_: Region[r], prim: ##java.io.OutputStreamWriter): OutputStreamWriter[r] \ Write(r) =
+    pub def wrapHH(_: Region[r], prim: ##java.io.OutputStreamWriter): OutputStreamWriter[r] \ Write(r) =
         OutputStreamWriter(prim) as \ Write(r)
 
     pub def newOutputStreamWriter[r: Region, stream: Region -> Type](_: Region[r], 
