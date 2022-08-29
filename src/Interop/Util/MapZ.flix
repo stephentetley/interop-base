@@ -54,25 +54,25 @@ namespace Interop/Util/MapZ {
         MapZ(prim) as \ Write(r)
 
 
-    pub def toMapZHH[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region](s: t[k, v, r]): ##java.util.Map with ImpMapZ[t] = 
+    pub def toMapHH[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region](s: t[k, v, r]): ##java.util.Map with ImpMapZ[t] = 
         Interop/Util/ImpMapZ.toMapZ(s) |> getHH
 
 
     pub def size[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region]
                 (m: t[k, v, r]): Int32 \ { Read(r) } with ImpMapZ[t] =
         import java.util.Map.size(): Int32 \ r;
-        toMapZHH(m) |> size
+        toMapHH(m) |> size
 
     pub def isEmpty[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region]
                     (m: t[k, v, r]): Bool \ { Read(r) } with ImpMapZ[t] =
         import java.util.Map.isEmpty(): Bool \ r;
-        toMapZHH(m) |> isEmpty
+        toMapHH(m) |> isEmpty
 
 
     pub def hashCode[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region]
                     (m: t[k, v, r]): Int32 \ { Read(r) } with ImpMapZ[t] =
         import java.util.Map.hashCode(): Int32 \ r;
-        toMapZHH(m) |> hashCode
+        toMapHH(m) |> hashCode
 
 
 
