@@ -135,8 +135,8 @@ namespace Interop/Flix/Marshal {
         valueOf(i)
 
     pub def unmarshalInt8(i: ##java.lang.Byte): Int8 = 
-        import java.lang.Byte.intValue(): Int8 & Pure;
-        intValue(i)
+        import java.lang.Byte.byteValue(): Int8 & Pure;
+        byteValue(i)
 
 
     pub def marshalInt16(i: Int16): ##java.lang.Short = 
@@ -144,8 +144,8 @@ namespace Interop/Flix/Marshal {
         valueOf(i)
 
     pub def unmarshalInt16(i: ##java.lang.Short): Int16 = 
-        import java.lang.Short.intValue(): Int16 & Pure;
-        intValue(i)
+        import java.lang.Short.shortValue(): Int16 & Pure;
+        shortValue(i)
 
     pub def marshalInt32(i: Int32): ##java.lang.Integer = 
         import static java.lang.Integer.valueOf(Int32): ##java.lang.Integer & Pure;
@@ -160,8 +160,8 @@ namespace Interop/Flix/Marshal {
         valueOf(i)
 
     pub def unmarshalInt64(i: ##java.lang.Long): Int64 = 
-        import java.lang.Long.intValue(): Int64 & Pure;
-        intValue(i)
+        import java.lang.Long.longValue(): Int64 & Pure;
+        longValue(i)
 
 
     pub def marshalFloat32(d: Float32): ##java.lang.Float = 

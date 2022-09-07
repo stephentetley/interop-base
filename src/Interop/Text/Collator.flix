@@ -108,9 +108,9 @@ namespace Interop/Text/Collator {
     /// /// TODO - test cloning the Java objects and then get a pure API...
 
     pub def clone(x: Collator[r]): Collator[r] \ Write(r) =
-        import java.text.Collator.clone(): ##java.text.Collator \ r;
+        import java.text.Collator.clone(): ##java.lang.Object \ r;
         let Collator(x1) = x;
-        clone(x1) |> Collator
+        {clone(x1) as ##java.text.Collator} |> Collator
 
     pub def getDecomposition(col: Collator[r]): Int32 \ Read(r) =
         import java.text.Collator.getDecomposition(): Int32 & r;
