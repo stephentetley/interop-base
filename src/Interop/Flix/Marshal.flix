@@ -138,7 +138,6 @@ namespace Interop/Flix/Marshal {
         import java.lang.Byte.byteValue(): Int8 & Pure;
         byteValue(i)
 
-
     pub def marshalInt16(i: Int16): ##java.lang.Short = 
         import static java.lang.Short.valueOf(Int16): ##java.lang.Short & Pure;
         valueOf(i)
