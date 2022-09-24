@@ -11,7 +11,13 @@ java --version
 
 ant
 
-rem check major version - should be 55...
+rem Checking that jar was compiled with Java 11
+
+rem list contents of the jar
+
+jar -tf .\build\interop-base-java.*.jar
+
+rem pick a class and check major version - should be 55...
 
 javap -cp .\build\interop-base-java.*.jar -verbose flixinterop.nio.file.Pathz
 

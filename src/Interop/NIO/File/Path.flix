@@ -22,6 +22,22 @@ namespace Interop/NIO/File {
     /// Interface / Immutable
     pub enum Path(##java.nio.file.Path)
 
+    instance ToString[Path] {
+        pub def toString(x: Path): String = 
+            Interop/NIO/File/Path.toString(x)
+    }
+
+    instance Eq[Path] {
+        pub def eq(x: Path, y: Path): Bool = 
+            Interop/NIO/File/Path.equals(x, y)
+    }
+
+    instance Hash[Path] {
+        pub def hash(x: Path): Int32 = 
+            Interop/NIO/File/Path.hashCode(x)
+    }
+
+
     instance Interop/Flix.Marshal[Path] {
         pub def toJavaObject(x: Path): ##java.lang.Object =
             let Path(x1) = x;

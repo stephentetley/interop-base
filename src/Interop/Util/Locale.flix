@@ -21,6 +21,20 @@ namespace Interop/Util {
     /// Immutable
     pub enum Locale(##java.util.Locale)
 
+    instance ToString[Locale] {
+        pub def toString(x: Locale): String = 
+            Interop/Util/Locale.toString(x)
+    }
+
+    instance Eq[Locale] {
+        pub def eq(x: Locale, y: Locale): Bool = 
+            Interop/Util/Locale.equals(x, y)
+    }
+
+    instance Hash[Locale] {
+        pub def hash(x: Locale): Int32 = 
+            Interop/Util/Locale.hashCode(x)
+    }
 
     instance Interop/Flix.Marshal[Locale] {
         pub def toJavaObject(x: Locale): ##java.lang.Object =

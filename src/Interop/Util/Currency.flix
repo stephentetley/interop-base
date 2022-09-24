@@ -22,6 +22,11 @@ namespace Interop/Util {
     pub enum Currency(##java.util.Currency)
 
 
+    instance ToString[Currency] {
+        pub def toString(x: Currency): String = 
+            Interop/Util/Currency.toString(x)
+    }
+
     instance Interop/Flix.Marshal[Currency] {
         pub def toJavaObject(x: Currency): ##java.lang.Object =
             let Currency(x1) = x;
@@ -80,6 +85,16 @@ namespace Interop/Util/Currency {
         let Currency(cur1) = cur;
         getDisplayName(cur1)
 
+    pub def getSymbol(cur: Currency): String = 
+        import java.util.Currency.getSymbol(): String \ {};
+        let Currency(cur1) = cur;
+        getSymbol(cur1)
+
+    pub def getSymbolWithLocale(loc: Locale, cur: Currency): String = 
+        import java.util.Currency.getSymbol(##java.util.Locale): String \ {};
+        let Currency(cur1) = cur;
+        let loc1 = Interop/Util/Locale.getHH(loc);
+        getSymbol(cur1, loc1)
 
 
     pub def getInstance(code: String): Result[Currency, String] \ IO = 
