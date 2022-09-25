@@ -22,6 +22,26 @@ namespace Interop/NIO/Charset {
     pub enum Charset(##java.nio.charset.Charset)
 
 
+    instance ToString[Charset] {
+        pub def toString(x: Charset): String = 
+            Interop/NIO/Charset/Charset.toString(x)
+    }
+
+    instance Eq[Charset] {
+        pub def eq(x: Charset, y: Charset): Bool = 
+            Interop/NIO/Charset/Charset.equals(x, y)
+    }
+    
+    instance Order[Charset] {
+        pub def compare(x: Charset, y: Charset): Comparison =
+            Interop/NIO/Charset/Charset.compareTo(x, y) |> Comparison.fromInt32
+    }
+
+    instance Hash[Charset] {
+        pub def hash(x: Charset): Int32 = 
+            Interop/NIO/Charset/Charset.hashCode(x)
+    }
+
     instance Interop/Flix.Marshal[Charset] {
         pub def toJavaObject(x: Charset): ##java.lang.Object =
             let Charset(x1) = x;

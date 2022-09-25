@@ -32,6 +32,11 @@ namespace Interop/NIO/File {
             Interop/NIO/File/Path.equals(x, y)
     }
 
+    instance Order[Path] {
+        pub def compare(x: Path, y: Path): Comparison =
+            Interop/NIO/File/Path.compareTo(x, y) |> Comparison.fromInt32
+    }
+
     instance Hash[Path] {
         pub def hash(x: Path): Int32 = 
             Interop/NIO/File/Path.hashCode(x)
