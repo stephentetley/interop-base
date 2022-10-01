@@ -43,6 +43,8 @@ namespace Interop/Text/DecimalFormat {
 
     use Interop/Text.DecimalFormat;
     use Interop/Text.DecimalFormat.{DecimalFormat};
+    use Interop/Text.DecimalFormatSymbols;
+    use Interop/Text.DecimalFormatSymbols.{DecimalFormatSymbols};
 
     pub def getHH(df: DecimalFormat[r]): ##java.text.DecimalFormat = 
         let DecimalFormat(df1) = df;
@@ -53,24 +55,35 @@ namespace Interop/Text/DecimalFormat {
 
     ///
     /// Returns a new mutable DecimalFormat.
+    /// Uses the (implicit) default locale, hence in IO
     ///
-    pub def new(_: Region[r]): DecimalFormat[r] \ Write(r) =
-        import new java.text.DecimalFormat(): ##java.text.DecimalFormat \ r as newDecimalFormat;
+    pub def new(_: Region[r]): DecimalFormat[r] \ {IO, Write(r)} =
+        import new java.text.DecimalFormat(): ##java.text.DecimalFormat \ {IO, r} as newDecimalFormat;
         newDecimalFormat() |> DecimalFormat
+
+    ///
+    /// Returns a new mutable DecimalFormat.
+    /// Uses the (implicit) default locale, hence in IO
+    ///
+    pub def newWithPattern(_: Region[r], patt: String): DecimalFormat[r] \ {IO, Write(r)} =
+        import new java.text.DecimalFormat(String): ##java.text.DecimalFormat \ {IO, r} as newDecimalFormat;
+        newDecimalFormat(patt) |> DecimalFormat
+
+    ///
+    /// Returns a new mutable DecimalFormat.
+    /// Uses DecimalFormatSymbols so not in IO
+    ///
+    pub def newWithDecimalFormatSymbols(_: Region[r], patt: String, dfs: DecimalFormatSymbols[r]): DecimalFormat[r] \ Write(r) =
+        import new java.text.DecimalFormat(String, ##java.text.DecimalFormatSymbols): ##java.text.DecimalFormat \ r as newDecimalFormat;
+        let dfs1 = Interop/Text/DecimalFormatSymbols.getHH(dfs);
+        newDecimalFormat(patt, dfs1) |> DecimalFormat
+
 
     pub def hashCode(df: DecimalFormat[r]): Int32 \ Read(r) =
         import java.text.DecimalFormat.hashCode(): Int32 \ r;
         let DecimalFormat(df1) = df;
         hashCode(df1)
 
-
-
-    ///
-    /// Returns a new mutable DecimalFormat.
-    ///
-    pub def newWithPattern(_: Region[r], patt: String): DecimalFormat[r] \ Write(r) =
-        import new java.text.DecimalFormat(String): ##java.text.DecimalFormat \ r as newDecimalFormat;
-        newDecimalFormat(patt) |> DecimalFormat
 
 
     pub def setGroupingSize!(sz: Int32, df: DecimalFormat[r]): Unit \ Write(r) =
