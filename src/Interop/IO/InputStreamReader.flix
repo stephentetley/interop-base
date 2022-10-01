@@ -56,9 +56,9 @@ namespace Interop/IO/InputStreamReader {
     pub def newInputStreamReader[r: Region, stream: Region -> Type](_: Region[r], 
                                                                     ins: stream[r], 
                                                                     cs: Charset): InputStreamReader[r] \ Write(r) with SubInputStream[stream] = 
-        import new java.io.InputStreamReader(##java.io.InputStream, ##java.nio.charset.Charset): ##java.io.InputStreamReader & r as newInputStreamReader;
+        import new java.io.InputStreamReader(##java.io.InputStream, ##java.nio.charset.Charset): ##java.io.InputStreamReader \ r as newInputStreamReader;
         let Charset(cs1) = cs;        
-        InputStreamReader(newInputStreamReader(Interop/IO/InputStream.getHH(Interop/IO/SubInputStream.toInputStream(ins)), cs1))
+        InputStreamReader(newInputStreamReader(Interop/IO/SubInputStream.getHH(ins), cs1))
 
 
 }

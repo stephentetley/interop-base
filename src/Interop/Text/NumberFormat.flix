@@ -33,10 +33,20 @@ namespace Interop/Text {
 }
 
 
+namespace Interop/IO/SubNumberFormat {
+    
+    use Interop/Text.SubNumberFormat;
+
+    pub def getHH[r: Region, format: Region -> Type](nf: format[r]): ##java.text.NumberFormat with SubNumberFormat[format] = 
+        Interop/Text/SubNumberFormat.toNumberFormat(nf) |> Interop/Text/NumberFormat.getHH
+
+}
+
 namespace Interop/Text/NumberFormat {
 
     use Interop/Text.NumberFormat;
     use Interop/Text.NumberFormat.{NumberFormat};
+    use Interop/Text.SubNumberFormat;
 
     use Interop/Lang.Number;
     use Interop/Lang.Number.{Number};
@@ -50,6 +60,10 @@ namespace Interop/Text/NumberFormat {
     pub def getHH(x: NumberFormat[r]): ##java.text.NumberFormat = 
         let NumberFormat(x1) = x;
         x1
+
+    pub def wrapHH(_: Region[r], x: ##java.text.NumberFormat): NumberFormat[r] = 
+        NumberFormat(x)
+
 
     // No constructor as we will not be creating subclasses
 
@@ -66,14 +80,20 @@ namespace Interop/Text/NumberFormat {
         hashCode(nf1)
 
 
+    // pub def clone(nf: NumberFormat[r]): Int32 =
+    //     import java.text.NumberFormat.clone(): ##java.lang.Object \ {};
+    //     let NumberFormat(nf1) = nf;
+    //     (clone(nf1) as ##java.text.NumberFormat) |> NumberFormat
+
+
     pub def getInstance(_: Region[r]): NumberFormat[r] \ Write(r) = 
         import static java.text.NumberFormat.getInstance(): ##java.text.NumberFormat \ r;
         getInstance() |> NumberFormat
 
-    pub def parse(s: String, nf: NumberFormat[r]): Result[Number, String] \ Read(r) = 
+    pub def parse[r: Region, format: Region -> Type](s: String, nf: format[r]): Result[Number, String] \ Read(r) with SubNumberFormat[format] = 
         try {
             import java.text.NumberFormat.parse(String): ##java.lang.Number \ r;
-            let NumberFormat(nf1) = nf;
+            let nf1 = Interop/IO/SubNumberFormat.getHH(nf);
             Number(parse(nf1, s)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -81,10 +101,11 @@ namespace Interop/Text/NumberFormat {
                 Err(getMessage(ex))
         }
 
-    pub def formatInt64(n: Int64, nf: NumberFormat[r]): Result[String, String] \ Read(r) = 
+    pub def formatInt64[r: Region, format: Region -> Type]
+                        (n: Int64, nf: format[r]): Result[String, String] \ Read(r) with SubNumberFormat[format] = 
         try {
             import java.text.NumberFormat.format(Int64): String \ r;
-            let NumberFormat(nf1) = nf;
+            let nf1 = Interop/IO/SubNumberFormat.getHH(nf);
             format(nf1, n) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -92,10 +113,11 @@ namespace Interop/Text/NumberFormat {
                 Err(getMessage(ex))
         }
 
-    pub def formatFloat64(d: Float64, nf: NumberFormat[r]): Result[String, String] \ Read(r) = 
+    pub def formatFloat64[r: Region, format: Region -> Type]
+                        (d: Float64, nf: format[r]): Result[String, String] \ Read(r) with SubNumberFormat[format] =  
         try {
             import java.text.NumberFormat.format(Float64): String \ r;
-            let NumberFormat(nf1) = nf;
+            let nf1 = Interop/IO/SubNumberFormat.getHH(nf);
             format(nf1, d) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -110,10 +132,10 @@ namespace Interop/Text/NumberFormat {
         getAvailableLocales() |> Array.toList |> List.map(Locale)
     }
    
-    pub def getCurrency(nf: NumberFormat[r]): Result[Currency, String] \ Write(r) = 
+    pub def getCurrency[r: Region, format: Region -> Type](nf: format[r]): Result[Currency, String] \ Write(r) with SubNumberFormat[format] = 
         try {
             import java.text.NumberFormat.getCurrency(): ##java.util.Currency \ r;
-            let NumberFormat(nf1) = nf;
+            let nf1 = Interop/IO/SubNumberFormat.getHH(nf);
             getCurrency(nf1) |> Currency |> Ok
         } catch {
             case ex: ##java.lang.Exception =>

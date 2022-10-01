@@ -48,65 +48,75 @@ namespace Interop/Text/DecimalFormat {
         let DecimalFormat(df1) = df;
         df1
 
+    pub def wrapHH(_: Region[r], x: ##java.text.DecimalFormat): DecimalFormat[r] = 
+        DecimalFormat(x)
+
     ///
     /// Returns a new mutable DecimalFormat.
     ///
     pub def new(_: Region[r]): DecimalFormat[r] \ Write(r) =
-        import new java.text.DecimalFormat(): ##java.text.DecimalFormat & r as newDecimalFormat;
+        import new java.text.DecimalFormat(): ##java.text.DecimalFormat \ r as newDecimalFormat;
         newDecimalFormat() |> DecimalFormat
+
+    pub def hashCode(df: DecimalFormat[r]): Int32 \ Read(r) =
+        import java.text.DecimalFormat.hashCode(): Int32 \ r;
+        let DecimalFormat(df1) = df;
+        hashCode(df1)
+
+
 
     ///
     /// Returns a new mutable DecimalFormat.
     ///
     pub def newWithPattern(_: Region[r], patt: String): DecimalFormat[r] \ Write(r) =
-        import new java.text.DecimalFormat(String): ##java.text.DecimalFormat & r as newDecimalFormat;
+        import new java.text.DecimalFormat(String): ##java.text.DecimalFormat \ r as newDecimalFormat;
         newDecimalFormat(patt) |> DecimalFormat
 
 
     pub def setGroupingSize!(sz: Int32, df: DecimalFormat[r]): Unit \ Write(r) =
-        import java.text.DecimalFormat.setGroupingSize(Int32): Unit & r;
+        import java.text.DecimalFormat.setGroupingSize(Int32): Unit \ r;
         let DecimalFormat(df1) = df;
         setGroupingSize(df1, sz)
 
     pub def setMaximumIntegerDigits!(n: Int32, df: DecimalFormat[r]): Unit \ Write(r) =
-        import java.text.DecimalFormat.setMaximumIntegerDigits(Int32): Unit & r;
+        import java.text.DecimalFormat.setMaximumIntegerDigits(Int32): Unit \ r;
         let DecimalFormat(df1) = df;
         setMaximumIntegerDigits(df1, n)
 
     pub def setMinimumIntegerDigits!(n: Int32, df: DecimalFormat[r]): Unit \ Write(r) =
-        import java.text.DecimalFormat.setMinimumIntegerDigits(Int32): Unit & r;
+        import java.text.DecimalFormat.setMinimumIntegerDigits(Int32): Unit \ r;
         let DecimalFormat(df1) = df;
         setMinimumIntegerDigits(df1, n)
 
     pub def setMaximumFractionDigits!(n: Int32, df: DecimalFormat[r]): Unit \ Write(r) =
-        import java.text.DecimalFormat.setMaximumFractionDigits(Int32): Unit & r;
+        import java.text.DecimalFormat.setMaximumFractionDigits(Int32): Unit \ r;
         let DecimalFormat(df1) = df;
         setMaximumFractionDigits(df1, n)
 
 
     pub def setMinimumFractionDigits!(n: Int32, df: DecimalFormat[r]): Unit \ Write(r) =
-        import java.text.DecimalFormat.setMinimumFractionDigits(Int32): Unit & r;
+        import java.text.DecimalFormat.setMinimumFractionDigits(Int32): Unit \ r;
         let DecimalFormat(df1) = df;
         setMinimumFractionDigits(df1, n)
 
 
     pub def setNegativePrefix!(s: String, df: DecimalFormat[r]): Unit \ Write(r) =
-        import java.text.DecimalFormat.setNegativePrefix(String): Unit & r;
+        import java.text.DecimalFormat.setNegativePrefix(String): Unit \ r;
         let DecimalFormat(df1) = df;
         setNegativePrefix(df1, s)
 
     pub def setNegativeSuffix!(s: String, df: DecimalFormat[r]): Unit \ Write(r) =
-        import java.text.DecimalFormat.setNegativeSuffix(String): Unit & r;
+        import java.text.DecimalFormat.setNegativeSuffix(String): Unit \ r;
         let DecimalFormat(df1) = df;
         setNegativeSuffix(df1, s)
 
     pub def setPositivePrefix!(s: String, df: DecimalFormat[r]): Unit \ Write(r) =
-        import java.text.DecimalFormat.setPositivePrefix(String): Unit & r;
+        import java.text.DecimalFormat.setPositivePrefix(String): Unit \ r;
         let DecimalFormat(df1) = df;
         setPositivePrefix(df1, s)
 
     pub def setPositiveSuffix!(s: String, df: DecimalFormat[r]): Unit \ Write(r) =
-        import java.text.DecimalFormat.setPositiveSuffix(String): Unit & r;
+        import java.text.DecimalFormat.setPositiveSuffix(String): Unit \ r;
         let DecimalFormat(df1) = df;
         setPositiveSuffix(df1, s)
 
@@ -114,7 +124,7 @@ namespace Interop/Text/DecimalFormat {
     /// Test equality of strings `s1` and `s2` with the collator `x``.
     ///
     pub def toPattern(df: DecimalFormat[r]): String \ Read(r) =
-        import java.text.DecimalFormat.toPattern(): String & r;
+        import java.text.DecimalFormat.toPattern(): String \ r;
         let DecimalFormat(df1) = df;
         toPattern(df1)
 
