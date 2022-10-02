@@ -50,8 +50,8 @@ namespace Interop/Util/MapZ {
         m1
 
 
-    pub def wrapHH(_: Region[r], prim: ##java.util.Map): MapZ[k, v, r] \ Write(r) =
-        MapZ(prim) as \ Write(r)
+    pub def wrapHH(_: Region[r], prim: ##java.util.Map): MapZ[k, v, r] =
+        MapZ(prim)
 
 
     pub def toMapHH[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region](s: t[k, v, r]): ##java.util.Map with ImpMapZ[t] = 

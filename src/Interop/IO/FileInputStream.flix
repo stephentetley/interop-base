@@ -50,8 +50,8 @@ namespace Interop/IO/FileInputStream {
         let FileInputStream(ins1) = ins;
         ins1
 
-    pub def wrapHH(_: Region[r], prim: ##java.io.FileInputStream): FileInputStream[r] \ Write(r) =
-        FileInputStream(prim) as \ Write(r)
+    pub def wrapHH(_: Region[r], prim: ##java.io.FileInputStream): FileInputStream[r] =
+        FileInputStream(prim)
 
     pub def newWithFile(file: File[r]): Result[FileInputStream[r], String] \ {Write(r), IO} = 
         try {

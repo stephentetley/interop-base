@@ -51,8 +51,8 @@ namespace Interop/IO/InputStream {
         let InputStream(ins1) = ins;
         ins1
 
-    pub def wrapHH(_: Region[r], prim: ##java.io.InputStream): InputStream[r] \ Write(r) = 
-        InputStream(prim) as \ Write(r)
+    pub def wrapHH(_: Region[r], prim: ##java.io.InputStream): InputStream[r] = 
+        InputStream(prim)
 
 
     pub def readAllBytes(ins: InputStream[r]): Result[Array[Int8, r], String] \ IO = 

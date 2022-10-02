@@ -40,8 +40,8 @@ namespace Interop/IO/File {
         let File(wr1) = wr;
         wr1
 
-    pub def wrapHH(_: Region[r], prim: ##java.io.File): File[r] \ Write(r) = 
-        File(prim) as \ Write(r)
+    pub def wrapHH(_: Region[r], prim: ##java.io.File): File[r] = 
+        File(prim)
 
 
     pub def newFile[r: Region](_: Region[r], path: String): File[r] \ { Write(r), IO } = 

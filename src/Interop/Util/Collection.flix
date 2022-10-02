@@ -47,8 +47,8 @@ namespace Interop/Util/Collection {
         iter1
 
 
-    pub def wrapHH(_: Region[r], col: ##java.util.Collection): Collection[a, r] \ Write(r) = 
-        Collection(col) as \ Write(r)
+    pub def wrapHH(_: Region[r], col: ##java.util.Collection): Collection[a, r] = 
+        Collection(col)
 
 
     pub def toCollectionHH[t: Type -> Region -> Type, a: Type, r: Region](col: t[a, r]): ##java.util.Collection with ImpCollection[t] = 

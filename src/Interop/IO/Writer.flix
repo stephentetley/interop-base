@@ -66,7 +66,7 @@ namespace Interop/IO/Writer {
         wr1
 
 
-    pub def wrapHH(_: Region[r], prim: ##java.io.Writer): Writer[r] \ Write(r) =
-        Writer(prim) as \ Write(r)
+    pub def wrapHH(_: Region[r], prim: ##java.io.Writer): Writer[r] =
+        Writer(prim)
 
 }

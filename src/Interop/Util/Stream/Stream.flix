@@ -40,8 +40,8 @@ namespace Interop/Util/Stream/Stream {
         let Stream(x1) = x;
         x1
 
-    pub def wrapHH(_: Region[r], prim: ##java.util.stream.Stream): Stream[a, r] \ Write(r) = 
-        Stream(prim) as \ Write(r)
+    pub def wrapHH(_: Region[r], prim: ##java.util.stream.Stream): Stream[a, r] = 
+        Stream(prim)
 
 
     pub def iterator(s: Stream[a, r]): Iterator[a, r] \ Write(r) with Marshal[a] =

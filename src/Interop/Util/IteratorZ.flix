@@ -38,8 +38,8 @@ namespace Interop/Util/IteratorZ {
         let IteratorZ(iter1) = iter;
         iter1
 
-    pub def wrapHH(_: Region[r], iter: ##java.util.Iterator): IteratorZ[a, r] \ Write(r) = 
-        IteratorZ(iter) as \ Write(r)
+    pub def wrapHH(_: Region[r], iter: ##java.util.Iterator): IteratorZ[a, r] = 
+        IteratorZ(iter)
 
     /// Mutable (raw) to mutable (Filx iterator) so Read/Write
     pub def iterator(iter: IteratorZ[a, r]): Iterator[a, r] \ { Read(r), Write(r) } with Marshal[a]  =

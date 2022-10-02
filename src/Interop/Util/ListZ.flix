@@ -59,8 +59,8 @@ namespace Interop/Util/ListZ {
         let ListZ(m1) = m;
         m1
 
-    pub def wrapHH(_: Region[r], prim: ##java.util.List): ListZ[a, r] \ Write(r) =
-        ListZ(prim) as \ Write(r)
+    pub def wrapHH(_: Region[r], prim: ##java.util.List): ListZ[a, r] =
+        ListZ(prim)
 
 
     pub def toListHH[t: Type -> Region -> Type, a: Type, r: Region](list: t[a, r]): ##java.util.List with ImpListZ[t] = 

@@ -54,8 +54,8 @@ namespace Interop/Util/SortedMap {
         let SortedMap(m1) = m;
         m1
 
-    pub def wrapHH(_: Region[r], prim: ##java.util.SortedMap): SortedMap[k, v, r] \ Write(r) =
-        SortedMap(prim) as \ Write(r)
+    pub def wrapHH(_: Region[r], prim: ##java.util.SortedMap): SortedMap[k, v, r] =
+        SortedMap(prim)
         
 
 

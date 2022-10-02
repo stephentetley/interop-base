@@ -55,8 +55,8 @@ namespace Interop/Util/HashMap {
         let HashMap(m1) = m;
         m1
 
-    pub def wrapHH(_: Region[r], prim: ##java.util.HashMap): HashMap[k, v, r] \ Write(r) =
-        HashMap(prim) as \ Write(r)
+    pub def wrapHH(_: Region[r], prim: ##java.util.HashMap): HashMap[k, v, r] =
+        HashMap(prim)
 
     ///
     /// Returns a new mutable HashMap.

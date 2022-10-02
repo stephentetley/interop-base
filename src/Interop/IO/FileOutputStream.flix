@@ -50,8 +50,8 @@ namespace Interop/IO/FileOutputStream {
         let FileOutputStream(ous1) = ous;
         ous1
 
-    pub def wrapHH(_: Region[r], prim: ##java.io.FileOutputStream): FileOutputStream[r] \ Write(r) =
-        FileOutputStream(prim) as \ Write(r)
+    pub def wrapHH(_: Region[r], prim: ##java.io.FileOutputStream): FileOutputStream[r] =
+        FileOutputStream(prim)
 
 
     pub def newWithFile(file: File[r]): Result[FileOutputStream[r], String] \ {Write(r), IO} = 

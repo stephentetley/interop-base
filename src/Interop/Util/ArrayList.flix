@@ -66,8 +66,8 @@ namespace Interop/Util/ArrayList {
         let ArrayList(arr1) = arr;
         arr1
 
-    pub def wrapHH(_: Region[r], prim: ##java.util.ArrayList): ArrayList[a, r] \ Write(r) =
-        ArrayList(prim) as \ Write(r)
+    pub def wrapHH(_: Region[r], prim: ##java.util.ArrayList): ArrayList[a, r] =
+        ArrayList(prim)
 
 
 

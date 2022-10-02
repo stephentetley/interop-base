@@ -65,8 +65,8 @@ namespace Interop/Util/HashSet {
         let HashSet(s1) = s;
         s1
 
-    pub def wrapHH(_: Region[r], prim: ##java.util.HashSet): HashSet[a, r] \ Write(r) =
-        HashSet(prim) as \ Write(r)
+    pub def wrapHH(_: Region[r], prim: ##java.util.HashSet): HashSet[a, r] =
+        HashSet(prim)
 
     ///
     /// Returns a new mutable HashSet.

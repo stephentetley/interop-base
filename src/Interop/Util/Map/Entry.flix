@@ -37,8 +37,8 @@ namespace Interop/Util/Map/Entry {
         let Entry(ent1) = ent;
         ent1
 
-    pub def wrapHH(_: Region[r], ent: ##java.util.Map$Entry): Entry[k, v, r] \ Write(r) = 
-        Entry(ent) as \ Write(r)
+    pub def wrapHH(_: Region[r], ent: ##java.util.Map$Entry): Entry[k, v, r] = 
+        Entry(ent)
 
 
     /// Entry cannot be an instance of Marshal because it carries a region.

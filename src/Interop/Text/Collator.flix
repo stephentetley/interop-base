@@ -39,6 +39,10 @@ namespace Interop/Text/Collator {
         c1
 
 
+    pub def wrapHH(_: Region[r], prim: ##java.text.Collator): Collator[r] = 
+        Collator(prim)
+
+
     pub def no_decomposition(): Int32 = 
         import static get java.text.Collator.NO_DECOMPOSITION: Int32 \ {} as get_NO_DECOMPOSITION;
         get_NO_DECOMPOSITION()
