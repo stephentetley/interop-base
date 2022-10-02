@@ -62,6 +62,11 @@ namespace Interop/Lang/Number {
         let Number(x1) = x;
         longValue(x1)
 
+    pub def floatValue(x: Number): Float32 =
+        import java.lang.Number.floatValue(): Float32 & Pure;
+        let Number(x1) = x;
+        floatValue(x1)
+
     ///
     ///
     ///
@@ -69,10 +74,5 @@ namespace Interop/Lang/Number {
         import java.lang.Number.doubleValue(): Float64 & Pure;
         let Number(x1) = x;
         doubleValue(x1)
-
-    pub def floatValue(x: Number): Float32 =
-        import java.lang.Number.floatValue(): Float32 & Pure;
-        let Number(x1) = x;
-        floatValue(x1)
 
 }

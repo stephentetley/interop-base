@@ -45,6 +45,10 @@ namespace Interop/Text/DecimalFormat {
     use Interop/Text.DecimalFormat.{DecimalFormat};
     use Interop/Text.DecimalFormatSymbols;
     use Interop/Text.DecimalFormatSymbols.{DecimalFormatSymbols};
+    use Interop/Math.RoundingMode;
+    use Interop/Math.RoundingMode.{RoundingMode};
+    use Interop/Util.Currency;
+    use Interop/Util.Currency.{Currency};
 
     pub def getHH(df: DecimalFormat[r]): ##java.text.DecimalFormat = 
         let DecimalFormat(df1) = df;
@@ -85,6 +89,53 @@ namespace Interop/Text/DecimalFormat {
         hashCode(df1)
 
 
+    pub def getCurrency(df: DecimalFormat[r]): Result[Currency, String] \ Write(r) =
+        try {
+            import java.text.DecimalFormat.getCurrency(): ##java.util.Currency \ r;
+            let DecimalFormat(df1) = df;
+            getCurrency(df1) |> Currency |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+
+    pub def setCurrency!(cur: Currency, df: DecimalFormat[r]): Result[Unit, String] \ Write(r) =
+        try {
+            import java.text.DecimalFormat.setCurrency(##java.util.Currency): Unit  \ r;
+            let DecimalFormat(df1) = df;
+            let Currency(cur1) = cur;
+            setCurrency(df1, cur1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+
+    pub def getDecimalFormatSymbols(df: DecimalFormat[r]): Result[DecimalFormatSymbols[r], String] \ Write(r) =
+        try {
+            import java.text.DecimalFormat.getDecimalFormatSymbols(): ##java.text.DecimalFormatSymbols \ r;
+            let DecimalFormat(df1) = df;
+            getDecimalFormatSymbols(df1) |> DecimalFormatSymbols |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def setDecimalFormatSymbols!(syms: DecimalFormatSymbols[r], df: DecimalFormat[r]): Result[Unit, String] \ Write(r) =
+        try {
+            import java.text.DecimalFormat.setDecimalFormatSymbols(##java.text.DecimalFormatSymbols): Unit \ r;
+            let DecimalFormat(df1) = df;
+            let DecimalFormatSymbols(syms1) = syms;
+            setDecimalFormatSymbols(df1, syms1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
     pub def setGroupingSize!(sz: Int32, df: DecimalFormat[r]): Unit \ Write(r) =
         import java.text.DecimalFormat.setGroupingSize(Int32): Unit \ r;
@@ -133,13 +184,56 @@ namespace Interop/Text/DecimalFormat {
         let DecimalFormat(df1) = df;
         setPositiveSuffix(df1, s)
 
-    ///
-    /// Test equality of strings `s1` and `s2` with the collator `x``.
+   
+    pub def setRoundingMode!(mode: RoundingMode, nf: DecimalFormat[r]): Result[Unit, String] \ Write(r) = 
+        try {
+            import java.text.DecimalFormat.setRoundingMode(##java.math.RoundingMode): Unit \ r;
+            let DecimalFormat(nf1) = nf;
+            let RoundingMode(mode1) = mode;
+            setRoundingMode(nf1, mode1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+
     ///
     pub def toPattern(df: DecimalFormat[r]): String \ Read(r) =
         import java.text.DecimalFormat.toPattern(): String \ r;
         let DecimalFormat(df1) = df;
         toPattern(df1)
+
+
+    ///
+    pub def toLocalizedPattern(df: DecimalFormat[r]): String \ Read(r) =
+        import java.text.DecimalFormat.toLocalizedPattern(): String \ r;
+        let DecimalFormat(df1) = df;
+        toLocalizedPattern(df1)
+
+    ///
+    pub def applyPattern!(patt: String, df: DecimalFormat[r]): Result[Unit, String] \ Write(r) =
+        try {
+            import java.text.DecimalFormat.applyPattern(String): Unit \ r;
+            let DecimalFormat(df1) = df;
+            applyPattern(df1, patt) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    ///
+    pub def applyLocalizedPattern!(patt: String, df: DecimalFormat[r]): Result[Unit, String] \ Write(r) =
+        try {
+            import java.text.DecimalFormat.applyLocalizedPattern(String): Unit \ r;
+            let DecimalFormat(df1) = df;
+            applyLocalizedPattern(df1, patt) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
 
 }
