@@ -86,8 +86,8 @@ namespace Interop/Text/NumberFormat {
     //     (clone(nf1) as ##java.text.NumberFormat) |> NumberFormat
 
 
-    pub def getInstance(_: Region[r]): NumberFormat[r] \ Write(r) = 
-        import static java.text.NumberFormat.getInstance(): ##java.text.NumberFormat \ r;
+    pub def getInstance(_: Region[r]): NumberFormat[r] \ {IO, Write(r)} = 
+        import static java.text.NumberFormat.getInstance(): ##java.text.NumberFormat \ {IO, r};
         getInstance() |> NumberFormat
 
     pub def parse[r: Region, format: Region -> Type](s: String, nf: format[r]): Result[Number, String] \ Read(r) with SubNumberFormat[format] = 
