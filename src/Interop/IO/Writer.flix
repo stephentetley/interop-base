@@ -147,7 +147,7 @@ namespace Interop/IO/Writer {
         }
 
     pub def writeCharArray![r: Region, r2: Region, wrt: Region -> Type]
-                        (arr: Array[Char, r2], wr: wrt[r]): Result[Unit, String] \ {Read(r2), Write(r)} with SubWriter[wrt]=
+                        (arr: Array[Char, r2], wr: wrt[r]): Result[Unit, String] \ {Read(r2), Write(r)} with SubWriter[wrt] =
         try {
             import java.io.Writer.write(Array[Char, r2]): Unit \ {r, r2};
             let wr1 = Interop/IO/SubWriter.getHH(wr);
@@ -159,7 +159,9 @@ namespace Interop/IO/Writer {
         }
 
     pub def writeSubCharArray![r: Region, r2: Region, wrt: Region -> Type]
-                                (arr: Array[Char, r2], sub: {offset = Int32, len = Int32}, wr: wrt[r]): Result[Unit, String] \ {Read(r2), Write(r)} with SubWriter[wrt]=
+                                (arr: Array[Char, r2], 
+                                sub: {offset = Int32, len = Int32}, 
+                                wr: wrt[r]): Result[Unit, String] \ {Read(r2), Write(r)} with SubWriter[wrt] =
         try {
             import java.io.Writer.write(Array[Char, r2], Int32, Int32): Unit \ {r, r2};
             let wr1 = Interop/IO/SubWriter.getHH(wr);
@@ -171,7 +173,7 @@ namespace Interop/IO/Writer {
         }
 
     pub def writeCharacter![r: Region, wrt: Region -> Type]
-                            (i: Int32, wr: wrt[r]): Result[Unit, String] \ Write(r) with SubWriter[wrt]=
+                            (i: Int32, wr: wrt[r]): Result[Unit, String] \ Write(r) with SubWriter[wrt] =
         try {
             import java.io.Writer.write(Int32): Unit \ r;
             let wr1 = Interop/IO/SubWriter.getHH(wr);
@@ -183,7 +185,7 @@ namespace Interop/IO/Writer {
         }
 
     pub def writeString![r: Region, wrt: Region -> Type]
-                        (s: String, wr: wrt[r]): Result[Unit, String] \ Write(r) with SubWriter[wrt]=
+                        (s: String, wr: wrt[r]): Result[Unit, String] \ Write(r) with SubWriter[wrt] =
         try {
             import java.io.Writer.write(String): Unit \ r;
             let wr1 = Interop/IO/SubWriter.getHH(wr);
@@ -195,7 +197,7 @@ namespace Interop/IO/Writer {
         }
 
     pub def writeSubstring![r: Region, wrt: Region -> Type]
-                            (s: String, sub: {offset = Int32, len = Int32}, wr: wrt[r]): Result[Unit, String] \ Write(r) with SubWriter[wrt]=
+                            (s: String, sub: {offset = Int32, len = Int32}, wr: wrt[r]): Result[Unit, String] \ Write(r) with SubWriter[wrt] =
         try {
             import java.io.Writer.write(String, Int32, Int32): Unit \ r;
             let wr1 = Interop/IO/SubWriter.getHH(wr);

@@ -23,6 +23,10 @@ namespace Interop/IO {
 
     pub enum OutputStreamWriter[_: Region](##java.io.OutputStreamWriter)
 
+
+    /// Note - this is subclassed by FileWriter, should we have a `SubOutputStreamWriter` class?
+    /// ... Probably not, could FileWriter use casting internally?
+
     instance Scoped[OutputStreamWriter] {
         pub def regionOf(_: OutputStreamWriter[r]): Region[r] = () as Region[r]
     }
@@ -72,5 +76,66 @@ namespace Interop/IO/OutputStreamWriter {
         let Charset(cs1) = cs;
         OutputStreamWriter(newOutputStreamWriter(Interop/IO/OutputStream.getHH(Interop/IO/SubOutputStream.toOutputStream(ous)), cs1))
 
+    pub def flush!(wr: OutputStreamWriter[r]): Result[Unit, String] \ Write(r) =
+        try {
+            import java.io.OutputStreamWriter.flush(): Unit \ r;
+            let wr1 = getHH(wr);
+            flush(wr1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def close!(wr: OutputStreamWriter[r]): Result[Unit, String] \ Write(r) =
+        try {
+            import java.io.OutputStreamWriter.flush(): Unit \ r;
+            let OutputStreamWriter(wr1) = wr;
+            flush(wr1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def getEncoding(wr: OutputStreamWriter[r]): Option[String] \ Read(r) =
+        import java.io.OutputStreamWriter.getEncoding(): String\ r;
+        let OutputStreamWriter(wr1) = wr;
+        getEncoding(wr1) |> Object.toOption
+
+    pub def writeSubCharArray!(arr: Array[Char, r2], 
+                                sub: {offset = Int32, len = Int32}, 
+                                wr: OutputStreamWriter[r]): Result[Unit, String] \ {Read(r2), Write(r)} =
+        try {
+            import java.io.OutputStreamWriter.write(Array[Char, r2], Int32, Int32): Unit \ {r, r2};
+            let OutputStreamWriter(wr1) = wr;
+            write(wr1, arr, sub.offset, sub.len) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def writeCharacter!(i: Int32, wr: OutputStreamWriter[r]): Result[Unit, String] \ Write(r) =
+        try {
+            import java.io.OutputStreamWriter.write(Int32): Unit \ r;
+            let OutputStreamWriter(wr1) = wr;
+            write(wr1, i) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def writeSubstring!(s: String, sub: {offset = Int32, len = Int32}, wr: OutputStreamWriter[r]): Result[Unit, String] \ Write(r) =
+        try {
+            import java.io.OutputStreamWriter.write(String, Int32, Int32): Unit \ r;
+            let OutputStreamWriter(wr1) = wr;
+            write(wr1, s, sub.offset, sub.len) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
 }

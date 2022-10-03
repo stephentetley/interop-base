@@ -67,8 +67,8 @@ namespace Interop/Lang/Appendable {
                 Err(getMessage(ex))
         }
 
-    pub def appendCharSequence![r1: Region, r2: Region, t1: Region -> Type, t2: Region -> Type](cs: t1[r1], 
-                    ss: t2[r2]): Result[Unit, String] \ {Read(r1), Write(r2)} with ImpCharSequence[t1], ImpAppendable[t2] = 
+    pub def appendCharSequence![r1: Region, r2: Region, t1: Region -> Type, t2: Region -> Type]
+                                (cs: t1[r1], ss: t2[r2]): Result[Unit, String] \ {Read(r1), Write(r2)} with ImpCharSequence[t1], ImpAppendable[t2] = 
         try {
             import java.lang.Appendable.append(##java.lang.CharSequence): ##java.lang.Appendable & r2;
             let Appendable(ss1) = Interop/Lang/ImpAppendable.toAppendable(ss);
