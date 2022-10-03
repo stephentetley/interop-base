@@ -63,11 +63,17 @@ namespace Interop/Text/DecimalFormatSymbols {
         newDecimalFormatSymbols(loc1) |> DecimalFormatSymbols
 
 
-    pub def equals(x: DecimalFormatSymbols[r], y: DecimalFormatSymbols[r]): Bool =
-        import java.text.DecimalFormatSymbols.equals(##java.lang.Object): Bool \ {};
+    pub def equals(x: DecimalFormatSymbols[r], y: DecimalFormatSymbols[r]): Bool \ Read(r) =
+        import java.text.DecimalFormatSymbols.equals(##java.lang.Object): Bool \ r;
         let DecimalFormatSymbols(x1) = x;
         let DecimalFormatSymbols(y1) = y;
         equals(x1, y1 as ##java.lang.Object)
+
+    pub def hashCode(dfs: DecimalFormatSymbols[r]): Int32 \ Read(r) =
+        import java.text.DecimalFormatSymbols.hashCode(): Int32 \ r;
+        let DecimalFormatSymbols(dfs1) = dfs;
+        hashCode(dfs1)
+
 
     /// This marshals okay...
     pub def getAvailableLocales(): List[Locale] \ IO = region r {

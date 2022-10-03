@@ -16,6 +16,8 @@
 
 package flixinterop.nio.file;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
@@ -41,6 +43,18 @@ public final class Filesz {
         OpenOption[] args = new OpenOption[options.size()];
         args = options.toArray(args);
         return Files.writeString(path, csq, args);
+    }
+
+    public static InputStream newInputStream(Path path, List<OpenOption> options) throws Exception {
+        OpenOption[] args = new OpenOption[options.size()];
+        args = options.toArray(args);
+        return Files.newInputStream(path, args);
+    }
+
+    public static OutputStream newOutputStream(Path path, List<OpenOption> options) throws Exception {
+        OpenOption[] args = new OpenOption[options.size()];
+        args = options.toArray(args);
+        return Files.newOutputStream(path, args);
     }
 
 }
