@@ -33,6 +33,12 @@ namespace Interop/IO {
     }
 
 
+    instance SubWriter[Writer] {
+        pub def toWriter(w: Writer[r]): Writer[r] = w
+        pub def fromWriter(w: Writer[r]): Writer[r] = w
+    }
+
+
     instance Interop/Lang.ImpAppendable[Writer] {
         pub def toAppendable(s: Writer[r]): Appendable[r] = 
             let Writer(s1) = s;
@@ -58,7 +64,8 @@ namespace Interop/IO/Writer {
 
     use Interop/IO.Writer;
     use Interop/IO.Writer.{Writer};
-
+    use Interop/IO.SubWriter;
+    use Interop/Lang.ImpCharSequence;
 
 
     pub def getHH(wr: Writer[r]): ##java.io.Writer = 
@@ -68,5 +75,135 @@ namespace Interop/IO/Writer {
 
     pub def wrapHH(_: Region[r], prim: ##java.io.Writer): Writer[r] =
         Writer(prim)
+
+
+    /// 
+    pub def nullWriter(): Writer[r] \ Write(r) =
+        import static java.io.Writer.nullWriter(): ##java.io.Writer \ r;
+        nullWriter() |> Writer
+
+
+    pub def appendChar![r: Region, wrt: Region -> Type]
+                        (c: Char, wr: wrt[r]): Result[wrt[r], String] \ Write(r) with SubWriter[wrt]=
+        try {
+            import java.io.Writer.append(Char): ##java.io.Writer \ r;
+            let wr1 = Interop/IO/SubWriter.getHH(wr);
+            append(wr1, c) |> Writer |> Interop/IO/SubWriter.fromWriter |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+
+    pub def appendCharSequence![r: Region, r2: Region, wrt: Region -> Type, cseq: Region -> Type]
+                                (cs: cseq[r2], wr: wrt[r]): Result[wrt[r], String] \ Write(r) with SubWriter[wrt], ImpCharSequence[cseq] =
+        try {
+            import java.io.Writer.append(##java.lang.CharSequence): ##java.io.Writer \ r;
+            let wr1 = Interop/IO/SubWriter.getHH(wr);
+            let cs1 = Interop/Lang/ImpCharSequence.getHH(cs);
+            append(wr1, cs1) |> Writer |> Interop/IO/SubWriter.fromWriter |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def appendSubCharSequence![r: Region, r2: Region, wrt: Region -> Type, cseq: Region -> Type]
+                                (cs: cseq[r2], sub: {start = Int32, end = Int32}, wr: wrt[r]): Result[wrt[r], String] \ Write(r) with SubWriter[wrt], ImpCharSequence[cseq] =
+        try {
+            import java.io.Writer.append(##java.lang.CharSequence, Int32, Int32): ##java.io.Writer \ r;
+            let wr1 = Interop/IO/SubWriter.getHH(wr);
+            let cs1 = Interop/Lang/ImpCharSequence.getHH(cs);
+            append(wr1, cs1, sub.start, sub.end) |> Writer |> Interop/IO/SubWriter.fromWriter |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def flush![r: Region, wrt: Region -> Type]
+                        (wr: wrt[r]): Result[Unit, String] \ Write(r) with SubWriter[wrt] =
+        try {
+            import java.io.Writer.flush(): Unit \ r;
+            let wr1 = Interop/IO/SubWriter.getHH(wr);
+            flush(wr1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def close![r: Region, wrt: Region -> Type]
+                    (wr: wrt[r]): Result[Unit, String] \ Write(r) with SubWriter[wrt] =
+        try {
+            import java.io.Writer.flush(): Unit \ r;
+            let wr1 = Interop/IO/SubWriter.getHH(wr);
+            flush(wr1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def writeCharArray![r: Region, r2: Region, wrt: Region -> Type]
+                        (arr: Array[Char, r2], wr: wrt[r]): Result[Unit, String] \ {Read(r2), Write(r)} with SubWriter[wrt]=
+        try {
+            import java.io.Writer.write(Array[Char, r2]): Unit \ {r, r2};
+            let wr1 = Interop/IO/SubWriter.getHH(wr);
+            write(wr1, arr) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def writeSubCharArray![r: Region, r2: Region, wrt: Region -> Type]
+                                (arr: Array[Char, r2], sub: {offset = Int32, len = Int32}, wr: wrt[r]): Result[Unit, String] \ {Read(r2), Write(r)} with SubWriter[wrt]=
+        try {
+            import java.io.Writer.write(Array[Char, r2], Int32, Int32): Unit \ {r, r2};
+            let wr1 = Interop/IO/SubWriter.getHH(wr);
+            write(wr1, arr, sub.offset, sub.len) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def writeCharacter![r: Region, wrt: Region -> Type]
+                            (i: Int32, wr: wrt[r]): Result[Unit, String] \ Write(r) with SubWriter[wrt]=
+        try {
+            import java.io.Writer.write(Int32): Unit \ r;
+            let wr1 = Interop/IO/SubWriter.getHH(wr);
+            write(wr1, i) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def writeString![r: Region, wrt: Region -> Type]
+                        (s: String, wr: wrt[r]): Result[Unit, String] \ Write(r) with SubWriter[wrt]=
+        try {
+            import java.io.Writer.write(String): Unit \ r;
+            let wr1 = Interop/IO/SubWriter.getHH(wr);
+            write(wr1, s) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def writeSubstring![r: Region, wrt: Region -> Type]
+                            (s: String, sub: {offset = Int32, len = Int32}, wr: wrt[r]): Result[Unit, String] \ Write(r) with SubWriter[wrt]=
+        try {
+            import java.io.Writer.write(String, Int32, Int32): Unit \ r;
+            let wr1 = Interop/IO/SubWriter.getHH(wr);
+            write(wr1, s, sub.offset, sub.len) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
 }

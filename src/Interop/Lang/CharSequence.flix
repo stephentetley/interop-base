@@ -17,6 +17,7 @@
 namespace Interop/Lang {
 
     /// Interface...
+    /// Must be able to handle both String and StringBuilder[r]
 
     use Interop/Flix/WrappedRegion.StringWithRegion;
     use Interop/Flix/WrappedRegion.StringWithRegion.{StringWithRegion};
@@ -54,6 +55,16 @@ namespace Interop/Lang {
 
 
 }
+
+namespace Interop/Lang/ImpCharSequence {
+    
+    use Interop/Lang.ImpCharSequence;
+
+    pub def getHH[r: Region, cseq: Region -> Type](cs: cseq[r]): ##java.lang.CharSequence with ImpCharSequence[cseq] = 
+        Interop/Lang/ImpCharSequence.toCharSequence(cs) |> Interop/Lang/CharSequence.getHH
+
+}
+
 
 namespace Interop/Lang/CharSequence {
 
