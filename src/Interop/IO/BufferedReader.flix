@@ -40,6 +40,7 @@ namespace Interop/IO/BufferedReader {
 
     use Interop/IO.BufferedReader;
     use Interop/IO.BufferedReader.{BufferedReader};
+    use Interop/IO.SubReader;
 
     use Interop/Util/Stream.Stream;
     use Interop/Util/Stream.Stream.{Stream};
@@ -51,6 +52,17 @@ namespace Interop/IO/BufferedReader {
     pub def wrapHH(_: Region[r], prim: ##java.io.BufferedReader): BufferedReader[r] = 
         BufferedReader(prim)
 
+
+    pub def newWithReader[r: Region, reader: Region -> Type]
+                            (rd: reader[r]): BufferedReader[r] \ Write(r) with SubReader[reader] = 
+        import new java.io.BufferedReader(##java.io.Reader): ##java.io.BufferedReader \ r as newBufferedReader;
+        Interop/IO/SubReader.getHH(rd) |> newBufferedReader |> BufferedReader
+
+
+    pub def newWithSize[r: Region, reader: Region -> Type]
+                        (rd: reader[r], size: Int32): BufferedReader[r] \ Write(r) with SubReader[reader] = 
+        import new java.io.BufferedReader(##java.io.Reader, Int32): ##java.io.BufferedReader \ r as newBufferedReader;
+        Interop/IO/SubReader.getHH(rd) |> flip(newBufferedReader, size) |> BufferedReader
 
     // read
 
