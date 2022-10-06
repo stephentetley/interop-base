@@ -66,9 +66,10 @@ namespace Interop/IO/BufferedReader {
 
     // read
 
-    pub def read!(rd: BufferedReader[r]): Result[Option[Int32], String] \ IO = 
+    /// None indicates end-of-stream.
+    pub def read!(rd: BufferedReader[r]): Result[Option[Int32], String] \ Read(r) = 
         try {
-            import java.io.BufferedReader.read(): Int32 \ { IO };
+            import java.io.BufferedReader.read(): Int32 \ r;
             let BufferedReader(rd1) = rd;
             match read(rd1) { 
                 case i if i < 0 => Ok(None)
@@ -81,9 +82,9 @@ namespace Interop/IO/BufferedReader {
         }
 
     // read (into-array)
-    pub def readIntoArrayWith!(buf: Array[Char, r2], offset: {offset :: Int32}, len: {len :: Int32}, rd: BufferedReader[r]): Result[Int32, String] \ { Write(r2), IO } = 
+    pub def readIntoArrayWith!(buf: Array[Char, r2], offset: {offset :: Int32}, len: {len :: Int32}, rd: BufferedReader[r]): Result[Int32, String] \ { Write(r2), Read(r) } = 
         try {
-            import java.io.BufferedReader.read(Array[Char, r2], Int32, Int32): Int32 \ { IO };
+            import java.io.BufferedReader.read(Array[Char, r2], Int32, Int32): Int32 \ {r, r2};
             let BufferedReader(rd1) = rd;
             read(rd1, buf, offset.offset, len.len) |> Ok
         } catch {
@@ -93,9 +94,9 @@ namespace Interop/IO/BufferedReader {
         }
 
     
-    pub def readLine!(rd: BufferedReader[r]): Result[String, String] \ IO = 
+    pub def readLine!(rd: BufferedReader[r]): Result[String, String] \ Read(r) = 
         try {
-            import java.io.BufferedReader.readLine(): String \ { IO };
+            import java.io.BufferedReader.readLine(): String \ r;
             let BufferedReader(rd1) = rd;
             readLine(rd1) |> Ok
         } catch {
@@ -104,9 +105,9 @@ namespace Interop/IO/BufferedReader {
                 Err(getMessage(ex))
         }
 
-    pub def ready(rd: BufferedReader[r]): Result[Bool, String] \ IO = 
+    pub def ready(rd: BufferedReader[r]): Result[Bool, String] \ Read(r) = 
         try {
-            import java.io.BufferedReader.ready(): Bool \ { IO };
+            import java.io.BufferedReader.ready(): Bool \ r;
             let BufferedReader(rd1) = rd;
             ready(rd1) |> Ok
         } catch {
@@ -115,15 +116,15 @@ namespace Interop/IO/BufferedReader {
                 Err(getMessage(ex))
         }
 
-    pub def markSupported(rd: BufferedReader[r]): Bool \ IO = 
-        import java.io.BufferedReader.markSupported(): Bool \ { IO };
+    pub def markSupported(rd: BufferedReader[r]): Bool \ Read(r) = 
+        import java.io.BufferedReader.markSupported(): Bool \ r;
         let BufferedReader(rd1) = rd;
         markSupported(rd1)
 
 
-    pub def mark!(readAheadLimit: Int32, rd: BufferedReader[r]): Result[Unit, String] \ IO = 
+    pub def mark!(readAheadLimit: Int32, rd: BufferedReader[r]): Result[Unit, String] \ Write(r) = 
         try {
-            import java.io.BufferedReader.mark(Int32): Unit \ { IO };
+            import java.io.BufferedReader.mark(Int32): Unit \ r;
             let BufferedReader(rd1) = rd;
             mark(rd1, readAheadLimit) |> Ok
         } catch {
@@ -132,9 +133,9 @@ namespace Interop/IO/BufferedReader {
                 Err(getMessage(ex))
         }
 
-    pub def reset!(rd: BufferedReader[r]): Result[Unit, String] \ IO = 
+    pub def reset!(rd: BufferedReader[r]): Result[Unit, String] \ Write(r) = 
         try {
-            import java.io.BufferedReader.reset(): Unit \ { IO };
+            import java.io.BufferedReader.reset(): Unit \ r;
             let BufferedReader(rd1) = rd;
             reset(rd1) |> Ok
         } catch {
@@ -143,9 +144,9 @@ namespace Interop/IO/BufferedReader {
                 Err(getMessage(ex))
         }
 
-    pub def close!(rd: BufferedReader[r]): Result[Unit, String] \ IO = 
+    pub def close!(rd: BufferedReader[r]): Result[Unit, String] \ Write(r) = 
         try {
-            import java.io.BufferedReader.close(): Unit \ { IO };
+            import java.io.BufferedReader.close(): Unit \ r;
             let BufferedReader(rd1) = rd;
             close(rd1) |> Ok
         } catch {
@@ -154,9 +155,9 @@ namespace Interop/IO/BufferedReader {
                 Err(getMessage(ex))
         }
 
-    pub def lines!(rd: BufferedReader[r]): Result[Stream[String, r], String] \ IO = 
+    pub def lines!(rd: BufferedReader[r]): Result[Stream[String, r], String] \ Read(r) = 
         try {
-            import java.io.BufferedReader.lines(): ##java.util.stream.Stream \ { IO };
+            import java.io.BufferedReader.lines(): ##java.util.stream.Stream \ r;
             let BufferedReader(rd1) = rd;
             lines(rd1) |> Stream |> Ok
         } catch {

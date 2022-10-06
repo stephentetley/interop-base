@@ -29,6 +29,13 @@ namespace Interop/IO {
         pub def fromReader[r: Region](s: Reader[r]): t[r]
     }
 
+
+    instance SubReader[Reader] {
+        pub def toReader(x: Reader[r]): Reader[r] = x
+        pub def fromReader(x: Reader[r]): Reader[r] = x
+    }
+
+
 }
 
 namespace Interop/IO/SubReader {
@@ -44,6 +51,7 @@ namespace Interop/IO/Reader {
 
     use Interop/IO.Reader;
     use Interop/IO.Reader.{Reader};
+    use Interop/IO.SubReader;
 
 
 
@@ -54,5 +62,29 @@ namespace Interop/IO/Reader {
     pub def wrapHH(_: Region[r], prim: ##java.io.Reader): Reader[r] =
         Reader(prim)
 
+
+    pub def close![r: Region, reader: Region -> Type]
+                    (rd: reader[r]): Result[Unit, String] \ Write(r) with SubReader[reader] =
+        try {
+            import java.io.Reader.close(): Unit \ r;
+            let rd1 = Interop/IO/SubReader.getHH(rd);
+            close(rd1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def skip![r: Region, reader: Region -> Type]
+                    (n: Int64, rd: reader[r]): Result[Int64, String] \ Write(r) with SubReader[reader] =
+        try {
+            import java.io.Reader.skip(Int64): Int64 \ r;
+            let rd1 = Interop/IO/SubReader.getHH(rd);
+            skip(rd1, n) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
 }

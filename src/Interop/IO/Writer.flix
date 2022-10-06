@@ -134,20 +134,20 @@ namespace Interop/IO/Writer {
                 Err(getMessage(ex))
         }
 
-    pub def close![r: Region, wrt: Region -> Type]
-                    (wr: wrt[r]): Result[Unit, String] \ Write(r) with SubWriter[wrt] =
+    pub def close![r: Region, writer: Region -> Type]
+                    (wr: writer[r]): Result[Unit, String] \ Write(r) with SubWriter[writer] =
         try {
-            import java.io.Writer.flush(): Unit \ r;
+            import java.io.Writer.close(): Unit \ r;
             let wr1 = Interop/IO/SubWriter.getHH(wr);
-            flush(wr1) |> Ok
+            close(wr1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
-    pub def writeCharArray![r: Region, r2: Region, wrt: Region -> Type]
-                        (arr: Array[Char, r2], wr: wrt[r]): Result[Unit, String] \ {Read(r2), Write(r)} with SubWriter[wrt] =
+    pub def writeCharArray![r: Region, r2: Region, writer: Region -> Type]
+                        (arr: Array[Char, r2], wr: writer[r]): Result[Unit, String] \ {Read(r2), Write(r)} with SubWriter[writer] =
         try {
             import java.io.Writer.write(Array[Char, r2]): Unit \ {r, r2};
             let wr1 = Interop/IO/SubWriter.getHH(wr);
@@ -158,10 +158,10 @@ namespace Interop/IO/Writer {
                 Err(getMessage(ex))
         }
 
-    pub def writeSubCharArray![r: Region, r2: Region, wrt: Region -> Type]
+    pub def writeSubCharArray![r: Region, r2: Region, writer: Region -> Type]
                                 (arr: Array[Char, r2], 
                                 sub: {offset = Int32, len = Int32}, 
-                                wr: wrt[r]): Result[Unit, String] \ {Read(r2), Write(r)} with SubWriter[wrt] =
+                                wr: writer[r]): Result[Unit, String] \ {Read(r2), Write(r)} with SubWriter[writer] =
         try {
             import java.io.Writer.write(Array[Char, r2], Int32, Int32): Unit \ {r, r2};
             let wr1 = Interop/IO/SubWriter.getHH(wr);
