@@ -53,9 +53,7 @@ namespace Interop/IO/InputStreamReader {
     pub def wrapHH(_: Region[r], prim: ##java.io.InputStreamReader): InputStreamReader[r] =
         InputStreamReader(prim)
 
-    pub def newInputStreamReader(_: Region[r], 
-                                    ins: InputStream[r], 
-                                    cs: Charset): InputStreamReader[r] \ Write(r) = 
+    pub def newInputStreamReader(ins: InputStream[r], cs: Charset): InputStreamReader[r] \ Write(r) = 
         import new java.io.InputStreamReader(##java.io.InputStream, ##java.nio.charset.Charset): ##java.io.InputStreamReader \ r as newInputStreamReader;
         let Charset(cs1) = cs;
         let ins1 = Interop/IO/InputStream.getHH(ins);

@@ -55,22 +55,22 @@ namespace Interop/IO/FileInputStream {
 
     pub def newWithFile(file: File[r]): Result[FileInputStream[r], String] \ {Write(r), IO} = 
         try {
-            import new java.io.FileInputStream(##java.io.File): ##java.io.FileInputStream \ IO as newFileInputStream;
+            import new java.io.FileInputStream(##java.io.File): ##java.io.FileInputStream \ {IO, r} as newFileInputStream;
             let file1 = Interop/IO/File.getHH(file);
             newFileInputStream(file1) |> FileInputStream |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & r;
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
-    pub def newWithPath(path: String): Result[FileInputStream[r], String] \ {Write(r), IO} = 
+    pub def newWithPath(_: Region[r], path: String): Result[FileInputStream[r], String] \ {Write(r), IO} = 
         try {
-            import new java.io.FileInputStream(String): ##java.io.FileInputStream \ IO as newFileInputStream;
+            import new java.io.FileInputStream(String): ##java.io.FileInputStream \ {IO, r} as newFileInputStream;
             newFileInputStream(path) |> FileInputStream |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & r;
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
