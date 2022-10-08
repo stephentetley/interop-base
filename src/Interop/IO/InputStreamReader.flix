@@ -61,5 +61,61 @@ namespace Interop/IO/InputStreamReader {
         let ins1 = Interop/IO/InputStream.getHH(ins);
         InputStreamReader(newInputStreamReader(ins1, cs1))
 
+    /// None indicates end-of-stream.
+    pub def read!(rd: InputStreamReader[r]): Result[Option[Int32], String] \ Read(r) = 
+        try {
+            import java.io.InputStreamReader.read(): Int32 \ r;
+            let InputStreamReader(rd1) = rd;
+            match read(rd1) { 
+                case i if i < 0 => Ok(None)
+                case i          => Ok(Some(i))
+            }
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    // read (into-array)
+    pub def readSubArray!(buf: Array[Char, r2], 
+                        offset: {offset :: Int32}, 
+                        len: {len :: Int32}, 
+                        rd: InputStreamReader[r]): Result[Int32, String] \ { Write(r2), Read(r) } = 
+        try {
+            import java.io.InputStreamReader.read(Array[Char, r2], Int32, Int32): Int32 \ {r, r2};
+            let InputStreamReader(rd1) = rd;
+            read(rd1, buf, offset.offset, len.len) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def getEncoding(rd: InputStreamReader[r]): String \ Read(r) = 
+        import java.io.InputStreamReader.getEncoding(): String \ r;
+        let InputStreamReader(rd1) = rd;
+        getEncoding(rd1)
+
+    pub def ready(rd: InputStreamReader[r]): Result[Bool, String] \ Read(r) = 
+        try {
+            import java.io.InputStreamReader.ready(): Bool \ r;
+            let InputStreamReader(rd1) = rd;
+            ready(rd1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def close!(rd: InputStreamReader[r]): Result[Unit, String] \ Write(r) = 
+        try {
+            import java.io.InputStreamReader.close(): Unit \ r;
+            let InputStreamReader(rd1) = rd;
+            close(rd1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
 }

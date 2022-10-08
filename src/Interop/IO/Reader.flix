@@ -30,12 +30,6 @@ namespace Interop/IO {
     }
 
 
-    instance SubReader[Reader] {
-        pub def toReader(x: Reader[r]): Reader[r] = x
-        pub def fromReader(x: Reader[r]): Reader[r] = x
-    }
-
-
 }
 
 namespace Interop/IO/SubReader {
@@ -51,7 +45,9 @@ namespace Interop/IO/Reader {
 
     use Interop/IO.Reader;
     use Interop/IO.Reader.{Reader};
+    use Interop/IO.Writer;
     use Interop/IO.SubReader;
+    use Interop/NIO.CharBuffer;
 
 
 
@@ -73,8 +69,72 @@ namespace Interop/IO/Reader {
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
+    
+    pub def mark!(limit: Int32, rd: Reader[r]): Result[Unit, String] \ Write(r) =
+        try {
+            import java.io.Reader.mark(Int32): Unit \ r;
+            let Reader(rd1) = rd;
+            mark(rd1, limit) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
-    pub def skip!(n: Int64, rd: Reader[r]): Result[Int64, String] \ Write(r) =
+    // Dont'provide `markSupported` should be overwritten by subclasses
+    
+    // read (into-array)
+    pub def readArray(buf: Array[Char, r2], rd: Reader[r]): Result[Int32, String] \ { Write(r2), Read(r) } = 
+        try {
+            import java.io.Reader.read(Array[Char, r2]): Int32 \ {r, r2};
+            let Reader(rd1) = rd;
+            read(rd1, buf) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    // read (into-array)
+    pub def readSubArray(buf: Array[Char, r2], 
+                            offset: {offset :: Int32}, 
+                            len: {len :: Int32}, 
+                            rd: Reader[r]): Result[Int32, String] \ { Write(r2), Read(r) } = 
+        try {
+            import java.io.Reader.read(Array[Char, r2], Int32, Int32): Int32 \ {r, r2};
+            let Reader(rd1) = rd;
+            read(rd1, buf, offset.offset, len.len) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    // read into CharBuffer
+    pub def readCharBuffer(buf: CharBuffer[r2], rd: Reader[r]): Result[Int32, String] \ { Write(r2), Read(r) } = 
+        try {
+            import java.io.Reader.read(##java.nio.CharBuffer): Int32 \ {r, r2};
+            let Reader(rd1) = rd;
+            let buf1 = Interop/NIO/CharBuffer.getHH(buf);
+            read(rd1, buf1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def reset!(rd: Reader[r]): Result[Unit, String] \ Write(r) =
+        try {
+            import java.io.Reader.reset(): Unit \ r;
+            let Reader(rd1) = rd;
+            reset(rd1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def skip!(n: Int64, rd: Reader[r]): Result[Int64, String] \ Read(r) =
         try {
             import java.io.Reader.skip(Int64): Int64 \ r;
             let Reader(rd1) = rd;
@@ -85,4 +145,15 @@ namespace Interop/IO/Reader {
                 Err(getMessage(ex))
         }
 
+    pub def transferTo!(outw: Writer[r2], rd: Reader[r]): Result[Int64, String] \ {Read(r), Write(r2)} =
+        try {
+            import java.io.Reader.transferTo(##java.io.Writer): Int64 \ {r, r2};
+            let Reader(rd1) = rd;
+            let outw1 = Interop/IO/Writer.getHH(outw);
+            transferTo(rd1, outw1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 }

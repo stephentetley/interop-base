@@ -55,6 +55,8 @@ namespace Interop/IO/InputStream {
         InputStream(prim)
 
 
+
+
     pub def readAllBytes(ins: InputStream[r]): Result[Array[Int8, r], String] \ IO = 
         try {
             import java.io.InputStream.readAllBytes(): Array[Int8, r] \ IO;
