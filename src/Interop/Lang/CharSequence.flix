@@ -19,8 +19,6 @@ namespace Interop/Lang {
     /// Interface...
     /// Must be able to handle both String and StringBuilder[r]
 
-    use Interop/Flix/WrappedRegion.StringWithRegion;
-    use Interop/Flix/WrappedRegion.StringWithRegion.{StringWithRegion};
 
     pub enum CharSequence[_: Region](##java.lang.CharSequence)
 
@@ -31,16 +29,6 @@ namespace Interop/Lang {
     pub class ImpCharSequence[t: Region -> Type] {
         pub def toCharSequence[r: Region](s: t[r]): CharSequence[r]
         pub def fromCharSequence[r: Region](s: CharSequence[r]): t[r]
-    }
-
-    instance Interop/Lang.ImpCharSequence[StringWithRegion] {
-        pub def toCharSequence(s: StringWithRegion[r]): CharSequence[r] = 
-            let StringWithRegion(s1) = s;
-            CharSequence(s1 as ##java.lang.CharSequence)
-
-        pub def fromCharSequence(s: CharSequence[r]): StringWithRegion[r] = 
-            let CharSequence(s1) = s;
-            StringWithRegion(s1 as ##java.lang.String) 
     }
 
     instance Interop/Lang.ImpCharSequence[StringBuilder] {

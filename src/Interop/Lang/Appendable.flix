@@ -81,10 +81,5 @@ namespace Interop/Lang/Appendable {
                 Err(getMessage(ex))
         }
 
-    /// pub def appendString![r: Region, t: Region -> Type](s: String, ss: t[r]): Result[Unit, String] \ Write(r) with ImpAppendable[t] = 
-    ///     region r1 {
-    ///         let ws = Interop/Flix/WrappedRegion.newStringWithRegion(r1, s);
-    ///         appendCharSequence!(ws, ss)
-    ///     }
 
 }
