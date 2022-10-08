@@ -57,7 +57,7 @@ namespace Interop/IO/OutputStreamWriter {
 
     use Interop/IO.OutputStreamWriter;
     use Interop/IO.OutputStreamWriter.{OutputStreamWriter};
-    use Interop/IO.SubOutputStream;
+    use Interop/IO.OutputStream;
 
     use Interop/NIO/Charset.Charset;
     use Interop/NIO/Charset.Charset.{Charset};
@@ -69,12 +69,11 @@ namespace Interop/IO/OutputStreamWriter {
     pub def wrapHH(_: Region[r], prim: ##java.io.OutputStreamWriter): OutputStreamWriter[r] =
         OutputStreamWriter(prim)
 
-    pub def newOutputStreamWriter[r: Region, stream: Region -> Type](_: Region[r], 
-                                                                    ous: stream[r], 
-                                                                    cs: Charset): OutputStreamWriter[r] \ Write(r) with SubOutputStream[stream] = 
+    pub def newOutputStreamWriter(outs: OutputStream[r], cs: Charset): OutputStreamWriter[r] \ Write(r) = 
         import new java.io.OutputStreamWriter(##java.io.OutputStream, ##java.nio.charset.Charset): ##java.io.OutputStreamWriter & r as newOutputStreamWriter;
         let Charset(cs1) = cs;
-        OutputStreamWriter(newOutputStreamWriter(Interop/IO/OutputStream.getHH(Interop/IO/SubOutputStream.toOutputStream(ous)), cs1))
+        let outs1 = Interop/IO/OutputStream.getHH(outs);
+        newOutputStreamWriter(outs1, cs1) |> OutputStreamWriter
 
     pub def flush!(wr: OutputStreamWriter[r]): Result[Unit, String] \ Write(r) =
         try {

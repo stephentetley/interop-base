@@ -82,7 +82,10 @@ namespace Interop/IO/FilterInputStream {
 
 
     // read (into-array)
-    pub def readIntoArrayWith!(buf: Array[Int8, r2], offset: {offset :: Int32}, len: {len :: Int32}, ins: FilterInputStream[r]): Result[Int32, String] \ { Write(r2), IO } = 
+    pub def readIntoArrayWith!(buf: Array[Int8, r2], 
+                                offset: {offset :: Int32}, 
+                                len: {len :: Int32}, 
+                                ins: FilterInputStream[r]): Result[Int32, String] \ { Write(r2), IO } = 
         try {
             import java.io.FilterInputStream.read(Array[Int8, r2], Int32, Int32): Int32 \ { IO };
             let FilterInputStream(ins1) = ins;

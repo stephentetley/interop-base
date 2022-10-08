@@ -104,7 +104,10 @@ namespace Interop/IO/FileInputStream {
 
 
     // read (into-array)
-    pub def readIntoArrayWith!(buf: Array[Int8, r2], offset: {offset :: Int32}, len: {len :: Int32}, ins: FileInputStream[r]): Result[Int32, String] \ { Write(r2), IO } = 
+    pub def readIntoArrayWith!(buf: Array[Int8, r2], 
+                                offset: {offset :: Int32}, 
+                                len: {len :: Int32}, 
+                                ins: FileInputStream[r]): Result[Int32, String] \ { Write(r2), IO } = 
         try {
             import java.io.FileInputStream.read(Array[Int8, r2], Int32, Int32): Int32 \ { IO };
             let FileInputStream(ins1) = ins;

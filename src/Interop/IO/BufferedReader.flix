@@ -40,7 +40,7 @@ namespace Interop/IO/BufferedReader {
 
     use Interop/IO.BufferedReader;
     use Interop/IO.BufferedReader.{BufferedReader};
-    use Interop/IO.SubReader;
+    use Interop/IO.Reader;
 
     use Interop/Util/Stream.Stream;
     use Interop/Util/Stream.Stream.{Stream};
@@ -53,16 +53,14 @@ namespace Interop/IO/BufferedReader {
         BufferedReader(prim)
 
 
-    pub def newWithReader[r: Region, reader: Region -> Type]
-                            (rd: reader[r]): BufferedReader[r] \ Write(r) with SubReader[reader] = 
+    pub def newWithReader(rd: Reader[r]): BufferedReader[r] \ Write(r) = 
         import new java.io.BufferedReader(##java.io.Reader): ##java.io.BufferedReader \ r as newBufferedReader;
-        Interop/IO/SubReader.getHH(rd) |> newBufferedReader |> BufferedReader
+        Interop/IO/Reader.getHH(rd) |> newBufferedReader |> BufferedReader
 
 
-    pub def newWithSize[r: Region, reader: Region -> Type]
-                        (rd: reader[r], size: Int32): BufferedReader[r] \ Write(r) with SubReader[reader] = 
+    pub def newWithSize(rd: Reader[r], size: Int32): BufferedReader[r] \ Write(r) = 
         import new java.io.BufferedReader(##java.io.Reader, Int32): ##java.io.BufferedReader \ r as newBufferedReader;
-        Interop/IO/SubReader.getHH(rd) |> flip(newBufferedReader, size) |> BufferedReader
+        Interop/IO/Reader.getHH(rd) |> flip(newBufferedReader, size) |> BufferedReader
 
     // read
 
@@ -82,7 +80,10 @@ namespace Interop/IO/BufferedReader {
         }
 
     // read (into-array)
-    pub def readIntoArrayWith!(buf: Array[Char, r2], offset: {offset :: Int32}, len: {len :: Int32}, rd: BufferedReader[r]): Result[Int32, String] \ { Write(r2), Read(r) } = 
+    pub def readIntoArrayWith!(buf: Array[Char, r2], 
+                                offset: {offset :: Int32}, 
+                                len: {len :: Int32}, 
+                                rd: BufferedReader[r]): Result[Int32, String] \ { Write(r2), Read(r) } = 
         try {
             import java.io.BufferedReader.read(Array[Char, r2], Int32, Int32): Int32 \ {r, r2};
             let BufferedReader(rd1) = rd;

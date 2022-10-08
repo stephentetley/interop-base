@@ -63,11 +63,10 @@ namespace Interop/IO/Reader {
         Reader(prim)
 
 
-    pub def close![r: Region, reader: Region -> Type]
-                    (rd: reader[r]): Result[Unit, String] \ Write(r) with SubReader[reader] =
+    pub def close!(rd: Reader[r]): Result[Unit, String] \ Write(r) =
         try {
             import java.io.Reader.close(): Unit \ r;
-            let rd1 = Interop/IO/SubReader.getHH(rd);
+            let Reader(rd1) = rd;
             close(rd1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -75,11 +74,10 @@ namespace Interop/IO/Reader {
                 Err(getMessage(ex))
         }
 
-    pub def skip![r: Region, reader: Region -> Type]
-                    (n: Int64, rd: reader[r]): Result[Int64, String] \ Write(r) with SubReader[reader] =
+    pub def skip!(n: Int64, rd: Reader[r]): Result[Int64, String] \ Write(r) =
         try {
             import java.io.Reader.skip(Int64): Int64 \ r;
-            let rd1 = Interop/IO/SubReader.getHH(rd);
+            let Reader(rd1) = rd;
             skip(rd1, n) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
