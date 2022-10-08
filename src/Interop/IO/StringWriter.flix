@@ -156,12 +156,13 @@ namespace Interop/IO/StringWriter {
             
 
     pub def writeSubstring!(s: String, 
-                            sub: {offset = Int32, len = Int32}, 
+                            offset: {offset :: Int32}, 
+                            len: {len :: Int32}, 
                             sr: StringWriter[r]): Result[Unit, String] \ Write(r) =
         try {
             import java.io.StringWriter.write(String, Int32, Int32): Unit \ r;
             let StringWriter(sr1) = sr;
-            write(sr1, s, sub.offset, sub.len) |> Ok
+            write(sr1, s, offset.offset, len.len) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
