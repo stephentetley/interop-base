@@ -33,12 +33,6 @@ namespace Interop/IO {
     }
 
 
-    instance SubWriter[Writer] {
-        pub def toWriter(w: Writer[r]): Writer[r] = w
-        pub def fromWriter(w: Writer[r]): Writer[r] = w
-    }
-
-
     instance Interop/Lang.ImpAppendable[Writer] {
         pub def toAppendable(s: Writer[r]): Appendable[r] = 
             let Writer(s1) = s;
@@ -87,7 +81,7 @@ namespace Interop/IO/Writer {
         try {
             import java.io.Writer.append(Char): ##java.io.Writer \ r;
             let wr1 = getHH(wr);
-            append(wr1, c) |> Writer |> Interop/IO/SubWriter.fromWriter |> Ok
+            append(wr1, c) |> Writer |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
@@ -100,7 +94,7 @@ namespace Interop/IO/Writer {
             import java.io.Writer.append(##java.lang.CharSequence): ##java.io.Writer \ r;
             let wr1 = getHH(wr);
             let cs1 = Interop/Lang/CharSequence.getHH(cs);
-            append(wr1, cs1) |> Writer |> Interop/IO/SubWriter.fromWriter |> Ok
+            append(wr1, cs1) |> Writer |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
@@ -114,7 +108,7 @@ namespace Interop/IO/Writer {
             import java.io.Writer.append(##java.lang.CharSequence, Int32, Int32): ##java.io.Writer \ r;
             let wr1 = getHH(wr);
             let cs1 = Interop/Lang/CharSequence.getHH(cs);
-            append(wr1, cs1, sub.start, sub.end) |> Writer |> Interop/IO/SubWriter.fromWriter |> Ok
+            append(wr1, cs1, sub.start, sub.end) |> Writer |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
