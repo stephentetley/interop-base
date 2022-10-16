@@ -29,22 +29,29 @@ namespace Interop/Util/Stream {
 }
 
 
-namespace Interop/Util/Stream/Stream {
+namespace Interop/Util/Stream/IntStream {
     
     use Interop/Util/Stream.IntStream;
     use Interop/Util/Stream.IntStream.{IntStream};
     
     use Interop/Flix.Marshal;
 
-    pub def newIntStream(_: Region[r], prim: ##java.util.stream.IntStream): IntStream[r] = IntStream(prim)
+    pub def getHH(x: IntStream[r]): ##java.util.stream.IntStream = 
+        let IntStream(x1) = x;
+        x1
+
+    pub def wrapHH(_: Region[r], prim: ##java.util.stream.IntStream): IntStream[r] = IntStream(prim)
 
     pub def intStreamIterator(s: IntStream[r]): Iterator[Int32, r] \ Write(r) =
-        import java.util.stream.BaseStream.iterator(): ##java.util.Iterator & r;
+        import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ r;
         let r = Scoped.regionOf(s);
         let IntStream(s1) = s;
         let iter1 = iterator(s1 as ##java.util.stream.BaseStream);
         let iter2 = Interop/Util/IteratorZ.wrapHH(r, iter1);
         Interop/Util/IteratorZ.iterator(iter2)
 
-
+    pub def range(_: Region[r], b: Int32, e: Int32): IntStream[r] \ Write(r) = 
+        import static java.util.stream.IntStream.range(Int32, Int32): ##java.util.stream.IntStream \ r;
+        range(b, e) |> IntStream
+        
 }
