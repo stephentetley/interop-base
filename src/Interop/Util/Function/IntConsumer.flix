@@ -37,6 +37,14 @@ namespace Interop/Util/Function/IntConsumer {
         let IntConsumer(x1) = x;
         x1
 
+    pub def makeIntConsumer(f: Int32 -> Unit \ ef): IntConsumer \ ef = 
+        let f1 = 
+            new ##java.util.function.IntConsumer {
+                def accept(_this: ##java.util.function.IntConsumer, i: Int32): Unit = f(i)
+            } as \ ef;
+        IntConsumer(f1)
+
+
     pub def accept(i: Int32, f: IntConsumer): Unit = 
         import java.util.function.IntConsumer.accept(Int32): Unit \ {};
         let IntConsumer(f1) = f;

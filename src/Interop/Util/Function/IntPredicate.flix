@@ -35,7 +35,14 @@ namespace Interop/Util/Function/IntPredicate {
         x1
 
 
+    pub def makeIntPredicate(f: Int32 -> Bool \ ef): IntPredicate \ ef = 
+        let pred1 = 
+            new ##java.util.function.IntPredicate {
+                def test(_this: ##java.util.function.IntPredicate, i: Int32): Bool = f(i)
+            } as \ ef;
+        IntPredicate(pred1)
 
+        
     pub def test(i: Int32, f: IntPredicate): Bool = 
         import java.util.function.IntPredicate.test(Int32): Bool \ {};
         let IntPredicate(f1) = f;
