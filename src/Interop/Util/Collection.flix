@@ -18,7 +18,7 @@ namespace Interop/Util {
 
     ///
     /// Represents a Java Collection.
-    /// Iterface / Mutable (some implementations may not be mutable)
+    /// Interface / Mutable (some implementations may not be mutable)
     ///
     pub enum Collection[_: Type, _: Region](##java.util.Collection)
 

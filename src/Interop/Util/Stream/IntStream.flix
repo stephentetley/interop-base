@@ -33,7 +33,12 @@ namespace Interop/Util/Stream/IntStream {
     
     use Interop/Util/Stream.IntStream;
     use Interop/Util/Stream.IntStream.{IntStream};
-    
+    use Interop/Util.IntSummaryStatistics;
+    use Interop/Util.IntSummaryStatistics.{IntSummaryStatistics};
+    use Interop/Util.OptionalDouble;
+    use Interop/Util.OptionalDouble.{OptionalDouble};
+    use Interop/Util/Function.IntPredicate;
+    use Interop/Util/Function.IntPredicate.{IntPredicate};
     use Interop/Flix.Marshal;
 
     pub def getHH(x: IntStream[r]): ##java.util.stream.IntStream = 
@@ -54,4 +59,34 @@ namespace Interop/Util/Stream/IntStream {
         import static java.util.stream.IntStream.range(Int32, Int32): ##java.util.stream.IntStream \ r;
         range(b, e) |> IntStream
         
+    pub def average(s: IntStream[r]): OptionalDouble \ Read(r) = 
+        import java.util.stream.IntStream.average(): ##java.util.OptionalDouble \ r;
+        let IntStream(s1) = s;
+        average(s1) |> OptionalDouble
+
+    
+    pub def summaryStatistics(s: IntStream[r]): IntSummaryStatistics[r] \ Read(r) = 
+        import java.util.stream.IntStream.summaryStatistics(): ##java.util.IntSummaryStatistics \ r;
+        let IntStream(s1) = s;
+        summaryStatistics(s1) |> IntSummaryStatistics
+
+    pub def anyMatch(f: IntPredicate, s: IntStream[r]): Bool \ Read(r) = 
+        import java.util.stream.IntStream.anyMatch(##java.util.function.IntPredicate): Bool \ r;
+        let IntStream(s1) = s;
+        let IntPredicate(f1) = f;
+        anyMatch(s1, f1)
+
+    pub def allMatch(f: IntPredicate, s: IntStream[r]): Bool \ Read(r) = 
+        import java.util.stream.IntStream.allMatch(##java.util.function.IntPredicate): Bool \ r;
+        let IntStream(s1) = s;
+        let IntPredicate(f1) = f;
+        allMatch(s1, f1)
+
+
+    pub def noneMatch(f: IntPredicate, s: IntStream[r]): Bool \ Read(r) = 
+        import java.util.stream.IntStream.noneMatch(##java.util.function.IntPredicate): Bool \ r;
+        let IntStream(s1) = s;
+        let IntPredicate(f1) = f;
+        noneMatch(s1, f1)
+
 }
