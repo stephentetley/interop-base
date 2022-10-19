@@ -33,7 +33,13 @@ namespace Interop/Util/Stream/DoubleStream {
     use Interop/Util/Stream.DoubleStream;
     use Interop/Util/Stream.DoubleStream.{DoubleStream};
     
-    use Interop/Flix.Marshal;
+
+    pub def getHH(x: DoubleStream[r]): ##java.util.stream.DoubleStream = 
+        let DoubleStream(x1) = x;
+        x1
+
+    pub def wrapHH(_: Region[r], prim: ##java.util.stream.DoubleStream): DoubleStream[r] = DoubleStream(prim)
+
 
     pub def doubleStreamIterator(s: DoubleStream[r]): Iterator[Float64, r] \ Write(r) =
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator & r;

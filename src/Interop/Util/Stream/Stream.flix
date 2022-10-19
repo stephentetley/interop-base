@@ -31,8 +31,9 @@ namespace Interop/Util/Stream {
 
 namespace Interop/Util/Stream/Stream {
     
-    use Interop/Util/Stream.Stream;
-    use Interop/Util/Stream.Stream.{Stream};
+    use Interop/Util/Stream.Stream
+    use Interop/Util/Stream.Stream.{Stream}
+    use Interop/Util/Stream/Stream.Builder.{Builder}
     
     use Interop/Flix.Marshal;
 
@@ -42,6 +43,16 @@ namespace Interop/Util/Stream/Stream {
 
     pub def wrapHH(_: Region[r], prim: ##java.util.stream.Stream): Stream[a, r] = 
         Stream(prim)
+
+
+    pub def empty(_: Region[r]): Stream[a, r] \ Write(r) = 
+        import static java.util.stream.Stream.empty(): ##java.util.stream.Stream \ r;
+        empty() |> Stream
+
+    pub def builder(_: Region[r]): Builder[a, r] \ Write(r) = 
+        import static java.util.stream.Stream.builder(): ##java.util.stream.Stream$Builder \ r;
+        builder() |> Builder
+
 
 
     pub def iterator(s: Stream[a, r]): Iterator[a, r] \ Write(r) with Marshal[a] =

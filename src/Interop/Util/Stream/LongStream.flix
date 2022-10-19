@@ -30,11 +30,19 @@ namespace Interop/Util/Stream {
 }
 
 
-namespace Interop/Util/Stream/Stream {
+namespace Interop/Util/Stream/LongStream {
     
     use Interop/Util/Stream.LongStream;
     use Interop/Util/Stream.LongStream.{LongStream};
     use Interop/Flix.Marshal;
+
+
+    pub def getHH(x: LongStream[r]): ##java.util.stream.LongStream = 
+        let LongStream(x1) = x;
+        x1
+
+    pub def wrapHH(_: Region[r], prim: ##java.util.stream.LongStream): LongStream[r] = LongStream(prim)
+
 
     pub def newLongStream(_: Region[r], prim: ##java.util.stream.LongStream): LongStream[r] = LongStream(prim)
 
