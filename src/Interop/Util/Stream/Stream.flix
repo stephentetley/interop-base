@@ -34,6 +34,8 @@ namespace Interop/Util/Stream/Stream {
     use Interop/Util/Stream.Stream
     use Interop/Util/Stream.Stream.{Stream}
     use Interop/Util/Stream/Stream.Builder.{Builder}
+    use Interop/Util/Function.UnaryOperator
+    use Interop/Util/Function.UnaryOperator.{UnaryOperator}
     
     use Interop/Flix.Marshal;
 
@@ -53,6 +55,22 @@ namespace Interop/Util/Stream/Stream {
         import static java.util.stream.Stream.builder(): ##java.util.stream.Stream$Builder \ r;
         builder() |> Builder
 
+    pub def of(_: Region[r], t: a): Stream[a, r] \ Write(r) with Marshal[a] = 
+        import static java.util.stream.Stream.of(##java.lang.Object): ##java.util.stream.Stream \ r;
+        let t1 = Interop/Flix/Marshal.toJavaObject(t);
+        of(t1) |> Stream
+
+    pub def ofNullable(_: Region[r], t: a): Stream[a, r] \ Write(r) with Marshal[a] = 
+        import static java.util.stream.Stream.ofNullable(##java.lang.Object): ##java.util.stream.Stream \ r;
+        let t1 = Interop/Flix/Marshal.toJavaObject(t);
+        ofNullable(t1) |> Stream
+
+
+    pub def iterate(_: Region[r], seed: a, op: UnaryOperator): Stream[a, r] \ Write(r) with Marshal[a] = 
+        import static java.util.stream.Stream.iterate(##java.lang.Object, ##java.util.function.UnaryOperator): ##java.util.stream.Stream \ r;
+        let UnaryOperator(op1) = op;
+        let seed1 = Interop/Flix/Marshal.toJavaObject(seed);
+        iterate(seed1, op1) |> Stream
 
 
     pub def iterator(s: Stream[a, r]): Iterator[a, r] \ Write(r) with Marshal[a] =
