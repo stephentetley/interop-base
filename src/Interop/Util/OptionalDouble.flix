@@ -34,9 +34,36 @@ namespace Interop/Util/OptionalDouble {
     pub def getHH(o: OptionalDouble): ##java.util.OptionalDouble = 
         let OptionalDouble(o1) = o;
         o1
+
+    pub def toOption(o: OptionalDouble): Option[Float64] =
+        getAsDouble(o) |> Result.toOption
     
+    pub def fromOption(o: Option[Float64]): OptionalDouble =
+        match o { 
+            case None    => empty()
+            case Some(d) => of(d)
+        }
+
+
     pub def empty(): OptionalDouble =
         import static java.util.OptionalDouble.empty(): ##java.util.OptionalDouble \ {};
         empty() |> OptionalDouble
+
+    pub def of(d: Float64): OptionalDouble =
+        import static java.util.OptionalDouble.of(Float64): ##java.util.OptionalDouble \ {};
+        of(d) |> OptionalDouble
+
+    pub def getAsDouble(o: OptionalDouble): Result[Float64, String] = 
+        try {
+            import java.util.OptionalDouble.getAsDouble(): Float64 \ {};
+            let OptionalDouble(o1) = o;
+            getAsDouble(o1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+
 
 }

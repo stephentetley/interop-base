@@ -34,9 +34,40 @@ namespace Interop/Util/OptionalInt {
     pub def getHH(o: OptionalInt): ##java.util.OptionalInt = 
         let OptionalInt(o1) = o;
         o1
+
+    pub def toOption(o: OptionalInt): Option[Int32] =
+        getAsInt(o) |> Result.toOption
     
+    pub def fromOption(o: Option[Int32]): OptionalInt =
+        match o { 
+            case None    => empty()
+            case Some(i) => of(i)
+        }
+
+
     pub def empty(): OptionalInt =
         import static java.util.OptionalInt.empty(): ##java.util.OptionalInt \ {};
         empty() |> OptionalInt
 
+    pub def of(i: Int32): OptionalInt =
+        import static java.util.OptionalInt.of(Int32): ##java.util.OptionalInt \ {};
+        of(i) |> OptionalInt
+
+    pub def getAsInt(o: OptionalInt): Result[Int32, String] = 
+        try {
+            import java.util.OptionalInt.getAsInt(): Int32 \ {};
+            let OptionalInt(o1) = o;
+            getAsInt(o1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+
+    pub def isPresent(o: OptionalInt): Bool = 
+        import java.util.OptionalInt.isPresent(): Bool \ {};
+        let OptionalInt(o1) = o;
+        isPresent(o1)
+        
 }
