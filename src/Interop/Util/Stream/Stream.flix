@@ -66,7 +66,7 @@ namespace Interop/Util/Stream/Stream {
         ofNullable(t1) |> Stream
 
 
-    pub def iterate(_: Region[r], seed: a, op: UnaryOperator): Stream[a, r] \ Write(r) with Marshal[a] = 
+    pub def iterate(_: Region[r], seed: a, op: UnaryOperator[a]): Stream[a, r] \ Write(r) with Marshal[a] = 
         import static java.util.stream.Stream.iterate(##java.lang.Object, ##java.util.function.UnaryOperator): ##java.util.stream.Stream \ r;
         let UnaryOperator(op1) = op;
         let seed1 = Interop/Flix/Marshal.toJavaObject(seed);
