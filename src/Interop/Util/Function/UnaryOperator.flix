@@ -22,6 +22,7 @@ namespace Interop/Util/Function {
     pub enum UnaryOperator[_: Type](##java.util.function.UnaryOperator)
 
 
+
 }
 
 
@@ -29,6 +30,8 @@ namespace Interop/Util/Function/UnaryOperator {
     
     use Interop/Util/Function.UnaryOperator
     use Interop/Util/Function.UnaryOperator.{UnaryOperator}
+    use Interop/Util/Function.Function
+    use Interop/Util/Function.Function.{Function}
     use Interop/Flix.Marshal
     
     pub def getHH(x: UnaryOperator[a]): ##java.util.function.UnaryOperator = 
@@ -54,6 +57,18 @@ namespace Interop/Util/Function/UnaryOperator {
     pub def identity(): UnaryOperator[a] = 
         import static java.util.function.UnaryOperator.identity(): ##java.util.function.UnaryOperator \ {};
         identity() |> UnaryOperator
+
+
+
+    pub def toFunction(op: UnaryOperator[a]): Function[a, a] = 
+        let UnaryOperator(op1) = op;
+        Function(op1 as ##java.util.function.Function)
+
+    pub def fromFunction(f: Function[a, a]): UnaryOperator[a] = 
+        let Function(f1) = f;
+        UnaryOperator(f1 as ##java.util.function.UnaryOperator)
+
+
 
 
 }

@@ -21,15 +21,18 @@ namespace Interop/Util/Function {
     ///
     pub enum Function[_: Type, _: Type](##java.util.function.Function)
 
+    // Don't think we can define a class that UnaryOperator can implement 
+    // to show it is a sub interface.
+    // UnaryOperator has to define `toFunction` and `fromFunction` as ordinary functions
 
 }
 
 
 namespace Interop/Util/Function/Function {
     
-    use Interop/Util/Function.Function;
-    use Interop/Util/Function.Function.{Function};
-    use Interop/Flix.Marshal;
+    use Interop/Util/Function.Function
+    use Interop/Util/Function.Function.{Function}
+    use Interop/Flix.Marshal
 
     pub def getHH(x: Function[a, b]): ##java.util.function.Function = 
         let Function(x1) = x;
