@@ -79,9 +79,12 @@ namespace Interop/Util/Stream/IntStream {
         import static java.util.stream.IntStream.of(Array[Int32, r2]): ##java.util.stream.IntStream \ {r, r2};
         of(arr) |> IntStream
 
-
-    pub def iterate(_: Region[r], seed: Int32, op: IntUnaryOperator): IntStream[r] \ Write(r) = 
+    pub def iterate(_: Region[r], seed: Int32, f: Int32 -> Int32 \ ef): IntStream[r] \ {Write(r), ef} = 
         import static java.util.stream.IntStream.iterate(Int32, ##java.util.function.IntUnaryOperator): ##java.util.stream.IntStream \ r;
+        (iterate(seed, i -> f(i) as \ IO) as \ {Write(r), ef}) |> IntStream
+
+    pub def iterateWrapped(_: Region[r], seed: Int32, op: IntUnaryOperator[ef]): IntStream[r] \ {Write(r), ef} = 
+        import static java.util.stream.IntStream.iterate(Int32, ##java.util.function.IntUnaryOperator): ##java.util.stream.IntStream \ {r, ef};
         let IntUnaryOperator(op1) = op;
         iterate(seed, op1) |> IntStream
 
@@ -119,11 +122,17 @@ namespace Interop/Util/Stream/IntStream {
         let IntPredicate(p1) = p;
         dropWhile(s1, p1) |> IntStream
 
-    pub def map(op: IntUnaryOperator, s: IntStream[r]): IntStream[r] \ Write(r) = 
-        import java.util.stream.IntStream.map(##java.util.function.IntUnaryOperator): ##java.util.stream.IntStream \ r;
+    pub def mapWrapped(op: IntUnaryOperator[ef], s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
+        import java.util.stream.IntStream.map(##java.util.function.IntUnaryOperator): ##java.util.stream.IntStream \ {r, ef};
         let IntStream(s1) = s;
         let IntUnaryOperator(op1) = op;
         map(s1, op1) |> IntStream
+
+    pub def map(f: Int32 -> Int32 \ ef, s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
+        import java.util.stream.IntStream.map(##java.util.function.IntUnaryOperator): ##java.util.stream.IntStream \ r;
+        let IntStream(s1) = s;
+        (map(s1, i -> f(i) as \ IO) as \ {Write(r), ef}) |> IntStream
+
 
     pub def forEach(f: IntConsumer, s: IntStream[r]): Unit \ Read(r) = 
         import java.util.stream.IntStream.forEach(##java.util.function.IntConsumer): Unit \ r;

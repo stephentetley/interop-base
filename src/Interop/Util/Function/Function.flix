@@ -22,7 +22,7 @@ namespace Interop/Util/Function {
     pub enum Function[_: Type, _: Type](##java.util.function.Function)
 
     // Don't think we can define a class that UnaryOperator can implement 
-    // to show it is a sub interface.
+    // to show it is a sub-interface.
     // UnaryOperator has to define `toFunction` and `fromFunction` as ordinary functions
 
 }
