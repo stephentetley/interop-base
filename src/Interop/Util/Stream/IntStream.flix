@@ -110,14 +110,14 @@ namespace Interop/Util/Stream/IntStream {
         concat(s1, t1) |> IntStream
 
 
-    pub def filter(p: IntPredicate, s: IntStream[r]): IntStream[r] \ Write(r) = 
-        import java.util.stream.IntStream.filter(##java.util.function.IntPredicate): ##java.util.stream.IntStream \ r;
+    pub def filter(p: IntPredicate[ef], s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
+        import java.util.stream.IntStream.filter(##java.util.function.IntPredicate): ##java.util.stream.IntStream \ {r, ef};
         let IntStream(s1) = s;
         let IntPredicate(p1) = p;
         filter(s1, p1) |> IntStream
 
-    pub def dropWhile(p: IntPredicate, s: IntStream[r]): IntStream[r] \ Write(r) = 
-        import java.util.stream.IntStream.dropWhile(##java.util.function.IntPredicate): ##java.util.stream.IntStream \ r;
+    pub def dropWhile(p: IntPredicate[ef], s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
+        import java.util.stream.IntStream.dropWhile(##java.util.function.IntPredicate): ##java.util.stream.IntStream \ {r, ef};
         let IntStream(s1) = s;
         let IntPredicate(p1) = p;
         dropWhile(s1, p1) |> IntStream
@@ -134,8 +134,8 @@ namespace Interop/Util/Stream/IntStream {
         (map(s1, i -> f(i) as \ IO) as \ {Write(r), ef}) |> IntStream
 
 
-    pub def forEach(f: IntConsumer, s: IntStream[r]): Unit \ Read(r) = 
-        import java.util.stream.IntStream.forEach(##java.util.function.IntConsumer): Unit \ r;
+    pub def forEach(f: IntConsumer[ef], s: IntStream[r]): Unit \ {Read(r), ef} = 
+        import java.util.stream.IntStream.forEach(##java.util.function.IntConsumer): Unit \ {r, ef};
         let IntStream(s1) = s;
         let IntConsumer(f1) = f;
         forEach(s1, f1)
@@ -152,21 +152,21 @@ namespace Interop/Util/Stream/IntStream {
         let IntStream(s1) = s;
         summaryStatistics(s1) |> IntSummaryStatistics
 
-    pub def anyMatch(f: IntPredicate, s: IntStream[r]): Bool \ Read(r) = 
-        import java.util.stream.IntStream.anyMatch(##java.util.function.IntPredicate): Bool \ r;
+    pub def anyMatch(f: IntPredicate[ef], s: IntStream[r]): Bool \ {Read(r), ef} = 
+        import java.util.stream.IntStream.anyMatch(##java.util.function.IntPredicate): Bool \ {r, ef};
         let IntStream(s1) = s;
         let IntPredicate(f1) = f;
         anyMatch(s1, f1)
 
-    pub def allMatch(f: IntPredicate, s: IntStream[r]): Bool \ Read(r) = 
-        import java.util.stream.IntStream.allMatch(##java.util.function.IntPredicate): Bool \ r;
+    pub def allMatch(f: IntPredicate[ef], s: IntStream[r]): Bool \ {Read(r), ef} = 
+        import java.util.stream.IntStream.allMatch(##java.util.function.IntPredicate): Bool \ {r, ef};
         let IntStream(s1) = s;
         let IntPredicate(f1) = f;
         allMatch(s1, f1)
 
 
-    pub def noneMatch(f: IntPredicate, s: IntStream[r]): Bool \ Read(r) = 
-        import java.util.stream.IntStream.noneMatch(##java.util.function.IntPredicate): Bool \ r;
+    pub def noneMatch(f: IntPredicate[ef], s: IntStream[r]): Bool \ {Read(r), ef} = 
+        import java.util.stream.IntStream.noneMatch(##java.util.function.IntPredicate): Bool \ {r, ef};
         let IntStream(s1) = s;
         let IntPredicate(f1) = f;
         noneMatch(s1, f1)

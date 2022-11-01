@@ -19,7 +19,7 @@ namespace Interop/Util/Function {
     ///
     /// Represents a Java IntConsumer.
     ///
-    pub enum IntConsumer(##java.util.function.IntConsumer)
+    pub enum IntConsumer[_: Bool](##java.util.function.IntConsumer)
 
 
 
@@ -33,28 +33,24 @@ namespace Interop/Util/Function/IntConsumer {
     
     use Interop/Flix.Marshal;
 
-    pub def getHH(x: IntConsumer): ##java.util.function.IntConsumer = 
+    pub def getHH(x: IntConsumer[ef]): ##java.util.function.IntConsumer = 
         let IntConsumer(x1) = x;
         x1
 
-    pub def makeIntConsumer(f: Int32 -> Unit \ ef): IntConsumer \ ef = 
-        let f1 = 
-            new ##java.util.function.IntConsumer {
-                def accept(_this: ##java.util.function.IntConsumer, i: Int32): Unit = f(i)
-            } as \ ef;
-        IntConsumer(f1)
+    pub def makeIntConsumer(f: Int32 -> Unit \ ef): IntConsumer[ef] = 
+        let op1 = i -> f(i) as \ IO;
+        IntConsumer(op1)
 
 
-    pub def accept(i: Int32, f: IntConsumer): Unit = 
-        import java.util.function.IntConsumer.accept(Int32): Unit \ {};
+    pub def accept(i: Int32, f: IntConsumer[ef]): Unit \ ef = 
         let IntConsumer(f1) = f;
-        accept(f1, i)
+        (f1(i) as \ ef)
 
-    /// Result?
-    pub def andThen(f: IntConsumer, g: IntConsumer): IntConsumer = 
-        import java.util.function.IntConsumer.andThen(##java.util.function.IntConsumer): ##java.util.function.IntConsumer \ {};
-        let IntConsumer(f1) = f;
-        let IntConsumer(g1) = g;
-        andThen(f1, g1) |> IntConsumer
+    // /// Result?
+    // pub def andThen(f: IntConsumer, g: IntConsumer): IntConsumer = 
+    //     import java.util.function.IntConsumer.andThen(##java.util.function.IntConsumer): ##java.util.function.IntConsumer \ {};
+    //     let IntConsumer(f1) = f;
+    //     let IntConsumer(g1) = g;
+    //     andThen(f1, g1) |> IntConsumer
 
 }
