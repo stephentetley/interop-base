@@ -41,7 +41,7 @@ namespace Interop/Util/Function/IntPredicate {
 
         
     pub def test(i: Int32, f: IntPredicate[ef]): Bool \ ef = 
-         let IntPredicate(f1) = f;
+        let IntPredicate(f1) = f;
         (f1(i) as \ ef)
 
     // pub def negate(f: IntPredicate): IntPredicate = 

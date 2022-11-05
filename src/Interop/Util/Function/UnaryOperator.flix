@@ -19,7 +19,7 @@ namespace Interop/Util/Function {
     ///
     /// Represents a Java UnaryOperator.
     ///
-    pub enum UnaryOperator[_: Type](##java.util.function.UnaryOperator)
+    pub enum UnaryOperator[_: Type, _: Bool](##java.util.function.UnaryOperator)
 
 
 
@@ -34,37 +34,39 @@ namespace Interop/Util/Function/UnaryOperator {
     use Interop/Util/Function.Function.{Function}
     use Interop/Flix.Marshal
     
-    pub def getHH(x: UnaryOperator[a]): ##java.util.function.UnaryOperator = 
+    pub def getHH(x: UnaryOperator[a, ef]): ##java.util.function.UnaryOperator = 
         let UnaryOperator(x1) = x;
         x1
 
 
-    pub def makeUnaryOperator(f: a -> a \ ef): UnaryOperator[a] \ ef with Marshal[a] = 
-        let f1 = obj -> {let a = Interop/Flix/Marshal.fromJavaObject(obj); f(a) |> Interop/Flix/Marshal.toJavaObject};
-        let op1 = 
-            new ##java.util.function.UnaryOperator {
-                def apply(_this: ##java.util.function.UnaryOperator, o: ##java.lang.Object): ##java.lang.Object = f1(o)
-            } as \ ef;
-        UnaryOperator(op1)
+    pub def makeUnaryOperator(f: a -> a \ ef): UnaryOperator[a, ef] with Marshal[a] = 
+        /// f1 is "seen" as a ##java.util.function.Function
+        let f1 = obj -> {
+            let a = Interop/Flix/Marshal.fromJavaObject(obj); 
+            let ans = f(a) as \ IO;
+            Interop/Flix/Marshal.toJavaObject(ans) 
+        };
+        UnaryOperator(f1 as ##java.util.function.UnaryOperator)
 
         
-    pub def apply(t: a, f: UnaryOperator[a]): a with Marshal[a] = 
+    pub def apply(t: a, f: UnaryOperator[a, ef]): a \ ef with Marshal[a] = 
         import java.util.function.UnaryOperator.apply(##java.lang.Object): ##java.lang.Object \ {};
         let UnaryOperator(f1) = f;
         let t1 = Interop/Flix/Marshal.toJavaObject(t);
-        apply(f1, t1) |> Interop/Flix/Marshal.fromJavaObject
+        let ans = apply(f1, t1) as \ ef;
+        Interop/Flix/Marshal.fromJavaObject(ans)
 
-    pub def identity(): UnaryOperator[a] = 
-        import static java.util.function.UnaryOperator.identity(): ##java.util.function.UnaryOperator \ {};
-        identity() |> UnaryOperator
+    // pub def identity(): UnaryOperator[a] = 
+    //     import static java.util.function.UnaryOperator.identity(): ##java.util.function.UnaryOperator \ {};
+    //     identity() |> UnaryOperator
 
 
 
-    pub def toFunction(op: UnaryOperator[a]): Function[a, a] = 
-        let UnaryOperator(op1) = op;
-        Function(op1 as ##java.util.function.Function)
+    // pub def toFunction(op: UnaryOperator[a]): Function[a, a] = 
+    //     let UnaryOperator(op1) = op;
+    //     Function(op1 as ##java.util.function.Function)
 
-    pub def fromFunction(f: Function[a, a]): UnaryOperator[a] = 
+    pub def fromFunction(f: Function[a, a, ef]): UnaryOperator[a, ef] = 
         let Function(f1) = f;
         UnaryOperator(f1 as ##java.util.function.UnaryOperator)
 
