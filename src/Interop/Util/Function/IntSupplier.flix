@@ -19,7 +19,9 @@ namespace Interop/Util/Function {
     ///
     /// Represents a Java IntSupplier.
     ///
-    pub enum IntSupplier(##java.util.function.IntSupplier)
+    /// IntSupplier is not a builtin functional Interface so it is created as a new object.
+    ///
+    pub type alias IntSupplier = ##java.util.function.IntSupplier
 
 
 }
@@ -28,25 +30,16 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/IntSupplier {
     
     use Interop/Util/Function.IntSupplier;
-    use Interop/Util/Function.IntSupplier.{IntSupplier};
     use Interop/Flix.Marshal;
 
-    pub def getHH(x: IntSupplier): ##java.util.function.IntSupplier = 
-        let IntSupplier(x1) = x;
-        x1
+    pub def makeIntSupplier(f: Unit -> Int32 \ ef): IntSupplier \ ef = 
+        new ##java.util.function.IntSupplier {
+            def getAsInt(_this: ##java.util.function.IntSupplier): Int32 = f()
+        } as \ ef
 
-
-    pub def makeIntSupplier(i: Int32): IntSupplier = 
-        let s1 = 
-            new ##java.util.function.IntSupplier {
-                def getAsInt(_this: ##java.util.function.IntSupplier): Int32 = i
-            } as \ {};
-        IntSupplier(s1)
-
-    pub def getAsInt(f: IntSupplier): Int32 = 
-        import java.util.function.IntSupplier.getAsInt(): Int32 \ {};
-        let IntSupplier(f1) = f;
-        getAsInt(f1)
+    pub def getAsInt(f: IntSupplier): Int32 \ ef = 
+        import java.util.function.IntSupplier.getAsInt(): Int32 \ ef;
+        getAsInt(f)
 
 
 }

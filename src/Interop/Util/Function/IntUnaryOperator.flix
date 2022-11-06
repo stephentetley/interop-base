@@ -19,7 +19,9 @@ namespace Interop/Util/Function {
     ///
     /// Represents a Java IntUnaryOperator.
     ///
-    pub enum IntUnaryOperator[_: Bool](##java.util.function.IntUnaryOperator)
+    /// IntUnaryOperator is a builtin functional Interface.
+    ///
+    pub type alias IntUnaryOperator = ##java.util.function.IntUnaryOperator
 
 
 }
@@ -28,21 +30,10 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/IntUnaryOperator {
     
     use Interop/Util/Function.IntUnaryOperator;
-    use Interop/Util/Function.IntUnaryOperator.{IntUnaryOperator};
     
-    pub def getHH(x: IntUnaryOperator[ef]): ##java.util.function.IntUnaryOperator = 
-        let IntUnaryOperator(x1) = x;
-        x1
 
+    pub def makeIntUnaryOperator(f: Int32 -> Int32 \ ef): IntUnaryOperator \ ef = (f as IntUnaryOperator) as \ ef
 
-    pub def makeIntUnaryOperator(f: Int32 -> Int32 \ ef): IntUnaryOperator[ef] = 
-        let op1 = i -> f(i) as \ IO;
-        IntUnaryOperator(op1)
-
-        
-    pub def applyAsInt(i: Int32, f: IntUnaryOperator[ef]): Int32 \ ef = 
-        let IntUnaryOperator(f1) = f;
-        f1(i) as \ ef
 
     // pub def identity(): IntUnaryOperator = 
     //     import static java.util.function.IntUnaryOperator.identity(): ##java.util.function.IntUnaryOperator \ {};

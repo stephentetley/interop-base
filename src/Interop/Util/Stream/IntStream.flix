@@ -45,11 +45,8 @@ namespace Interop/Util/Stream/IntStream {
     use Interop/Util.OptionalInt.{OptionalInt};
     use Interop/Util/Function.IntConsumer;
     use Interop/Util/Function.IntPredicate;
-    use Interop/Util/Function.IntPredicate.{IntPredicate};
     use Interop/Util/Function.IntSupplier;
-    use Interop/Util/Function.IntSupplier.{IntSupplier};
     use Interop/Util/Function.IntUnaryOperator;
-    use Interop/Util/Function.IntUnaryOperator.{IntUnaryOperator};
     use Interop/Flix.Marshal;
 
     pub def getHH(x: IntStream[r]): ##java.util.stream.IntStream = 
@@ -79,17 +76,13 @@ namespace Interop/Util/Stream/IntStream {
         of(arr) |> IntStream
 
     pub def iterate(_: Region[r], seed: Int32, f: Int32 -> Int32 \ ef): IntStream[r] \ {Write(r), ef} = 
-        import static java.util.stream.IntStream.iterate(Int32, ##java.util.function.IntUnaryOperator): ##java.util.stream.IntStream \ r;
-        (iterate(seed, i -> f(i) as \ IO) as \ {Write(r), ef}) |> IntStream
+        import static java.util.stream.IntStream.iterate(Int32, IntUnaryOperator): ##java.util.stream.IntStream \ {r, ef};
+        let f1 = Interop/Util/Function/IntUnaryOperator.makeIntUnaryOperator(f);
+        iterate(seed, f1) |> IntStream
 
-    pub def iterateWrapped(_: Region[r], seed: Int32, op: IntUnaryOperator[ef]): IntStream[r] \ {Write(r), ef} = 
-        import static java.util.stream.IntStream.iterate(Int32, ##java.util.function.IntUnaryOperator): ##java.util.stream.IntStream \ {r, ef};
-        let IntUnaryOperator(op1) = op;
-        iterate(seed, op1) |> IntStream
-
-    pub def generate(_: Region[r], s: IntSupplier): IntStream[r] \ Write(r) = 
-        import static java.util.stream.IntStream.generate(##java.util.function.IntSupplier): ##java.util.stream.IntStream \ r;
-        let IntSupplier(s1) = s;
+    pub def generate(_: Region[r], f: Unit -> Int32 \ ef): IntStream[r] \ {Write(r), ef} = 
+        import static java.util.stream.IntStream.generate(IntSupplier): ##java.util.stream.IntStream \ r;
+        let s1 = Interop/Util/Function/IntSupplier.makeIntSupplier(f);
         generate(s1) |> IntStream
 
 
@@ -109,28 +102,24 @@ namespace Interop/Util/Stream/IntStream {
         concat(s1, t1) |> IntStream
 
 
-    pub def filter(p: IntPredicate[ef], s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
-        import java.util.stream.IntStream.filter(##java.util.function.IntPredicate): ##java.util.stream.IntStream \ {r, ef};
+    pub def filter(p: Int32 -> Bool \ ef, s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
+        import java.util.stream.IntStream.filter(IntPredicate): ##java.util.stream.IntStream \ {r, ef};
         let IntStream(s1) = s;
-        let IntPredicate(p1) = p;
+        let p1 = Interop/Util/Function/IntPredicate.makeIntPredicate(p);
         filter(s1, p1) |> IntStream
 
-    pub def dropWhile(p: IntPredicate[ef], s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
-        import java.util.stream.IntStream.dropWhile(##java.util.function.IntPredicate): ##java.util.stream.IntStream \ {r, ef};
+    pub def dropWhile(p: Int32 -> Bool \ ef, s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
+        import java.util.stream.IntStream.dropWhile(IntPredicate): ##java.util.stream.IntStream \ {r, ef};
         let IntStream(s1) = s;
-        let IntPredicate(p1) = p;
+        let p1 = Interop/Util/Function/IntPredicate.makeIntPredicate(p);
         dropWhile(s1, p1) |> IntStream
 
-    pub def mapWrapped(op: IntUnaryOperator[ef], s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
-        import java.util.stream.IntStream.map(##java.util.function.IntUnaryOperator): ##java.util.stream.IntStream \ {r, ef};
+    pub def mapWrapped(f: Int32 -> Int32 \ ef, s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
+        import java.util.stream.IntStream.map(IntUnaryOperator): ##java.util.stream.IntStream \ {r, ef};
         let IntStream(s1) = s;
-        let IntUnaryOperator(op1) = op;
-        map(s1, op1) |> IntStream
+        let f1 = Interop/Util/Function/IntUnaryOperator.makeIntUnaryOperator(f);
+        map(s1, f1) |> IntStream
 
-    pub def map(f: Int32 -> Int32 \ ef, s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
-        import java.util.stream.IntStream.map(##java.util.function.IntUnaryOperator): ##java.util.stream.IntStream \ r;
-        let IntStream(s1) = s;
-        (map(s1, i -> f(i) as \ IO) as \ {Write(r), ef}) |> IntStream
 
 
     pub def forEach(f: Int32 -> Unit \ ef, s: IntStream[r]): Unit \ {Read(r), ef} = 
@@ -151,23 +140,23 @@ namespace Interop/Util/Stream/IntStream {
         let IntStream(s1) = s;
         summaryStatistics(s1) |> IntSummaryStatistics
 
-    pub def anyMatch(f: IntPredicate[ef], s: IntStream[r]): Bool \ {Read(r), ef} = 
-        import java.util.stream.IntStream.anyMatch(##java.util.function.IntPredicate): Bool \ {r, ef};
+    pub def anyMatch(f: Int32 -> Bool \ ef, s: IntStream[r]): Bool \ {Read(r), ef} = 
+        import java.util.stream.IntStream.anyMatch(IntPredicate): Bool \ {r, ef};
         let IntStream(s1) = s;
-        let IntPredicate(f1) = f;
+        let f1 = Interop/Util/Function/IntPredicate.makeIntPredicate(f);
         anyMatch(s1, f1)
 
-    pub def allMatch(f: IntPredicate[ef], s: IntStream[r]): Bool \ {Read(r), ef} = 
-        import java.util.stream.IntStream.allMatch(##java.util.function.IntPredicate): Bool \ {r, ef};
+    pub def allMatch(f: Int32 -> Bool \ ef, s: IntStream[r]): Bool \ {Read(r), ef} = 
+        import java.util.stream.IntStream.allMatch(IntPredicate): Bool \ {r, ef};
         let IntStream(s1) = s;
-        let IntPredicate(f1) = f;
+        let f1 = Interop/Util/Function/IntPredicate.makeIntPredicate(f);
         allMatch(s1, f1)
 
 
-    pub def noneMatch(f: IntPredicate[ef], s: IntStream[r]): Bool \ {Read(r), ef} = 
-        import java.util.stream.IntStream.noneMatch(##java.util.function.IntPredicate): Bool \ {r, ef};
+    pub def noneMatch(f: Int32 -> Bool \ ef, s: IntStream[r]): Bool \ {Read(r), ef} = 
+        import java.util.stream.IntStream.noneMatch(IntPredicate): Bool \ {r, ef};
         let IntStream(s1) = s;
-        let IntPredicate(f1) = f;
+        let f1 = Interop/Util/Function/IntPredicate.makeIntPredicate(f);
         noneMatch(s1, f1)
 
     pub def findFirst(s: IntStream[r]): OptionalInt \ Read(r) = 

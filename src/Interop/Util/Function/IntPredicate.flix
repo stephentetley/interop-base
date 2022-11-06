@@ -19,7 +19,9 @@ namespace Interop/Util/Function {
     ///
     /// Represents a Java IntPredicate.
     ///
-    pub enum IntPredicate[_: Bool](##java.util.function.IntPredicate)
+    /// IntPredicate is a builtin functional Interface.
+    ///
+    pub type alias IntPredicate = ##java.util.function.IntPredicate
 
 
 }
@@ -28,21 +30,10 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/IntPredicate {
     
     use Interop/Util/Function.IntPredicate;
-    use Interop/Util/Function.IntPredicate.{IntPredicate};
-    
-    pub def getHH(x: IntPredicate[ef]): ##java.util.function.IntPredicate = 
-        let IntPredicate(x1) = x;
-        x1
+
+    pub def makeIntPredicate(f: Int32 -> Bool \ ef): IntPredicate \ ef = (f as IntPredicate) as \ ef
 
 
-    pub def makeIntPredicate(f: Int32 -> Bool \ ef): IntPredicate[ef] = 
-        let op1 = i -> f(i) as \ IO;
-        IntPredicate(op1)
-
-        
-    pub def test(i: Int32, f: IntPredicate[ef]): Bool \ ef = 
-        let IntPredicate(f1) = f;
-        (f1(i) as \ ef)
 
     // pub def negate(f: IntPredicate): IntPredicate = 
     //     import java.util.function.IntPredicate.negate(): ##java.util.function.IntPredicate \ {};

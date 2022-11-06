@@ -19,6 +19,8 @@ namespace Interop/Util/Function {
     ///
     /// Represents a Java IntBinaryOperator.
     ///
+    /// IntBinaryOperator is not a builtin functional Interface so it is created as a new object.
+    ///
     pub type alias IntBinaryOperator = ##java.util.function.IntBinaryOperator
 
 
