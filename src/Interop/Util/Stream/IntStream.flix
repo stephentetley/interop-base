@@ -31,26 +31,26 @@ namespace Interop/Util/Stream {
 
 namespace Interop/Util/Stream/IntStream {
     
-    use Interop/Util/Stream.IntStream;
-    use Interop/Util/Stream.IntStream.{IntStream};
-    use Interop/Util/Stream.DoubleStream;
-    use Interop/Util/Stream.DoubleStream.{DoubleStream};
-    use Interop/Util/Stream.LongStream;
-    use Interop/Util/Stream.LongStream.{LongStream};
+    use Interop/Util/Stream.IntStream
+    use Interop/Util/Stream.IntStream.{IntStream}
+    use Interop/Util/Stream.DoubleStream
+    use Interop/Util/Stream.DoubleStream.{DoubleStream}
+    use Interop/Util/Stream.LongStream
+    use Interop/Util/Stream.LongStream.{LongStream}
     use Interop/Util/Stream.Stream
     use Interop/Util/Stream.Stream.{Stream}
-    use Interop/Util.IntSummaryStatistics;
-    use Interop/Util.IntSummaryStatistics.{IntSummaryStatistics};
-    use Interop/Util.OptionalDouble;
-    use Interop/Util.OptionalDouble.{OptionalDouble};
-    use Interop/Util.OptionalInt;
-    use Interop/Util.OptionalInt.{OptionalInt};
-    use Interop/Util/Function.IntConsumer;
-    use Interop/Util/Function.IntFunction;
-    use Interop/Util/Function.IntPredicate;
-    use Interop/Util/Function.IntSupplier;
-    use Interop/Util/Function.IntUnaryOperator;
-    use Interop/Flix.Marshal;
+    use Interop/Util.IntSummaryStatistics
+    use Interop/Util.IntSummaryStatistics.{IntSummaryStatistics}
+    use Interop/Util.OptionalDouble
+    use Interop/Util.OptionalDouble.{OptionalDouble}
+    use Interop/Util.OptionalInt
+    use Interop/Util.OptionalInt.{OptionalInt}
+    use Interop/Util/Function.IntConsumer
+    use Interop/Util/Function.IntFunction
+    use Interop/Util/Function.IntPredicate
+    use Interop/Util/Function.IntSupplier
+    use Interop/Util/Function.IntUnaryOperator
+    use Interop/Flix.Marshal
 
     pub def getHH(x: IntStream[r]): ##java.util.stream.IntStream = 
         let IntStream(x1) = x;
@@ -132,7 +132,7 @@ namespace Interop/Util/Stream/IntStream {
         let f1 = Interop/Util/Function/IntUnaryOperator.makeIntUnaryOperator(f);
         map(s1, f1) |> IntStream
 
-    /// TODO - no idea if this works...
+    /// This is a bit wild - tests suggest it works...
     pub def flatMap(f: Int32 -> IntStream[r] \ ef, s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
         import java.util.stream.IntStream.flatMap(IntFunction[##java.util.stream.IntStream]): ##java.util.stream.IntStream \ {r, ef};
         let IntStream(s1) = s;
@@ -157,7 +157,6 @@ namespace Interop/Util/Stream/IntStream {
         let IntStream(s1) = s;
         average(s1) |> OptionalDouble
 
-    
     pub def summaryStatistics(s: IntStream[r]): IntSummaryStatistics[r] \ Read(r) = 
         import java.util.stream.IntStream.summaryStatistics(): ##java.util.IntSummaryStatistics \ r;
         let IntStream(s1) = s;
@@ -201,6 +200,11 @@ namespace Interop/Util/Stream/IntStream {
         import java.util.stream.IntStream.min(): ##java.util.OptionalInt \ r;
         let IntStream(s1) = s;
         min(s1) |> OptionalInt
+
+    pub def sorted(s: IntStream[r]): IntStream[r] \ Write(r) = 
+        import java.util.stream.IntStream.sorted(): ##java.util.stream.IntStream \ r;
+        let IntStream(s1) = s;
+        sorted(s1) |> IntStream
 
 
     pub def asLongStream(s: IntStream[r]): LongStream[r] \ Write(r) = 

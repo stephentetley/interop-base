@@ -39,5 +39,7 @@ namespace Interop/Util/Function/LongFunction {
         ((i -> f(i) |> Interop/Flix/Marshal.toJavaObject) as LongFunction[a]) as \ ef
 
 
+    pub def makeLongFunctionWith(f: Int64 -> a \ ef, cast: a -> ##java.lang.Object): LongFunction[a] \ ef = 
+        ((i -> f(i) |> cast) as LongFunction[a]) as \ ef
 
 }

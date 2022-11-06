@@ -17,29 +17,29 @@
 namespace Interop/Util {
 
     ///
-    /// Represents a Java IntSummaryStatistics.
+    /// Represents a Java LongSummaryStatistics.
     /// Mutable - see combine
-    pub enum IntSummaryStatistics[_: Region](##java.util.IntSummaryStatistics)
+    pub enum LongSummaryStatistics[_: Region](##java.util.LongSummaryStatistics)
 
 
 }
 
 
-namespace Interop/Util/IntSummaryStatistics {
+namespace Interop/Util/LongSummaryStatistics {
     
-    use Interop/Util.IntSummaryStatistics
-    use Interop/Util.IntSummaryStatistics.{IntSummaryStatistics}
+    use Interop/Util.LongSummaryStatistics
+    use Interop/Util.LongSummaryStatistics.{LongSummaryStatistics}
     use Interop/Flix.Marshal
 
-    pub def getHH(o: IntSummaryStatistics[r]): ##java.util.IntSummaryStatistics = 
-        let IntSummaryStatistics(o1) = o;
+    pub def getHH(o: LongSummaryStatistics[r]): ##java.util.LongSummaryStatistics = 
+        let LongSummaryStatistics(o1) = o;
         o1
     
-    pub def combine!(i: IntSummaryStatistics[r], j: IntSummaryStatistics[r]): Result[Unit, String] \ {Read(r), Write(r)} =
+    pub def combine!(i: LongSummaryStatistics[r], j: LongSummaryStatistics[r]): Result[Unit, String] \ {Read(r), Write(r)} =
         try {
-            import java.util.IntSummaryStatistics.combine(##java.util.IntSummaryStatistics): Unit \ r;
-            let IntSummaryStatistics(i1) = i;
-            let IntSummaryStatistics(j1) = j;
+            import java.util.LongSummaryStatistics.combine(##java.util.LongSummaryStatistics): Unit \ r;
+            let LongSummaryStatistics(i1) = i;
+            let LongSummaryStatistics(j1) = j;
             combine(i1, j1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
