@@ -42,7 +42,7 @@ namespace Interop/Util/Function/LongBinaryOperator {
         } as \ ef
 
         
-    pub def apply(t: Int64, u: Int64, f: LongBinaryOperator): Int64 \ ef = 
+    pub def applyAsLong(t: Int64, u: Int64, f: LongBinaryOperator): Int64 \ ef = 
         import java.util.function.LongBinaryOperator.applyAsLong(Int64, Int64): Int64 \ ef;        
         applyAsLong(f, t, u)
 
