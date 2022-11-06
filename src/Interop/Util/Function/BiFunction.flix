@@ -33,7 +33,6 @@ namespace Interop/Util/Function/BiFunction {
     
     use Interop/Util/Function.BiFunction    
     use Interop/Util/Function.Function
-    use Interop/Util/Function.Function.{Function}
     use Interop/Flix.Marshal
 
 
@@ -55,10 +54,9 @@ namespace Interop/Util/Function/BiFunction {
         import java.util.function.BiFunction.apply(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ ef;
         apply(f, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u)) |> Interop/Flix/Marshal.fromJavaObject
 
-    pub def andThen(f: BiFunction[a, b, c], g: Function[c, d, ef1]): BiFunction[a, b, d] \ ef1 = 
-        import java.util.function.BiFunction.andThen(##java.util.function.Function): ##java.util.function.BiFunction \ ef1;
-        let Function(g1) = g;
-        andThen(f, g1)
+    pub def andThen(f: BiFunction[a, b, c], g: Function[c, d]): BiFunction[a, b, d] = 
+        import java.util.function.BiFunction.andThen(##java.util.function.Function): ##java.util.function.BiFunction \ {};
+        andThen(f, g)
 
 
 }

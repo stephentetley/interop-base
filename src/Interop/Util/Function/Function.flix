@@ -19,11 +19,10 @@ namespace Interop/Util/Function {
     ///
     /// Represents a Java Function.
     ///
-    pub enum Function[_: Type, _: Type, _: Bool](##java.util.function.Function)
+    /// Function is a builtin functional Interface.
+    ///
+    pub type alias Function[_: Type, _: Type] = ##java.util.function.Function
 
-    // Don't think we can define a class that UnaryOperator can implement 
-    // to show it is a sub-interface.
-    // UnaryOperator has to define `toFunction` and `fromFunction` as ordinary functions
 
 }
 
@@ -31,37 +30,28 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/Function {
     
     use Interop/Util/Function.Function
-    use Interop/Util/Function.Function.{Function}
     use Interop/Flix.Marshal
 
-    pub def getHH(x: Function[a, b, ef]): ##java.util.function.Function = 
-        let Function(x1) = x;
-        x1
 
 
-
-
-    pub def makeFunction(f: a -> b \ ef): Function[a, b, ef] with Marshal[a], Marshal[b] = 
+    pub def makeFunction(f: a -> b \ ef): Function[a, b] \ ef with Marshal[a], Marshal[b] = 
         let f1 = obj -> {
             let a = Interop/Flix/Marshal.fromJavaObject(obj); 
             let ans = f(a) as \ IO;
             Interop/Flix/Marshal.toJavaObject(ans) 
         };
-        Function(f1)
+        f1 as \ ef
 
-    pub def apply(f: Function[a, b, ef], t: a): b \ ef with Marshal[a], Marshal[b] =
-        let Function(f1) = f;
+    pub def apply(f: Function[a, b], t: a): b \ ef with Marshal[a], Marshal[b] =
         let obj = Interop/Flix/Marshal.toJavaObject(t);
-        let ans = f1(obj) as \ ef;
+        let ans = f(obj) as \ ef;
         Interop/Flix/Marshal.fromJavaObject(ans)
     
 
 
-    // pub def andThen(f: Function[a, b], g: Function[b, c]): Function[a, c]= 
+    // pub def andThen(f: Function[a, b], g: Function[b, c]): Function[a, c] = 
     //     import java.util.function.Function.andThen(##java.util.function.Function): ##java.util.function.Function \ {};
-    //     let Function(f1) = f;
-    //     let Function(g1) = g;
-    //     andThen(f1, g1) |> Function
+    //     andThen(f, g)
 
     // pub def compose(f: Function[b, c], g: Function[a, b]): Function[a, c] = 
     //     import java.util.function.Function.compose(##java.util.function.Function): ##java.util.function.Function \ {};

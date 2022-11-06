@@ -44,7 +44,6 @@ namespace Interop/Util/Stream/IntStream {
     use Interop/Util.OptionalInt;
     use Interop/Util.OptionalInt.{OptionalInt};
     use Interop/Util/Function.IntConsumer;
-    use Interop/Util/Function.IntConsumer.{IntConsumer};
     use Interop/Util/Function.IntPredicate;
     use Interop/Util/Function.IntPredicate.{IntPredicate};
     use Interop/Util/Function.IntSupplier;
@@ -134,10 +133,10 @@ namespace Interop/Util/Stream/IntStream {
         (map(s1, i -> f(i) as \ IO) as \ {Write(r), ef}) |> IntStream
 
 
-    pub def forEach(f: IntConsumer[ef], s: IntStream[r]): Unit \ {Read(r), ef} = 
-        import java.util.stream.IntStream.forEach(##java.util.function.IntConsumer): Unit \ {r, ef};
+    pub def forEach(f: Int32 -> Unit \ ef, s: IntStream[r]): Unit \ {Read(r), ef} = 
+        import java.util.stream.IntStream.forEach(IntConsumer): Unit \ {r, ef};
+        let f1 = Interop/Util/Function/IntConsumer.makeIntConsumer(f);
         let IntStream(s1) = s;
-        let IntConsumer(f1) = f;
         forEach(s1, f1)
 
 

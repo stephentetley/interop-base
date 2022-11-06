@@ -19,7 +19,9 @@ namespace Interop/Util/Function {
     ///
     /// Represents a Java IntConsumer.
     ///
-    pub enum IntConsumer[_: Bool](##java.util.function.IntConsumer)
+    /// IntConsumer is a builtin functional Interface.
+    ///
+    pub type alias IntConsumer = ##java.util.function.IntConsumer
 
 
 
@@ -28,23 +30,11 @@ namespace Interop/Util/Function {
 
 namespace Interop/Util/Function/IntConsumer {
     
-    use Interop/Util/Function.IntConsumer;
-    use Interop/Util/Function.IntConsumer.{IntConsumer};
-    
-    use Interop/Flix.Marshal;
-
-    pub def getHH(x: IntConsumer[ef]): ##java.util.function.IntConsumer = 
-        let IntConsumer(x1) = x;
-        x1
-
-    pub def makeIntConsumer(f: Int32 -> Unit \ ef): IntConsumer[ef] = 
-        let op1 = i -> f(i) as \ IO;
-        IntConsumer(op1)
+    use Interop/Util/Function.IntConsumer
 
 
-    pub def accept(i: Int32, f: IntConsumer[ef]): Unit \ ef = 
-        let IntConsumer(f1) = f;
-        (f1(i) as \ ef)
+    pub def makeIntConsumer(f: Int32 -> Unit \ ef): IntConsumer \ ef = (f as IntConsumer) as \ ef
+
 
     // /// Result?
     // pub def andThen(f: IntConsumer, g: IntConsumer): IntConsumer = 

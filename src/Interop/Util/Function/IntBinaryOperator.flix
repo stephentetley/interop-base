@@ -19,7 +19,7 @@ namespace Interop/Util/Function {
     ///
     /// Represents a Java IntBinaryOperator.
     ///
-    pub enum IntBinaryOperator(##java.util.function.IntBinaryOperator)
+    pub type alias IntBinaryOperator = ##java.util.function.IntBinaryOperator
 
 
 }
@@ -28,19 +28,12 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/IntBinaryOperator {
     
     use Interop/Util/Function.IntBinaryOperator;
-    use Interop/Util/Function.IntBinaryOperator.{IntBinaryOperator};
     
-    pub def getHH(x: IntBinaryOperator): ##java.util.function.IntBinaryOperator = 
-        let IntBinaryOperator(x1) = x;
-        x1
-
 
     pub def makeIntBinaryOperator(f: (Int32, Int32) -> Int32 \ ef): IntBinaryOperator \ ef = 
-        let op1 = 
-            new ##java.util.function.IntBinaryOperator {
-                def applyAsInt(_this: ##java.util.function.IntBinaryOperator, i: Int32, j: Int32): Int32 = f(i, j)
-            } as \ ef;
-        IntBinaryOperator(op1)
+        new ##java.util.function.IntBinaryOperator {
+            def applyAsInt(_this: ##java.util.function.IntBinaryOperator, i: Int32, j: Int32): Int32 = f(i, j)
+        } as \ ef
 
 
 }

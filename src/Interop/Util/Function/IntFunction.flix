@@ -19,32 +19,25 @@ namespace Interop/Util/Function {
     ///
     /// Represents a Java IntFunction.
     ///
-    pub enum IntFunction[_: Bool, _: Type](##java.util.function.IntFunction)
+    /// IntFunction is a builtin functional Interface.
+    ///
+    pub type alias IntFunction[_: Type] = ##java.util.function.IntFunction
 
 
     
 
 }
 
-// Note - this module may be dropped as IntFunction now builtin
+
 namespace Interop/Util/Function/IntFunction {
     
     use Interop/Util/Function.IntFunction;
-    use Interop/Util/Function.IntFunction.{IntFunction};
     use Interop/Flix.Marshal;
 
-    pub def getHH(x: IntFunction[ef, a]): ##java.util.function.IntFunction = 
-        let IntFunction(x1) = x;
-        x1
 
+    pub def makeIntFunction(f: Int32 -> a \ ef): IntFunction[a] \ ef with Marshal[a] = 
+        ((f >> Interop/Flix/Marshal.toJavaObject) as IntFunction[a]) as \ ef
 
-    pub def makeIntFunction(f: Int32 -> a \ ef): IntFunction[ef, a] with Marshal[a] = 
-        let op1 = i -> (f(i) |> Interop/Flix/Marshal.toJavaObject) as \ IO;
-        IntFunction(op1)
-
-    pub def apply(i: Int32, f: IntFunction[ef, a]): a \ ef with Marshal[a] = 
-        let IntFunction(f1) = f;
-        (f1(i) as \ ef) |> Interop/Flix/Marshal.fromJavaObject
 
 
 }
