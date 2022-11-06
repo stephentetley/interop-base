@@ -38,6 +38,7 @@ namespace Interop/Util/Function/IntFunction {
     pub def makeIntFunction(f: Int32 -> a \ ef): IntFunction[a] \ ef with Marshal[a] = 
         ((i -> f(i) |> Interop/Flix/Marshal.toJavaObject) as IntFunction[a]) as \ ef
 
-
+    pub def makeIntFunctionWith(f: Int32 -> a \ ef, cast: a -> ##java.lang.Object): IntFunction[a] \ ef = 
+        ((i -> f(i) |> cast) as IntFunction[a]) as \ ef
 
 }

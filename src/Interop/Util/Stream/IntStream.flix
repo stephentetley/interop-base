@@ -37,6 +37,8 @@ namespace Interop/Util/Stream/IntStream {
     use Interop/Util/Stream.DoubleStream.{DoubleStream};
     use Interop/Util/Stream.LongStream;
     use Interop/Util/Stream.LongStream.{LongStream};
+    use Interop/Util/Stream.Stream
+    use Interop/Util/Stream.Stream.{Stream}
     use Interop/Util.IntSummaryStatistics;
     use Interop/Util.IntSummaryStatistics.{IntSummaryStatistics};
     use Interop/Util.OptionalDouble;
@@ -44,6 +46,7 @@ namespace Interop/Util/Stream/IntStream {
     use Interop/Util.OptionalInt;
     use Interop/Util.OptionalInt.{OptionalInt};
     use Interop/Util/Function.IntConsumer;
+    use Interop/Util/Function.IntFunction;
     use Interop/Util/Function.IntPredicate;
     use Interop/Util/Function.IntSupplier;
     use Interop/Util/Function.IntUnaryOperator;
@@ -94,6 +97,15 @@ namespace Interop/Util/Stream/IntStream {
         import static java.util.stream.IntStream.rangeClosed(Int32, Int32): ##java.util.stream.IntStream \ r;
         rangeClosed(b, e) |> IntStream
 
+    pub def boxed(s: IntStream[r]): Stream[##java.lang.Integer, r] \ {Write(r), ef} = 
+        import java.util.stream.IntStream.boxed(): ##java.util.stream.Stream \ {r, ef};
+        let IntStream(s1) = s;
+        boxed(s1) |> Stream
+
+    pub def count(s: IntStream[r]): Int64 \ Read(r) = 
+        import java.util.stream.IntStream.count(): Int64 \ r;
+        let IntStream(s1) = s;
+        count(s1)
 
     pub def concat(s: IntStream[r], t: IntStream[r]): IntStream[r] \ Write(r) = 
         import static java.util.stream.IntStream.concat(##java.util.stream.IntStream, ##java.util.stream.IntStream): ##java.util.stream.IntStream \ r;
@@ -114,19 +126,30 @@ namespace Interop/Util/Stream/IntStream {
         let p1 = Interop/Util/Function/IntPredicate.makeIntPredicate(p);
         dropWhile(s1, p1) |> IntStream
 
-    pub def mapWrapped(f: Int32 -> Int32 \ ef, s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
+    pub def map(f: Int32 -> Int32 \ ef, s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
         import java.util.stream.IntStream.map(IntUnaryOperator): ##java.util.stream.IntStream \ {r, ef};
         let IntStream(s1) = s;
         let f1 = Interop/Util/Function/IntUnaryOperator.makeIntUnaryOperator(f);
         map(s1, f1) |> IntStream
 
+    /// TODO - no idea if this works...
+    pub def flatMap(f: Int32 -> IntStream[r] \ ef, s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
+        import java.util.stream.IntStream.flatMap(IntFunction[##java.util.stream.IntStream]): ##java.util.stream.IntStream \ {r, ef};
+        let IntStream(s1) = s;
+        let f1 = Interop/Util/Function/IntFunction.makeIntFunctionWith(f, t -> {let IntStream(t1) = t; t1 as ##java.lang.Object});
+        (flatMap(s1, f1) as \ {Write(r), ef}) |> IntStream
 
 
-    pub def forEach(f: Int32 -> Unit \ ef, s: IntStream[r]): Unit \ {Read(r), ef} = 
+    pub def foreach(f: Int32 -> Unit \ ef, s: IntStream[r]): Unit \ {Read(r), ef} = 
         import java.util.stream.IntStream.forEach(IntConsumer): Unit \ {r, ef};
         let f1 = Interop/Util/Function/IntConsumer.makeIntConsumer(f);
         let IntStream(s1) = s;
         forEach(s1, f1)
+
+    pub def toArray(s: IntStream[r]): Array[Int32, r] \ Write(r) = 
+        import java.util.stream.IntStream.toArray(): Array[Int32, r] \ r;
+        let IntStream(s1) = s;
+        toArray(s1)
 
 
     pub def average(s: IntStream[r]): OptionalDouble \ Read(r) = 
