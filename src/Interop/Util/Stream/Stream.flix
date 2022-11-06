@@ -34,8 +34,11 @@ namespace Interop/Util/Stream/Stream {
     use Interop/Util/Stream.Stream
     use Interop/Util/Stream.Stream.{Stream}
     use Interop/Util/Stream/Stream.Builder.{Builder}
-    use Interop/Util/Function.UnaryOperator
-    
+    use Interop/Util/Function.Consumer
+    use Interop/Util/Function.Function
+    use Interop/Util/Function.Predicate
+    use Interop/Util/Function.Supplier
+    use Interop/Util/Function.UnaryOperator    
     use Interop/Flix.Marshal;
 
     pub def getHH(x: Stream[a, r]): ##java.util.stream.Stream = 
@@ -101,5 +104,37 @@ namespace Interop/Util/Stream/Stream {
         import java.util.stream.Stream.count(): Int64 & r;
         let Stream(s1) = s;
         count(s1)
+
+    pub def concat(s: Stream[a, r], t: Stream[a, r]): Stream[a, r] \ Write(r) = 
+        import static java.util.stream.Stream.concat(##java.util.stream.Stream, ##java.util.stream.Stream): ##java.util.stream.Stream \ r;
+        let Stream(s1) = s;
+        let Stream(t1) = t;
+        concat(s1, t1) |> Stream
+
+    pub def filter(p: a -> Bool \ ef, s: Stream[a, r]): Stream[a, r] \ {Write(r), ef} with Marshal[a] = 
+        import java.util.stream.Stream.filter(Predicate[a]): ##java.util.stream.Stream \ {r, ef};
+        let Stream(s1) = s;
+        let p1 = Interop/Util/Function/Predicate.makePredicate(p);
+        filter(s1, p1) |> Stream
+
+    pub def dropWhile(p: a -> Bool \ ef, s: Stream[a, r]): Stream[a, r] \ {Write(r), ef} with Marshal[a] =
+        import java.util.stream.Stream.dropWhile(Predicate[a]): ##java.util.stream.Stream \ {r, ef};
+        let Stream(s1) = s;
+        let p1 = Interop/Util/Function/Predicate.makePredicate(p);
+        dropWhile(s1, p1) |> Stream
+
+    pub def map(f: a -> b \ ef, s: Stream[a, r]): Stream[a, r] \ {Write(r), ef} with Marshal[a], Marshal[b] = 
+        import java.util.stream.Stream.map(Function[a, b]): ##java.util.stream.Stream \ {r, ef};
+        let Stream(s1) = s;
+        let f1 = Interop/Util/Function/Function.makeFunction(f);
+        map(s1, f1) |> Stream
+
+    pub def flatMap(f: a -> Stream[b, r] \ ef, s: Stream[a, r]): Stream[b, r] \ {Write(r), ef} with Marshal[a], Marshal[b] = 
+        import java.util.stream.Stream.flatMap(Function[a, ##java.util.stream.Stream]): ##java.util.stream.Stream \ {r, ef};
+        let Stream(s1) = s;
+        let f1 = Interop/Util/Function/Function.makeFunctionWith(f, Interop/Flix/Marshal.fromJavaObject, strm -> strm as ##java.lang.Object);
+        (flatMap(s1, f1) as \ {Write(r), ef}) |> Stream
+
+
 
 }

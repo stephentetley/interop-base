@@ -42,6 +42,11 @@ namespace Interop/Util/Function/Function {
         };
         f1 as \ ef
 
+
+    pub def makeFunctionWith(f: a -> b \ ef, toA: ##java.lang.Object -> a, fromB: b -> ##java.lang.Object): Function[a, b] \ ef = 
+        ((obj -> f(toA(obj)) |> fromB) as Function[a, b]) as \ ef
+
+
     pub def apply(f: Function[a, b], t: a): b \ ef with Marshal[a], Marshal[b] =
         let obj = Interop/Flix/Marshal.toJavaObject(t);
         let ans = f(obj) as \ ef;
