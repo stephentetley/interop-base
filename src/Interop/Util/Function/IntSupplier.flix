@@ -29,8 +29,7 @@ namespace Interop/Util/Function {
 
 namespace Interop/Util/Function/IntSupplier {
     
-    use Interop/Util/Function.IntSupplier;
-    use Interop/Flix.Marshal;
+    use Interop/Util/Function.IntSupplier
 
     pub def makeIntSupplier(f: Unit -> Int32 \ ef): IntSupplier \ ef = 
         new ##java.util.function.IntSupplier {
