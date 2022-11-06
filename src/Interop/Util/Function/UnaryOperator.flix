@@ -19,7 +19,11 @@ namespace Interop/Util/Function {
     ///
     /// Represents a Java UnaryOperator.
     ///
-    pub enum UnaryOperator[_: Type, _: Bool](##java.util.function.UnaryOperator)
+    /// UnaryOperator is not a builtin functional Interface so it is created as a new object.
+    ///
+    /// NOTE - type alias not enum
+    ///    
+    pub type alias UnaryOperator[_: Type] = ##java.util.function.UnaryOperator
 
 
 
@@ -29,47 +33,30 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/UnaryOperator {
     
     use Interop/Util/Function.UnaryOperator
-    use Interop/Util/Function.UnaryOperator.{UnaryOperator}
     use Interop/Util/Function.Function
     use Interop/Util/Function.Function.{Function}
     use Interop/Flix.Marshal
     
-    pub def getHH(x: UnaryOperator[a, ef]): ##java.util.function.UnaryOperator = 
-        let UnaryOperator(x1) = x;
-        x1
 
-
-    pub def makeUnaryOperator(f: a -> a \ ef): UnaryOperator[a, ef] with Marshal[a] = 
-        /// f1 is "seen" as a ##java.util.function.Function
-        let f1 = obj -> {
-            let a = Interop/Flix/Marshal.fromJavaObject(obj); 
-            let ans = f(a) as \ IO;
-            Interop/Flix/Marshal.toJavaObject(ans) 
+    pub def makeUnaryOperator(f: a -> a \ ef): UnaryOperator[a] \ ef with Marshal[a] = 
+        let f1 = o1 -> {
+            let a = Interop/Flix/Marshal.fromJavaObject(o1); 
+            let ans = f(a);
+            Interop/Flix/Marshal.toJavaObject(ans)
         };
-        UnaryOperator(f1 as ##java.util.function.UnaryOperator)         /// This causes a crash!
+        new ##java.util.function.UnaryOperator {
+            def apply(_this: ##java.util.function.UnaryOperator, t: ##java.lang.Object): ##java.lang.Object = 
+                f1(t)
+        } as \ ef
 
         
-    pub def apply(t: a, f: UnaryOperator[a, ef]): a \ ef with Marshal[a] = 
-        import java.util.function.UnaryOperator.apply(##java.lang.Object): ##java.lang.Object \ {};
-        let UnaryOperator(f1) = f;
-        let t1 = Interop/Flix/Marshal.toJavaObject(t);
-        let ans = apply(f1, t1) as \ ef;
-        Interop/Flix/Marshal.fromJavaObject(ans)
+    pub def apply(t: a, f: UnaryOperator[a]): a \ ef with Marshal[a] = 
+        import java.util.function.UnaryOperator.apply(##java.lang.Object): ##java.lang.Object \ ef;
+        apply(f, Interop/Flix/Marshal.toJavaObject(t)) |> Interop/Flix/Marshal.fromJavaObject
 
-    // pub def identity(): UnaryOperator[a] = 
-    //     import static java.util.function.UnaryOperator.identity(): ##java.util.function.UnaryOperator \ {};
-    //     identity() |> UnaryOperator
-
-
-
-    // pub def toFunction(op: UnaryOperator[a]): Function[a, a] = 
-    //     let UnaryOperator(op1) = op;
-    //     Function(op1 as ##java.util.function.Function)
-
-    pub def fromFunction(f: Function[a, a, ef]): UnaryOperator[a, ef] = 
-        let Function(f1) = f;
-        UnaryOperator(f1 as ##java.util.function.UnaryOperator)
-
+    pub def identity(): UnaryOperator[a] = 
+        import static java.util.function.UnaryOperator.identity(): ##java.util.function.UnaryOperator \ {};
+        identity()
 
 
 

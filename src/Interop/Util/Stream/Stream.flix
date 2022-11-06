@@ -35,7 +35,6 @@ namespace Interop/Util/Stream/Stream {
     use Interop/Util/Stream.Stream.{Stream}
     use Interop/Util/Stream/Stream.Builder.{Builder}
     use Interop/Util/Function.UnaryOperator
-    use Interop/Util/Function.UnaryOperator.{UnaryOperator}
     
     use Interop/Flix.Marshal;
 
@@ -66,10 +65,10 @@ namespace Interop/Util/Stream/Stream {
         ofNullable(t1) |> Stream
 
 
-    pub def iterate(_: Region[r], seed: a, op: UnaryOperator[a, ef]): Stream[a, r] \ {Write(r), ef} with Marshal[a] = 
+    pub def iterate(_: Region[r], seed: a, op: a -> a \ ef): Stream[a, r] \ {Write(r), ef} with Marshal[a] = 
         import static java.util.stream.Stream.iterate(##java.lang.Object, ##java.util.function.UnaryOperator): ##java.util.stream.Stream \ {r, ef};
-        let UnaryOperator(op1) = op;
         let seed1 = Interop/Flix/Marshal.toJavaObject(seed);
+        let op1 = Interop/Util/Function/UnaryOperator.makeUnaryOperator(op);
         iterate(seed1, op1) |> Stream
 
 
