@@ -39,5 +39,7 @@ namespace Interop/Util/Function/DoubleFunction {
         ((d -> f(d) |> Interop/Flix/Marshal.toJavaObject) as DoubleFunction[a]) as \ ef
 
 
+    pub def makeDoubleFunctionWith(f: Float64 -> a \ ef, cast: a -> ##java.lang.Object): DoubleFunction[a] \ ef = 
+        ((i -> f(i) |> cast) as DoubleFunction[a]) as \ ef
 
 }

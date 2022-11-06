@@ -33,7 +33,7 @@ namespace Interop/Util/Function/DoubleConsumer {
     use Interop/Util/Function.DoubleConsumer
 
 
-    pub def makeDoubleConsumer(f: Int32 -> Unit \ ef): DoubleConsumer \ ef = (f as DoubleConsumer) as \ ef
+    pub def makeDoubleConsumer(f: Float64 -> Unit \ ef): DoubleConsumer \ ef = (f as DoubleConsumer) as \ ef
 
 
 }

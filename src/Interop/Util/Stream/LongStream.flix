@@ -73,7 +73,7 @@ namespace Interop/Util/Stream/LongStream {
         import static java.util.stream.LongStream.empty(): ##java.util.stream.LongStream \ r;
         empty() |> LongStream
 
-    pub def ofInt32(_: Region[r], i: Int64): LongStream[r] \ Write(r) = 
+    pub def ofInt64(_: Region[r], i: Int64): LongStream[r] \ Write(r) = 
         import static java.util.stream.LongStream.of(Int64): ##java.util.stream.LongStream \ r;
         of(i) |> LongStream
 
