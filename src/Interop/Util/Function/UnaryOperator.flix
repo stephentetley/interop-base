@@ -46,7 +46,7 @@ namespace Interop/Util/Function/UnaryOperator {
             let ans = f(a) as \ IO;
             Interop/Flix/Marshal.toJavaObject(ans) 
         };
-        UnaryOperator(f1 as ##java.util.function.UnaryOperator)
+        UnaryOperator(f1 as ##java.util.function.UnaryOperator)         /// This causes a crash!
 
         
     pub def apply(t: a, f: UnaryOperator[a, ef]): a \ ef with Marshal[a] = 
