@@ -39,7 +39,7 @@ namespace Interop/Util/Function/ToDoubleFunction {
         } as \ ef
 
 
-    pub def applyAsInt(f: ToDoubleFunction[a], t: a): Float64 \ ef with Marshal[a]  = 
+    pub def applyAsDouble(f: ToDoubleFunction[a], t: a): Float64 \ ef with Marshal[a]  = 
         import java.util.function.ToDoubleFunction.applyAsDouble(##java.lang.Object): Float64 \ ef;
         applyAsDouble(f, Interop/Flix/Marshal.toJavaObject(t))
 
