@@ -17,27 +17,28 @@
 namespace Interop/Util/Function {
 
     ///
-    /// Represents a Java IntFunction.
+    /// Represents a Java LongSupplier.
     ///
-    /// IntFunction is a builtin functional Interface.
+    /// LongSupplier is not a builtin functional Interface so it is created as a new object.
     ///
-    pub type alias IntFunction[_: Type] = ##java.util.function.IntFunction
+    pub type alias LongSupplier = ##java.util.function.LongSupplier
 
-
-    
 
 }
 
 
-namespace Interop/Util/Function/IntFunction {
+namespace Interop/Util/Function/LongSupplier {
     
-    use Interop/Util/Function.IntFunction;
-    use Interop/Flix.Marshal;
+    use Interop/Util/Function.LongSupplier
 
+    pub def makeLongSupplier(f: Unit -> Int64 \ ef): LongSupplier \ ef = 
+        new ##java.util.function.LongSupplier {
+            def getAsLong(_this: ##java.util.function.LongSupplier): Int64 = f()
+        } as \ ef
 
-    pub def makeIntFunction(f: Int32 -> a \ ef): IntFunction[a] \ ef with Marshal[a] = 
-        ((i -> f(i) |> Interop/Flix/Marshal.toJavaObject) as IntFunction[a]) as \ ef
-
+    pub def getAsInt(f: LongSupplier): Int64 \ ef = 
+        import java.util.function.LongSupplier.getAsLong(): Int64 \ ef;
+        getAsLong(f)
 
 
 }

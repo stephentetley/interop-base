@@ -35,8 +35,8 @@ namespace Interop/Util/Function/DoubleFunction {
     use Interop/Flix.Marshal;
 
 
-    pub def makeDoubleFunction(f: Int32 -> a \ ef): DoubleFunction[a] \ ef with Marshal[a] = 
-        ((f >> Interop/Flix/Marshal.toJavaObject) as DoubleFunction[a]) as \ ef
+    pub def makeDoubleFunction(f: Float64 -> a \ ef): DoubleFunction[a] \ ef with Marshal[a] = 
+        ((d -> f(d) |> Interop/Flix/Marshal.toJavaObject) as DoubleFunction[a]) as \ ef
 
 
 

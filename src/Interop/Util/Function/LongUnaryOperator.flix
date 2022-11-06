@@ -17,27 +17,22 @@
 namespace Interop/Util/Function {
 
     ///
-    /// Represents a Java IntFunction.
+    /// Represents a Java LongUnaryOperator.
     ///
-    /// IntFunction is a builtin functional Interface.
+    /// LongUnaryOperator is a builtin functional Interface.
     ///
-    pub type alias IntFunction[_: Type] = ##java.util.function.IntFunction
+    pub type alias LongUnaryOperator = ##java.util.function.LongUnaryOperator
 
-
-    
 
 }
 
 
-namespace Interop/Util/Function/IntFunction {
+namespace Interop/Util/Function/LongUnaryOperator {
     
-    use Interop/Util/Function.IntFunction;
-    use Interop/Flix.Marshal;
+    use Interop/Util/Function.LongUnaryOperator;
+    
 
-
-    pub def makeIntFunction(f: Int32 -> a \ ef): IntFunction[a] \ ef with Marshal[a] = 
-        ((i -> f(i) |> Interop/Flix/Marshal.toJavaObject) as IntFunction[a]) as \ ef
-
+    pub def makeLongUnaryOperator(f: Int64 -> Int64 \ ef): LongUnaryOperator \ ef = (f as LongUnaryOperator) as \ ef
 
 
 }

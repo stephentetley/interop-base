@@ -17,11 +17,11 @@
 namespace Interop/Util/Function {
 
     ///
-    /// Represents a Java IntFunction.
+    /// Represents a Java LongFunction.
     ///
-    /// IntFunction is a builtin functional Interface.
+    /// LongFunction is a builtin functional Interface.
     ///
-    pub type alias IntFunction[_: Type] = ##java.util.function.IntFunction
+    pub type alias LongFunction[_: Type] = ##java.util.function.LongFunction
 
 
     
@@ -29,14 +29,14 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/IntFunction {
+namespace Interop/Util/Function/LongFunction {
     
-    use Interop/Util/Function.IntFunction;
+    use Interop/Util/Function.LongFunction;
     use Interop/Flix.Marshal;
 
 
-    pub def makeIntFunction(f: Int32 -> a \ ef): IntFunction[a] \ ef with Marshal[a] = 
-        ((i -> f(i) |> Interop/Flix/Marshal.toJavaObject) as IntFunction[a]) as \ ef
+    pub def makeLongFunction(f: Int64 -> a \ ef): LongFunction[a] \ ef with Marshal[a] = 
+        ((i -> f(i) |> Interop/Flix/Marshal.toJavaObject) as LongFunction[a]) as \ ef
 
 
 

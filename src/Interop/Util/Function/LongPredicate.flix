@@ -17,26 +17,21 @@
 namespace Interop/Util/Function {
 
     ///
-    /// Represents a Java IntFunction.
+    /// Represents a Java LongPredicate.
     ///
-    /// IntFunction is a builtin functional Interface.
+    /// LongPredicate is a builtin functional Interface.
     ///
-    pub type alias IntFunction[_: Type] = ##java.util.function.IntFunction
+    pub type alias LongPredicate = ##java.util.function.LongPredicate
 
-
-    
 
 }
 
 
-namespace Interop/Util/Function/IntFunction {
+namespace Interop/Util/Function/LongPredicate {
     
-    use Interop/Util/Function.IntFunction;
-    use Interop/Flix.Marshal;
+    use Interop/Util/Function.LongPredicate;
 
-
-    pub def makeIntFunction(f: Int32 -> a \ ef): IntFunction[a] \ ef with Marshal[a] = 
-        ((i -> f(i) |> Interop/Flix/Marshal.toJavaObject) as IntFunction[a]) as \ ef
+    pub def makeLongPredicate(f: Int64 -> Bool \ ef): LongPredicate \ ef = (f as LongPredicate) as \ ef
 
 
 
