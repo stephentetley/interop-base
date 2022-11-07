@@ -137,4 +137,44 @@ namespace Interop/Util/Stream/Stream {
 
 
 
+    pub def foreach(f: a -> Unit \ ef, s: Stream[a, r]): Unit \ {Read(r), ef} with Marshal[a] = 
+        import java.util.stream.Stream.forEach(Consumer[a]): Unit \ {r, ef};
+        let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
+        let Stream(s1) = s;
+        forEach(s1, f1)
+
+    pub def toArray(s: Stream[a, r]): Array[a, r] \ Write(r) = 
+        import java.util.stream.Stream.toArray(): Array[a, r] \ r;
+        let Stream(s1) = s;
+        toArray(s1)
+
+    pub def anyMatch(f: Int64 -> Bool \ ef, s: Stream[a, r]): Bool \ {Read(r), ef} with Marshal[a] = 
+        import java.util.stream.Stream.anyMatch(Predicate[a]): Bool \ {r, ef};
+        let Stream(s1) = s;
+        let f1 = Interop/Util/Function/Predicate.makePredicate(f);
+        anyMatch(s1, f1)
+
+    pub def allMatch(f: a -> Bool \ ef, s: Stream[a, r]): Bool \ {Read(r), ef} with Marshal[a] = 
+        import java.util.stream.Stream.allMatch(Predicate[a]): Bool \ {r, ef};
+        let Stream(s1) = s;
+        let f1 = Interop/Util/Function/Predicate.makePredicate(f);
+        allMatch(s1, f1)
+
+    pub def noneMatch(f: a -> Bool \ ef, s: Stream[a, r]): Bool \ {Read(r), ef} with Marshal[a] = 
+        import java.util.stream.Stream.noneMatch(Predicate[a]): Bool \ {r, ef};
+        let Stream(s1) = s;
+        let f1 = Interop/Util/Function/Predicate.makePredicate(f);
+        noneMatch(s1, f1)
+
+
+    pub def findFirst(s: Stream[a, r]): Option[a] \ Read(r) with Marshal[a] = 
+        import java.util.stream.Stream.findFirst(): ##java.util.Optional \ r;
+        let Stream(s1) = s;
+        findFirst(s1) |> Interop/Util/Optional.hhToOption(Interop/Flix/Marshal.fromJavaObject)
+
+    pub def findAny(s: Stream[a, r]): Option[a] \ Read(r) with Marshal[a] = 
+        import java.util.stream.Stream.findAny(): ##java.util.Optional \ r;
+        let Stream(s1) = s;
+        findAny(s1) |> Interop/Util/Optional.hhToOption(Interop/Flix/Marshal.fromJavaObject)
+
 }
