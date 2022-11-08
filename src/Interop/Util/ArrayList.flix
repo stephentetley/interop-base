@@ -119,8 +119,8 @@ namespace Interop/Util/ArrayList {
         let ArrayList(arr1) = arr;
         add(arr1, ocast(x))
 
-    pub def addAll![t: Type -> Region -> Type, r: Region, a: Type](col: t[a, r], 
-                                                                    arr: ArrayList[a, r]): Result[Bool, String] \ { Write(r) } with ImpCollection[t] = 
+    pub def addAll![t: Type -> Region -> Type, r: Region, a: Type]
+                    (col: t[a, r], arr: ArrayList[a, r]): Result[Bool, String] \ { Write(r) } with ImpCollection[t] = 
         try { 
             import java.util.ArrayList.addAll(##java.util.Collection): Bool & r;
             let ArrayList(arr1) = arr;
