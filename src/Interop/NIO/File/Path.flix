@@ -173,7 +173,7 @@ namespace Interop/NIO/File/Path {
     ///
     /// Returns `true` if the filepath `path` starts with the Path `prefix`.
     ///
-    pub def startsWith(prefix: {prefix :: Path}, path: Path): Bool =
+    pub def startsWith(prefix: {prefix = Path}, path: Path): Bool =
         import java.nio.file.Path.startsWith(##java.nio.file.Path): Bool \ {};
         let Path(p1) = path;
         let Path(prefix1) = prefix.prefix;
@@ -182,7 +182,7 @@ namespace Interop/NIO/File/Path {
     ///
     /// Returns `true` if the filepath `path` starts with the String `prefix`.
     ///
-    pub def startsWithString(prefix: {prefix :: String}, path: Path): Bool =
+    pub def startsWithString(prefix: {prefix = String}, path: Path): Bool =
         import java.nio.file.Path.startsWith(String): Bool \ {};
         let Path(p1) = path;
         startsWith(p1, prefix.prefix)

@@ -140,7 +140,7 @@ namespace Interop/Util/Stream/IntStream {
         (flatMap(s1, f1) as \ {Write(r), ef}) |> IntStream
 
 
-    pub def foreach(f: Int32 -> Unit \ ef, s: IntStream[r]): Unit \ {Read(r), ef} = 
+    pub def forEach(f: Int32 -> Unit \ ef, s: IntStream[r]): Unit \ {Read(r), ef} = 
         import java.util.stream.IntStream.forEach(IntConsumer): Unit \ {r, ef};
         let f1 = Interop/Util/Function/IntConsumer.makeIntConsumer(f);
         let IntStream(s1) = s;

@@ -72,8 +72,8 @@ namespace Interop/Util/IteratorZ {
     ///
     /// Apply the effectful function `f` to all the elements in the array `a`.
     ///
-    pub def foreach(f: a -> Unit & ef, iter: IteratorZ[a, r]): Unit \ { ef, Read(r) } with Marshal[a] =
-        iterator(iter) |> Iterator.foreach(f)
+    pub def forEach(f: a -> Unit & ef, iter: IteratorZ[a, r]): Unit \ { ef, Read(r) } with Marshal[a] =
+        iterator(iter) |> Iterator.forEach(f)
 
     pub def toList(iter: IteratorZ[a, r]): List[a] \ Read(r) with Marshal[a] = 
         iterator(iter) |> Iterator.toList

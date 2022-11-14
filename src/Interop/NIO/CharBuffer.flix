@@ -73,8 +73,8 @@ namespace Interop/NIO/CharBuffer {
 
 
     pub def appendSubCharSequence!(cs: CharSequence[r2], 
-                                    offset: {offset :: Int32}, 
-                                    len: {len :: Int32}, 
+                                    offset: {offset = Int32}, 
+                                    len: {len = Int32}, 
                                     cb: CharBuffer[r]): Result[CharBuffer[r], String] \ {Write(r), Read(r2)} = 
         try {
             import java.nio.CharBuffer.append(##java.lang.CharSequence, Int32, Int32): ##java.nio.CharBuffer \ {r, r2};

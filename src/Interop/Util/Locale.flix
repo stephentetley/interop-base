@@ -130,7 +130,7 @@ namespace Interop/Util/Locale {
     ///
     /// Returns a new Locale for the supplied language and country.
     ///
-    pub def newLocaleWithCountry(lang: {lang :: String}, country: {country :: String}): Locale =
+    pub def newLocaleWithCountry(lang: {lang = String}, country: {country = String}): Locale =
         import new java.util.Locale(String, String): ##java.util.Locale \ {} as new1;
         Locale(new1(lang.lang, country.country))
 
@@ -142,7 +142,7 @@ namespace Interop/Util/Locale {
     ///
     /// For guidelines to the formatting of a valid tag see the Javadoc for `java.util.Locale`.
     /// 
-    pub def newLocaleWithVariant(lang: {lang :: String}, country: {country :: String}, variant: {variant :: String}): Locale =
+    pub def newLocaleWithVariant(lang: {lang = String}, country: {country = String}, variant: {variant = String}): Locale =
         import new java.util.Locale(String, String, String): ##java.util.Locale \ {} as new1;
         Locale(new1(lang.lang, country.country, variant.variant))
 
@@ -353,7 +353,7 @@ namespace Interop/Util/Locale {
         let Locale(x1) = x;
         getDisplayCountry(x1)
 
-    pub def getDisplayCountryWithLocale(inLocale: {inLocale :: Locale}, x: Locale): String =
+    pub def getDisplayCountryWithLocale(inLocale: {inLocale = Locale}, x: Locale): String =
         import java.util.Locale.getDisplayCountry(##java.util.Locale): String \ {};
         let Locale(inLocale1) = inLocale.inLocale;
         let Locale(x1) = x;
@@ -364,7 +364,7 @@ namespace Interop/Util/Locale {
         let Locale(x1) = x;
         getDisplayLanguage(x1)
 
-    pub def getDisplayLanguageWithLocale(inLocale: {inLocale :: Locale}, x: Locale): String =
+    pub def getDisplayLanguageWithLocale(inLocale: {inLocale = Locale}, x: Locale): String =
         import java.util.Locale.getDisplayLanguage(##java.util.Locale): String \ {};
         let Locale(inLocale1) = inLocale.inLocale;
         let Locale(x1) = x;
@@ -375,7 +375,7 @@ namespace Interop/Util/Locale {
         let Locale(x1) = x;
         getDisplayName(x1)
 
-    pub def getDisplayNameWithLocale(inLocale: {inLocale :: Locale}, x: Locale): String =
+    pub def getDisplayNameWithLocale(inLocale: {inLocale = Locale}, x: Locale): String =
         import java.util.Locale.getDisplayName(##java.util.Locale): String \ {};
         let Locale(inLocale1) = inLocale.inLocale;
         let Locale(x1) = x;
@@ -386,7 +386,7 @@ namespace Interop/Util/Locale {
         let Locale(x1) = x;
         getDisplayScript(x1)
 
-    pub def getDisplayScriptWithLocale(inLocale: {inLocale :: Locale}, x: Locale): String =
+    pub def getDisplayScriptWithLocale(inLocale: {inLocale = Locale}, x: Locale): String =
         import java.util.Locale.getDisplayScript(##java.util.Locale): String \ {};
         let Locale(inLocale1) = inLocale.inLocale;
         let Locale(x1) = x;
@@ -398,7 +398,7 @@ namespace Interop/Util/Locale {
         let Locale(x1) = x;
         getDisplayVariant(x1)
 
-    pub def getDisplayVariantWithLocale(inLocale: {inLocale :: Locale}, x: Locale): String =
+    pub def getDisplayVariantWithLocale(inLocale: {inLocale = Locale}, x: Locale): String =
         import java.util.Locale.getDisplayVariant(##java.util.Locale): String \ {};
         let Locale(inLocale1) = inLocale.inLocale;
         let Locale(x1) = x;

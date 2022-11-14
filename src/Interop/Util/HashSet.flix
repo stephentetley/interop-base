@@ -88,12 +88,12 @@ namespace Interop/Util/HashSet {
 
     pub def fromFoldable(r: Region[r], t: t[a]): HashSet[a, r] \ Write(r) with Foldable[t], Marshal[a] =
         let set1 = new(r);
-        Foldable.foreach(x -> discard add!(x, set1), t);
+        Foldable.forEach(x -> discard add!(x, set1), t);
         set1
 
     pub def fromFoldableWith(r: Region[r], ocast: a -> ##java.lang.Object, t: t[a]): HashSet[a, r] \ { Write(r) } with Foldable[t] =
         let set1 = new(r);
-        Foldable.foreach(x -> discard addWith!(x, ocast, set1), t);
+        Foldable.forEach(x -> discard addWith!(x, ocast, set1), t);
         set1
 
 }

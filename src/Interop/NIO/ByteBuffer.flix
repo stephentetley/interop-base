@@ -72,8 +72,8 @@ namespace Interop/NIO/ByteBuffer {
 
 
     pub def appendSubArray!(arr: Array[Int8, r2], 
-                            offset: {offset :: Int32}, 
-                            len: {len :: Int32}, 
+                            offset: {offset = Int32}, 
+                            len: {len = Int32}, 
                             bb: ByteBuffer[r]): Result[ByteBuffer[r], String] \ {Write(r), Read(r2)} = 
         try {
             import java.nio.ByteBuffer.put(Array[Int8, r2], Int32, Int32): ##java.nio.ByteBuffer \ {r, r2};

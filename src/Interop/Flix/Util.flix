@@ -16,7 +16,7 @@
 
 namespace Interop/Flix/Util {
 
-    pub def getStringWithoutNull(default: {default :: String}, s: String): String = 
+    pub def getStringWithoutNull(default: {default = String}, s: String): String = 
         if (Object.isNull(s)) 
             default.default
         else

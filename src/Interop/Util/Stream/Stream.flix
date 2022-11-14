@@ -137,7 +137,7 @@ namespace Interop/Util/Stream/Stream {
 
 
 
-    pub def foreach(f: a -> Unit \ ef, s: Stream[a, r]): Unit \ {Read(r), ef} with Marshal[a] = 
+    pub def forEach(f: a -> Unit \ ef, s: Stream[a, r]): Unit \ {Read(r), ef} with Marshal[a] = 
         import java.util.stream.Stream.forEach(Consumer[a]): Unit \ {r, ef};
         let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
         let Stream(s1) = s;

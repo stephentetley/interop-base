@@ -81,8 +81,8 @@ namespace Interop/IO/BufferedReader {
 
     // read (into-array)
     pub def readSubArray!(buf: Array[Char, r2], 
-                            offset: {offset :: Int32}, 
-                            len: {len :: Int32}, 
+                            offset: {offset = Int32}, 
+                            len: {len = Int32}, 
                             rd: BufferedReader[r]): Result[Int32, String] \ { Write(r2), Read(r) } = 
         try {
             import java.io.BufferedReader.read(Array[Char, r2], Int32, Int32): Int32 \ {r, r2};

@@ -156,8 +156,8 @@ namespace Interop/IO/StringWriter {
             
 
     pub def writeSubstring!(s: String, 
-                            offset: {offset :: Int32}, 
-                            len: {len :: Int32}, 
+                            offset: {offset = Int32}, 
+                            len: {len = Int32}, 
                             sr: StringWriter[r]): Result[Unit, String] \ Write(r) =
         try {
             import java.io.StringWriter.write(String, Int32, Int32): Unit \ r;

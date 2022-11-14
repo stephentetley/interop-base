@@ -125,7 +125,7 @@ namespace Interop/Util/Stream/DoubleStream {
         (flatMap(s1, f1) as \ {Write(r), ef}) |> DoubleStream
 
 
-    pub def foreach(f: Float64 -> Unit \ ef, s: DoubleStream[r]): Unit \ {Read(r), ef} = 
+    pub def forEach(f: Float64 -> Unit \ ef, s: DoubleStream[r]): Unit \ {Read(r), ef} = 
         import java.util.stream.DoubleStream.forEach(DoubleConsumer): Unit \ {r, ef};
         let f1 = Interop/Util/Function/DoubleConsumer.makeDoubleConsumer(f);
         let DoubleStream(s1) = s;

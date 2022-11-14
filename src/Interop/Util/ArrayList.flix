@@ -84,17 +84,17 @@ namespace Interop/Util/ArrayList {
                         (r: Region[r2], t: t[a, r]): ArrayList[a, r2] \ { Read(r), Write(r2) } with Iterable[t], Marshal[a] =
         let als = new(r);
         let iter1 = Iterable.iterator(t);
-        Iterator.foreach(x -> discard add!(x, als), iter1);
+        Iterator.forEach(x -> discard add!(x, als), iter1);
         als
 
     pub def fromFoldable(r: Region[r], t: t[a]): ArrayList[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
         let als = new(r);
-        Foldable.foreach(x -> discard add!(x, als), t);
+        Foldable.forEach(x -> discard add!(x, als), t);
         als
 
     pub def fromFoldableWith(r: Region[r], ocast: a -> ##java.lang.Object, t: t[a]): ArrayList[a, r] \ { Write(r) } with Foldable[t] =
         let als = new(r);
-        Foldable.foreach(x -> discard addWith!(x, ocast, als), t);
+        Foldable.forEach(x -> discard addWith!(x, ocast, als), t);
         als
 
 

@@ -142,7 +142,7 @@ namespace Interop/Util/Stream/LongStream {
         (flatMap(s1, f1) as \ {Write(r), ef}) |> LongStream
 
 
-    pub def foreach(f: Int64 -> Unit \ ef, s: LongStream[r]): Unit \ {Read(r), ef} = 
+    pub def forEach(f: Int64 -> Unit \ ef, s: LongStream[r]): Unit \ {Read(r), ef} = 
         import java.util.stream.LongStream.forEach(LongConsumer): Unit \ {r, ef};
         let f1 = Interop/Util/Function/LongConsumer.makeLongConsumer(f);
         let LongStream(s1) = s;
