@@ -17,8 +17,10 @@
 
 namespace Interop/Lang/String {
 
-    use Interop/NIO/Charset.Charset;
-    use Interop/NIO/Charset.Charset.{Charset};
+    use Interop/NIO/Charset.Charset
+    use Interop/NIO/Charset.Charset.{Charset}
+    use Interop/Util/Stream.IntStream
+    use Interop/Util/Stream.IntStream.{IntStream}
 
     pub def fromArray(arr: Array[Int8, r]): String \ Read(r) = 
         import new java.lang.String(Array[Int8, r]): String \ r as newString;
@@ -94,5 +96,13 @@ namespace Interop/Lang/String {
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
+
+    pub def chars(_: Region[r], s: String): IntStream[r] \ Write(r) = 
+        import java.lang.String.chars(): ##java.util.stream.IntStream \ r ;
+        chars(s) |> IntStream
+
+    pub def codePoints(_: Region[r], s: String): IntStream[r] \ Write(r) = 
+        import java.lang.String.codePoints(): ##java.util.stream.IntStream \ r ;
+        codePoints(s) |> IntStream
 
 }

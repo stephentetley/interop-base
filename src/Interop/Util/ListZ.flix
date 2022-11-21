@@ -16,8 +16,8 @@
 
 namespace Interop/Util {
 
-    use Interop/Util.Collection;
-    use Interop/Util.Collection.{Collection};
+    use Interop/Util.Collection
+    use Interop/Util.Collection.{Collection}
 
     ///
     /// Represents a Java List.
