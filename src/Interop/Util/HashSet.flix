@@ -72,7 +72,7 @@ namespace Interop/Util/HashSet {
     /// Returns a new mutable HashSet.
     ///
     pub def new(_: Region[r]): HashSet[a, r] \ Write(r) =
-        import new java.util.HashSet(): ##java.util.HashSet & r as newHashSet;
+        import new java.util.HashSet(): ##java.util.HashSet \ r as newHashSet;
         newHashSet() |> HashSet
 
     pub def add!(x: a, s: HashSet[a, r]): Bool \  Write(r) with Marshal[a] =
@@ -82,9 +82,25 @@ namespace Interop/Util/HashSet {
         add(s1, x1)
 
     pub def addWith!(x: a, ocast: a -> ##java.lang.Object, s: HashSet[a, r]): Bool \ { Write(r) } = 
-        import java.util.HashSet.add(##java.lang.Object): Bool & r;
+        import java.util.HashSet.add(##java.lang.Object): Bool \ r;
         let HashSet(s1) = s;
         add(s1, ocast(x))
+
+    pub def isEmpty(s: HashSet[a, r]): Bool \ Read(r) = 
+        import java.util.HashSet.isEmpty(): Bool \ r;
+        let HashSet(s1) = s;
+        isEmpty(s1)
+
+    pub def size(s: HashSet[a, r]): Int32 \ Read(r) = 
+        import java.util.HashSet.size(): Int32 \ r;
+        let HashSet(s1) = s;
+        size(s1)
+
+    pub def clear!(s: HashSet[a, r]): Unit \ Read(r) = 
+        import java.util.HashSet.clear(): Unit \ r;
+        let HashSet(s1) = s;
+        clear(s1)
+
 
     pub def fromFoldable(r: Region[r], t: t[a]): HashSet[a, r] \ Write(r) with Foldable[t], Marshal[a] =
         let set1 = new(r);

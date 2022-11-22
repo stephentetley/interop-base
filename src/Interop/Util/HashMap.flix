@@ -45,10 +45,13 @@ namespace Interop/Util {
 
 namespace Interop/Util/HashMap {
 
-    use Interop/Util.HashMap;
-    use Interop/Util.HashMap.{HashMap};
-    use Interop/Util.ImpMapZ;
-    use Interop/Flix.Marshal;
+    use Interop/Util.HashMap
+    use Interop/Util.HashMap.{HashMap}
+    use Interop/Util.ImpMapZ
+    use Interop/Util/Map.Entry
+    use Interop/Util.SetZ
+    use Interop/Util.SetZ.{SetZ}
+    use Interop/Flix.Marshal
 
 
     pub def getHH(m: HashMap[k, v, r]): ##java.util.HashMap = 
@@ -84,10 +87,38 @@ namespace Interop/Util/HashMap {
         discard put(m1, k1, v1)
 
 
+    pub def clear!(m: HashMap[k, v, r]): Unit \ Write(r) =
+        import java.util.HashMap.clear(): Unit \ r; 
+        let HashMap(m1) = m;
+        clear(m1)
+
+    pub def entrySet(m: HashMap[k, v, r]): SetZ[Entry[k, v, r], r] \ {Write(r)}= 
+        import java.util.HashMap.entrySet(): ##java.util.Set \ Write(r);
+        let HashMap(m1) = m;
+        entrySet(m1) |> SetZ
+
+    pub def isEmpty(m: HashMap[k, v, r]): Bool \ Write(r) =
+        import java.util.HashMap.isEmpty(): Bool \ r; 
+        let HashMap(m1) = m;
+        isEmpty(m1)
+
+    pub def keySet(m: HashMap[k, v, r]): SetZ[k, r] \ {Write(r)}= 
+        import java.util.HashMap.keySet(): ##java.util.Set \ Write(r);
+        let HashMap(m1) = m;
+        keySet(m1) |> SetZ
+
+    pub def remove!(k: k, m: HashMap[k, v, r]): Option[v] \  Write(r) with Marshal[k], Marshal[v] =
+        import java.util.HashMap.remove(##java.lang.Object): ##java.lang.Object \ r; 
+        let HashMap(m1) = m;
+        let k1 = Interop/Flix/Marshal.toJavaObject(k);        
+        remove(m1, k1) |> Object.toOption |>  Option.map(Interop/Flix/Marshal.fromJavaObject)
+
+
     pub def fromFlixMap(r: Region[r], t: Map[k, v]): HashMap[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
         let map1 = new(r);
         Map.forEach((k, v) -> discard put!(k, v, map1), t);
         map1
+
 
 
     pub def fromFoldable(r: Region[r], t: t[(k, v)]): HashMap[k, v, r] \ Write(r) with Foldable[t], Marshal[k], Marshal[v] =

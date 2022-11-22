@@ -18,6 +18,7 @@ namespace Interop/Lang {
 
     ///
     /// Represents a Java Enum.
+    /// Class
     ///
     pub enum Enum[_: Type](##java.lang.Enum)
 
@@ -31,9 +32,8 @@ namespace Interop/Lang {
 namespace Interop/Lang/Enum {
 
 
-    use Interop/Lang.Enum;
-    use Interop/Lang.Enum.{Enum};
-    use Interop/Lang.ImpEnum;
+    use Interop/Lang.Enum
+    use Interop/Lang.Enum.{Enum}
 
 
     pub def equals(x: Enum[a], y: Enum[a]): Bool =

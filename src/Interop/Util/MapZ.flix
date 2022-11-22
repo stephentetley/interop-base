@@ -37,13 +37,11 @@ namespace Interop/Util {
 
 namespace Interop/Util/MapZ {
 
-    use Interop/Util.MapZ;
-    use Interop/Util.MapZ.{MapZ};
-    use Interop/Util.MapEntry;
-    use Interop/Util.MapEntry.{MapEntry};
+    use Interop/Util.MapZ
+    use Interop/Util.MapZ.{MapZ}
 
-    use Interop/Util.ImpMapZ;
-    use Interop/Flix.Marshal;
+    use Interop/Util.ImpMapZ
+    use Interop/Flix.Marshal
 
     pub def getHH(m: MapZ[k, v, r]): ##java.util.Map = 
         let MapZ(m1) = m;
@@ -58,21 +56,21 @@ namespace Interop/Util/MapZ {
         Interop/Util/ImpMapZ.toMapZ(s) |> getHH
 
 
-    pub def size[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region]
-                (m: t[k, v, r]): Int32 \ { Read(r) } with ImpMapZ[t] =
+    pub def size(m: MapZ[k, v, r]): Int32 \ Read(r) =
         import java.util.Map.size(): Int32 \ r;
-        toMapHH(m) |> size
+        let MapZ(m1) = m;
+        size(m1)
 
-    pub def isEmpty[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region]
-                    (m: t[k, v, r]): Bool \ { Read(r) } with ImpMapZ[t] =
+    pub def isEmpty(m: MapZ[k, v, r]): Bool \ Read(r) =
         import java.util.Map.isEmpty(): Bool \ r;
-        toMapHH(m) |> isEmpty
+        let MapZ(m1) = m;
+        isEmpty(m1)
 
 
-    pub def hashCode[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region]
-                    (m: t[k, v, r]): Int32 \ { Read(r) } with ImpMapZ[t] =
+    pub def hashCode(m: MapZ[k, v, r]): Int32 \ Read(r) =
         import java.util.Map.hashCode(): Int32 \ r;
-        toMapHH(m) |> hashCode
+        let MapZ(m1) = m;
+        hashCode(m1)
 
 
 
