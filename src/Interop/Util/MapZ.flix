@@ -55,6 +55,24 @@ namespace Interop/Util/MapZ {
     pub def toMapHH[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region](s: t[k, v, r]): ##java.util.Map with ImpMapZ[t] = 
         Interop/Util/ImpMapZ.toMapZ(s) |> getHH
 
+    pub def of0(_: Region[r]): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
+        import static java.util.Map.of(): ##java.util.Map \ r;
+        of() |> MapZ
+
+    pub def of1(_: Region[r], k1: k, v1: v): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
+        import static java.util.Map.of(##java.lang.Object, ##java.lang.Object): ##java.util.Map \ r;
+        let ko1 = Interop/Flix/Marshal.toJavaObject(k1);
+        let vo1 = Interop/Flix/Marshal.toJavaObject(v1);
+        of(ko1, vo1) |> MapZ
+
+    pub def of2(_: Region[r], k1: k, v1: v, k2: k, v2: v): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
+        import static java.util.Map.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Map \ r;
+        let ko1 = Interop/Flix/Marshal.toJavaObject(k1);
+        let vo1 = Interop/Flix/Marshal.toJavaObject(v1);
+        let ko2 = Interop/Flix/Marshal.toJavaObject(k2);
+        let vo2 = Interop/Flix/Marshal.toJavaObject(v2);
+        of(ko1, vo1, ko2, vo2) |> MapZ
+
 
     pub def size(m: MapZ[k, v, r]): Int32 \ Read(r) =
         import java.util.Map.size(): Int32 \ r;
@@ -72,6 +90,19 @@ namespace Interop/Util/MapZ {
         let MapZ(m1) = m;
         hashCode(m1)
 
+
+
+    pub def forEach(f: (k, v) -> Unit \ ef, m: MapZ[k, v, r]): Result[Unit, String] \  {ef, Read(r)} with Marshal[k], Marshal[v] =
+        try {
+            import java.util.Map.forEach(##java.util.function.BiConsumer): Unit \ r; 
+            let MapZ(m1) = m;
+            let f1 = Interop/Util/Function/BiConsumer.makeBiConsumer(f);
+            forEach(m1, f1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
 
     ///

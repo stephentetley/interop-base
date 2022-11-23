@@ -2,15 +2,15 @@
 // > java -jar ..\bin\flix-master.jar .\temp\ForEach.flix .\interop-base.fpkg .\lib\interop-base-java.1.3.jar
 
 def main(): Int32 \ IO = 
-    match test01() {
-        case Ok() => ()
-        case Err(msg) => println(msg)
-    };
-    match test02() {
-        case Ok() => ()
-        case Err(msg) => println(msg)
-    };
+    test01 |> runIt;
+    test02 |> runIt;
+    test03 |> runIt;
     0
+
+pub def runIt(f: Unit -> Result[Unit, String] \ ef): Unit \ {ef, IO} = match f() {
+    case Ok() => ()
+    case Err(msg) => println(msg)
+}
 
 pub def printStr(s: String): Unit \ IO = println(s)
 
@@ -24,3 +24,8 @@ pub def test02(): Result[Unit, String] \ IO = region r {
     Interop/Util/Collection.removeIf!(s -> String.contains(substr = "B", s), col1) |> println;
     Interop/Util/Collection.forEach(x -> printStr(x), col1)
 }    
+
+pub def test03(): Result[Unit, String] \ IO = region r {
+    let map1 = Interop/Util/MapZ.of2(r, "AAA", "aaa", "BB", "bb");
+    Interop/Util/MapZ.forEach((k,v) -> printStr("${k} => ${v}"), map1)
+} 
