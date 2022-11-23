@@ -65,6 +65,35 @@ namespace Interop/Util/SetZ {
         Interop/Util/ImpSetZ.toSetZ(s) |> getHH
 
 
+    pub def isEmpty(s: SetZ[a, r]): Bool \ Read(r) = 
+        import java.util.Set.isEmpty(): Bool \ r;
+        let SetZ(s1) = s;
+        isEmpty(s1)
+
+    pub def size(s: SetZ[a, r]): Int32 \ Read(r) = 
+        import java.util.Set.size(): Int32 \ r;
+        let SetZ(s1) = s;
+        size(s1)
+
+    pub def clear!(s: SetZ[a, r]): Unit \ Read(r) = 
+        import java.util.Set.clear(): Unit \ r;
+        let SetZ(s1) = s;
+        clear(s1)
+
+
+    pub def remove!(x: a, s: SetZ[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+        try {
+            import java.util.Set.remove(##java.lang.Object): Bool \ r; 
+            let SetZ(s1) = s;
+            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            remove(s1, x1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+
     ///
     /// Returns an iterator over `s`.
     ///

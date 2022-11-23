@@ -33,7 +33,8 @@ namespace Interop/Util/Function/Predicate {
     use Interop/Flix.Marshal
 
     pub def makePredicate(f: a -> Bool \ ef): Predicate[a] \ ef with Marshal[a] = 
-        ((f >> Interop/Flix/Marshal.toJavaObject) as Predicate[a]) as \ ef
+        ((obj -> f(Interop/Flix/Marshal.fromJavaObject(obj))) as Predicate[a]) as \ ef
+
 
 
 

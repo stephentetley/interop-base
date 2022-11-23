@@ -36,15 +36,18 @@ namespace Interop/Util {
 
 namespace Interop/Util/Collection {
 
-    use Interop/Util.Collection;
-    use Interop/Util.Collection.{Collection};
-    use Interop/Util.ImpCollection;
-    use Interop/Flix.Marshal;
+    use Interop/Util.Collection
+    use Interop/Util.Collection.{Collection}
+    use Interop/Util.ImpCollection
+    use Interop/Util/Stream.Stream
+    use Interop/Util/Stream.Stream.{Stream}
+
+    use Interop/Flix.Marshal
 
 
-    pub def getHH(iter: Collection[a, r]): ##java.util.Collection = 
-        let Collection(iter1) = iter;
-        iter1
+    pub def getHH(c: Collection[a, r]): ##java.util.Collection = 
+        let Collection(c1) = c;
+        c1
 
 
     pub def wrapHH(_: Region[r], col: ##java.util.Collection): Collection[a, r] = 
@@ -56,39 +59,109 @@ namespace Interop/Util/Collection {
 
 
 
-    pub def size[t: Type -> Region -> Type, a: Type, r: Region](col: t[a, r]): Int32 \ { Read(r) } with ImpCollection[t] =
+    pub def size(c: Collection[a, r]): Int32 \ Read(r) =
         import java.util.Collection.size(): Int32 \ r;
-        toCollectionHH(col) |> size
+        let Collection(c1) = c;
+        size(c1)
 
-    pub def isEmpty[t: Type -> Region -> Type, a: Type, r: Region](col: t[a, r]): Bool \ { Read(r) } with ImpCollection[t] =
+    pub def isEmpty(c: Collection[a, r]): Bool \ Read(r) =
         import java.util.Collection.isEmpty(): Bool \ r;
-        toCollectionHH(col) |> isEmpty
+        let Collection(c1) = c;
+        isEmpty(c1)
 
-    pub def hashCode[t: Type -> Region -> Type, a: Type, r: Region](col: t[a, r]): Int32 \ { Read(r) } with ImpCollection[t] =
+    pub def hashCode(c: Collection[a, r]): Int32 \ Read(r) =
         import java.util.Collection.hashCode(): Int32 \ r;
-        toCollectionHH(col) |> hashCode
+        let Collection(c1) = c;
+        hashCode(c1)
 
-    pub def clear![t: Type -> Region -> Type, a: Type, r: Region](col: t[a, r]): Result[Unit, String] \ Write(r) with ImpCollection[t] =
+    pub def clear!(c: Collection[a, r]): Result[Unit, String] \ Write(r) =
         try {
             import java.util.Collection.clear(): Unit \ r;
-            toCollectionHH(col) |> clear |> Ok
+            let Collection(c1) = c;
+            clear(c1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
-    pub def iterator[t: Type -> Region -> Type, a: Type, r: Region]
-                    (col: t[a, r]): Iterator[a, r] \ { Write(r) } with ImpCollection[t], Scoped[t[a]], Marshal[a] =
-        toFlixIterator(Scoped.regionOf(col), Interop/Flix/Marshal.fromJavaObject, col)
+    pub def add!(x: a, s: Collection[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+        try {
+            import java.util.Collection.add(##java.lang.Object): Bool \ r; 
+            let Collection(s1) = s;
+            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            add(s1, x1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def remove!(x: a, c: Collection[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+        try {
+            import java.util.Collection.remove(##java.lang.Object): Bool \ r; 
+            let Collection(c1) = c;
+            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            remove(c1, x1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+
+    pub def removeIf!(f: a -> Bool \ ef, c: Collection[a, r]): Result[Bool, String] \  {ef, Write(r)} with Marshal[a] =
+        try {
+            import java.util.Collection.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
+            let Collection(c1) = c;            
+            let f1 = Interop/Util/Function/Predicate.makePredicate(f);
+            (removeIf(c1, f1) as \  {ef, Write(r)}) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def forEach(f: a -> Unit \ ef, c: Collection[a, r]): Result[Unit, String] \  {ef, Read(r)} with Marshal[a] =
+        try {
+            import java.util.Collection.forEach(##java.util.function.Consumer): Unit \ r; 
+            let Collection(c1) = c;
+            let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
+            forEach(c1, f1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+
+    // Uses `Object.equals` for comparing.
+    pub def contains(x: a, c: Collection[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+        try {
+            import java.util.Collection.contains(##java.lang.Object): Bool \ r; 
+            let Collection(c1) = c;
+            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            contains(c1, x1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def stream(c: Collection[a, r]): Stream[a, r] \ { Read(r), Write(r) }  with Marshal[a] =
+        import java.util.Collection.stream(): ##java.util.stream.Stream \ r; 
+        let Collection(c1) = c;
+        stream(c1) |> Stream
+
+    pub def iterator(c: Collection[a, r]): Iterator[a, r] \ { Write(r) } with Marshal[a] =
+        toFlixIterator(Scoped.regionOf(c), Interop/Flix/Marshal.fromJavaObject, c)
         
 
-    pub def toFlixIterator[t: Type -> Region -> Type, a: Type, r: Region, r2: Region]
-                            (r2: Region[r2], 
-                                ocast: ##java.lang.Object -> a,
-                                col: t[a, r]): Iterator[a, r2] \ { Read(r), Write(r2) } with ImpCollection[t], Marshal[a] =
+    pub def toFlixIterator(r2: Region[r2], 
+                            ocast: ##java.lang.Object -> a,
+                            c: Collection[a, r]): Iterator[a, r2] \ { Read(r), Write(r2) } with Marshal[a] =
         import java.util.Collection.iterator(): ##java.util.Iterator \ {r, r2} as iterator;
-        let c1 = toCollectionHH(col);
+        let Collection(c1) = c;
         if (Object.isNull(c1))
             Iterator.new(r2)
         else 

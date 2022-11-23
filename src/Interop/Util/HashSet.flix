@@ -55,10 +55,10 @@ namespace Interop/Util {
 
 namespace Interop/Util/HashSet {
 
-    use Interop/Util.HashSet;
-    use Interop/Util.HashSet.{HashSet};
-    use Interop/Util.ImpSetZ;
-    use Interop/Flix.Marshal;
+    use Interop/Util.HashSet
+    use Interop/Util.HashSet.{HashSet}
+    use Interop/Util.ImpSetZ
+    use Interop/Flix.Marshal
 
 
     pub def getHH(s: HashSet[a, r]): ##java.util.HashSet = 
@@ -101,6 +101,13 @@ namespace Interop/Util/HashSet {
         let HashSet(s1) = s;
         clear(s1)
 
+    /// No exception unlike SetZ
+    pub def remove!(x: a, s: HashSet[a, r]): Bool \  Write(r) with Marshal[a] =
+        import java.util.HashSet.remove(##java.lang.Object): Bool \ r; 
+        let HashSet(s1) = s;
+        let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+        remove(s1, x1)
+        
 
     pub def fromFoldable(r: Region[r], t: t[a]): HashSet[a, r] \ Write(r) with Foldable[t], Marshal[a] =
         let set1 = new(r);
