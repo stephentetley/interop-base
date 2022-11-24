@@ -105,6 +105,7 @@ namespace Interop/Util/SetZ {
         let eo5 = Interop/Flix/Marshal.toJavaObject(e5);
         of(eo1, eo2, eo3, eo4, eo5) |> SetZ
 
+
     pub def equals(s1: SetZ[a, r], s2: SetZ[a, r]): Bool \  Read(r) with Marshal[a] =
         import java.util.Set.equals(##java.lang.Object): Bool \ r; 
         let SetZ(js1) = s1;
@@ -204,6 +205,19 @@ namespace Interop/Util/SetZ {
             let SetZ(s1) = s;
             let Collection(c1) = c;
             removeAll(s1, c1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    
+    pub def removeIf!(f: a -> Bool \ ef, s: SetZ[a, r]): Result[Bool, String] \  {ef, Write(r)} with Marshal[a] =
+        try {
+            import java.util.Set.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
+            let SetZ(s1) = s;        
+            let f1 = Interop/Util/Function/Predicate.makePredicate(f);
+            (removeIf(s1, f1) as \  {ef, Write(r)}) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};

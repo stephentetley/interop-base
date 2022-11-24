@@ -57,6 +57,8 @@ namespace Interop/Util/HashSet {
 
     use Interop/Util.HashSet
     use Interop/Util.HashSet.{HashSet}
+    use Interop/Util.Collection
+    use Interop/Util.Collection.{Collection}
     use Interop/Util.ImpSetZ
     use Interop/Flix.Marshal
 
@@ -75,16 +77,22 @@ namespace Interop/Util/HashSet {
         import new java.util.HashSet(): ##java.util.HashSet \ r as newHashSet;
         newHashSet() |> HashSet
 
-    pub def add!(x: a, s: HashSet[a, r]): Bool \  Write(r) with Marshal[a] =
-        import java.util.HashSet.add(##java.lang.Object): Bool \ r; 
+    pub def toString(s: HashSet[a, r]): String \ Read(r) = 
+        import java.util.HashSet.toString(): String \ r;
         let HashSet(s1) = s;
-        let x1 = Interop/Flix/Marshal.toJavaObject(x);
-        add(s1, x1)
+        toString(s1)
 
-    pub def addWith!(x: a, ocast: a -> ##java.lang.Object, s: HashSet[a, r]): Bool \ { Write(r) } = 
-        import java.util.HashSet.add(##java.lang.Object): Bool \ r;
+    pub def equals(s1: HashSet[a, r], s2: HashSet[a, r]): Bool \  Read(r) with Marshal[a] =
+        import java.util.HashSet.equals(##java.lang.Object): Bool \ r; 
+        let HashSet(js1) = s1;
+        let HashSet(js2) = s2;
+        equals(js1, js2 as ##java.lang.Object)
+
+
+    pub def hashCode(s: HashSet[a, r]): Int32 \ Read(r) = 
+        import java.util.HashSet.hashCode(): Int32 \ r;
         let HashSet(s1) = s;
-        add(s1, ocast(x))
+        hashCode(s1)
 
     pub def isEmpty(s: HashSet[a, r]): Bool \ Read(r) = 
         import java.util.HashSet.isEmpty(): Bool \ r;
@@ -96,18 +104,74 @@ namespace Interop/Util/HashSet {
         let HashSet(s1) = s;
         size(s1)
 
+
+    pub def add!(x: a, s: HashSet[a, r]): Bool \  Write(r) with Marshal[a] =
+        import java.util.HashSet.add(##java.lang.Object): Bool \ r; 
+        let HashSet(s1) = s;
+        let x1 = Interop/Flix/Marshal.toJavaObject(x);
+        add(s1, x1)
+
+    pub def addWith!(x: a, ocast: a -> ##java.lang.Object, s: HashSet[a, r]): Bool \ { Write(r) } = 
+        import java.util.HashSet.add(##java.lang.Object): Bool \ r;
+        let HashSet(s1) = s;
+        add(s1, ocast(x))
+
+
     pub def clear!(s: HashSet[a, r]): Unit \ Read(r) = 
         import java.util.HashSet.clear(): Unit \ r;
         let HashSet(s1) = s;
         clear(s1)
 
-    /// No exception unlike SetZ
-    pub def remove!(x: a, s: HashSet[a, r]): Bool \  Write(r) with Marshal[a] =
-        import java.util.HashSet.remove(##java.lang.Object): Bool \ r; 
-        let HashSet(s1) = s;
-        let x1 = Interop/Flix/Marshal.toJavaObject(x);        
-        remove(s1, x1)
+    /// Use Result - `s` could be null...
+    pub def remove!(x: a, s: HashSet[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+        try {
+            import java.util.HashSet.remove(##java.lang.Object): Bool \ r; 
+            let HashSet(s1) = s;
+            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            remove(s1, x1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
         
+
+    pub def removeAll!(c: Collection[a, r], s: HashSet[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+        try {
+            import java.util.HashSet.removeAll(##java.util.Collection): Bool \ r; 
+            let HashSet(s1) = s;
+            let Collection(c1) = c;
+            removeAll(s1, c1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    
+    pub def removeIf!(f: a -> Bool \ ef, s: HashSet[a, r]): Result[Bool, String] \  {ef, Write(r)} with Marshal[a] =
+        try {
+            import java.util.HashSet.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
+            let HashSet(s1) = s;        
+            let f1 = Interop/Util/Function/Predicate.makePredicate(f);
+            (removeIf(s1, f1) as \  {ef, Write(r)}) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def retainAll!(c: Collection[a, r], s: HashSet[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+        try {
+            import java.util.HashSet.retainAll(##java.util.Collection): Bool \ r; 
+            let HashSet(s1) = s;
+            let Collection(c1) = c;
+            retainAll(s1, c1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
     pub def fromFoldable(r: Region[r], t: t[a]): HashSet[a, r] \ Write(r) with Foldable[t], Marshal[a] =
         let set1 = new(r);

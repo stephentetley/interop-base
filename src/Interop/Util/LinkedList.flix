@@ -196,6 +196,21 @@ namespace Interop/Util/LinkedList {
                 Err(getMessage(ex))
         }
 
+
+    pub def forEach(f: a -> Unit \ ef, l: LinkedList[a, r]): Result[Unit, String] \  {ef, Read(r)} with Marshal[a] =
+        try {
+            import java.util.LinkedList.forEach(##java.util.function.Consumer): Unit \ r; 
+            let LinkedList(l1) = l;
+            let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
+            forEach(l1, f1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+
+
     pub def fromIterable[a: Type, t: Type -> Region -> Type, r: Region, r2: Region]
                         (r: Region[r2], t: t[a, r]): LinkedList[a, r2] \ { Read(r), Write(r2) } with Iterable[t], Marshal[a] =
         let als = new(r);

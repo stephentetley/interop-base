@@ -213,6 +213,18 @@ namespace Interop/Util/ListZ {
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
+    
+    pub def removeIf!(f: a -> Bool \ ef, l: ListZ[a, r]): Result[Bool, String] \  {ef, Write(r)} with Marshal[a] =
+        try {
+            import java.util.List.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
+            let ListZ(l1) = l;        
+            let f1 = Interop/Util/Function/Predicate.makePredicate(f);
+            (removeIf(l1, f1) as \  {ef, Write(r)}) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
     pub def retainAll!(c: Collection[a, r], l: ListZ[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
         try {
@@ -220,6 +232,18 @@ namespace Interop/Util/ListZ {
             let ListZ(l1) = l;
             let Collection(c1) = c;
             retainAll(l1, c1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def forEach(f: a -> Unit \ ef, l: ListZ[a, r]): Result[Unit, String] \  {ef, Read(r)} with Marshal[a] =
+        try {
+            import java.util.List.forEach(##java.util.function.Consumer): Unit \ r; 
+            let ListZ(l1) = l;
+            let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
+            forEach(l1, f1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
