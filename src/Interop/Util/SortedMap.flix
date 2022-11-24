@@ -41,13 +41,15 @@ namespace Interop/Util {
 
 namespace Interop/Util/SortedMap {
 
-    use Interop/Util.SortedMap;
-    use Interop/Util.SortedMap.{SortedMap};
-    use Interop/Util/Map.Entry;
-    use Interop/Util/Map.Entry.{Entry};
-    use Interop/Util.SetZ;
-    use Interop/Util.SetZ.{SetZ};
-    use Interop/Flix.Marshal;
+    use Interop/Util.SortedMap
+    use Interop/Util.SortedMap.{SortedMap}
+    use Interop/Util/Map.Entry
+    use Interop/Util/Map.Entry.{Entry}
+    use Interop/Util.Collection
+    use Interop/Util.Collection.{Collection}
+    use Interop/Util.SetZ
+    use Interop/Util.SetZ.{SetZ}
+    use Interop/Flix.Marshal
 
 
     pub def getHH(m: SortedMap[k, v, r]): ##java.util.SortedMap = 
@@ -58,8 +60,47 @@ namespace Interop/Util/SortedMap {
         SortedMap(prim)
         
 
+    pub def equals(m1: SortedMap[k, v, r], m2: SortedMap[k, v, r]): Bool \ Read(r) =
+        import java.util.SortedMap.equals(##java.lang.Object): Bool \ r; 
+        let SortedMap(jm1) = m1;
+        let SortedMap(jm2) = m2;
+        equals(jm1, jm2 as ##java.lang.Object)
 
-    /// Can't guaranteed `Ord[k]` at this point...
+    pub def size(m: SortedMap[k, v, r]): Int32 \ Read(r) =
+        import java.util.SortedMap.size(): Int32 \ r;
+        let SortedMap(m1) = m;
+        size(m1)
+
+    pub def isEmpty(m: SortedMap[k, v, r]): Bool \ Read(r) =
+        import java.util.SortedMap.isEmpty(): Bool \ r;
+        let SortedMap(m1) = m;
+        isEmpty(m1)
+
+    pub def hashCode(m: SortedMap[k, v, r]): Int32 \ Read(r) =
+        import java.util.SortedMap.hashCode(): Int32 \ r;
+        let SortedMap(m1) = m;
+        hashCode(m1)
+
+    pub def get(k: k, m: SortedMap[k, v, r]): Result[Option[v], String] \ Write(r) with Marshal[k], Marshal[v] =
+        try {
+            import java.util.SortedMap.get(##java.lang.Object): ##java.lang.Object \ r; 
+            let SortedMap(m1) = m;
+            let k1 = Interop/Flix/Marshal.toJavaObject(k);
+            get(m1, k1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def put!(k: k, v: v, m: SortedMap[k, v, r]): v \ Write(r) with Marshal[k], Marshal[v] =
+        import java.util.SortedMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
+        let SortedMap(m1) = m;
+        let k1 = Interop/Flix/Marshal.toJavaObject(k);
+        let v1 = Interop/Flix/Marshal.toJavaObject(v);
+        put(m1, k1, v1) |> Interop/Flix/Marshal.fromJavaObject
+
+    /// Can't guarantee `Ord[k]` at this point...
     pub def entrySet(m: SortedMap[k, v, r]): SetZ[Entry[k, v, r], r] \ {Write(r)}= 
         import java.util.SortedMap.entrySet(): ##java.util.Set \ Write(r);
         let SortedMap(m1) = m;
@@ -67,6 +108,10 @@ namespace Interop/Util/SortedMap {
         SetZ(sz)
 
 
+    pub def values(m: SortedMap[k, v, r]): Collection[k, r] \ {Write(r)}= 
+        import java.util.SortedMap.values(): ##java.util.Collection \ Write(r);
+        let SortedMap(m1) = m;
+        values(m1) |> Collection
 
 
     pub def foldMap(f: (b, (k, v)) -> b & ef, s: b, m: SortedMap[k, v, r]): b \ { Read(r), ef} with Order[k], Marshal[k], Marshal[v] = 

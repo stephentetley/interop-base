@@ -106,7 +106,7 @@ namespace Interop/Util/SetZ {
         of(eo1, eo2, eo3, eo4, eo5) |> SetZ
 
 
-    pub def equals(s1: SetZ[a, r], s2: SetZ[a, r]): Bool \  Read(r) with Marshal[a] =
+    pub def equals(s1: SetZ[a, r], s2: SetZ[a, r]): Bool \ Read(r) =
         import java.util.Set.equals(##java.lang.Object): Bool \ r; 
         let SetZ(js1) = s1;
         let SetZ(js2) = s2;

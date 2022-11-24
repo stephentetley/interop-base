@@ -69,9 +69,9 @@ namespace Interop/Lang/CharSequence {
         Interop/Lang/ImpCharSequence.toCharSequence(cseq) |> getHH
 
 
-    pub def length[r: Region, t: Region -> Type](ss: t[r]): Int32 \ Read(r) with ImpCharSequence[t] = 
+    pub def length(cs: CharSequence[r]): Int32 \ Read(r) = 
         import java.lang.CharSequence.length(): Int32 & r;
-        let CharSequence(ss1) = Interop/Lang/ImpCharSequence.toCharSequence(ss);
-        length(ss1)
+        let CharSequence(cs1) = cs;
+        length(cs1)
 
 }

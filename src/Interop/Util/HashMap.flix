@@ -49,6 +49,8 @@ namespace Interop/Util/HashMap {
     use Interop/Util.HashMap.{HashMap}
     use Interop/Util.ImpMapZ
     use Interop/Util/Map.Entry
+    use Interop/Util.Collection
+    use Interop/Util.Collection.{Collection}
     use Interop/Util.SetZ
     use Interop/Util.SetZ.{SetZ}
     use Interop/Flix.Marshal
@@ -69,7 +71,40 @@ namespace Interop/Util/HashMap {
         newHashMap() |> HashMap
 
 
-    pub def put!(k: k, v: v, m: HashMap[k, v, r]): v \  Write(r) with Marshal[k], Marshal[v] =
+    pub def equals(m1: HashMap[k, v, r], m2: HashMap[k, v, r]): Bool \ Read(r) =
+        import java.util.HashMap.equals(##java.lang.Object): Bool \ r; 
+        let HashMap(jm1) = m1;
+        let HashMap(jm2) = m2;
+        equals(jm1, jm2 as ##java.lang.Object)
+
+    pub def size(m: HashMap[k, v, r]): Int32 \ Read(r) =
+        import java.util.HashMap.size(): Int32 \ r;
+        let HashMap(m1) = m;
+        size(m1)
+
+    pub def isEmpty(m: HashMap[k, v, r]): Bool \ Write(r) =
+        import java.util.HashMap.isEmpty(): Bool \ r; 
+        let HashMap(m1) = m;
+        isEmpty(m1)
+
+    pub def hashCode(m: HashMap[k, v, r]): Int32 \ Read(r) =
+        import java.util.HashMap.hashCode(): Int32 \ r;
+        let HashMap(m1) = m;
+        hashCode(m1)
+
+    pub def get(k: k, m: HashMap[k, v, r]): Result[Option[v], String] \ Write(r) with Marshal[k], Marshal[v] =
+        try {
+            import java.util.HashMap.get(##java.lang.Object): ##java.lang.Object \ r; 
+            let HashMap(m1) = m;
+            let k1 = Interop/Flix/Marshal.toJavaObject(k);
+            get(m1, k1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def put!(k: k, v: v, m: HashMap[k, v, r]): v \ Write(r) with Marshal[k], Marshal[v] =
         import java.util.HashMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
         let HashMap(m1) = m;
         let k1 = Interop/Flix/Marshal.toJavaObject(k);
@@ -97,15 +132,17 @@ namespace Interop/Util/HashMap {
         let HashMap(m1) = m;
         entrySet(m1) |> SetZ
 
-    pub def isEmpty(m: HashMap[k, v, r]): Bool \ Write(r) =
-        import java.util.HashMap.isEmpty(): Bool \ r; 
-        let HashMap(m1) = m;
-        isEmpty(m1)
 
     pub def keySet(m: HashMap[k, v, r]): SetZ[k, r] \ {Write(r)}= 
         import java.util.HashMap.keySet(): ##java.util.Set \ Write(r);
         let HashMap(m1) = m;
         keySet(m1) |> SetZ
+
+    pub def values(m: HashMap[k, v, r]): Collection[k, r] \ {Write(r)}= 
+        import java.util.HashMap.values(): ##java.util.Collection \ Write(r);
+        let HashMap(m1) = m;
+        values(m1) |> Collection
+
 
     pub def remove!(k: k, m: HashMap[k, v, r]): Option[v] \  Write(r) with Marshal[k], Marshal[v] =
         import java.util.HashMap.remove(##java.lang.Object): ##java.lang.Object \ r; 
@@ -118,7 +155,6 @@ namespace Interop/Util/HashMap {
         let map1 = new(r);
         Map.forEach((k, v) -> discard put!(k, v, map1), t);
         map1
-
 
 
     pub def fromFoldable(r: Region[r], t: t[(k, v)]): HashMap[k, v, r] \ Write(r) with Foldable[t], Marshal[k], Marshal[v] =
