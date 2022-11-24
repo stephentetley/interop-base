@@ -56,9 +56,11 @@ namespace Interop/Util {
 
 namespace Interop/Util/ArrayList {
 
-    use Interop/Util.ArrayList;
-    use Interop/Util.ArrayList.{ArrayList};
-    use Interop/Util.ImpCollection;
+    use Interop/Util.ArrayList
+    use Interop/Util.ArrayList.{ArrayList}
+    use Interop/Util.Collection
+    use Interop/Util.Collection.{Collection}
+    use Interop/Util.ImpCollection
     use Interop/Flix.Marshal;
 
     
@@ -69,33 +71,12 @@ namespace Interop/Util/ArrayList {
     pub def wrapHH(_: Region[r], prim: ##java.util.ArrayList): ArrayList[a, r] =
         ArrayList(prim)
 
-
-
-
     ///
     /// Returns a new mutable ArrayList.
     ///
     pub def new(_: Region[r]): ArrayList[a, r] \ Write(r) =
         import new java.util.ArrayList(): ##java.util.ArrayList & r as newArrayList;
         ArrayList(newArrayList())
-
-
-    pub def fromIterable[a: Type, t: Type -> Region -> Type, r: Region, r2: Region]
-                        (r: Region[r2], t: t[a, r]): ArrayList[a, r2] \ { Read(r), Write(r2) } with Iterable[t], Marshal[a] =
-        let als = new(r);
-        let iter1 = Iterable.iterator(t);
-        Iterator.forEach(x -> discard add!(x, als), iter1);
-        als
-
-    pub def fromFoldable(r: Region[r], t: t[a]): ArrayList[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
-        let als = new(r);
-        Foldable.forEach(x -> discard add!(x, als), t);
-        als
-
-    pub def fromFoldableWith(r: Region[r], ocast: a -> ##java.lang.Object, t: t[a]): ArrayList[a, r] \ { Write(r) } with Foldable[t] =
-        let als = new(r);
-        Foldable.forEach(x -> discard addWith!(x, ocast, als), t);
-        als
 
 
     pub def length(arr: ArrayList[a, r]): Int32 \ Read(r) = 
@@ -114,24 +95,41 @@ namespace Interop/Util/ArrayList {
         let ArrayList(arr1) = arr;
         add(arr1, Interop/Flix/Marshal.toJavaObject(x))
 
-    pub def addWith!(x: a, ocast: a -> ##java.lang.Object, arr: ArrayList[a, r]): Bool \ { Write(r) } = 
+    pub def addWith!(x: a, ocast: a -> ##java.lang.Object, arr: ArrayList[a, r]): Bool \ Write(r) = 
         import java.util.ArrayList.add(##java.lang.Object): Bool & r;
         let ArrayList(arr1) = arr;
         add(arr1, ocast(x))
 
-    pub def addAll![t: Type -> Region -> Type, r: Region, a: Type]
-                    (col: t[a, r], arr: ArrayList[a, r]): Result[Bool, String] \ { Write(r) } with ImpCollection[t] = 
+    pub def addAll!(c: Collection[a, r], l: ArrayList[a, r]): Result[Bool, String] \ Write(r) = 
         try { 
             import java.util.ArrayList.addAll(##java.util.Collection): Bool & r;
-            let ArrayList(arr1) = arr;
-            let col1 = Interop/Util/Collection.toCollectionHH(col);
-            addAll(arr1, col1) |> Ok 
+            let ArrayList(l1) = l;
+            let Collection(c1) = c;
+            addAll(l1, c1) |> Ok 
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
         
+
+
+    pub def fromIterable[a: Type, t: Type -> Region -> Type, r: Region, r2: Region]
+                        (r: Region[r2], t: t[a, r]): ArrayList[a, r2] \ { Read(r), Write(r2) } with Iterable[t], Marshal[a] =
+        let als = new(r);
+        let iter1 = Iterable.iterator(t);
+        Iterator.forEach(x -> discard add!(x, als), iter1);
+        als
+
+    pub def fromFoldable(r: Region[r], t: t[a]): ArrayList[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
+        let als = new(r);
+        Foldable.forEach(x -> discard add!(x, als), t);
+        als
+
+    pub def fromFoldableWith(r: Region[r], ocast: a -> ##java.lang.Object, t: t[a]): ArrayList[a, r] \ { Write(r) } with Foldable[t] =
+        let als = new(r);
+        Foldable.forEach(x -> discard addWith!(x, ocast, als), t);
+        als
 
 
     ///

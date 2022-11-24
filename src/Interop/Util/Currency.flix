@@ -41,11 +41,12 @@ namespace Interop/Util {
 
 namespace Interop/Util/Currency {
     
-    use Interop/Util.Currency;
-    use Interop/Util.Currency.{Currency};
-    use Interop/Util.Locale;
-    use Interop/Util.Locale.{Locale};
-    use Interop/Flix.Marshal;
+    use Interop/Util.Currency
+    use Interop/Util.Currency.{Currency}
+    use Interop/Util.Locale
+    use Interop/Util.Locale.{Locale}
+    use Interop/Util.SetZ
+    use Interop/Flix.Marshal
 
     pub def getHH(o: Currency): ##java.util.Currency = 
         let Currency(o1) = o;
@@ -59,15 +60,10 @@ namespace Interop/Util/Currency {
         toString(x1)
 
 
-    pub def getAvailableCurrencies(): Result[List[Currency], String] \ IO = region r {
+    pub def getAvailableCurrencies(r: Region[r]): SetZ[Currency, r] \ IO =
         import static java.util.Currency.getAvailableCurrencies(): ##java.util.Set \ IO ;
-        let s1 = getAvailableCurrencies() |> Interop/Util/SetZ.wrapHH(r);
-        let arr1 = Interop/Util/ArrayList.new(r);
-        match Interop/Util/ArrayList.addAll!(s1, arr1) {
-            case Ok(_)    => arr1 |> Interop/Util/ArrayList.toFlixList |> Ok
-            case Err(msg) => Err(msg)
-        }
-    }
+        getAvailableCurrencies() |> Interop/Util/SetZ.wrapHH(r)
+        
 
 
     pub def getCurrencyCode(cur: Currency): String = 

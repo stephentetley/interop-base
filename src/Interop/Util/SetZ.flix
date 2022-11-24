@@ -47,10 +47,12 @@ namespace Interop/Util {
 
 namespace Interop/Util/SetZ {
 
-    use Interop/Util.SetZ;
-    use Interop/Util.SetZ.{SetZ};
-    use Interop/Util.ImpSetZ;
-    use Interop/Flix.Marshal;
+    use Interop/Util.SetZ
+    use Interop/Util.SetZ.{SetZ}
+    use Interop/Util.Collection
+    use Interop/Util.Collection.{Collection}
+    use Interop/Util.ImpSetZ
+    use Interop/Flix.Marshal
 
 
     pub def getHH(m: SetZ[a, r]): ##java.util.Set = 
@@ -64,6 +66,56 @@ namespace Interop/Util/SetZ {
     pub def toSetHH[t: Type -> Region -> Type, a: Type, r: Region](s: t[a, r]): ##java.util.Set with ImpSetZ[t] = 
         Interop/Util/ImpSetZ.toSetZ(s) |> getHH
 
+    pub def of0(_: Region[r]): SetZ[a, r] \ Write(r) with Marshal[a] =
+        import static java.util.Set.of(): ##java.util.Set \ r;
+        of() |> SetZ
+
+    pub def of1(_: Region[r], e1: a): SetZ[a, r] \ Write(r) with Marshal[a] =
+        import static java.util.Set.of(##java.lang.Object): ##java.util.Set \ r;
+        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
+        of(eo1) |> SetZ
+
+    pub def of2(_: Region[r], e1: a, e2: a): SetZ[a, r] \ Write(r) with Marshal[a] =
+        import static java.util.Set.of(##java.lang.Object, ##java.lang.Object): ##java.util.Set \ r;
+        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
+        let eo2 = Interop/Flix/Marshal.toJavaObject(e2);
+        of(eo1, eo2) |> SetZ
+
+    pub def of3(_: Region[r], e1: a, e2: a, e3: a): SetZ[a, r] \ Write(r) with Marshal[a] =
+        import static java.util.Set.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Set \ r;
+        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
+        let eo2 = Interop/Flix/Marshal.toJavaObject(e2);
+        let eo3 = Interop/Flix/Marshal.toJavaObject(e3);
+        of(eo1, eo2, eo3) |> SetZ
+
+    pub def of4(_: Region[r], e1: a, e2: a, e3: a, e4: a): SetZ[a, r] \ Write(r) with Marshal[a] =
+        import static java.util.Set.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Set \ r;
+        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
+        let eo2 = Interop/Flix/Marshal.toJavaObject(e2);
+        let eo3 = Interop/Flix/Marshal.toJavaObject(e3);
+        let eo4 = Interop/Flix/Marshal.toJavaObject(e4);
+        of(eo1, eo2, eo3, eo4) |> SetZ
+
+    pub def of5(_: Region[r], e1: a, e2: a, e3: a, e4: a, e5: a): SetZ[a, r] \ Write(r) with Marshal[a] =
+        import static java.util.Set.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Set \ r;
+        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
+        let eo2 = Interop/Flix/Marshal.toJavaObject(e2);
+        let eo3 = Interop/Flix/Marshal.toJavaObject(e3);
+        let eo4 = Interop/Flix/Marshal.toJavaObject(e4);
+        let eo5 = Interop/Flix/Marshal.toJavaObject(e5);
+        of(eo1, eo2, eo3, eo4, eo5) |> SetZ
+
+    pub def equals(s1: SetZ[a, r], s2: SetZ[a, r]): Bool \  Read(r) with Marshal[a] =
+        import java.util.Set.equals(##java.lang.Object): Bool \ r; 
+        let SetZ(js1) = s1;
+        let SetZ(js2) = s2;
+        equals(js1, js2 as ##java.lang.Object)
+
+
+    pub def hashCode(s: SetZ[a, r]): Int32 \ Read(r) = 
+        import java.util.Set.hashCode(): Int32 \ r;
+        let SetZ(s1) = s;
+        hashCode(s1)
 
     pub def isEmpty(s: SetZ[a, r]): Bool \ Read(r) = 
         import java.util.Set.isEmpty(): Bool \ r;
@@ -75,11 +127,64 @@ namespace Interop/Util/SetZ {
         let SetZ(s1) = s;
         size(s1)
 
-    pub def clear!(s: SetZ[a, r]): Unit \ Read(r) = 
-        import java.util.Set.clear(): Unit \ r;
-        let SetZ(s1) = s;
-        clear(s1)
+    pub def add!(x: a, s: SetZ[a, r]): Result[Bool, String] \  Read(r) with Marshal[a] =
+        try {
+            import java.util.Set.add(##java.lang.Object): Bool \ r; 
+            let SetZ(s1) = s;
+            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            add(s1, x1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
+    pub def addAll!(c: Collection[a, r], s: SetZ[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+        try {
+            import java.util.Set.addAll(##java.util.Collection): Bool \ r; 
+            let SetZ(s1) = s;
+            let Collection(c1) = c;
+            addAll(s1, c1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def contains(x: a, s: SetZ[a, r]): Result[Bool, String] \  Read(r) with Marshal[a] =
+        try {
+            import java.util.Set.contains(##java.lang.Object): Bool \ r; 
+            let SetZ(s1) = s;
+            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            contains(s1, x1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def containsAll(c: Collection[a, r], s: SetZ[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+        try {
+            import java.util.Set.containsAll(##java.util.Collection): Bool \ r; 
+            let SetZ(s1) = s;
+            let Collection(c1) = c;
+            containsAll(s1, c1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def clear!(s: SetZ[a, r]): Result[Unit, String] \ Read(r) = 
+        try {
+            import java.util.Set.clear(): Unit \ r;
+            let SetZ(s1) = s;
+            clear(s1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
     pub def remove!(x: a, s: SetZ[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
         try {
@@ -87,6 +192,30 @@ namespace Interop/Util/SetZ {
             let SetZ(s1) = s;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
             remove(s1, x1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def removeAll!(c: Collection[a, r], s: SetZ[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+        try {
+            import java.util.Set.removeAll(##java.util.Collection): Bool \ r; 
+            let SetZ(s1) = s;
+            let Collection(c1) = c;
+            removeAll(s1, c1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def retainAll!(c: Collection[a, r], s: SetZ[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+        try {
+            import java.util.Set.retainAll(##java.util.Collection): Bool \ r; 
+            let SetZ(s1) = s;
+            let Collection(c1) = c;
+            retainAll(s1, c1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};

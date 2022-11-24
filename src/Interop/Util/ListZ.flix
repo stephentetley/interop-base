@@ -49,10 +49,12 @@ namespace Interop/Util {
 
 namespace Interop/Util/ListZ {
 
-    use Interop/Util.ListZ;
-    use Interop/Util.ListZ.{ListZ};
-    use Interop/Util.ImpListZ;
-    use Interop/Flix.Marshal;
+    use Interop/Util.ListZ
+    use Interop/Util.ListZ.{ListZ}
+    use Interop/Util.Collection
+    use Interop/Util.Collection.{Collection}
+    use Interop/Util.ImpListZ
+    use Interop/Flix.Marshal
 
 
     pub def getHH(m: ListZ[a, r]): ##java.util.List = 
@@ -67,6 +69,162 @@ namespace Interop/Util/ListZ {
         Interop/Util/ImpListZ.toListZ(list) |> getHH
 
 
+    pub def of0(_: Region[r]): ListZ[a, r] \ Write(r) with Marshal[a] =
+        import static java.util.List.of(): ##java.util.List \ r;
+        of() |> ListZ
+
+    pub def of1(_: Region[r], e1: a): ListZ[a, r] \ Write(r) with Marshal[a] =
+        import static java.util.List.of(##java.lang.Object): ##java.util.List \ r;
+        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
+        of(eo1) |> ListZ
+
+    pub def of2(_: Region[r], e1: a, e2: a): ListZ[a, r] \ Write(r) with Marshal[a] =
+        import static java.util.List.of(##java.lang.Object, ##java.lang.Object): ##java.util.List \ r;
+        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
+        let eo2 = Interop/Flix/Marshal.toJavaObject(e2);
+        of(eo1, eo2) |> ListZ
+
+    pub def of3(_: Region[r], e1: a, e2: a, e3: a): ListZ[a, r] \ Write(r) with Marshal[a] =
+        import static java.util.List.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.List \ r;
+        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
+        let eo2 = Interop/Flix/Marshal.toJavaObject(e2);
+        let eo3 = Interop/Flix/Marshal.toJavaObject(e3);
+        of(eo1, eo2, eo3) |> ListZ
+
+    pub def of4(_: Region[r], e1: a, e2: a, e3: a, e4: a): ListZ[a, r] \ Write(r) with Marshal[a] =
+        import static java.util.List.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.List \ r;
+        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
+        let eo2 = Interop/Flix/Marshal.toJavaObject(e2);
+        let eo3 = Interop/Flix/Marshal.toJavaObject(e3);
+        let eo4 = Interop/Flix/Marshal.toJavaObject(e4);
+        of(eo1, eo2, eo3, eo4) |> ListZ
+
+    pub def of5(_: Region[r], e1: a, e2: a, e3: a, e4: a, e5: a): ListZ[a, r] \ Write(r) with Marshal[a] =
+        import static java.util.List.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.List \ r;
+        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
+        let eo2 = Interop/Flix/Marshal.toJavaObject(e2);
+        let eo3 = Interop/Flix/Marshal.toJavaObject(e3);
+        let eo4 = Interop/Flix/Marshal.toJavaObject(e4);
+        let eo5 = Interop/Flix/Marshal.toJavaObject(e5);
+        of(eo1, eo2, eo3, eo4, eo5) |> ListZ
+
+    pub def equals(l1: ListZ[a, r], l2: ListZ[a, r]): Bool \  Read(r) with Marshal[a] =
+        import java.util.List.equals(##java.lang.Object): Bool \ r; 
+        let ListZ(jl1) = l1;
+        let ListZ(jl2) = l2;
+        equals(jl1, jl2 as ##java.lang.Object)
+
+
+    pub def hashCode(l: ListZ[a, r]): Int32 \ Read(r) = 
+        import java.util.List.hashCode(): Int32 \ r;
+        let ListZ(l1) = l;
+        hashCode(l1)
+
+    pub def isEmpty(l: ListZ[a, r]): Bool \ Read(r) = 
+        import java.util.List.isEmpty(): Bool \ r;
+        let ListZ(l1) = l;
+        isEmpty(l1)
+
+    pub def size(l: ListZ[a, r]): Int32 \ Read(r) = 
+        import java.util.List.size(): Int32 \ r;
+        let ListZ(l1) = l;
+        size(l1)
+
+    pub def add!(x: a, l: ListZ[a, r]): Result[Bool, String] \ Write(r) with Marshal[a] =
+        try {
+            import java.util.List.add(##java.lang.Object): Bool \ r;
+            let ListZ(l1) = l;
+            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            add(l1, x1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def addAll!(c: Collection[a, r], l: ListZ[a, r]): Result[Bool, String] \ Write(r) with Marshal[a] =
+        try {
+            import java.util.List.addAll(##java.util.Collection): Bool \ r; 
+            let ListZ(l1) = l;
+            let Collection(c1) = c;
+            addAll(l1, c1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def contains(x: a, l: ListZ[a, r]): Result[Bool, String] \  Read(r) with Marshal[a] =
+        try {
+            import java.util.List.contains(##java.lang.Object): Bool \ r; 
+            let ListZ(l1) = l;
+            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            contains(l1, x1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def containsAll(c: Collection[a, r], l: ListZ[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+        try {
+            import java.util.List.containsAll(##java.util.Collection): Bool \ r; 
+            let ListZ(l1) = l;
+            let Collection(c1) = c;
+            containsAll(l1, c1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def clear!(l: ListZ[a, r]): Result[Unit, String] \ Read(r) = 
+        try {
+            import java.util.List.clear(): Unit \ r;
+            let ListZ(l1) = l;
+            clear(l1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+
+    pub def remove!(x: a, l: ListZ[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+        try {
+            import java.util.List.remove(##java.lang.Object): Bool \ r; 
+            let ListZ(l1) = l;
+            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            remove(l1, x1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def removeAll!(c: Collection[a, r], l: ListZ[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+        try {
+            import java.util.List.removeAll(##java.util.Collection): Bool \ r; 
+            let ListZ(l1) = l;
+            let Collection(c1) = c;
+            removeAll(l1, c1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def retainAll!(c: Collection[a, r], l: ListZ[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+        try {
+            import java.util.List.retainAll(##java.util.Collection): Bool \ r; 
+            let ListZ(l1) = l;
+            let Collection(c1) = c;
+            retainAll(l1, c1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
     ///
     /// Returns an iterator over `l`.

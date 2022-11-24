@@ -123,7 +123,7 @@ namespace Interop/Util/Stream/Stream {
         let p1 = Interop/Util/Function/Predicate.makePredicate(p);
         dropWhile(s1, p1) |> Stream
 
-    pub def map(f: a -> b \ ef, s: Stream[a, r]): Stream[a, r] \ {Write(r), ef} with Marshal[a], Marshal[b] = 
+    pub def map(f: a -> b \ ef, s: Stream[a, r]): Stream[b, r] \ {Write(r), ef} with Marshal[a], Marshal[b] = 
         import java.util.stream.Stream.map(Function[a, b]): ##java.util.stream.Stream \ {r, ef};
         let Stream(s1) = s;
         let f1 = Interop/Util/Function/Function.makeFunction(f);
@@ -148,7 +148,7 @@ namespace Interop/Util/Stream/Stream {
         let Stream(s1) = s;
         toArray(s1)
 
-    pub def anyMatch(f: Int64 -> Bool \ ef, s: Stream[a, r]): Bool \ {Read(r), ef} with Marshal[a] = 
+    pub def anyMatch(f: a -> Bool \ ef, s: Stream[a, r]): Bool \ {Read(r), ef} with Marshal[a] = 
         import java.util.stream.Stream.anyMatch(Predicate[a]): Bool \ {r, ef};
         let Stream(s1) = s;
         let f1 = Interop/Util/Function/Predicate.makePredicate(f);
