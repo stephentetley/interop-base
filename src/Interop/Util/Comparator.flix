@@ -19,6 +19,8 @@ namespace Interop/Util {
     ///
     /// Represents a Java Comparator.
     ///
+    /// Functional interface
+    ///
     pub type alias Comparator[_: Type] = ##java.util.Comparator
 
 
@@ -42,6 +44,14 @@ namespace Interop/Util/Comparator {
                 f1(t, u)
         } as \ ef
 
+    pub def naturalOrder(): Comparator[a] = 
+        import static java.util.Comparator.naturalOrder(): ##java.util.Comparator \ {}; 
+        naturalOrder()
+
+    
+    pub def reverseOrder(): Comparator[a] = 
+        import static java.util.Comparator.reverseOrder(): ##java.util.Comparator \ {}; 
+        reverseOrder()
 
 
 }

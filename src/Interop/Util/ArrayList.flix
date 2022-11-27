@@ -239,7 +239,12 @@ namespace Interop/Util/ArrayList {
         }
 
 
-    pub def sort!(c: Comparator[a], l: ArrayList[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
+    pub def sort!(f: (a, a) -> Int32, l: ArrayList[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
+        let f1 = Interop/Util/Comparator.makeComparator(f);
+        sortWithComparator!(f1, l)
+
+
+    pub def sortWithComparator!(c: Comparator[a], l: ArrayList[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
         try {
             import java.util.ArrayList.sort(##java.util.Comparator): Unit \ r; 
             let ArrayList(l1) = l;
