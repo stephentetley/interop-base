@@ -46,6 +46,7 @@ namespace Interop/Util/Vector {
 
     use Interop/Util.Vector;
     use Interop/Util.Vector.{Vector};
+    use Interop/Util.Comparator;
     use Interop/Flix.Marshal;
 
 
@@ -57,11 +58,56 @@ namespace Interop/Util/Vector {
         Vector(prim)
 
 
+    ///
+    /// Returns a new mutable ArrayList.
+    ///
+    pub def new(_: Region[r]): Vector[a, r] \ Write(r) =
+        import new java.util.Vector(): ##java.util.Vector \ r as newVector;
+        Vector(newVector())
+
+    pub def equals(v1: Vector[a, r], v2: Vector[a, r]): Bool \  Read(r) with Marshal[a] =
+        import java.util.Vector.equals(##java.lang.Object): Bool \ r; 
+        let Vector(jv1) = v1;
+        let Vector(jv2) = v2;
+        equals(jv1, jv2 as ##java.lang.Object)
+
+
+    pub def hashCode(v: Vector[a, r]): Int32 \ Read(r) = 
+        import java.util.Vector.hashCode(): Int32 \ r;
+        let Vector(v1) = v;
+        hashCode(v1)
+
+    pub def isEmpty(v: Vector[a, r]): Bool \ Read(r) = 
+        import java.util.Vector.isEmpty(): Bool \ r;
+        let Vector(v1) = v;
+        isEmpty(v1)
+
+    pub def size(v: Vector[a, r]): Int32 \ Read(r) = 
+        import java.util.Vector.size(): Int32 \ r;
+        let Vector(v1) = v;
+        size(v1)
 
     pub def add!(x: a, v: Vector[a, r]): Bool \ { Write(r) } with Marshal[a] = 
         import java.util.Vector.add(##java.lang.Object): Bool & r;
         let Vector(v1) = v;
         add(v1, Interop/Flix/Marshal.toJavaObject(x))
+
+
+    pub def sort!(f: (a, a) -> Int32, v: Vector[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
+        let f1 = Interop/Util/Comparator.makeComparator(f);
+        sortWithComparator!(f1, v)
+
+
+    pub def sortWithComparator!(c: Comparator[a], v: Vector[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
+        try {
+            import java.util.Vector.sort(##java.util.Comparator): Unit \ r; 
+            let Vector(v1) = v;
+            sort(v1, c) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
 
     ///

@@ -44,6 +44,19 @@ namespace Interop/Util/Function/BiConsumer {
         } as \ ef
 
 
+    pub def makeBiConsumer2(f: (a, b) -> Unit \ ef, 
+                            castToA: ##java.lang.Object -> a,
+                            castToB: ##java.lang.Object -> b): BiConsumer[a, b] \ ef = 
+        let f1 = (o1, o2) -> {
+            let a = castToA(o1); 
+            let b = castToB(o2);
+            f(a, b)
+        };
+        new ##java.util.function.BiConsumer {
+            def accept(_this: ##java.util.function.BiConsumer, t: ##java.lang.Object, u: ##java.lang.Object): Unit = 
+                f1(t, u)
+        } as \ ef
+
         
     pub def accept(t: a, u: b, f: BiConsumer[a, b]): Unit \ ef with Marshal[a], Marshal[b] = 
         import java.util.function.BiConsumer.accept(##java.lang.Object, ##java.lang.Object): Unit \ ef;

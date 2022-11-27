@@ -33,6 +33,7 @@ namespace Interop/Util/Stream/Stream {
     
     use Interop/Util/Stream.Stream
     use Interop/Util/Stream.Stream.{Stream}
+    use Interop/Util/Stream.Collector
     use Interop/Util/Stream/Stream.Builder.{Builder}
     use Interop/Util/Function.Consumer
     use Interop/Util/Function.Function
@@ -61,6 +62,11 @@ namespace Interop/Util/Stream/Stream {
         import static java.util.stream.Stream.of(##java.lang.Object): ##java.util.stream.Stream \ r;
         let t1 = Interop/Flix/Marshal.toJavaObject(t);
         of(t1) |> Stream
+
+    pub def ofArray(_: Region[r], arr: Array[a, r2]): Stream[a, r] \ {Read(r2), Write(r)} with Marshal[a] = 
+        import static java.util.stream.Stream.of(Array[##java.lang.Object, r2]): ##java.util.stream.Stream \ r;
+        let arr1 = Array.map(Interop/Flix/Marshal.toJavaObject, arr);
+        of(arr1) |> Stream
 
     pub def ofNullable(_: Region[r], t: a): Stream[a, r] \ Write(r) with Marshal[a] = 
         import static java.util.stream.Stream.ofNullable(##java.lang.Object): ##java.util.stream.Stream \ r;
@@ -176,5 +182,16 @@ namespace Interop/Util/Stream/Stream {
         import java.util.stream.Stream.findAny(): ##java.util.Optional \ r;
         let Stream(s1) = s;
         findAny(s1) |> Interop/Util/Optional.hhToOption(Interop/Flix/Marshal.fromJavaObject)
+
+    pub def collect(c: Collector[t, a, ans], s: Stream[a, r]): ans \ Read(r) with Marshal[ans] = 
+        import java.util.stream.Stream.collect(##java.util.stream.Collector): ##java.lang.Object \ r;
+        let Stream(s1) = s;
+        collect(s1, c) |> Interop/Flix/Marshal.fromJavaObject
+
+    pub def collectWith(c: Collector[t, a, ans], s: Stream[a, r], castObjToAns: ##java.lang.Object -> ans): ans \ Read(r) = 
+        import java.util.stream.Stream.collect(##java.util.stream.Collector): ##java.lang.Object \ r;
+        let Stream(s1) = s;
+        collect(s1, c) |> castObjToAns
+
 
 }

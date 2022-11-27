@@ -56,10 +56,10 @@ namespace Interop/Lang/ImpCharSequence {
 
 namespace Interop/Lang/CharSequence {
 
-    use Interop/Lang.CharSequence;
-    use Interop/Lang.CharSequence.{CharSequence};
+    use Interop/Lang.CharSequence
+    use Interop/Lang.CharSequence.{CharSequence}
 
-    use Interop/Lang.ImpCharSequence;
+    use Interop/Lang.ImpCharSequence
 
     pub def getHH(cs: CharSequence[r]): ##java.lang.CharSequence = 
         let CharSequence(cs1) = cs;

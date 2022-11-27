@@ -48,7 +48,19 @@ namespace Interop/Util/Function/BinaryOperator {
                 f1(t, u)
         } as \ ef
 
-        
+       
+    pub def makeBinaryOperator2(f: (a, a) -> a \ ef, castToObj: a -> ##java.lang.Object, castToA: ##java.lang.Object -> a): BinaryOperator[a] \ ef = 
+        let f1 = (o1, o2) -> {
+            let a = castToA(o1); 
+            let b = castToA(o2); 
+            let ans = f(a, b);
+            castToObj(ans)
+        };
+        new ##java.util.function.BinaryOperator {
+            def apply(_this: ##java.util.function.BinaryOperator, t: ##java.lang.Object, u: ##java.lang.Object): ##java.lang.Object = 
+                f1(t, u)
+        } as \ ef
+
     pub def apply(t: a, u: a, f: BinaryOperator[a]): a \ ef with Marshal[a] = 
         import java.util.function.BinaryOperator.apply(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ ef;        
         apply(f, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u)) |> Interop/Flix/Marshal.fromJavaObject

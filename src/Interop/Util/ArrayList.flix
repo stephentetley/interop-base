@@ -31,6 +31,16 @@ namespace Interop/Util {
         pub def regionOf(_: ArrayList[a, r]): Region[r] = () as Region[r]
     }
 
+    // instance Interop/Flix.Marshal[ArrayList[a, r]] {
+    //     pub def toJavaObject(x: ArrayList[a, r]): ##java.lang.Object =
+    //         let ArrayList(x1) = x;
+    //         x1 as ##java.lang.Object
+
+    //     pub def fromJavaObject(o: ##java.lang.Object): ArrayList[a, r] = 
+    //         Currency(o as ##java.util.Currency)
+    // }
+
+
     instance Interop/Util.ImpCollection[ArrayList] {
         pub def toCollection(t: ArrayList[a, r]): Collection[a, r] = 
             let ArrayList(t1) = t;

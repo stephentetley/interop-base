@@ -53,6 +53,7 @@ namespace Interop/Util/ListZ {
     use Interop/Util.ListZ.{ListZ}
     use Interop/Util.Collection
     use Interop/Util.Collection.{Collection}
+    use Interop/Util.Comparator
     use Interop/Util.ImpListZ
     use Interop/Flix.Marshal
 
@@ -249,6 +250,24 @@ namespace Interop/Util/ListZ {
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
+
+
+    pub def sort!(f: (a, a) -> Int32, l: ListZ[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
+        let f1 = Interop/Util/Comparator.makeComparator(f);
+        sortWithComparator!(f1, l)
+
+
+    pub def sortWithComparator!(c: Comparator[a], l: ListZ[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
+        try {
+            import java.util.List.sort(##java.util.Comparator): Unit \ r; 
+            let ListZ(l1) = l;
+            sort(l1, c) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
 
     ///
     /// Returns an iterator over `l`.

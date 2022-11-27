@@ -32,10 +32,17 @@ namespace Interop/Util/Function/Supplier {
     use Interop/Util/Function.Supplier
     use Interop/Flix.Marshal
 
-    pub def makeSupplier(f: Unit -> a \ ef): Supplier[a] \ ef with Marshal[a]= 
+    pub def makeSupplier(f: Unit -> a \ ef): Supplier[a] \ ef with Marshal[a] = 
         new ##java.util.function.Supplier {
             def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 
                 f() |> Interop/Flix/Marshal.toJavaObject
+        } as \ ef
+
+
+    pub def makeSupplier2(f: Unit -> a \ ef, castToObj: a -> ##java.lang.Object): Supplier[a] \ ef = 
+        new ##java.util.function.Supplier {
+            def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 
+                f() |> castToObj
         } as \ ef
 
     pub def get(f: Supplier[a]): a \ ef with Marshal[a] = 

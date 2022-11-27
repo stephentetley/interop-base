@@ -60,6 +60,7 @@ namespace Interop/Util/LinkedList {
     use Interop/Util.LinkedList.{LinkedList}
     use Interop/Util.Collection
     use Interop/Util.Collection.{Collection}
+    use Interop/Util.Comparator
     use Interop/Util.ImpCollection
     use Interop/Flix.Marshal;
 
@@ -210,6 +211,21 @@ namespace Interop/Util/LinkedList {
         }
 
 
+    pub def sort!(f: (a, a) -> Int32, l: LinkedList[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
+        let f1 = Interop/Util/Comparator.makeComparator(f);
+        sortWithComparator!(f1, l)
+
+
+    pub def sortWithComparator!(c: Comparator[a], l: LinkedList[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
+        try {
+            import java.util.LinkedList.sort(##java.util.Comparator): Unit \ r; 
+            let LinkedList(l1) = l;
+            sort(l1, c) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
     pub def fromIterable[a: Type, t: Type -> Region -> Type, r: Region, r2: Region]
                         (r: Region[r2], t: t[a, r]): LinkedList[a, r2] \ { Read(r), Write(r2) } with Iterable[t], Marshal[a] =
