@@ -60,6 +60,7 @@ namespace Interop/Util/ArrayList {
     use Interop/Util.ArrayList.{ArrayList}
     use Interop/Util.Collection
     use Interop/Util.Collection.{Collection}
+    use Interop/Util.Comparator
     use Interop/Util.ImpCollection
     use Interop/Flix.Marshal;
 
@@ -77,6 +78,33 @@ namespace Interop/Util/ArrayList {
     pub def new(_: Region[r]): ArrayList[a, r] \ Write(r) =
         import new java.util.ArrayList(): ##java.util.ArrayList \ r as newArrayList;
         ArrayList(newArrayList())
+
+    ///
+    /// Returns a new mutable ArrayList.
+    ///
+    pub def newWithCapacity(_: Region[r], initialCapacity: Int32): Result[ArrayList[a, r], String] \ Write(r) =
+        try {
+            import new java.util.ArrayList(Int32): ##java.util.ArrayList \ r as newArrayList;
+            newArrayList(initialCapacity) |> ArrayList |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    ///
+    /// Returns a new mutable ArrayList.
+    ///
+    pub def newWithCollection(_: Region[r], c: Collection[a, r2]): Result[ArrayList[a, r], String] \ Write(r) =
+        try {
+            import new java.util.ArrayList(##java.util.Collection): ##java.util.ArrayList \ r as newArrayList;
+            let Collection(c1) = c;
+            newArrayList(c1) |> ArrayList |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
 
     pub def toString(l: ArrayList[a, r]): String \ Read(r) = 
@@ -204,6 +232,18 @@ namespace Interop/Util/ArrayList {
             let ArrayList(l1) = l;
             let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
             forEach(l1, f1) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+
+    pub def sort!(c: Comparator[a], l: ArrayList[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
+        try {
+            import java.util.ArrayList.sort(##java.util.Comparator): Unit \ r; 
+            let ArrayList(l1) = l;
+            sort(l1, c) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
