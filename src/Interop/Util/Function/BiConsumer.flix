@@ -30,6 +30,7 @@ namespace Interop/Util/Function/BiConsumer {
     
     use Interop/Util/Function.BiConsumer
     use Interop/Flix.Marshal
+    use Interop/Flix.MutMarshal
 
 
     pub def makeBiConsumer(f: (a, b) -> Unit \ ef): BiConsumer[a, b] \ ef with Marshal[a], Marshal[b] = 
@@ -37,6 +38,20 @@ namespace Interop/Util/Function/BiConsumer {
             let a = Interop/Flix/Marshal.fromJavaObject(o1); 
             let b = Interop/Flix/Marshal.fromJavaObject(o2);
             f(a, b)
+        };
+        new ##java.util.function.BiConsumer {
+            def accept(_this: ##java.util.function.BiConsumer, t: ##java.lang.Object, u: ##java.lang.Object): Unit = 
+                f1(t, u)
+        } as \ ef
+
+
+    /// Collector imposes arg order: collection * element
+    pub def makeAccumulator[a: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
+                            (r: Region[r], f: (t[a, r], a) -> Unit \ ef): BiConsumer[t[a, r], a] \ ef with Marshal[a], MutMarshal[t] = 
+        let f1 = (o1, o2) -> {
+            let t = Interop/Flix/MutMarshal.mmFromJavaObject(r, o1); 
+            let a = Interop/Flix/Marshal.fromJavaObject(o2);
+            f(t, a)
         };
         new ##java.util.function.BiConsumer {
             def accept(_this: ##java.util.function.BiConsumer, t: ##java.lang.Object, u: ##java.lang.Object): Unit = 

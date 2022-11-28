@@ -31,7 +31,7 @@ namespace Interop/Util/Function/Function {
     
     use Interop/Util/Function.Function
     use Interop/Flix.Marshal
-
+    use Interop/Flix.MutMarshal
 
 
     pub def makeFunction(f: a -> b \ ef): Function[a, b] \ ef with Marshal[a], Marshal[b] = 
@@ -39,6 +39,25 @@ namespace Interop/Util/Function/Function {
             let a = Interop/Flix/Marshal.fromJavaObject(obj); 
             let ans = f(a) as \ IO;
             Interop/Flix/Marshal.toJavaObject(ans) 
+        };
+        f1 as \ ef
+
+
+    pub def makeSummaryFinisher[a: Type, b: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
+                                (r: Region[r], f: t[a, r] -> b \ ef): Function[t[a, r], b] \ ef with MutMarshal[t], Marshal[b] = 
+        let f1 = obj -> {
+            let t1 = Interop/Flix/MutMarshal.mmFromJavaObject(r, obj);
+            let ans = f(t1) as \ IO;
+            Interop/Flix/Marshal.toJavaObject(ans) 
+        };
+        f1 as \ ef
+
+    pub def makeCollectionFinisher[a: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
+                                    (r: Region[r], f: t[a, r] -> t[a, r] \ ef): Function[t[a, r], t[a, r]] \ ef with MutMarshal[t] = 
+        let f1 = obj -> {
+            let t1 = Interop/Flix/MutMarshal.mmFromJavaObject(r, obj);
+            let ans = f(t1) as \ IO;
+            Interop/Flix/MutMarshal.mmToJavaObject(ans) 
         };
         f1 as \ ef
 

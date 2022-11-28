@@ -34,6 +34,7 @@ namespace Interop/Util/Function/BinaryOperator {
     
     use Interop/Util/Function.BinaryOperator
     use Interop/Flix.Marshal
+    use Interop/Flix.MutMarshal
     
 
     pub def makeBinaryOperator(f: (a, a) -> a \ ef): BinaryOperator[a] \ ef with Marshal[a] = 
@@ -48,7 +49,20 @@ namespace Interop/Util/Function/BinaryOperator {
                 f1(t, u)
         } as \ ef
 
-       
+
+    pub def makeCombiner[a: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
+                        (r: Region[r], f: (t[a, r], t[a, r]) -> t[a, r] \ef): BinaryOperator[t[a, r]] \ef with MutMarshal[t] = 
+        let f1 = (o1, o2) -> {
+            let a = Interop/Flix/MutMarshal.mmFromJavaObject(r, o1); 
+            let b = Interop/Flix/MutMarshal.mmFromJavaObject(r, o2); 
+            let ans = f(a, b);
+            Interop/Flix/MutMarshal.mmToJavaObject(ans)
+        };
+        new ##java.util.function.BinaryOperator {
+            def apply(_this: ##java.util.function.BinaryOperator, t: ##java.lang.Object, u: ##java.lang.Object): ##java.lang.Object = 
+                f1(t, u)
+        } as \ ef 
+
     pub def makeBinaryOperator2(f: (a, a) -> a \ ef, castToObj: a -> ##java.lang.Object, castToA: ##java.lang.Object -> a): BinaryOperator[a] \ ef = 
         let f1 = (o1, o2) -> {
             let a = castToA(o1); 

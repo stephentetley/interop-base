@@ -31,14 +31,14 @@ namespace Interop/Util {
         pub def regionOf(_: ArrayList[a, r]): Region[r] = () as Region[r]
     }
 
-    // instance Interop/Flix.Marshal[ArrayList[a, r]] {
-    //     pub def toJavaObject(x: ArrayList[a, r]): ##java.lang.Object =
-    //         let ArrayList(x1) = x;
-    //         x1 as ##java.lang.Object
+    instance Interop/Flix.MutMarshal[ArrayList] {
+        pub def mmToJavaObject(x: ArrayList[a, r]): ##java.lang.Object =
+            let ArrayList(x1) = x;
+            x1 as ##java.lang.Object
 
-    //     pub def fromJavaObject(o: ##java.lang.Object): ArrayList[a, r] = 
-    //         Currency(o as ##java.util.Currency)
-    // }
+        pub def mmFromJavaObject(_: Region[r], o: ##java.lang.Object): ArrayList[a, r] = 
+            ArrayList(o as ##java.util.ArrayList)
+    }
 
 
     instance Interop/Util.ImpCollection[ArrayList] {

@@ -31,11 +31,19 @@ namespace Interop/Util/Function/Supplier {
     
     use Interop/Util/Function.Supplier
     use Interop/Flix.Marshal
+    use Interop/Flix.MutMarshal
 
     pub def makeSupplier(f: Unit -> a \ ef): Supplier[a] \ ef with Marshal[a] = 
         new ##java.util.function.Supplier {
             def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 
                 f() |> Interop/Flix/Marshal.toJavaObject
+        } as \ ef
+
+    pub def makeInitialSupplier[a: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
+                                (_: Region[r], f: Unit -> t[a, r] \ ef): Supplier[t[a, r]] \ ef with MutMarshal[t] = 
+        new ##java.util.function.Supplier {
+            def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 
+                f() |> Interop/Flix/MutMarshal.mmToJavaObject
         } as \ ef
 
 
