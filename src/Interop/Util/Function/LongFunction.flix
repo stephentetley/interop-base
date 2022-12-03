@@ -36,10 +36,10 @@ namespace Interop/Util/Function/LongFunction {
 
 
     pub def makeLongFunction(f: Int64 -> a \ ef): LongFunction[a] \ ef with Marshal[a] = 
-        ((i -> f(i) |> Interop/Flix/Marshal.toJavaObject) as LongFunction[a]) as \ ef
+        unsafe_cast (i -> f(i) |> Interop/Flix/Marshal.toJavaObject) as LongFunction[a] \ ef
 
 
-    pub def makeLongFunctionWith(f: Int64 -> a \ ef, cast: a -> ##java.lang.Object): LongFunction[a] \ ef = 
-        ((i -> f(i) |> cast) as LongFunction[a]) as \ ef
+    pub def makeLongFunctionWith(f: Int64 -> a \ ef, castToObj: a -> ##java.lang.Object): LongFunction[a] \ ef = 
+        unsafe_cast (i -> f(i) |> castToObj) as LongFunction[a] \ ef
 
 }

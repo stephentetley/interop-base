@@ -21,18 +21,18 @@ namespace Interop/IO {
     pub enum StringReader[_: Region](##java.io.StringReader)
 
     instance Scoped[StringReader] {
-        pub def regionOf(_: StringReader[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: StringReader[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
 
     instance SubReader[StringReader] {
         pub def toReader(s: StringReader[r]): Reader[r] = 
             let StringReader(s1) = s;
-            Reader(s1 as ##java.io.Reader)
+            Reader(unsafe_cast s1 as ##java.io.Reader)
 
         pub def fromReader(s: Reader[r]): StringReader[r] = 
             let Reader(s1) = s;
-            StringReader(s1 as ##java.io.StringReader) 
+            StringReader(unsafe_cast s1 as ##java.io.StringReader) 
     }
 
 

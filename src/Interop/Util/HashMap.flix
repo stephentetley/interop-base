@@ -27,18 +27,18 @@ namespace Interop/Util {
     }
 
     instance Scoped[HashMap[k, v]] {
-        pub def regionOf(_: HashMap[k, v, r]): Region[r] = () as Region[r]
+        pub def regionOf(_: HashMap[k, v, r]): Region[r] = unsafe_cast () as Region[r]
     }
 
 
     instance Interop/Util.ImpMapZ[HashMap] {
         pub def toMapZ(t: HashMap[k, v, r]): MapZ[k, v, r] = 
             let HashMap(t1) = t;
-            MapZ(t1 as ##java.util.Map)
+            MapZ(unsafe_cast t1 as ##java.util.Map)
 
         pub def fromMapZ(t: MapZ[k, v, r]): HashMap[k, v, r] = 
             let MapZ(t1) = t;
-            HashMap(t1 as ##java.util.HashMap) 
+            HashMap(unsafe_cast t1 as ##java.util.HashMap) 
     }
 
 }
@@ -75,7 +75,7 @@ namespace Interop/Util/HashMap {
         import java.util.HashMap.equals(##java.lang.Object): Bool \ r; 
         let HashMap(jm1) = m1;
         let HashMap(jm2) = m2;
-        equals(jm1, jm2 as ##java.lang.Object)
+        equals(jm1, unsafe_cast jm2 as ##java.lang.Object)
 
     pub def size(m: HashMap[k, v, r]): Int32 \ Read(r) =
         import java.util.HashMap.size(): Int32 \ r;

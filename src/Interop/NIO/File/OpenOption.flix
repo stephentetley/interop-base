@@ -27,10 +27,10 @@ namespace Interop/NIO/File {
     instance Interop/Flix.Marshal[OpenOption] {
         pub def toJavaObject(x: OpenOption): ##java.lang.Object =
             let OpenOption(x1) = x;
-            x1 as ##java.lang.Object
+            unsafe_cast x1 as ##java.lang.Object
 
         pub def fromJavaObject(o: ##java.lang.Object): OpenOption = 
-            OpenOption(o as ##java.nio.file.OpenOption)
+            OpenOption(unsafe_cast o as ##java.nio.file.OpenOption)
     }
 
 }

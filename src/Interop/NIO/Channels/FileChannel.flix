@@ -21,7 +21,7 @@ namespace Interop/NIO/Channels {
     pub enum FileChannel[_: Region](##java.nio.channels.FileChannel)
 
     instance Scoped[FileChannel] {
-        pub def regionOf(_: FileChannel[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: FileChannel[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
 

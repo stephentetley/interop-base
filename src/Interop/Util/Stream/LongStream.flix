@@ -23,7 +23,7 @@ namespace Interop/Util/Stream {
     pub enum LongStream[_r: Region](##java.util.stream.LongStream)
 
     instance Scoped[LongStream] {
-        pub def regionOf(_: LongStream[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: LongStream[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
 
@@ -65,7 +65,7 @@ namespace Interop/Util/Stream/LongStream {
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator & r;
         let r = Scoped.regionOf(s);
         let LongStream(s1) = s;
-        let iter1 = iterator(s1 as ##java.util.stream.BaseStream);
+        let iter1 = iterator(unsafe_cast s1 as ##java.util.stream.BaseStream);
         let iter2 = Interop/Util/IteratorZ.wrapHH(r, iter1);
         Interop/Util/IteratorZ.iterator(iter2)
 
@@ -138,8 +138,8 @@ namespace Interop/Util/Stream/LongStream {
     pub def flatMap(f: Int64 -> LongStream[r] \ ef, s: LongStream[r]): LongStream[r] \ {Write(r), ef} = 
         import java.util.stream.LongStream.flatMap(LongFunction[##java.util.stream.LongStream]): ##java.util.stream.LongStream \ {r, ef};
         let LongStream(s1) = s;
-        let f1 = Interop/Util/Function/LongFunction.makeLongFunctionWith(f, t -> {let LongStream(t1) = t; t1 as ##java.lang.Object});
-        (flatMap(s1, f1) as \ {Write(r), ef}) |> LongStream
+        let f1 = Interop/Util/Function/LongFunction.makeLongFunctionWith(f, t -> {let LongStream(t1) = t; unsafe_cast t1 as ##java.lang.Object});
+        (unsafe_cast (flatMap(s1, f1)) as \ {Write(r), ef}) |> LongStream
 
 
     pub def forEach(f: Int64 -> Unit \ ef, s: LongStream[r]): Unit \ {Read(r), ef} = 

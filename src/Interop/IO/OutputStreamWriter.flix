@@ -28,27 +28,27 @@ namespace Interop/IO {
     /// ... Probably not, could FileWriter use casting internally?
 
     instance Scoped[OutputStreamWriter] {
-        pub def regionOf(_: OutputStreamWriter[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: OutputStreamWriter[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
     instance Interop/IO.SubWriter[OutputStreamWriter] {
         pub def toWriter(s: OutputStreamWriter[r]): Writer[r] = 
             let OutputStreamWriter(s1) = s;
-            Writer(s1 as ##java.io.Writer)
+            Writer(unsafe_cast s1 as ##java.io.Writer)
 
         pub def fromWriter(s: Writer[r]): OutputStreamWriter[r] = 
             let Writer(s1) = s;
-            OutputStreamWriter(s1 as ##java.io.OutputStreamWriter) 
+            OutputStreamWriter(unsafe_cast s1 as ##java.io.OutputStreamWriter) 
     }
 
     instance Interop/Lang.ImpAppendable[OutputStreamWriter] {
         pub def toAppendable(s: OutputStreamWriter[r]): Appendable[r] = 
             let OutputStreamWriter(s1) = s;
-            Appendable(s1 as ##java.lang.Appendable)
+            Appendable(unsafe_cast s1 as ##java.lang.Appendable)
 
         pub def fromAppendable(s: Appendable[r]): OutputStreamWriter[r] = 
             let Appendable(s1) = s;
-            OutputStreamWriter(s1 as ##java.io.OutputStreamWriter) 
+            OutputStreamWriter(unsafe_cast s1 as ##java.io.OutputStreamWriter) 
     }
 
 }

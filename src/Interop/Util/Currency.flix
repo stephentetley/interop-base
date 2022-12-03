@@ -30,10 +30,10 @@ namespace Interop/Util {
     instance Interop/Flix.Marshal[Currency] {
         pub def toJavaObject(x: Currency): ##java.lang.Object =
             let Currency(x1) = x;
-            x1 as ##java.lang.Object
+            unsafe_cast x1 as ##java.lang.Object
 
         pub def fromJavaObject(o: ##java.lang.Object): Currency = 
-            Currency(o as ##java.util.Currency)
+            Currency(unsafe_cast o as ##java.util.Currency)
     }
 
 }

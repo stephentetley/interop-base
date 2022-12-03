@@ -22,7 +22,7 @@ namespace Interop/Util/Stream {
     pub enum DoubleStream[_r: Region](##java.util.stream.DoubleStream)
 
     instance Scoped[DoubleStream] {
-        pub def regionOf(_: DoubleStream[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: DoubleStream[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
 }
@@ -56,7 +56,7 @@ namespace Interop/Util/Stream/DoubleStream {
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator & r;
         let r = Scoped.regionOf(s);
         let DoubleStream(s1) = s;
-        let iter1 = iterator(s1 as ##java.util.stream.BaseStream);
+        let iter1 = iterator(unsafe_cast s1 as ##java.util.stream.BaseStream);
         let iter2 = Interop/Util/IteratorZ.wrapHH(r, iter1);
         Interop/Util/IteratorZ.iterator(iter2)
 
@@ -121,8 +121,8 @@ namespace Interop/Util/Stream/DoubleStream {
     pub def flatMap(f: Float64 -> DoubleStream[r] \ ef, s: DoubleStream[r]): DoubleStream[r] \ {Write(r), ef} = 
         import java.util.stream.DoubleStream.flatMap(DoubleFunction[##java.util.stream.DoubleStream]): ##java.util.stream.DoubleStream \ {r, ef};
         let DoubleStream(s1) = s;
-        let f1 = Interop/Util/Function/DoubleFunction.makeDoubleFunctionWith(f, t -> {let DoubleStream(t1) = t; t1 as ##java.lang.Object});
-        (flatMap(s1, f1) as \ {Write(r), ef}) |> DoubleStream
+        let f1 = Interop/Util/Function/DoubleFunction.makeDoubleFunctionWith(f, t -> {let DoubleStream(t1) = t; unsafe_cast t1 as ##java.lang.Object});
+        (unsafe_cast (flatMap(s1, f1)) as \ {Write(r), ef}) |> DoubleStream
 
 
     pub def forEach(f: Float64 -> Unit \ ef, s: DoubleStream[r]): Unit \ {Read(r), ef} = 

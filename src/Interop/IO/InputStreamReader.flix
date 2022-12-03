@@ -22,17 +22,17 @@ namespace Interop/IO {
     pub enum InputStreamReader[_: Region](##java.io.InputStreamReader)
 
     instance Scoped[InputStreamReader] {
-        pub def regionOf(_: InputStreamReader[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: InputStreamReader[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
     instance Interop/IO.SubReader[InputStreamReader] {
         pub def toReader(s: InputStreamReader[r]): Reader[r] = 
             let InputStreamReader(s1) = s;
-            Reader(s1 as ##java.io.Reader)
+            Reader(unsafe_cast s1 as ##java.io.Reader)
 
         pub def fromReader(s: Reader[r]): InputStreamReader[r] = 
             let Reader(s1) = s;
-            InputStreamReader(s1 as ##java.io.InputStreamReader) 
+            InputStreamReader(unsafe_cast s1 as ##java.io.InputStreamReader) 
     }
 
 }

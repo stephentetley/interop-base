@@ -22,7 +22,7 @@ namespace Interop/Text {
     pub enum NumberFormat[_: Region](##java.text.NumberFormat)
     
     instance Scoped[NumberFormat] {
-        pub def regionOf(_: NumberFormat[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: NumberFormat[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
     pub class SubNumberFormat[t: Region -> Type] {
@@ -71,7 +71,7 @@ namespace Interop/Text/NumberFormat {
         import java.text.NumberFormat.equals(##java.lang.Object): Bool \ {};
         let NumberFormat(x1) = x;
         let NumberFormat(y1) = y;
-        equals(x1, y1 as ##java.lang.Object)
+        equals(x1, unsafe_cast y1 as ##java.lang.Object)
 
 
     pub def hashCode(nf: NumberFormat[r]): Int32 =

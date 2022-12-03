@@ -37,38 +37,38 @@ namespace Interop/Util/Function/Function {
     pub def makeFunction(f: a -> b \ ef): Function[a, b] \ ef with Marshal[a], Marshal[b] = 
         let f1 = obj -> {
             let a = Interop/Flix/Marshal.fromJavaObject(obj); 
-            let ans = f(a) as \ IO;
+            let ans = unsafe_cast f(a) as \ IO;
             Interop/Flix/Marshal.toJavaObject(ans) 
         };
-        f1 as \ ef
+        unsafe_cast f1 as \ ef
 
 
     pub def makeSummaryFinisher[a: Type, b: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
                                 (r: Region[r], f: t[a, r] -> b \ ef): Function[t[a, r], b] \ ef with MutMarshal[t], Marshal[b] = 
         let f1 = obj -> {
             let t1 = Interop/Flix/MutMarshal.mmFromJavaObject(r, obj);
-            let ans = f(t1) as \ IO;
+            let ans = unsafe_cast f(t1) as \ IO;
             Interop/Flix/Marshal.toJavaObject(ans) 
         };
-        f1 as \ ef
+        unsafe_cast f1 as \ ef
 
     pub def makeCollectionFinisher[a: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
                                     (r: Region[r], f: t[a, r] -> t[a, r] \ ef): Function[t[a, r], t[a, r]] \ ef with MutMarshal[t] = 
         let f1 = obj -> {
             let t1 = Interop/Flix/MutMarshal.mmFromJavaObject(r, obj);
-            let ans = f(t1) as \ IO;
+            let ans = unsafe_cast f(t1) as \ IO;
             Interop/Flix/MutMarshal.mmToJavaObject(ans) 
         };
-        f1 as \ ef
+        unsafe_cast f1 as \ ef
 
 
     pub def makeFunctionWith(f: a -> b \ ef, toA: ##java.lang.Object -> a, fromB: b -> ##java.lang.Object): Function[a, b] \ ef = 
-        ((obj -> f(toA(obj)) |> fromB) as Function[a, b]) as \ ef
+        unsafe_cast (obj -> f(toA(obj)) |> fromB) as Function[a, b] \ ef
 
 
     pub def apply(f: Function[a, b], t: a): b \ ef with Marshal[a], Marshal[b] =
         let obj = Interop/Flix/Marshal.toJavaObject(t);
-        let ans = f(obj) as \ ef;
+        let ans = unsafe_cast f(obj) as \ ef;
         Interop/Flix/Marshal.fromJavaObject(ans)
     
 

@@ -25,17 +25,17 @@ namespace Interop/NIO/Channels/Pipe {
     pub enum SinkChannel[_: Region](##java.nio.channels.Pipe$SinkChannel)
 
     instance Scoped[SinkChannel] {
-        pub def regionOf(_: SinkChannel[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: SinkChannel[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
     instance SubChannel[SinkChannel] {
         pub def toChannel(c: SinkChannel[r]): ChannelZ[r] = 
             let SinkChannel(c1) = c;
-            ChannelZ(c1 as ##java.nio.channels.Channel)
+            ChannelZ(unsafe_cast c1 as ##java.nio.channels.Channel)
 
         pub def fromChannel(c: ChannelZ[r]): SinkChannel[r] = 
             let ChannelZ(c1) = c;
-            SinkChannel(c1 as ##java.nio.channels.Pipe$SinkChannel) 
+            SinkChannel(unsafe_cast c1 as ##java.nio.channels.Pipe$SinkChannel) 
     }
 
 }

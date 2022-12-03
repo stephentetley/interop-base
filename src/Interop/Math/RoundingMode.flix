@@ -27,11 +27,11 @@ namespace Interop/Math {
     instance SubEnum[RoundingMode] {
         pub def toEnum(x: RoundingMode): Enum[a] = 
             let RoundingMode(x1) = x;
-            Enum(x1 as ##java.lang.Enum)
+            Enum(unsafe_cast x1 as ##java.lang.Enum)
 
         pub def fromEnum(x: Enum[a]): RoundingMode = 
             let Enum(x1) = x;
-            RoundingMode(x1 as ##java.math.RoundingMode) 
+            RoundingMode(unsafe_cast x1 as ##java.math.RoundingMode) 
     }
 
 }

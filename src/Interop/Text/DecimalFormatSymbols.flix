@@ -23,7 +23,7 @@ namespace Interop/Text {
     pub enum DecimalFormatSymbols[_: Region](##java.text.DecimalFormatSymbols)
     
     instance Scoped[DecimalFormatSymbols] {
-        pub def regionOf(_: DecimalFormatSymbols[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: DecimalFormatSymbols[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
 
@@ -67,7 +67,7 @@ namespace Interop/Text/DecimalFormatSymbols {
         import java.text.DecimalFormatSymbols.equals(##java.lang.Object): Bool \ r;
         let DecimalFormatSymbols(x1) = x;
         let DecimalFormatSymbols(y1) = y;
-        equals(x1, y1 as ##java.lang.Object)
+        equals(x1, unsafe_cast y1 as ##java.lang.Object)
 
     pub def hashCode(dfs: DecimalFormatSymbols[r]): Int32 \ Read(r) =
         import java.text.DecimalFormatSymbols.hashCode(): Int32 \ r;

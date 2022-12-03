@@ -33,7 +33,7 @@ namespace Interop/Util/Function/LongConsumer {
     use Interop/Util/Function.LongConsumer
 
 
-    pub def makeLongConsumer(f: Int64 -> Unit \ ef): LongConsumer \ ef = (f as LongConsumer) as \ ef
+    pub def makeLongConsumer(f: Int64 -> Unit \ ef): LongConsumer \ ef = unsafe_cast f as LongConsumer \ ef
 
 
 }

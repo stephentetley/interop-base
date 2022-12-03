@@ -28,28 +28,28 @@ namespace Interop/Util {
     pub enum LinkedList[_: Type, _: Region](##java.util.LinkedList)
 
     instance Scoped[LinkedList[a]] {
-        pub def regionOf(_: LinkedList[a, r]): Region[r] = () as Region[r]
+        pub def regionOf(_: LinkedList[a, r]): Region[r] = unsafe_cast () as Region[r]
     }
 
     instance Interop/Util.ImpCollection[LinkedList] {
         pub def toCollection(t: LinkedList[a, r]): Collection[a, r] = 
             let LinkedList(t1) = t;
-            Collection(t1 as ##java.util.Collection)
+            Collection(unsafe_cast t1 as ##java.util.Collection)
 
         pub def fromCollection(t: Collection[a, r]): LinkedList[a, r] = 
             let Collection(t1) = t;
-            LinkedList(t1 as ##java.util.LinkedList) 
+            LinkedList(unsafe_cast t1 as ##java.util.LinkedList) 
     }
 
 
     instance Interop/Util.ImpListZ[LinkedList] {
         pub def toListZ(t: LinkedList[a, r]): ListZ[a, r] = 
             let LinkedList(t1) = t;
-            ListZ(t1 as ##java.util.List)
+            ListZ(unsafe_cast t1 as ##java.util.List)
 
         pub def fromListZ(t: ListZ[a, r]): LinkedList[a, r] = 
             let ListZ(t1) = t;
-            LinkedList(t1 as ##java.util.LinkedList) 
+            LinkedList(unsafe_cast t1 as ##java.util.LinkedList) 
     }
 
 }
@@ -94,7 +94,7 @@ namespace Interop/Util/LinkedList {
         import java.util.LinkedList.equals(##java.lang.Object): Bool \ r; 
         let LinkedList(jl1) = l1;
         let LinkedList(jl2) = l2;
-        equals(jl1, jl2 as ##java.lang.Object)
+        equals(jl1, unsafe_cast jl2 as ##java.lang.Object)
 
     pub def isEmpty(l: LinkedList[a, r]): Bool \ Read(r) = 
         import java.util.LinkedList.isEmpty(): Bool \ r;
@@ -176,7 +176,7 @@ namespace Interop/Util/LinkedList {
             import java.util.LinkedList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let LinkedList(l1) = l;            
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            (removeIf(l1, f1) as \  {ef, Write(r)}) |> Ok
+            (unsafe_cast removeIf(l1, f1) as \ {ef, Write(r)}) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};

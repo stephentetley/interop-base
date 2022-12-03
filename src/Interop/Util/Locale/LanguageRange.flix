@@ -21,10 +21,10 @@ namespace Interop/Util/Locale {
     instance Interop/Flix.Marshal[LanguageRange] {
         pub def toJavaObject(x: LanguageRange): ##java.lang.Object =
             let LanguageRange(x1) = x;
-            x1 as ##java.lang.Object
+            unsafe_cast x1 as ##java.lang.Object
 
         pub def fromJavaObject(o: ##java.lang.Object): LanguageRange = 
-            LanguageRange(o as ##java.util.Locale$LanguageRange)
+            LanguageRange(unsafe_cast o as ##java.util.Locale$LanguageRange)
     }
 
 }
@@ -53,7 +53,7 @@ namespace Interop/Util/Locale/LanguageRange {
         import java.util.Locale$LanguageRange.equals(##java.lang.Object): Bool \ {};
         let LanguageRange(x1) = x;
         let LanguageRange(y1) = y;
-        equals(x1, y1 as ##java.lang.Object)
+        equals(x1, unsafe_cast y1 as ##java.lang.Object)
 
     pub def toString(x: LanguageRange): String =
         import java.util.Locale$LanguageRange.toString(): String \ {};

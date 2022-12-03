@@ -31,7 +31,7 @@ namespace Interop/Util/Function/IntPredicate {
     
     use Interop/Util/Function.IntPredicate;
 
-    pub def makeIntPredicate(f: Int32 -> Bool \ ef): IntPredicate \ ef = (f as IntPredicate) as \ ef
+    pub def makeIntPredicate(f: Int32 -> Bool \ ef): IntPredicate \ ef = unsafe_cast f as IntPredicate \ ef
 
 
 

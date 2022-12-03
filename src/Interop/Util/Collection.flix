@@ -23,7 +23,7 @@ namespace Interop/Util {
     pub enum Collection[_: Type, _: Region](##java.util.Collection)
 
     instance Scoped[Collection[a]] {
-        pub def regionOf(_: Collection[a, r]): Region[r] = () as Region[r]
+        pub def regionOf(_: Collection[a, r]): Region[r] = unsafe_cast () as Region[r]
     }
 
     pub class ImpCollection[t: Type -> Region -> Type] {
@@ -115,7 +115,7 @@ namespace Interop/Util/Collection {
             import java.util.Collection.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let Collection(c1) = c;            
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            (removeIf(c1, f1) as \  {ef, Write(r)}) |> Ok
+            (unsafe_cast removeIf(c1, f1) as \ {ef, Write(r)}) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
@@ -176,7 +176,7 @@ namespace Interop/Util/Collection {
         import new java.util.LinkedList(): ##java.util.LinkedList & r as new1;
         import java.util.LinkedList.add(##java.lang.Object): Bool & r as add1;
         def loop(st1, acc) = match f(st1) {
-            case None         => Collection(acc as ##java.util.Collection)
+            case None         => Collection(unsafe_cast acc as ##java.util.Collection)
             case Some(o, st2) => {discard add1(acc, Interop/Flix/Marshal.toJavaObject(o)); loop(st2, acc)}
         };
         loop(st, new1())

@@ -17,91 +17,91 @@
 namespace Interop/Util {
 
     ///
-    /// Represents a Java Vector.
+    /// Represents a Java VectorZ.
     /// Class / Mutable
     ///
     /// (Prefer ArrayList if thread safety is not needed)
     ///
-    pub enum Vector[_a: Type, _r: Region](##java.util.Vector)
+    pub enum VectorZ[_a: Type, _r: Region](##java.util.Vector)
 
 
-    instance Scoped[Vector[a]] {
-        pub def regionOf(_: Vector[a, r]): Region[r] = () as Region[r]
+    instance Scoped[VectorZ[a]] {
+        pub def regionOf(_: VectorZ[a, r]): Region[r] = unsafe_cast () as Region[r]
     }
 
-    instance Interop/Util.ImpCollection[Vector] {
-        pub def toCollection(t: Vector[a, r]): Collection[a, r] = 
-            let Vector(t1) = t;
-            Collection(t1 as ##java.util.Collection)
+    instance Interop/Util.ImpCollection[VectorZ] {
+        pub def toCollection(t: VectorZ[a, r]): Collection[a, r] = 
+            let VectorZ(t1) = t;
+            Collection(unsafe_cast t1 as ##java.util.Collection)
 
-        pub def fromCollection(t: Collection[a, r]): Vector[a, r] = 
+        pub def fromCollection(t: Collection[a, r]): VectorZ[a, r] = 
             let Collection(t1) = t;
-            Vector(t1 as ##java.util.Vector) 
+            VectorZ(unsafe_cast t1 as ##java.util.Vector) 
     }
 
 
 }
 
-namespace Interop/Util/Vector {
+namespace Interop/Util/VectorZ {
 
-    use Interop/Util.Vector;
-    use Interop/Util.Vector.{Vector};
+    use Interop/Util.VectorZ;
+    use Interop/Util.VectorZ.{VectorZ};
     use Interop/Util.Comparator;
     use Interop/Flix.Marshal;
 
 
-    pub def getHH(m: Vector[a, r]): ##java.util.Vector = 
-        let Vector(m1) = m;
+    pub def getHH(m: VectorZ[a, r]): ##java.util.Vector = 
+        let VectorZ(m1) = m;
         m1
         
-    pub def wrapHH(_: Region[r], prim: ##java.util.Vector): Vector[a, r] = 
-        Vector(prim)
+    pub def wrapHH(_: Region[r], prim: ##java.util.Vector): VectorZ[a, r] = 
+        VectorZ(prim)
 
 
     ///
     /// Returns a new mutable ArrayList.
     ///
-    pub def new(_: Region[r]): Vector[a, r] \ Write(r) =
+    pub def new(_: Region[r]): VectorZ[a, r] \ Write(r) =
         import new java.util.Vector(): ##java.util.Vector \ r as newVector;
-        Vector(newVector())
+        VectorZ(newVector())
 
-    pub def equals(v1: Vector[a, r], v2: Vector[a, r]): Bool \  Read(r) with Marshal[a] =
+    pub def equals(v1: VectorZ[a, r], v2: VectorZ[a, r]): Bool \  Read(r) with Marshal[a] =
         import java.util.Vector.equals(##java.lang.Object): Bool \ r; 
-        let Vector(jv1) = v1;
-        let Vector(jv2) = v2;
-        equals(jv1, jv2 as ##java.lang.Object)
+        let VectorZ(jv1) = v1;
+        let VectorZ(jv2) = v2;
+        equals(jv1, unsafe_cast jv2 as ##java.lang.Object)
 
 
-    pub def hashCode(v: Vector[a, r]): Int32 \ Read(r) = 
+    pub def hashCode(v: VectorZ[a, r]): Int32 \ Read(r) = 
         import java.util.Vector.hashCode(): Int32 \ r;
-        let Vector(v1) = v;
+        let VectorZ(v1) = v;
         hashCode(v1)
 
-    pub def isEmpty(v: Vector[a, r]): Bool \ Read(r) = 
+    pub def isEmpty(v: VectorZ[a, r]): Bool \ Read(r) = 
         import java.util.Vector.isEmpty(): Bool \ r;
-        let Vector(v1) = v;
+        let VectorZ(v1) = v;
         isEmpty(v1)
 
-    pub def size(v: Vector[a, r]): Int32 \ Read(r) = 
+    pub def size(v: VectorZ[a, r]): Int32 \ Read(r) = 
         import java.util.Vector.size(): Int32 \ r;
-        let Vector(v1) = v;
+        let VectorZ(v1) = v;
         size(v1)
 
-    pub def add!(x: a, v: Vector[a, r]): Bool \ { Write(r) } with Marshal[a] = 
+    pub def add!(x: a, v: VectorZ[a, r]): Bool \ { Write(r) } with Marshal[a] = 
         import java.util.Vector.add(##java.lang.Object): Bool & r;
-        let Vector(v1) = v;
+        let VectorZ(v1) = v;
         add(v1, Interop/Flix/Marshal.toJavaObject(x))
 
 
-    pub def sort!(f: (a, a) -> Int32, v: Vector[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
+    pub def sort!(f: (a, a) -> Int32, v: VectorZ[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
         let f1 = Interop/Util/Comparator.makeComparator(f);
         sortWithComparator!(f1, v)
 
 
-    pub def sortWithComparator!(c: Comparator[a], v: Vector[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
+    pub def sortWithComparator!(c: Comparator[a], v: VectorZ[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
         try {
             import java.util.Vector.sort(##java.util.Comparator): Unit \ r; 
-            let Vector(v1) = v;
+            let VectorZ(v1) = v;
             sort(v1, c) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -113,7 +113,7 @@ namespace Interop/Util/Vector {
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def iterator(v: Vector[a, r]): Iterator[a, r] \ { Write(r) } with Marshal[a] =
+    pub def iterator(v: VectorZ[a, r]): Iterator[a, r] \ { Write(r) } with Marshal[a] =
         toFlixIterator(Scoped.regionOf(v), Interop/Flix/Marshal.fromJavaObject, v)
 
 
@@ -122,9 +122,9 @@ namespace Interop/Util/Vector {
     ///
     pub def toFlixIterator(r2: Region[r2], 
                             ocast: ##java.lang.Object -> a, 
-                            v: Vector[a, r]): Iterator[a, r2] \ { Read(r), Write(r2) } =
+                            v: VectorZ[a, r]): Iterator[a, r2] \ { Read(r), Write(r2) } =
         import java.util.Vector.iterator(): ##java.util.Iterator \ Write(r);
-        let Vector(v1) = v;
+        let VectorZ(v1) = v;
         if (Object.isNull(v1))
             Iterator.new(r2)
         else 
@@ -132,12 +132,12 @@ namespace Interop/Util/Vector {
                 |> Interop/Util/IteratorZ.wrapHH(r2)
                 |> Interop/Util/IteratorZ.toFlixIterator(ocast)
 
-    pub def toFlixSet(v: Vector[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
+    pub def toFlixSet(v: VectorZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
         region r2 {
             toFlixIterator(r2, Interop/Flix/Marshal.fromJavaObject, v) |> Iterator.toSet
         }
 
-    pub def toFlixList(v: Vector[a, r]): List[a] \ { Read(r) } with Marshal[a] =
+    pub def toFlixList(v: VectorZ[a, r]): List[a] \ { Read(r) } with Marshal[a] =
         region r2 {
             toFlixIterator(r2, Interop/Flix/Marshal.fromJavaObject, v) |> Iterator.toList
         }

@@ -32,9 +32,9 @@ namespace Interop/Util/Function/DoubleSupplier {
     use Interop/Util/Function.DoubleSupplier
 
     pub def makeDoubleSupplier(f: Unit -> Float64 \ ef): DoubleSupplier \ ef = 
-        new ##java.util.function.DoubleSupplier {
+        unsafe_cast (new ##java.util.function.DoubleSupplier {
             def getAsDouble(_this: ##java.util.function.DoubleSupplier): Float64 = f()
-        } as \ ef
+        }) as \ ef
 
     pub def getAsDouble(f: DoubleSupplier): Float64 \ ef = 
         import java.util.function.DoubleSupplier.getAsDouble(): Float64 \ ef;

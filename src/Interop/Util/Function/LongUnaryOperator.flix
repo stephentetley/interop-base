@@ -32,7 +32,7 @@ namespace Interop/Util/Function/LongUnaryOperator {
     use Interop/Util/Function.LongUnaryOperator;
     
 
-    pub def makeLongUnaryOperator(f: Int64 -> Int64 \ ef): LongUnaryOperator \ ef = (f as LongUnaryOperator) as \ ef
+    pub def makeLongUnaryOperator(f: Int64 -> Int64 \ ef): LongUnaryOperator \ ef = unsafe_cast f as LongUnaryOperator \ ef
 
 
 }

@@ -32,9 +32,9 @@ namespace Interop/Util/Function/LongSupplier {
     use Interop/Util/Function.LongSupplier
 
     pub def makeLongSupplier(f: Unit -> Int64 \ ef): LongSupplier \ ef = 
-        new ##java.util.function.LongSupplier {
+        unsafe_cast (new ##java.util.function.LongSupplier {
             def getAsLong(_this: ##java.util.function.LongSupplier): Int64 = f()
-        } as \ ef
+        }) as \ ef
 
     pub def getAsInt(f: LongSupplier): Int64 \ ef = 
         import java.util.function.LongSupplier.getAsLong(): Int64 \ ef;

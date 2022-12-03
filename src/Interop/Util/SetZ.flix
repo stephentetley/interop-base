@@ -29,17 +29,17 @@ namespace Interop/Util {
 
 
     instance Scoped[SetZ[a]] {
-        pub def regionOf(_: SetZ[a, r]): Region[r] = () as Region[r]
+        pub def regionOf(_: SetZ[a, r]): Region[r] = unsafe_cast () as Region[r]
     }
 
     instance Interop/Util.ImpCollection[SetZ] {
         pub def toCollection(t: SetZ[a, r]): Collection[a, r] = 
             let SetZ(t1) = t;
-            Collection(t1 as ##java.util.Collection)
+            Collection(unsafe_cast t1 as ##java.util.Collection)
 
         pub def fromCollection(t: Collection[a, r]): SetZ[a, r] = 
             let Collection(t1) = t;
-            SetZ(t1 as ##java.util.Set) 
+            SetZ(unsafe_cast t1 as ##java.util.Set) 
     }
 
 
@@ -110,7 +110,7 @@ namespace Interop/Util/SetZ {
         import java.util.Set.equals(##java.lang.Object): Bool \ r; 
         let SetZ(js1) = s1;
         let SetZ(js2) = s2;
-        equals(js1, js2 as ##java.lang.Object)
+        equals(js1, unsafe_cast js2 as ##java.lang.Object)
 
 
     pub def hashCode(s: SetZ[a, r]): Int32 \ Read(r) = 
@@ -217,7 +217,7 @@ namespace Interop/Util/SetZ {
             import java.util.Set.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let SetZ(s1) = s;        
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            (removeIf(s1, f1) as \  {ef, Write(r)}) |> Ok
+            (unsafe_cast (removeIf(s1, f1)) as \ {ef, Write(r)}) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};

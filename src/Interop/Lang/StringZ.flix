@@ -15,7 +15,7 @@
  */
 
 
-namespace Interop/Lang/String {
+namespace Interop/Lang/StringZ {
 
     use Interop/NIO/Charset.Charset
     use Interop/NIO/Charset.Charset.{Charset}

@@ -19,7 +19,7 @@ namespace Interop/Util/Locale {
     pub enum Builder[_: Region](##java.util.Locale$Builder)
 
     instance Scoped[Builder] {
-        pub def regionOf(_: Builder[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: Builder[r]): Region[r] = unsafe_cast () as Region[r]
     }
     
 }

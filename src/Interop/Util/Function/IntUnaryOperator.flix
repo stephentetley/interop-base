@@ -32,7 +32,7 @@ namespace Interop/Util/Function/IntUnaryOperator {
     use Interop/Util/Function.IntUnaryOperator;
     
 
-    pub def makeIntUnaryOperator(f: Int32 -> Int32 \ ef): IntUnaryOperator \ ef = (f as IntUnaryOperator) as \ ef
+    pub def makeIntUnaryOperator(f: Int32 -> Int32 \ ef): IntUnaryOperator \ ef = unsafe_cast f as IntUnaryOperator \ ef
 
 
     // pub def identity(): IntUnaryOperator = 

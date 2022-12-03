@@ -33,12 +33,12 @@ namespace Interop/Util/Function/ToDoubleBiFunction {
     use Interop/Flix.Marshal
 
     pub def makeToDoubleBiFunction(f: (a, b) -> Float64 \ ef): ToDoubleBiFunction[a, b] \ ef with Marshal[a], Marshal[b] = 
-        new ##java.util.function.ToDoubleBiFunction {
+        unsafe_cast (new ##java.util.function.ToDoubleBiFunction {
             def applyAsDouble(_this: ##java.util.function.ToDoubleBiFunction, t: ##java.lang.Object, u: ##java.lang.Object): Float64 = 
                 let a1 = Interop/Flix/Marshal.fromJavaObject(t);
                 let b1 = Interop/Flix/Marshal.fromJavaObject(u);
                 f(a1, b1)
-        } as \ ef
+        }) as \ ef
 
 
     pub def applyAsDouble(f: ToDoubleBiFunction[a, b], t: a, u: b): Float64 \ ef with Marshal[a], Marshal[b] = 

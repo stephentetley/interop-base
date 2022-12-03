@@ -31,7 +31,7 @@ namespace Interop/Util/Function/DoublePredicate {
     
     use Interop/Util/Function.DoublePredicate;
 
-    pub def makeDoublePredicate(f: Float64 -> Bool \ ef): DoublePredicate \ ef = (f as DoublePredicate) as \ ef
+    pub def makeDoublePredicate(f: Float64 -> Bool \ ef): DoublePredicate \ ef = unsafe_cast f as DoublePredicate \ ef
 
 
 }

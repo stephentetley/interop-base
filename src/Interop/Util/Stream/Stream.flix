@@ -23,7 +23,7 @@ namespace Interop/Util/Stream {
 
 
     instance Scoped[Stream[a]] {
-        pub def regionOf(_: Stream[a, r]): Region[r] = () as Region[r]
+        pub def regionOf(_: Stream[a, r]): Region[r] = unsafe_cast () as Region[r]
     }
 
 }
@@ -89,7 +89,7 @@ namespace Interop/Util/Stream/Stream {
         import java.util.Iterator.hasNext(): Bool & r;
         import java.util.Iterator.next(): ##java.lang.Object & r;
         let Stream(s1) = s;
-        let iter1 = iterator(s1 as ##java.util.stream.BaseStream);
+        let iter1 = iterator(unsafe_cast s1 as ##java.util.stream.BaseStream);
         let isDone = () -> { 
             let ans = hasNext(iter1);
             not ans
@@ -138,8 +138,8 @@ namespace Interop/Util/Stream/Stream {
     pub def flatMap(f: a -> Stream[b, r] \ ef, s: Stream[a, r]): Stream[b, r] \ {Write(r), ef} with Marshal[a], Marshal[b] = 
         import java.util.stream.Stream.flatMap(Function[a, ##java.util.stream.Stream]): ##java.util.stream.Stream \ {r, ef};
         let Stream(s1) = s;
-        let f1 = Interop/Util/Function/Function.makeFunctionWith(f, Interop/Flix/Marshal.fromJavaObject, strm -> strm as ##java.lang.Object);
-        (flatMap(s1, f1) as \ {Write(r), ef}) |> Stream
+        let f1 = Interop/Util/Function/Function.makeFunctionWith(f, Interop/Flix/Marshal.fromJavaObject, strm -> unsafe_cast strm as ##java.lang.Object);
+        (unsafe_cast (flatMap(s1, f1)) as \ {Write(r), ef}) |> Stream
 
 
 

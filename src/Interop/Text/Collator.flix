@@ -23,7 +23,7 @@ namespace Interop/Text {
     pub enum Collator[_: Region](##java.text.Collator)
 
     instance Scoped[Collator] {
-        pub def regionOf(_: Collator[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: Collator[r]): Region[r] = unsafe_cast () as Region[r]
     }
 }
 
@@ -114,7 +114,7 @@ namespace Interop/Text/Collator {
     pub def clone(x: Collator[r]): Collator[r] \ Write(r) =
         import java.text.Collator.clone(): ##java.lang.Object \ r;
         let Collator(x1) = x;
-        {clone(x1) as ##java.text.Collator} |> Collator
+        (unsafe_cast clone(x1) as ##java.text.Collator) |> Collator
 
     pub def getDecomposition(col: Collator[r]): Int32 \ Read(r) =
         import java.text.Collator.getDecomposition(): Int32 & r;

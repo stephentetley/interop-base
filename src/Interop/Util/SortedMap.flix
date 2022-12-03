@@ -23,17 +23,17 @@ namespace Interop/Util {
     pub enum SortedMap[_k: Type, _v: Type, _r: Region](##java.util.SortedMap)
 
     instance Scoped[SortedMap[k, v]] {
-        pub def regionOf(_: SortedMap[k, v, r]): Region[r] = () as Region[r]
+        pub def regionOf(_: SortedMap[k, v, r]): Region[r] = unsafe_cast () as Region[r]
     }
 
     instance Interop/Util.ImpMapZ[SortedMap] {
         pub def toMapZ(t: SortedMap[k, v, r]): MapZ[k, v, r] = 
             let SortedMap(t1) = t;
-            MapZ(t1 as ##java.util.Map)
+            MapZ(unsafe_cast t1 as ##java.util.Map)
 
         pub def fromMapZ(t: MapZ[k, v, r]): SortedMap[k, v, r] = 
             let MapZ(t1) = t;
-            SortedMap(t1 as ##java.util.SortedMap) 
+            SortedMap(unsafe_cast t1 as ##java.util.SortedMap) 
     }
 
 
@@ -64,7 +64,7 @@ namespace Interop/Util/SortedMap {
         import java.util.SortedMap.equals(##java.lang.Object): Bool \ r; 
         let SortedMap(jm1) = m1;
         let SortedMap(jm2) = m2;
-        equals(jm1, jm2 as ##java.lang.Object)
+        equals(jm1, unsafe_cast jm2 as ##java.lang.Object)
 
     pub def size(m: SortedMap[k, v, r]): Int32 \ Read(r) =
         import java.util.SortedMap.size(): Int32 \ r;
@@ -124,7 +124,7 @@ namespace Interop/Util/SortedMap {
         import new java.util.TreeMap(): ##java.util.TreeMap & r as newTreeMap;
         import java.util.TreeMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object & r as put; 
         def loop(st1, ac) = match f(st1) {
-            case None            => SortedMap(ac as ##java.util.SortedMap)
+            case None            => SortedMap(unsafe_cast ac as ##java.util.SortedMap)
             case Some(k, v, st2) => { discard put(ac, Interop/Flix/Marshal.toJavaObject(k), Interop/Flix/Marshal.toJavaObject(v)); loop(st2, ac) }
         };
         loop(st, newTreeMap())

@@ -32,7 +32,7 @@ namespace Interop/Util/Function/DoubleUnaryOperator {
     use Interop/Util/Function.DoubleUnaryOperator;
     
 
-    pub def makeDoubleUnaryOperator(f: Float64 -> Float64 \ ef): DoubleUnaryOperator \ ef = (f as DoubleUnaryOperator) as \ ef
+    pub def makeDoubleUnaryOperator(f: Float64 -> Float64 \ ef): DoubleUnaryOperator \ ef = unsafe_cast f as DoubleUnaryOperator \ ef
 
 
 

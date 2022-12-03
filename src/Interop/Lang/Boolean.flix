@@ -40,7 +40,7 @@ namespace Interop/Lang/Boolean {
         import java.lang.Boolean.equals(##java.lang.Object): Bool \ {};
         let Boolean(x1) = x;
         let Boolean(y1) = y;
-        equals(x1, y1 as ##java.lang.Object)
+        equals(x1, unsafe_cast y1 as ##java.lang.Object)
 
     pub def compare(x: Bool, y: Bool): Int32 =
         import static java.lang.Boolean.compare(Bool, Bool): Int32 \ {};

@@ -33,7 +33,7 @@ namespace Interop/Util/Function/IntConsumer {
     use Interop/Util/Function.IntConsumer
 
 
-    pub def makeIntConsumer(f: Int32 -> Unit \ ef): IntConsumer \ ef = (f as IntConsumer) as \ ef
+    pub def makeIntConsumer(f: Int32 -> Unit \ ef): IntConsumer \ ef = unsafe_cast f as IntConsumer \ ef
 
 
     // /// Result?

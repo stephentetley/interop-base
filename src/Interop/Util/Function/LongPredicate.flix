@@ -31,7 +31,7 @@ namespace Interop/Util/Function/LongPredicate {
     
     use Interop/Util/Function.LongPredicate;
 
-    pub def makeLongPredicate(f: Int64 -> Bool \ ef): LongPredicate \ ef = (f as LongPredicate) as \ ef
+    pub def makeLongPredicate(f: Int64 -> Bool \ ef): LongPredicate \ ef = unsafe_cast f as LongPredicate \ ef
 
 
 

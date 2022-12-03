@@ -40,7 +40,7 @@ namespace Interop/Lang/Enum {
         import java.lang.Enum.equals(##java.lang.Object): Bool \ {};
         let Enum(x1) = x;
         let Enum(y1) = y;
-        equals(x1, y1 as ##java.lang.Object)
+        equals(x1, unsafe_cast y1 as ##java.lang.Object)
 
     pub def name(x: Enum[a]): String =
         import java.lang.Enum.name(): String \ {};

@@ -28,38 +28,38 @@ namespace Interop/Util {
     pub enum ArrayList[_: Type, _: Region](##java.util.ArrayList)
 
     instance Scoped[ArrayList[a]] {
-        pub def regionOf(_: ArrayList[a, r]): Region[r] = () as Region[r]
+        pub def regionOf(_: ArrayList[a, r]): Region[r] = unsafe_cast () as Region[r]
     }
 
     instance Interop/Flix.MutMarshal[ArrayList] {
         pub def mmToJavaObject(x: ArrayList[a, r]): ##java.lang.Object =
             let ArrayList(x1) = x;
-            x1 as ##java.lang.Object
+            unsafe_cast x1 as ##java.lang.Object
 
         pub def mmFromJavaObject(_: Region[r], o: ##java.lang.Object): ArrayList[a, r] = 
-            ArrayList(o as ##java.util.ArrayList)
+            ArrayList(unsafe_cast o as ##java.util.ArrayList)
     }
 
 
     instance Interop/Util.ImpCollection[ArrayList] {
         pub def toCollection(t: ArrayList[a, r]): Collection[a, r] = 
             let ArrayList(t1) = t;
-            Collection(t1 as ##java.util.Collection)
+            Collection(unsafe_cast t1 as ##java.util.Collection)
 
         pub def fromCollection(t: Collection[a, r]): ArrayList[a, r] = 
             let Collection(t1) = t;
-            ArrayList(t1 as ##java.util.ArrayList) 
+            ArrayList(unsafe_cast t1 as ##java.util.ArrayList) 
     }
 
 
     instance Interop/Util.ImpListZ[ArrayList] {
         pub def toListZ(t: ArrayList[a, r]): ListZ[a, r] = 
             let ArrayList(t1) = t;
-            ListZ(t1 as ##java.util.List)
+            ListZ(unsafe_cast t1 as ##java.util.List)
 
         pub def fromListZ(t: ListZ[a, r]): ArrayList[a, r] = 
             let ListZ(t1) = t;
-            ArrayList(t1 as ##java.util.ArrayList) 
+            ArrayList(unsafe_cast t1 as ##java.util.ArrayList) 
     }
 
 }
@@ -131,7 +131,7 @@ namespace Interop/Util/ArrayList {
         import java.util.ArrayList.equals(##java.lang.Object): Bool \ r; 
         let ArrayList(jl1) = l1;
         let ArrayList(jl2) = l2;
-        equals(jl1, jl2 as ##java.lang.Object)
+        equals(jl1, unsafe_cast jl2 as ##java.lang.Object)
 
     pub def isEmpty(l: ArrayList[a, r]): Bool \ Read(r) = 
         import java.util.ArrayList.isEmpty(): Bool \ r;
@@ -213,7 +213,7 @@ namespace Interop/Util/ArrayList {
             import java.util.ArrayList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let ArrayList(l1) = l;            
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            (removeIf(l1, f1) as \  {ef, Write(r)}) |> Ok
+            (unsafe_cast removeIf(l1, f1) as \ {ef, Write(r)}) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};

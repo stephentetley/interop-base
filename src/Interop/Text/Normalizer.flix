@@ -26,7 +26,7 @@ namespace Interop/Text/Normalizer {
         import static java.text.Normalizer.normalize(##java.lang.CharSequence, ##java.text.Normalizer$Form): String & Pure;
         try {
             let NormalizerForm(nform1) = nform;
-            normalize(src as ##java.lang.CharSequence, nform1) |> Ok
+            normalize(unsafe_cast src as ##java.lang.CharSequence, nform1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String & Pure;
@@ -37,7 +37,7 @@ namespace Interop/Text/Normalizer {
         import static java.text.Normalizer.isNormalized(##java.lang.CharSequence, ##java.text.Normalizer$Form): Bool & Pure;
         try {
             let NormalizerForm(nform1) = nform;
-            isNormalized(src as ##java.lang.CharSequence, nform1) |> Ok
+            isNormalized(unsafe_cast src as ##java.lang.CharSequence, nform1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String & Pure;

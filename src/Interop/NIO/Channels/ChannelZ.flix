@@ -21,7 +21,7 @@ namespace Interop/NIO/Channels {
     pub enum ChannelZ[_: Region](##java.nio.channels.Channel)
 
     instance Scoped[ChannelZ] {
-        pub def regionOf(_: ChannelZ[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: ChannelZ[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
     pub class SubChannel[t: Region -> Type] {

@@ -33,9 +33,9 @@ namespace Interop/Util/Function/IntBinaryOperator {
     
 
     pub def makeIntBinaryOperator(f: (Int32, Int32) -> Int32 \ ef): IntBinaryOperator \ ef = 
-        new ##java.util.function.IntBinaryOperator {
+        unsafe_cast (new ##java.util.function.IntBinaryOperator {
             def applyAsInt(_this: ##java.util.function.IntBinaryOperator, i: Int32, j: Int32): Int32 = f(i, j)
-        } as \ ef
+        }) as \ ef
 
 
 }

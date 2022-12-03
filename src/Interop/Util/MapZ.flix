@@ -23,7 +23,7 @@ namespace Interop/Util {
     pub enum MapZ[_k: Type, _v: Type, _r: Region](##java.util.Map)
 
     instance Scoped[MapZ[k, v]] {
-        pub def regionOf(_: MapZ[k, v, r]): Region[r] = () as Region[r]
+        pub def regionOf(_: MapZ[k, v, r]): Region[r] = unsafe_cast () as Region[r]
     }
 
     pub class ImpMapZ[t: Type -> Type -> Region -> Type] {
@@ -122,7 +122,7 @@ namespace Interop/Util/MapZ {
         import java.util.Map.equals(##java.lang.Object): Bool \ r; 
         let MapZ(jm1) = m1;
         let MapZ(jm2) = m2;
-        equals(jm1, jm2 as ##java.lang.Object)
+        equals(jm1, unsafe_cast jm2 as ##java.lang.Object)
 
     pub def size(m: MapZ[k, v, r]): Int32 \ Read(r) =
         import java.util.Map.size(): Int32 \ r;

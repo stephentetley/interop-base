@@ -22,18 +22,18 @@ namespace Interop/IO {
     pub enum FileInputStream[_: Region](##java.io.FileInputStream)
 
     instance Scoped[FileInputStream] {
-        pub def regionOf(_: FileInputStream[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: FileInputStream[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
 
     instance Interop/IO.SubInputStream[FileInputStream] {
         pub def toInputStream(s: FileInputStream[r]): InputStream[r] = 
             let FileInputStream(s1) = s;
-            InputStream(s1 as ##java.io.InputStream)
+            InputStream(unsafe_cast s1 as ##java.io.InputStream)
 
         pub def fromInputStream(s: InputStream[r]): FileInputStream[r] = 
             let InputStream(s1) = s;
-            FileInputStream(s1 as ##java.io.FileInputStream) 
+            FileInputStream(unsafe_cast s1 as ##java.io.FileInputStream) 
     }
 
 

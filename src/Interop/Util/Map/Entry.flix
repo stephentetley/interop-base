@@ -21,7 +21,7 @@ namespace Interop/Util/Map {
     pub enum Entry[_k: Type, _v: Type, _: Region](##java.util.Map$Entry)
     
     instance Scoped[Entry[k, v]] {
-        pub def regionOf(_: Entry[k, v, r]): Region[r] = () as Region[r]
+        pub def regionOf(_: Entry[k, v, r]): Region[r] = unsafe_cast () as Region[r]
     }
 
 
@@ -43,13 +43,13 @@ namespace Interop/Util/Map/Entry {
 
     /// Entry cannot be an instance of Marshal because it carries a region.
     pub def castObject(_: Region[r], o: ##java.lang.Object): Entry[k, v, r] \ Write(r) = 
-        Entry(o as ##java.util.Map$Entry) as \ Write(r)
+        unsafe_cast (Entry(unsafe_cast o as ##java.util.Map$Entry)) as \ Write(r)
 
     pub def equals(x: Entry[k, v, r], y: Entry[k, v, r]): Bool \ Read(r) = 
         import java.util.Map$Entry.equals(##java.lang.Object): Bool \ r;
         let Entry(x1) = x;
         let Entry(y1) = y;
-        equals(x1, y1 as ##java.lang.Object) 
+        equals(x1, unsafe_cast y1 as ##java.lang.Object) 
 
     pub def hashCode(x: Entry[k, v, r]): Int32 \ Read(r) = 
         import java.util.Map$Entry.hashCode(): Int32 \ r;

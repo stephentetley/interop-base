@@ -21,7 +21,7 @@ namespace Interop/NIO/Channels {
     pub enum Pipe[_: Region](##java.nio.channels.Pipe)
     
     instance Scoped[Pipe] {
-        pub def regionOf(_: Pipe[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: Pipe[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
 }

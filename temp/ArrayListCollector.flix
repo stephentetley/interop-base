@@ -15,13 +15,6 @@ pub def runIt(f: Unit -> Result[Unit, String] \ ef): Unit \ {ef, IO} = match f()
     case Err(msg) => println(msg)
 }
 
-pub def castObjectToArrayList(r: Region[r], o: ##java.lang.Object): ArrayList[a, r] = 
-    Interop/Util/ArrayList.wrapHH(r, o as ##java.util.ArrayList)
-
-pub def castArrayListToObject(l: ArrayList[a, r]): ##java.lang.Object = 
-    let ArrayList(l1) = l;
-    l1 as ##java.lang.Object 
-
 
 pub def arrayListCollector(r: Region[r]): Collector[String, a, ArrayList[String, r]] \ IO = 
     let supplier = Interop/Util/Function/Supplier.makeInitialSupplier(r, _ -> Interop/Util/ArrayList.new(r));
@@ -36,7 +29,7 @@ pub def test01(): Result[Unit, String] \ IO =
     region r {
         let strm    = Interop/Util/Stream/Stream.ofArray(r, ["Hello", "World", "!"] @ r);
         let coll    = arrayListCollector(r);
-        let ans     = Interop/Util/Stream/Stream.collectWith(coll, strm, castObjectToArrayList(r));
+        let ans     = Interop/Util/Stream/Stream.collectWith(coll, strm, Interop/Flix/MutMarshal.mmFromJavaObject(r));
         println(Interop/Util/ArrayList.toString(ans));
         Ok()
     }    

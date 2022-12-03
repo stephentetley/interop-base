@@ -30,31 +30,31 @@ namespace Interop/NIO/File {
     instance Interop/Flix.Marshal[LinkOption] {
         pub def toJavaObject(x: LinkOption): ##java.lang.Object =
             let LinkOption(x1) = x;
-            x1 as ##java.lang.Object
+            unsafe_cast x1 as ##java.lang.Object
 
         pub def fromJavaObject(o: ##java.lang.Object): LinkOption = 
-            LinkOption(o as ##java.nio.file.LinkOption)
+            LinkOption(unsafe_cast o as ##java.nio.file.LinkOption)
     }
 
 
     instance ImpOpenOption[LinkOption] {
         pub def toOpenOption(x: LinkOption): OpenOption = 
             let LinkOption(x1) = x;
-            OpenOption(x1 as ##java.nio.file.OpenOption)
+            OpenOption(unsafe_cast x1 as ##java.nio.file.OpenOption)
 
         pub def fromOpenOption(x: OpenOption): LinkOption = 
             let OpenOption(x1) = x;
-            LinkOption(x1 as ##java.nio.file.LinkOption) 
+            LinkOption(unsafe_cast x1 as ##java.nio.file.LinkOption) 
     }
 
     instance SubEnum[LinkOption] {
         pub def toEnum(x: LinkOption): Enum[a] = 
             let LinkOption(x1) = x;
-            Enum(x1 as ##java.lang.Enum)
+            Enum(unsafe_cast x1 as ##java.lang.Enum)
 
         pub def fromEnum(x: Enum[a]): LinkOption = 
             let Enum(x1) = x;
-            LinkOption(x1 as ##java.nio.file.LinkOption) 
+            LinkOption(unsafe_cast x1 as ##java.nio.file.LinkOption) 
     }
 
 }

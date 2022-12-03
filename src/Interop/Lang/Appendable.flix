@@ -21,7 +21,7 @@ namespace Interop/Lang {
     pub enum Appendable[_: Region](##java.lang.Appendable)
 
     instance Scoped[Appendable] {
-        pub def regionOf(_: Appendable[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: Appendable[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
     pub class ImpAppendable[t: Region -> Type] {
@@ -32,11 +32,11 @@ namespace Interop/Lang {
     instance Interop/Lang.ImpAppendable[StringBuilder] {
         pub def toAppendable(s: StringBuilder[r]): Appendable[r] = 
             let StringBuilder(s1) = s;
-            Appendable(s1 as ##java.lang.Appendable)
+            Appendable(unsafe_cast s1 as ##java.lang.Appendable)
 
         pub def fromAppendable(s: Appendable[r]): StringBuilder[r] = 
             let Appendable(s1) = s;
-            StringBuilder(s1 as ##java.lang.StringBuilder) 
+            StringBuilder(unsafe_cast s1 as ##java.lang.StringBuilder) 
     }
 
 }
@@ -67,6 +67,7 @@ namespace Interop/Lang/Appendable {
                 Err(getMessage(ex))
         }
 
+    /// TODO - use concrete types
     pub def appendCharSequence![r1: Region, r2: Region, t1: Region -> Type, t2: Region -> Type]
                                 (cs: t1[r1], ss: t2[r2]): Result[Unit, String] \ {Read(r1), Write(r2)} with ImpCharSequence[t1], ImpAppendable[t2] = 
         try {
@@ -74,7 +75,7 @@ namespace Interop/Lang/Appendable {
             let Appendable(ss1) = Interop/Lang/ImpAppendable.toAppendable(ss);
             let CharSequence(cs1) = Interop/Lang/ImpCharSequence.toCharSequence(cs);
             discard append(ss1, cs1);
-            Ok() as \ {Read(r1), Write(r2)} 
+            unsafe_cast Ok() as \ {Read(r1), Write(r2)} 
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String & r2;

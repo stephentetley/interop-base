@@ -22,7 +22,7 @@ namespace Interop/Util/Stream {
     pub enum IntStream[_r: Region](##java.util.stream.IntStream)
 
     instance Scoped[IntStream] {
-        pub def regionOf(_: IntStream[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: IntStream[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
 
@@ -62,7 +62,7 @@ namespace Interop/Util/Stream/IntStream {
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ r;
         let r = Scoped.regionOf(s);
         let IntStream(s1) = s;
-        let iter1 = iterator(s1 as ##java.util.stream.BaseStream);
+        let iter1 = iterator(unsafe_cast s1 as ##java.util.stream.BaseStream);
         let iter2 = Interop/Util/IteratorZ.wrapHH(r, iter1);
         Interop/Util/IteratorZ.iterator(iter2)
 
@@ -136,8 +136,8 @@ namespace Interop/Util/Stream/IntStream {
     pub def flatMap(f: Int32 -> IntStream[r] \ ef, s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
         import java.util.stream.IntStream.flatMap(IntFunction[##java.util.stream.IntStream]): ##java.util.stream.IntStream \ {r, ef};
         let IntStream(s1) = s;
-        let f1 = Interop/Util/Function/IntFunction.makeIntFunctionWith(f, t -> {let IntStream(t1) = t; t1 as ##java.lang.Object});
-        (flatMap(s1, f1) as \ {Write(r), ef}) |> IntStream
+        let f1 = Interop/Util/Function/IntFunction.makeIntFunctionWith(f, t -> {let IntStream(t1) = t; unsafe_cast t1 as ##java.lang.Object});
+        (unsafe_cast (flatMap(s1, f1)) as \ { Write(r), ef }) |> IntStream
 
 
     pub def forEach(f: Int32 -> Unit \ ef, s: IntStream[r]): Unit \ {Read(r), ef} = 

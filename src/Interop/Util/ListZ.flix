@@ -26,7 +26,7 @@ namespace Interop/Util {
     pub enum ListZ[_: Type, _: Region](##java.util.List)
 
     instance Scoped[ListZ[a]] {
-        pub def regionOf(_: ListZ[a, r]): Region[r] = () as Region[r]
+        pub def regionOf(_: ListZ[a, r]): Region[r] = unsafe_cast () as Region[r]
     }
 
     pub class ImpListZ[t: Type -> Region -> Type] {
@@ -38,11 +38,11 @@ namespace Interop/Util {
     instance Interop/Util.ImpCollection[ListZ] {
         pub def toCollection(t: ListZ[a, r]): Collection[a, r] = 
             let ListZ(t1) = t;
-            Collection(t1 as ##java.util.Collection)
+            Collection(unsafe_cast t1 as ##java.util.Collection)
 
         pub def fromCollection(t: Collection[a, r]): ListZ[a, r] = 
             let Collection(t1) = t;
-            ListZ(t1 as ##java.util.List) 
+            ListZ(unsafe_cast t1 as ##java.util.List) 
     }
 
 }
@@ -113,7 +113,7 @@ namespace Interop/Util/ListZ {
         import java.util.List.equals(##java.lang.Object): Bool \ r; 
         let ListZ(jl1) = l1;
         let ListZ(jl2) = l2;
-        equals(jl1, jl2 as ##java.lang.Object)
+        equals(jl1, unsafe_cast jl2 as ##java.lang.Object)
 
 
     pub def hashCode(l: ListZ[a, r]): Int32 \ Read(r) = 
@@ -220,7 +220,7 @@ namespace Interop/Util/ListZ {
             import java.util.List.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let ListZ(l1) = l;        
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            (removeIf(l1, f1) as \  {ef, Write(r)}) |> Ok
+            (unsafe_cast removeIf(l1, f1) as \ {ef, Write(r)}) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};

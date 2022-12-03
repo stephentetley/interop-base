@@ -40,7 +40,7 @@ namespace Interop/Lang/Character {
         import java.lang.Character.equals(##java.lang.Object): Bool \ {};
         let Character(x1) = x;
         let Character(y1) = y;
-        equals(x1, y1 as ##java.lang.Object)
+        equals(x1, unsafe_cast y1 as ##java.lang.Object)
 
     pub def compare(x: Char, y: Char): Int32 =
         import static java.lang.Character.compare(Char, Char): Int32 \ {};

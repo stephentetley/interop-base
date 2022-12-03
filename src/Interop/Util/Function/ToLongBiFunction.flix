@@ -33,12 +33,12 @@ namespace Interop/Util/Function/ToLongBiFunction {
     use Interop/Flix.Marshal
 
     pub def makeToLongBiFunction(f: (a, b) -> Int64 \ ef): ToLongBiFunction[a, b] \ ef with Marshal[a], Marshal[b] = 
-        new ##java.util.function.ToLongBiFunction {
+        unsafe_cast (new ##java.util.function.ToLongBiFunction {
             def applyAsLong(_this: ##java.util.function.ToLongBiFunction, t: ##java.lang.Object, u: ##java.lang.Object): Int64 = 
                 let a1 = Interop/Flix/Marshal.fromJavaObject(t);
                 let b1 = Interop/Flix/Marshal.fromJavaObject(u);
                 f(a1, b1)
-        } as \ ef
+        }) as \ ef
 
 
     pub def applyAsInt(f: ToLongBiFunction[a, b], t: a, u: b): Int64 \ ef with Marshal[a], Marshal[b] = 

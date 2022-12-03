@@ -23,17 +23,17 @@ namespace Interop/Text {
     pub enum DecimalFormat[_: Region](##java.text.DecimalFormat)
     
     instance Scoped[DecimalFormat] {
-        pub def regionOf(_: DecimalFormat[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: DecimalFormat[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
     instance SubNumberFormat[DecimalFormat] {
         pub def toNumberFormat(o: DecimalFormat[r]): NumberFormat[r] = 
             let DecimalFormat(o1) = o;
-            NumberFormat(o1 as ##java.text.NumberFormat)
+            NumberFormat(unsafe_cast o1 as ##java.text.NumberFormat)
 
         pub def fromNumberFormat(o: NumberFormat[r]): DecimalFormat[r] = 
             let NumberFormat(o1) = o;
-            DecimalFormat(o1 as ##java.text.DecimalFormat) 
+            DecimalFormat(unsafe_cast o1 as ##java.text.DecimalFormat) 
     }
 
 }

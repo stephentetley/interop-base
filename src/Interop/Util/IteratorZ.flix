@@ -22,7 +22,7 @@ namespace Interop/Util {
     pub enum IteratorZ[_a: Type, _r: Region](##java.util.Iterator)
 
     instance Scoped[IteratorZ[a]] {
-        pub def regionOf(_: IteratorZ[a, r]): Region[r] = () as Region[r]
+        pub def regionOf(_: IteratorZ[a, r]): Region[r] = unsafe_cast () as Region[r]
     }
 
 }
@@ -59,7 +59,7 @@ namespace Interop/Util/IteratorZ {
             let a1 = next(iter1);
             ocast(a1)
         };
-        Iterator(isDone, getNext) as \ { Read(r), Write(r) }
+        unsafe_cast Iterator(isDone, getNext) as \ { Read(r), Write(r) }
 
 
 

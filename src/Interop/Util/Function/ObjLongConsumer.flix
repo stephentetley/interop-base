@@ -36,10 +36,10 @@ namespace Interop/Util/Function/ObjLongConsumer {
     use Interop/Flix.Marshal
 
     pub def makeObjLongConsumer(f: (a, Int64) -> Unit \ ef): ObjLongConsumer[a] \ ef with Marshal[a] = 
-        new ##java.util.function.ObjLongConsumer {
+        unsafe_cast (new ##java.util.function.ObjLongConsumer {
             def accept(_this: ##java.util.function.ObjLongConsumer, t: ##java.lang.Object, u: Int64): Unit = 
                 f(Interop/Flix/Marshal.fromJavaObject(t), u)
-        } as \ ef
+        }) as \ ef
 
         
     pub def accept(t: a, u: Int64, f: ObjLongConsumer[a]): Unit \ ef with Marshal[a] = 

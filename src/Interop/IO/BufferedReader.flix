@@ -21,17 +21,17 @@ namespace Interop/IO {
     pub enum BufferedReader[_: Region](##java.io.BufferedReader)
 
     instance Scoped[BufferedReader] {
-        pub def regionOf(_: BufferedReader[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: BufferedReader[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
     instance Interop/IO.SubReader[BufferedReader] {
         pub def toReader(s: BufferedReader[r]): Reader[r] = 
             let BufferedReader(s1) = s;
-            Reader(s1 as ##java.io.Reader)
+            Reader(unsafe_cast s1 as ##java.io.Reader)
 
         pub def fromReader(s: Reader[r]): BufferedReader[r] = 
             let Reader(s1) = s;
-            BufferedReader(s1 as ##java.io.BufferedReader) 
+            BufferedReader(unsafe_cast s1 as ##java.io.BufferedReader) 
     }
 
 }

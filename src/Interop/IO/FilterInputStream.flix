@@ -22,18 +22,18 @@ namespace Interop/IO {
     pub enum FilterInputStream[_: Region](##java.io.FilterInputStream)
 
     instance Scoped[FilterInputStream] {
-        pub def regionOf(_: FilterInputStream[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: FilterInputStream[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
 
     instance Interop/IO.SubInputStream[FilterInputStream] {
         pub def toInputStream(s: FilterInputStream[r]): InputStream[r] = 
             let FilterInputStream(s1) = s;
-            InputStream(s1 as ##java.io.InputStream)
+            InputStream(unsafe_cast s1 as ##java.io.InputStream)
 
         pub def fromInputStream(s: InputStream[r]): FilterInputStream[r] = 
             let InputStream(s1) = s;
-            FilterInputStream(s1 as ##java.io.FilterInputStream) 
+            FilterInputStream(unsafe_cast s1 as ##java.io.FilterInputStream) 
     }
 
 

@@ -20,7 +20,7 @@ namespace Interop/Lang {
     pub enum Process[_: Region](##java.lang.Process)
 
     instance Scoped[Process] {
-        pub def regionOf(_: Process[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: Process[r]): Region[r] = unsafe_cast () as Region[r]
     }
 }
 

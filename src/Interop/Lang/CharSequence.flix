@@ -23,7 +23,7 @@ namespace Interop/Lang {
     pub enum CharSequence[_: Region](##java.lang.CharSequence)
 
     instance Scoped[CharSequence] {
-        pub def regionOf(_: CharSequence[r]): Region[r] = () as Region[r]
+        pub def regionOf(_: CharSequence[r]): Region[r] = unsafe_cast () as Region[r]
     }
 
     pub class ImpCharSequence[t: Region -> Type] {
@@ -34,11 +34,11 @@ namespace Interop/Lang {
     instance Interop/Lang.ImpCharSequence[StringBuilder] {
         pub def toCharSequence(s: StringBuilder[r]): CharSequence[r] = 
             let StringBuilder(s1) = s;
-            CharSequence(s1 as ##java.lang.CharSequence)
+            CharSequence(unsafe_cast s1 as ##java.lang.CharSequence)
 
         pub def fromCharSequence(s: CharSequence[r]): StringBuilder[r] = 
             let CharSequence(s1) = s;
-            StringBuilder(s1 as ##java.lang.StringBuilder) 
+            StringBuilder(unsafe_cast s1 as ##java.lang.StringBuilder) 
     }
 
 
