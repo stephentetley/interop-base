@@ -51,6 +51,11 @@ namespace Interop/Lang/Character {
         let Character(x1) = x;
         charValue(x1)
 
+
+    pub def charValueWithCodePoint(cp: Int32): Int32 =
+        import static java.lang.Character.charCount(Int32): Int32 \ {};
+        charCount(cp)
+
     pub def hashCode(x: Character): Int32 =
         import java.lang.Character.hashCode(): Int32 \ {};
         let Character(x1) = x;
@@ -60,4 +65,7 @@ namespace Interop/Lang/Character {
         import static java.lang.Character.valueOf(Char): ##java.lang.Character \ {};
         valueOf(x) |> Character
 
+    pub def getName(cp: Int32): String =
+        import static java.lang.Character.getName(Int32): String \ {};
+        getName(cp)
 }

@@ -35,6 +35,10 @@ namespace Interop/Lang/Enum {
     use Interop/Lang.Enum
     use Interop/Lang.Enum.{Enum}
 
+    pub def toString(x: Enum[a]): String =
+        import java.lang.Enum.toString(): String \ {};
+        let Enum(x1) = x;
+        toString(x1)
 
     pub def equals(x: Enum[a], y: Enum[a]): Bool =
         import java.lang.Enum.equals(##java.lang.Object): Bool \ {};
@@ -42,9 +46,19 @@ namespace Interop/Lang/Enum {
         let Enum(y1) = y;
         equals(x1, unsafe_cast y1 as ##java.lang.Object)
 
+    pub def hashCode(x: Enum[a]): Int32 =
+        import java.lang.Enum.hashCode(): Int32 \ {};
+        let Enum(x1) = x;
+        hashCode(x1)
+
     pub def name(x: Enum[a]): String =
         import java.lang.Enum.name(): String \ {};
         let Enum(x1) = x;
         name(x1)
+
+    pub def ordinal(x: Enum[a]): Int32 =
+        import java.lang.Enum.ordinal(): Int32 \ {};
+        let Enum(x1) = x;
+        ordinal(x1)
 
 }

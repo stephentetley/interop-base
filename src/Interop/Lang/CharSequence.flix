@@ -69,9 +69,41 @@ namespace Interop/Lang/CharSequence {
         Interop/Lang/ImpCharSequence.toCharSequence(cseq) |> getHH
 
 
+    pub def toString(cs: CharSequence[r]): String \ Read(r) = 
+        import java.lang.CharSequence.toString(): String \ r;
+        let CharSequence(cs1) = cs;
+        toString(cs1)
+
+    pub def isEmpty(cs: CharSequence[r]): Bool \ Read(r) = 
+        import java.lang.CharSequence.isEmpty(): Bool \ r;
+        let CharSequence(cs1) = cs;
+        isEmpty(cs1)
+
     pub def length(cs: CharSequence[r]): Int32 \ Read(r) = 
-        import java.lang.CharSequence.length(): Int32 & r;
+        import java.lang.CharSequence.length(): Int32 \ r;
         let CharSequence(cs1) = cs;
         length(cs1)
+
+    pub def charAt(ix: Int32, cs: CharSequence[r]): Result[Char, String] \ Read(r) = 
+        try {
+            import java.lang.CharSequence.charAt(Int32): Char \ r;
+            let CharSequence(cs1) = cs;
+            charAt(cs1, ix) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
+
+    pub def subSequence(start: {start = Int32}, end: {end = Int32}, cs: CharSequence[r]): Result[CharSequence[r], String] \ {Read(r), Write(r)} = 
+        try {
+            import java.lang.CharSequence.subSequence(Int32, Int32): ##java.lang.CharSequence \ r;
+            let CharSequence(cs1) = cs;
+            subSequence(cs1, start.start, end.end) |> CharSequence |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
 }
