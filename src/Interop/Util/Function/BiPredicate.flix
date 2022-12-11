@@ -41,7 +41,7 @@ namespace Interop/Util/Function/BiPredicate {
         unsafe_cast (new ##java.util.function.BiPredicate {
             def test(_this: ##java.util.function.BiPredicate, t: ##java.lang.Object, u: ##java.lang.Object): Bool = 
                 f1(t, u)
-        }) as \ ef
+        }) as _ \ ef
 
 
         

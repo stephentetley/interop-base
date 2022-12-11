@@ -139,7 +139,7 @@ namespace Interop/Util/Stream/LongStream {
         import java.util.stream.LongStream.flatMap(LongFunction[##java.util.stream.LongStream]): ##java.util.stream.LongStream \ {r, ef};
         let LongStream(s1) = s;
         let f1 = Interop/Util/Function/LongFunction.makeLongFunctionWith(f, t -> {let LongStream(t1) = t; unsafe_cast t1 as ##java.lang.Object});
-        (unsafe_cast (flatMap(s1, f1)) as \ {Write(r), ef}) |> LongStream
+        (unsafe_cast (flatMap(s1, f1)) as _ \ {Write(r), ef}) |> LongStream
 
 
     pub def forEach(f: Int64 -> Unit \ ef, s: LongStream[r]): Unit \ {Read(r), ef} = 

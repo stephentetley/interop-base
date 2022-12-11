@@ -137,7 +137,7 @@ namespace Interop/Util/Stream/IntStream {
         import java.util.stream.IntStream.flatMap(IntFunction[##java.util.stream.IntStream]): ##java.util.stream.IntStream \ {r, ef};
         let IntStream(s1) = s;
         let f1 = Interop/Util/Function/IntFunction.makeIntFunctionWith(f, t -> {let IntStream(t1) = t; unsafe_cast t1 as ##java.lang.Object});
-        (unsafe_cast (flatMap(s1, f1)) as \ { Write(r), ef }) |> IntStream
+        (unsafe_cast (flatMap(s1, f1)) as _ \ { Write(r), ef }) |> IntStream
 
 
     pub def forEach(f: Int32 -> Unit \ ef, s: IntStream[r]): Unit \ {Read(r), ef} = 

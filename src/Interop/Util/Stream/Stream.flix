@@ -139,7 +139,7 @@ namespace Interop/Util/Stream/Stream {
         import java.util.stream.Stream.flatMap(Function[a, ##java.util.stream.Stream]): ##java.util.stream.Stream \ {r, ef};
         let Stream(s1) = s;
         let f1 = Interop/Util/Function/Function.makeFunctionWith(f, Interop/Flix/Marshal.fromJavaObject, strm -> unsafe_cast strm as ##java.lang.Object);
-        (unsafe_cast (flatMap(s1, f1)) as \ {Write(r), ef}) |> Stream
+        (unsafe_cast (flatMap(s1, f1)) as _ \ {Write(r), ef}) |> Stream
 
 
 

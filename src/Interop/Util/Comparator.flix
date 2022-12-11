@@ -42,7 +42,7 @@ namespace Interop/Util/Comparator {
         unsafe_cast (new ##java.util.Comparator {
             def compare(_this: ##java.util.Comparator, t: ##java.lang.Object, u: ##java.lang.Object): Int32 = 
                 f1(t, u)
-        }) as \ ef
+        }) as _ \ ef
 
     pub def naturalOrder(): Comparator[a] = 
         import static java.util.Comparator.naturalOrder(): ##java.util.Comparator \ {}; 

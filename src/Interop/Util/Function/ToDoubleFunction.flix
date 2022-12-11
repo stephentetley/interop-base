@@ -36,7 +36,7 @@ namespace Interop/Util/Function/ToDoubleFunction {
         unsafe_cast (new ##java.util.function.ToDoubleFunction {
             def applyAsDouble(_this: ##java.util.function.ToDoubleFunction, t: ##java.lang.Object): Float64 = 
                 Interop/Flix/Marshal.fromJavaObject(t) |> f
-        }) as \ ef
+        }) as _ \ ef
 
 
     pub def applyAsDouble(f: ToDoubleFunction[a], t: a): Float64 \ ef with Marshal[a]  = 

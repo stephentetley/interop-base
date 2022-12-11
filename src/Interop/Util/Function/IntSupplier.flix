@@ -34,7 +34,7 @@ namespace Interop/Util/Function/IntSupplier {
     pub def makeIntSupplier(f: Unit -> Int32 \ ef): IntSupplier \ ef = 
         unsafe_cast (new ##java.util.function.IntSupplier {
             def getAsInt(_this: ##java.util.function.IntSupplier): Int32 = f()
-        }) as \ ef
+        }) as _ \ ef
 
     pub def getAsInt(f: IntSupplier): Int32 \ ef = 
         import java.util.function.IntSupplier.getAsInt(): Int32 \ ef;

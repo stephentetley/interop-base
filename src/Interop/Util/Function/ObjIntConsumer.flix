@@ -39,7 +39,7 @@ namespace Interop/Util/Function/ObjIntConsumer {
         unsafe_cast (new ##java.util.function.ObjIntConsumer {
             def accept(_this: ##java.util.function.ObjIntConsumer, t: ##java.lang.Object, u: Int32): Unit = 
                 f(Interop/Flix/Marshal.fromJavaObject(t), u)
-        }) as \ ef
+        }) as _ \ ef
 
         
     pub def accept(t: a, u: Int32, f: ObjIntConsumer[a]): Unit \ ef with Marshal[a] = 

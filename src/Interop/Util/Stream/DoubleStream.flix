@@ -122,7 +122,7 @@ namespace Interop/Util/Stream/DoubleStream {
         import java.util.stream.DoubleStream.flatMap(DoubleFunction[##java.util.stream.DoubleStream]): ##java.util.stream.DoubleStream \ {r, ef};
         let DoubleStream(s1) = s;
         let f1 = Interop/Util/Function/DoubleFunction.makeDoubleFunctionWith(f, t -> {let DoubleStream(t1) = t; unsafe_cast t1 as ##java.lang.Object});
-        (unsafe_cast (flatMap(s1, f1)) as \ {Write(r), ef}) |> DoubleStream
+        (unsafe_cast (flatMap(s1, f1)) as _ \ {Write(r), ef}) |> DoubleStream
 
 
     pub def forEach(f: Float64 -> Unit \ ef, s: DoubleStream[r]): Unit \ {Read(r), ef} = 

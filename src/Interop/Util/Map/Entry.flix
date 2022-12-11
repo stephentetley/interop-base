@@ -43,7 +43,7 @@ namespace Interop/Util/Map/Entry {
 
     /// Entry cannot be an instance of Marshal because it carries a region.
     pub def castObject(_: Region[r], o: ##java.lang.Object): Entry[k, v, r] \ Write(r) = 
-        unsafe_cast (Entry(unsafe_cast o as ##java.util.Map$Entry)) as \ Write(r)
+        unsafe_cast (Entry(unsafe_cast o as ##java.util.Map$Entry)) as _ \ Write(r)
 
     pub def equals(x: Entry[k, v, r], y: Entry[k, v, r]): Bool \ Read(r) = 
         import java.util.Map$Entry.equals(##java.lang.Object): Bool \ r;

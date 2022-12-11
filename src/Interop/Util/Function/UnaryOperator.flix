@@ -46,7 +46,7 @@ namespace Interop/Util/Function/UnaryOperator {
         unsafe_cast (new ##java.util.function.UnaryOperator {
             def apply(_this: ##java.util.function.UnaryOperator, t: ##java.lang.Object): ##java.lang.Object = 
                 f1(t)
-        }) as \ ef
+        }) as _ \ ef
 
         
     pub def apply(t: a, f: UnaryOperator[a]): a \ ef with Marshal[a] = 

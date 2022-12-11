@@ -39,7 +39,7 @@ namespace Interop/Util/Function/LongBinaryOperator {
         unsafe_cast (new ##java.util.function.LongBinaryOperator {
             def applyAsLong(_this: ##java.util.function.LongBinaryOperator, t: Int64, u: Int64): Int64 = 
                 f(t, u)
-        }) as \ ef
+        }) as _ \ ef
 
         
     pub def applyAsLong(t: Int64, u: Int64, f: LongBinaryOperator): Int64 \ ef = 

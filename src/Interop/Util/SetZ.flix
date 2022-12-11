@@ -217,7 +217,7 @@ namespace Interop/Util/SetZ {
             import java.util.Set.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let SetZ(s1) = s;        
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            (unsafe_cast (removeIf(s1, f1)) as \ {ef, Write(r)}) |> Ok
+            (unsafe_cast (removeIf(s1, f1)) as _ \ {ef, Write(r)}) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};

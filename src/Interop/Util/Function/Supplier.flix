@@ -37,21 +37,21 @@ namespace Interop/Util/Function/Supplier {
         unsafe_cast (new ##java.util.function.Supplier {
             def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 
                 f() |> Interop/Flix/Marshal.toJavaObject
-        }) as \ ef
+        }) as _ \ ef
 
     pub def makeInitialSupplier[a: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
                                 (_: Region[r], f: Unit -> t[a, r] \ ef): Supplier[t[a, r]] \ ef with MutMarshal[t] = 
         unsafe_cast (new ##java.util.function.Supplier {
             def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 
                 f() |> Interop/Flix/MutMarshal.mmToJavaObject
-        }) as \ ef
+        }) as _ \ ef
 
 
     pub def makeSupplier2(f: Unit -> a \ ef, castToObj: a -> ##java.lang.Object): Supplier[a] \ ef = 
         unsafe_cast (new ##java.util.function.Supplier {
             def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 
                 f() |> castToObj
-        }) as \ ef
+        }) as _ \ ef
 
     pub def get(f: Supplier[a]): a \ ef with Marshal[a] = 
         import java.util.function.Supplier.get(): ##java.lang.Object \ ef;

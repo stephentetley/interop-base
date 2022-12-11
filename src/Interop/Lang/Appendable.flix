@@ -75,7 +75,7 @@ namespace Interop/Lang/Appendable {
             let Appendable(ss1) = Interop/Lang/ImpAppendable.toAppendable(ss);
             let CharSequence(cs1) = Interop/Lang/ImpCharSequence.toCharSequence(cs);
             discard append(ss1, cs1);
-            unsafe_cast Ok() as \ {Read(r1), Write(r2)} 
+            unsafe_cast Ok() as _ \ {Read(r1), Write(r2)} 
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String & r2;

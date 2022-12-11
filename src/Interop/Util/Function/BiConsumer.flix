@@ -42,7 +42,7 @@ namespace Interop/Util/Function/BiConsumer {
         unsafe_cast (new ##java.util.function.BiConsumer {
             def accept(_this: ##java.util.function.BiConsumer, t: ##java.lang.Object, u: ##java.lang.Object): Unit = 
                 f1(t, u)
-        }) as \ ef
+        }) as _ \ ef
 
 
     /// Collector imposes arg order: collection * element
@@ -56,7 +56,7 @@ namespace Interop/Util/Function/BiConsumer {
         unsafe_cast (new ##java.util.function.BiConsumer {
             def accept(_this: ##java.util.function.BiConsumer, t: ##java.lang.Object, u: ##java.lang.Object): Unit = 
                 f1(t, u)
-        }) as \ ef
+        }) as _ \ ef
 
 
     pub def makeBiConsumer2(f: (a, b) -> Unit \ ef, 
@@ -70,7 +70,7 @@ namespace Interop/Util/Function/BiConsumer {
         unsafe_cast (new ##java.util.function.BiConsumer {
             def accept(_this: ##java.util.function.BiConsumer, t: ##java.lang.Object, u: ##java.lang.Object): Unit = 
                 f1(t, u)
-        }) as \ ef
+        }) as _ \ ef
 
         
     pub def accept(t: a, u: b, f: BiConsumer[a, b]): Unit \ ef with Marshal[a], Marshal[b] = 

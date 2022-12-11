@@ -47,7 +47,7 @@ namespace Interop/Util/Function/BinaryOperator {
         unsafe_cast (new ##java.util.function.BinaryOperator {
             def apply(_this: ##java.util.function.BinaryOperator, t: ##java.lang.Object, u: ##java.lang.Object): ##java.lang.Object = 
                 f1(t, u)
-        }) as \ ef
+        }) as _ \ ef
 
 
     pub def makeCombiner[a: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
@@ -61,7 +61,7 @@ namespace Interop/Util/Function/BinaryOperator {
         unsafe_cast (new ##java.util.function.BinaryOperator {
             def apply(_this: ##java.util.function.BinaryOperator, t: ##java.lang.Object, u: ##java.lang.Object): ##java.lang.Object = 
                 f1(t, u)
-        }) as \ ef 
+        }) as _ \ ef 
 
     pub def makeBinaryOperator2(f: (a, a) -> a \ ef, castToObj: a -> ##java.lang.Object, castToA: ##java.lang.Object -> a): BinaryOperator[a] \ ef = 
         let f1 = (o1, o2) -> {
@@ -73,7 +73,7 @@ namespace Interop/Util/Function/BinaryOperator {
         unsafe_cast (new ##java.util.function.BinaryOperator {
             def apply(_this: ##java.util.function.BinaryOperator, t: ##java.lang.Object, u: ##java.lang.Object): ##java.lang.Object = 
                 f1(t, u)
-        }) as \ ef
+        }) as _ \ ef
 
     pub def apply(t: a, u: a, f: BinaryOperator[a]): a \ ef with Marshal[a] = 
         import java.util.function.BinaryOperator.apply(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ ef;        

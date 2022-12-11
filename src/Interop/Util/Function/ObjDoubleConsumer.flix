@@ -39,7 +39,7 @@ namespace Interop/Util/Function/ObjDoubleConsumer {
         unsafe_cast (new ##java.util.function.ObjDoubleConsumer {
             def accept(_this: ##java.util.function.ObjDoubleConsumer, t: ##java.lang.Object, u: Float64): Unit = 
                 f(Interop/Flix/Marshal.fromJavaObject(t), u)
-        }) as \ ef
+        }) as _ \ ef
 
         
     pub def accept(t: a, u: Float64, f: ObjDoubleConsumer[a]): Unit \ ef with Marshal[a] = 

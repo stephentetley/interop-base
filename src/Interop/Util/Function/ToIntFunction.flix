@@ -36,7 +36,7 @@ namespace Interop/Util/Function/ToIntFunction {
         unsafe_cast (new ##java.util.function.ToIntFunction {
             def applyAsInt(_this: ##java.util.function.ToIntFunction, t: ##java.lang.Object): Int32 = 
                 Interop/Flix/Marshal.fromJavaObject(t) |> f
-        }) as \ ef
+        }) as _ \ ef
 
 
     pub def applyAsInt(f: ToIntFunction[a], t: a): Int32 \ ef with Marshal[a]  = 

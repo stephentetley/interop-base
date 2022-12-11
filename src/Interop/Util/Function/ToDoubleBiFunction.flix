@@ -38,7 +38,7 @@ namespace Interop/Util/Function/ToDoubleBiFunction {
                 let a1 = Interop/Flix/Marshal.fromJavaObject(t);
                 let b1 = Interop/Flix/Marshal.fromJavaObject(u);
                 f(a1, b1)
-        }) as \ ef
+        }) as _ \ ef
 
 
     pub def applyAsDouble(f: ToDoubleBiFunction[a, b], t: a, u: b): Float64 \ ef with Marshal[a], Marshal[b] = 

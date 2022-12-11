@@ -59,7 +59,7 @@ namespace Interop/Util/IteratorZ {
             let a1 = next(iter1);
             ocast(a1)
         };
-        unsafe_cast Iterator(isDone, getNext) as \ { Read(r), Write(r) }
+        unsafe_cast Iterator(isDone, getNext) as _ \ { Read(r), Write(r) }
 
 
 

@@ -39,7 +39,7 @@ namespace Interop/Util/Function/DoubleBinaryOperator {
         unsafe_cast (new ##java.util.function.DoubleBinaryOperator {
             def applyAsDouble(_this: ##java.util.function.DoubleBinaryOperator, t: Float64, u: Float64): Float64 = 
                 f(t, u)
-        }) as \ ef
+        }) as _ \ ef
 
         
     pub def apply(t: Float64, u: Float64, f: DoubleBinaryOperator): Float64 \ ef = 

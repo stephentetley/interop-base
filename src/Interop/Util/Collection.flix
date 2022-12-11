@@ -115,7 +115,7 @@ namespace Interop/Util/Collection {
             import java.util.Collection.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let Collection(c1) = c;            
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            (unsafe_cast removeIf(c1, f1) as \ {ef, Write(r)}) |> Ok
+            (unsafe_cast removeIf(c1, f1) as _ \ {ef, Write(r)}) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
