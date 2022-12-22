@@ -63,9 +63,9 @@ namespace Interop/Util/Stream/Stream {
         let t1 = Interop/Flix/Marshal.toJavaObject(t);
         of(t1) |> Stream
 
-    pub def ofArray(_: Region[r], arr: Array[a, r2]): Stream[a, r] \ {Read(r2), Write(r)} with Marshal[a] = 
-        import static java.util.stream.Stream.of(Array[##java.lang.Object, r2]): ##java.util.stream.Stream \ r;
-        let arr1 = Array.map(Interop/Flix/Marshal.toJavaObject, arr);
+    pub def ofArray(rh: Region[r], arr: Array[a, r2]): Stream[a, r] \ {Read(r2), Write(r)} with Marshal[a] = 
+        import static java.util.stream.Stream.of(Array[##java.lang.Object, r]): ##java.util.stream.Stream \ { Write(r) };
+        let arr1 = Array.map(rh, Interop/Flix/Marshal.toJavaObject, arr);
         of(arr1) |> Stream
 
     pub def ofNullable(_: Region[r], t: a): Stream[a, r] \ Write(r) with Marshal[a] = 
