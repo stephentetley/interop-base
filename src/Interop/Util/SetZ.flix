@@ -27,11 +27,6 @@ namespace Interop/Util {
         pub def fromSetZ[a: Type, r: Region](s: SetZ[a, r]): t[a, r]
     }
 
-
-    instance Scoped[SetZ[a]] {
-        pub def regionOf(_: SetZ[a, r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
     instance Interop/Util.ImpCollection[SetZ] {
         pub def toCollection(t: SetZ[a, r]): Collection[a, r] = 
             let SetZ(t1) = t;
@@ -240,24 +235,24 @@ namespace Interop/Util/SetZ {
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def iterator(s: SetZ[a, r]): Iterator[a, r] \ { Write(r) } with Marshal[a] =
-        toFlixIterator(Scoped.regionOf(s), Interop/Flix/Marshal.fromJavaObject, s)
+    pub def iterator(rh: Region[rh], s: SetZ[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a] =
+        toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, s)
 
 
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def toFlixIterator(r2: Region[r2], 
+    pub def toFlixIterator(rh: Region[rh], 
                             ocast: ##java.lang.Object -> a, 
-                            s: SetZ[a, r]): Iterator[a, r2] \ { Read(r), Write(r2) } =
-        import java.util.Set.iterator(): ##java.util.Iterator \ Write(r);
+                            s: SetZ[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } =
+        import java.util.Set.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) } ;
         let SetZ(s1) = s;
         if (Object.isNull(s1))
-            Iterator.new(r2)
+            Iterator.new(rh)
         else 
             iterator(s1) 
-                |> Interop/Util/IteratorZ.wrapHH(r2)
-                |> Interop/Util/IteratorZ.toFlixIterator(ocast)
+                |> Interop/Util/IteratorZ.wrapHH(rh)
+                |> Interop/Util/IteratorZ.toFlixIterator(rh, ocast)
 
     pub def toFlixSet(s: SetZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
         region r2 {

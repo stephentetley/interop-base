@@ -21,10 +21,6 @@ namespace Interop/Text {
     /// Mutable
     pub enum NumberFormat[_: Region](##java.text.NumberFormat)
     
-    instance Scoped[NumberFormat] {
-        pub def regionOf(_: NumberFormat[r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
     pub class SubNumberFormat[t: Region -> Type] {
         pub def toNumberFormat[r: Region](s: t[r]): NumberFormat[r]
         pub def fromNumberFormat[r: Region](s: NumberFormat[r]): t[r]

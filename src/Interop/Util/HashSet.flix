@@ -27,10 +27,6 @@ namespace Interop/Util {
         pub def new(r: Region[r]): HashSet[a, r] \ Write(r) = Interop/Util/HashSet.new(r)
     }
 
-    instance Scoped[HashSet[a]] {
-        pub def regionOf(_: HashSet[a, r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
     instance Interop/Util.ImpCollection[HashSet] {
         pub def toCollection(t: HashSet[a, r]): Collection[a, r] = 
             let HashSet(t1) = t;

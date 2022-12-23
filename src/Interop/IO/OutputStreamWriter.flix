@@ -27,9 +27,6 @@ namespace Interop/IO {
     /// Note - this is subclassed by FileWriter, should we have a `SubOutputStreamWriter` class?
     /// ... Probably not, could FileWriter use casting internally?
 
-    instance Scoped[OutputStreamWriter] {
-        pub def regionOf(_: OutputStreamWriter[r]): Region[r] = unsafe_cast () as Region[r]
-    }
 
     instance Interop/IO.SubWriter[OutputStreamWriter] {
         pub def toWriter(s: OutputStreamWriter[r]): Writer[r] = 

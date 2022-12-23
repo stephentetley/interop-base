@@ -20,10 +20,6 @@ namespace Interop/Util/Map {
     /// Interface / Mutable - see `java.util.Map.Entry.setValue`
     pub enum Entry[_k: Type, _v: Type, _: Region](##java.util.Map$Entry)
     
-    instance Scoped[Entry[k, v]] {
-        pub def regionOf(_: Entry[k, v, r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
 
 }
 
@@ -65,6 +61,17 @@ namespace Interop/Util/Map/Entry {
         import java.util.Map$Entry.getValue(): ##java.lang.Object \ r;
         let Entry(ent1) = ent;
         getValue(ent1) |> Interop/Flix/Marshal.fromJavaObject
+
+    pub def copyOf(_: Region[rh], ent: Entry[k, v, r]): Result[Entry[k, v, r], String] \ { Read(r), Write(rh) } = 
+        try {
+            import static java.util.Map$Entry.copyOf(##java.util.Map$Entry): ##java.util.Map$Entry \ { Read(r), Write(rh) };
+            let Entry(ent1) = ent;
+            copyOf(ent1) |> Entry |> Ok
+        } catch { 
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
+        }
 
     ///
     /// We don't need the inverse function "Entry from (k,v)" because Java's API for building maps is `m.put(k, v)`

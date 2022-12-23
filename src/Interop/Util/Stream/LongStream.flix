@@ -22,11 +22,6 @@ namespace Interop/Util/Stream {
     ///
     pub enum LongStream[_r: Region](##java.util.stream.LongStream)
 
-    instance Scoped[LongStream] {
-        pub def regionOf(_: LongStream[r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
-
 }
 
 
@@ -61,13 +56,12 @@ namespace Interop/Util/Stream/LongStream {
 
     pub def newLongStream(_: Region[r], prim: ##java.util.stream.LongStream): LongStream[r] = LongStream(prim)
 
-    pub def longStreamIterator(s: LongStream[r]): Iterator[Int64, r] \ Write(r) =
-        import java.util.stream.BaseStream.iterator(): ##java.util.Iterator & r;
-        let r = Scoped.regionOf(s);
+    pub def longStreamIterator(rh: Region[rh], s: LongStream[r]): Iterator[Int64, rh] \ { Read(r), Write(rh) } =
+        import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
         let LongStream(s1) = s;
         let iter1 = iterator(unsafe_cast s1 as ##java.util.stream.BaseStream);
-        let iter2 = Interop/Util/IteratorZ.wrapHH(r, iter1);
-        Interop/Util/IteratorZ.iterator(iter2)
+        let iter2 = Interop/Util/IteratorZ.wrapHH(rh, iter1);
+        Interop/Util/IteratorZ.iterator(rh, iter2)
 
     pub def empty(_: Region[r]): LongStream[r] \ Write(r) = 
         import static java.util.stream.LongStream.empty(): ##java.util.stream.LongStream \ r;

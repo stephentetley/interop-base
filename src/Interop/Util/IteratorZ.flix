@@ -21,9 +21,6 @@ namespace Interop/Util {
     ///
     pub enum IteratorZ[_a: Type, _r: Region](##java.util.Iterator)
 
-    instance Scoped[IteratorZ[a]] {
-        pub def regionOf(_: IteratorZ[a, r]): Region[r] = unsafe_cast () as Region[r]
-    }
 
 }
 
@@ -42,14 +39,14 @@ namespace Interop/Util/IteratorZ {
         IteratorZ(iter)
 
     /// Mutable (raw) to mutable (Filx iterator) so Read/Write
-    pub def iterator(iter: IteratorZ[a, r]): Iterator[a, r] \ { Read(r), Write(r) } with Marshal[a]  =
-        toFlixIterator(Interop/Flix/Marshal.fromJavaObject, iter)
+    pub def iterator(rh: Region[rh], iter: IteratorZ[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a]  =
+        toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, iter)
         
 
     /// Cast must be Pure!
-    pub def toFlixIterator(ocast: ##java.lang.Object -> a, iter: IteratorZ[a, r]): Iterator[a, r] \ { Read(r), Write(r) }   =
-        import java.util.Iterator.hasNext(): Bool \ Read(r);
-        import java.util.Iterator.next(): ##java.lang.Object \ { Write(r) };
+    pub def toFlixIterator(_: Region[rh], ocast: ##java.lang.Object -> a, iter: IteratorZ[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } =
+        import java.util.Iterator.hasNext(): Bool \ Read(rh);
+        import java.util.Iterator.next(): ##java.lang.Object \ { Write(rh) };
         let IteratorZ(iter1) = iter;
         let isDone = () -> { 
             let ans = hasNext(iter1);
@@ -59,30 +56,32 @@ namespace Interop/Util/IteratorZ {
             let a1 = next(iter1);
             ocast(a1)
         };
-        unsafe_cast Iterator(isDone, getNext) as _ \ { Read(r), Write(r) }
+        unsafe_cast Iterator(isDone, getNext) as _ \ { Read(r), Write(rh) }
 
 
 
 
 
 
-    pub def enumerator(iter: IteratorZ[a, r]): Iterator[(a, Int32), r] \ Write(r) with Marshal[a] =
-        iterator(iter) |> Iterator.enumerator
+    pub def enumerator(rh: Region[rh], iter: IteratorZ[a, r]): Iterator[(a, Int32), rh] \ { Read(r), Write(rh) } with Marshal[a] =
+        iterator(rh, iter) |> Iterator.enumerator
 
     ///
     /// Apply the effectful function `f` to all the elements in the array `a`.
     ///
-    pub def forEach(f: a -> Unit & ef, iter: IteratorZ[a, r]): Unit \ { ef, Read(r) } with Marshal[a] =
-        iterator(iter) |> Iterator.forEach(f)
+    pub def forEach(f: a -> Unit & ef, iter: IteratorZ[a, r]): Unit \ { ef, Read(r) } with Marshal[a] = region r {
+        iterator(r, iter) |> Iterator.forEach(f)
+    }
 
-    pub def toList(iter: IteratorZ[a, r]): List[a] \ Read(r) with Marshal[a] = 
-        iterator(iter) |> Iterator.toList
+    pub def toList(iter: IteratorZ[a, r]): List[a] \ Read(r) with Marshal[a] = region r {
+        iterator(r, iter) |> Iterator.toList
+    }
 
-    pub def toNel(iter: IteratorZ[a, r]): Option[Nel[a]] \ Read(r) with Marshal[a] =
-        iterator(iter) |> Iterator.toNel
+    pub def toNel(iter: IteratorZ[a, r]): Option[Nel[a]] \ Read(r) with Marshal[a] = region r {
+        iterator(r, iter) |> Iterator.toNel
+    }
 
-
-    pub def toMapWith(f: a -> (k, v) & ef, iter: IteratorZ[a, r]): Map[k, v] \ { Read(r), ef } with Order[k], Marshal[a] =
-        iterator(iter) |> Iterator.foldLeft((acc, a) -> let (k,v) = f(a); Map.insert(k, v, acc), Map.empty())
-
+    pub def toMapWith(f: a -> (k, v) \ ef, iter: IteratorZ[a, r]): Map[k, v] \ { Read(r), ef } with Order[k], Marshal[a] = region r {
+        iterator(r, iter) |> Iterator.foldLeft((acc, a) -> let (k,v) = f(a); Map.insert(k, v, acc), Map.empty())
+    }
 }

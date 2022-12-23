@@ -19,9 +19,6 @@ namespace Interop/Lang {
 
     pub enum ProcessBuilder[_: Region](##java.lang.ProcessBuilder)
 
-    instance Scoped[ProcessBuilder] {
-        pub def regionOf(_: ProcessBuilder[r]): Region[r] = unsafe_cast () as Region[r]
-    }
 
 }
 
@@ -50,12 +47,12 @@ namespace Interop/Lang/ProcessBuilder {
         let ls1 = Interop/Util/ArrayList.fromFoldable(r, l) |> Interop/Util/ListZ.toListHH;
         newProcessBuilder(ls1) |> ProcessBuilder
 
-    pub def command!(l: List[String], pb: ProcessBuilder[r]): ProcessBuilder[r] \ Write(r) = 
-        import java.lang.ProcessBuilder.command(##java.util.List): ##java.lang.ProcessBuilder \ r;
+    pub def command!(l: List[String], pb: ProcessBuilder[r]): ProcessBuilder[r] \ Write(r) = region r1 {
+        import java.lang.ProcessBuilder.command(##java.util.List): ##java.lang.ProcessBuilder \ Write(r);
         let ProcessBuilder(pb1) = pb;
-        let r = Scoped.regionOf(pb);
-        let ls1 = Interop/Util/ArrayList.fromFoldable(r, l) |> Interop/Util/ListZ.toListHH;
+        let ls1 = Interop/Util/ArrayList.fromFoldable(r1, l) |> Interop/Util/ListZ.toListHH;
         command(pb1, ls1) |> ProcessBuilder
+    }
 
     pub def getCommand(pb: ProcessBuilder[r]): List[String] \ Read(r) = 
         region r1 {

@@ -20,10 +20,6 @@ namespace Interop/IO {
     // StringReader has a read pointer so it is mutable
     pub enum StringReader[_: Region](##java.io.StringReader)
 
-    instance Scoped[StringReader] {
-        pub def regionOf(_: StringReader[r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
 
     instance SubReader[StringReader] {
         pub def toReader(s: StringReader[r]): Reader[r] = 

@@ -21,10 +21,6 @@ namespace Interop/IO {
 
     pub enum File[_: Region](##java.io.File)
 
-    instance Scoped[File] {
-        pub def regionOf(_: File[r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
 
 }
 

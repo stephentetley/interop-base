@@ -20,10 +20,6 @@ namespace Interop/Lang {
 
     pub enum Appendable[_: Region](##java.lang.Appendable)
 
-    instance Scoped[Appendable] {
-        pub def regionOf(_: Appendable[r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
     pub class ImpAppendable[t: Region -> Type] {
         pub def toAppendable[r: Region](s: t[r]): Appendable[r]
         pub def fromAppendable[r: Region](s: Appendable[r]): t[r]

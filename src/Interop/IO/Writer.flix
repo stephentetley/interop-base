@@ -23,9 +23,6 @@ namespace Interop/IO {
 
     pub enum Writer[_: Region](##java.io.Writer)
 
-    instance Scoped[Writer] {
-        pub def regionOf(_: Writer[r]): Region[r] = unsafe_cast () as Region[r]
-    }
 
     pub class SubWriter[t: Region -> Type] {
         pub def toWriter[r: Region](s: t[r]): Writer[r]

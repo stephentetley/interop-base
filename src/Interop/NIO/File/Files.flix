@@ -95,36 +95,35 @@ namespace Interop/NIO/File/Files {
         }
 
     /// UTF_8
-    pub def writeStringUtf8!(path: Path, s: CharSequence[r], opts: List[OpenOption]): Result[Path, String] \ IO = 
+    pub def writeStringUtf8!(path: Path, s: CharSequence[r], opts: List[OpenOption]): Result[Path, String] \ IO = region r {
         try {
             import static flixinterop.nio.file.Filesz.writeString(##java.nio.file.Path, 
                             ##java.lang.CharSequence, ##java.util.List): ##java.nio.file.Path \ IO;
             let Path(path1) = path;
             let s1 = Interop/Lang/CharSequence.getHH(s);
-            let r1 = Scoped.regionOf(s);
-            let opts1 = Interop/Util/ArrayList.fromFoldable(r1, opts) |> Interop/Util/ListZ.toListHH;
+            let opts1 = Interop/Util/ArrayList.fromFoldable(r, opts) |> Interop/Util/ListZ.toListHH;
             writeString(path1, s1, opts1) |> Path |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
+    }
 
-    pub def writeString!(path: Path, s: CharSequence[r], cs: Charset, opts: List[OpenOption]): Result[Path, String] \ IO = 
+    pub def writeString!(path: Path, s: CharSequence[r], cs: Charset, opts: List[OpenOption]): Result[Path, String] \ IO = region r {
         try {
             import static flixinterop.nio.file.Filesz.writeString(##java.nio.file.Path, 
                             ##java.lang.CharSequence, ##java.nio.charset.Charset, ##java.util.List): ##java.nio.file.Path \ IO;
             let Path(path1) = path;
             let s1 = Interop/Lang/CharSequence.getHH(s);
             let Charset(cs1) = cs;
-            let r1 = Scoped.regionOf(s);
-            let opts1 = Interop/Util/ArrayList.fromFoldable(r1, opts) |> Interop/Util/ListZ.toListHH;
+            let opts1 = Interop/Util/ArrayList.fromFoldable(r, opts) |> Interop/Util/ListZ.toListHH;
             writeString(path1, s1, cs1, opts1) |> Path |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
-
+    }
 
 }

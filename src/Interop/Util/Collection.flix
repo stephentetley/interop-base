@@ -22,9 +22,6 @@ namespace Interop/Util {
     ///
     pub enum Collection[_: Type, _: Region](##java.util.Collection)
 
-    instance Scoped[Collection[a]] {
-        pub def regionOf(_: Collection[a, r]): Region[r] = unsafe_cast () as Region[r]
-    }
 
     pub class ImpCollection[t: Type -> Region -> Type] {
         pub def toCollection[a: Type, r: Region](s: t[a, r]): Collection[a, r]
@@ -153,21 +150,21 @@ namespace Interop/Util/Collection {
         let Collection(c1) = c;
         stream(c1) |> Stream
 
-    pub def iterator(c: Collection[a, r]): Iterator[a, r] \ { Write(r) } with Marshal[a] =
-        toFlixIterator(Scoped.regionOf(c), Interop/Flix/Marshal.fromJavaObject, c)
+    pub def iterator(rh: Region[rh], c: Collection[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a] =
+        toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, c)
         
 
-    pub def toFlixIterator(r2: Region[r2], 
+    pub def toFlixIterator(rh: Region[rh], 
                             ocast: ##java.lang.Object -> a,
-                            c: Collection[a, r]): Iterator[a, r2] \ { Read(r), Write(r2) } with Marshal[a] =
-        import java.util.Collection.iterator(): ##java.util.Iterator \ {r, r2} as iterator;
+                            c: Collection[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a] =
+        import java.util.Collection.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) } as iterator;
         let Collection(c1) = c;
         if (Object.isNull(c1))
-            Iterator.new(r2)
+            Iterator.new(rh)
         else 
             iterator(c1) 
-                |> Interop/Util/IteratorZ.wrapHH(r2)
-                |> Interop/Util/IteratorZ.toFlixIterator(ocast)
+                |> Interop/Util/IteratorZ.wrapHH(rh)
+                |> Interop/Util/IteratorZ.toFlixIterator(rh, ocast)
 
     /// pub def enumerator(r: Region[r1], c: Collection[a, r2]): Iterator[(a, Int32), r] \ { Read(r2), Write(r1) }  with Marshal[a] =
     ///     iterator(r, c) |> Iterator.enumerator

@@ -22,9 +22,6 @@ namespace Interop/Util {
     ///
     pub enum MapZ[_k: Type, _v: Type, _r: Region](##java.util.Map)
 
-    instance Scoped[MapZ[k, v]] {
-        pub def regionOf(_: MapZ[k, v, r]): Region[r] = unsafe_cast () as Region[r]
-    }
 
     pub class ImpMapZ[t: Type -> Type -> Region -> Type] {
         pub def toMapZ[k: Type, v: Type, r: Region](m: t[k, v, r]): MapZ[k, v, r]
@@ -233,21 +230,21 @@ namespace Interop/Util/MapZ {
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     ///
-    pub def iterator(m: MapZ[k, v, r]): Iterator[(k, v), r] \ { Write(r) } with Marshal[k], Marshal[v] =
-        toFlixIterator(Scoped.regionOf(m), Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)
+    pub def iterator(rh: Region[rh], m: MapZ[k, v, r]): Iterator[(k, v), rh] \ { Read(r), Write(rh) } with Marshal[k], Marshal[v] =
+        toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)
 
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     /// Can't use RawIterator because no Marshal instance for MapEntry
     ///
-    pub def toFlixIterator(r2: Region[r2], 
+    pub def toFlixIterator(rh: Region[rh], 
                             kcast: ##java.lang.Object -> k, 
                             vcast: ##java.lang.Object -> v, 
-                            m: MapZ[k, v, r]): Iterator[(k, v), r2] \ { Read(r), Write(r2) } with Marshal[k], Marshal[v] =
+                            m: MapZ[k, v, r]): Iterator[(k, v), rh] \ { Read(r), Write(rh) } with Marshal[k], Marshal[v] =
         import java.util.Map.entrySet(): ##java.util.Set \ r;
-        import java.util.Set.iterator(): ##java.util.Iterator \ {r, r2};
-        import java.util.Iterator.hasNext(): Bool \ r2;
-        import java.util.Iterator.next(): ##java.lang.Object \ r2;
+        import java.util.Set.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
+        import java.util.Iterator.hasNext(): Bool \ Read(rh);
+        import java.util.Iterator.next(): ##java.lang.Object \ Read(rh);
         let set1 = getHH(m) |> entrySet;
         let iter = iterator(set1);
         let isDone = () -> { 
@@ -255,21 +252,23 @@ namespace Interop/Util/MapZ {
             not ans
         };
         let getNext = () -> {
-            let entry = next(iter) |> Interop/Util/Map/Entry.castObject(r2);
+            let entry = next(iter) |> Interop/Util/Map/Entry.castObject(rh);
             Interop/Util/Map/Entry.toKeyValueWith(kcast, vcast, entry)
         };
         Iterator(isDone, getNext)
 
 
     
-    pub def toFlixMap(m: MapZ[k, v, r]): Map[k, v] \ { Read(r) } with Order[k], Marshal[k], Marshal[v] =
+    pub def toFlixMap(m: MapZ[k, v, r]): Map[k, v] \ { Read(r) } with Order[k], Marshal[k], Marshal[v] = region r {
         let step = (acc, entry) -> {
             let (k, v) = entry;
             Map.insert(k, v, acc)
         };
-        iterator(m) |> Iterator.foldLeft(step, Map.empty())
+        iterator(r, m) |> Iterator.foldLeft(step, Map.empty())
+    } 
 
-    pub def toFlixList(m: MapZ[k, v, r]): List[(k, v)] \ { Read(r) } with Marshal[k], Marshal[v] =
-        iterator(m) |> Iterator.toList
+    pub def toFlixList(m: MapZ[k, v, r]): List[(k, v)] \ { Read(r) } with Marshal[k], Marshal[v] = region r {
+        iterator(r, m) |> Iterator.toList
+    }
 
 }

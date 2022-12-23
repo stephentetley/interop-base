@@ -22,9 +22,7 @@ namespace Interop/Text {
     ///
     pub enum Collator[_: Region](##java.text.Collator)
 
-    instance Scoped[Collator] {
-        pub def regionOf(_: Collator[r]): Region[r] = unsafe_cast () as Region[r]
-    }
+
 }
 
 namespace Interop/Text/Collator {

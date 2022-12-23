@@ -27,9 +27,6 @@ namespace Interop/Util {
     ///
     pub enum LinkedList[_: Type, _: Region](##java.util.LinkedList)
 
-    instance Scoped[LinkedList[a]] {
-        pub def regionOf(_: LinkedList[a, r]): Region[r] = unsafe_cast () as Region[r]
-    }
 
     instance Interop/Util.ImpCollection[LinkedList] {
         pub def toCollection(t: LinkedList[a, r]): Collection[a, r] = 
@@ -248,31 +245,31 @@ namespace Interop/Util/LinkedList {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def iterator(l: LinkedList[a, r]): Iterator[a, r] \ { Write(r) } with Marshal[a] =
-        toFlixIterator(Scoped.regionOf(l), Interop/Flix/Marshal.fromJavaObject, l)
+    pub def iterator(rh: Region[rh], l: LinkedList[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a] =
+        toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, l)
 
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def toFlixIterator(r2: Region[r2], 
+    pub def toFlixIterator(rh: Region[rh], 
                             ocast: ##java.lang.Object -> a, 
-                            l: LinkedList[a, r]): Iterator[a, r2] \ { Read(r), Write(r2) } =
-        import java.util.LinkedList.iterator(): ##java.util.Iterator \ {r, r2} as iterator;
+                            l: LinkedList[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } =
+        import java.util.LinkedList.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) } as iterator;
         let LinkedList(l1) = l;
         if (Object.isNull(l1))
-            Iterator.new(r2)
+            Iterator.new(rh)
         else 
             iterator(l1) 
-                |> Interop/Util/IteratorZ.wrapHH(r2) 
-                |> Interop/Util/IteratorZ.toFlixIterator(ocast)
+                |> Interop/Util/IteratorZ.wrapHH(rh) 
+                |> Interop/Util/IteratorZ.toFlixIterator(rh, ocast)
 
 
 
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def enumerator(l: LinkedList[a, r]): Iterator[(a, Int32), r] \ { Write(r) } with Marshal[a] =
-        iterator(l) |> Iterator.enumerator
+    pub def enumerator(rh: Region[rh], l: LinkedList[a, r]): Iterator[(a, Int32), rh] \ { Read(r), Write(rh) } with Marshal[a] =
+        iterator(rh, l) |> Iterator.enumerator
 
 
     pub def unfoldLinkedList(_: Region[r], f: s -> Option[(a, s)] \ ef, st: s): LinkedList[a, r] \ { Write(r),  ef } with Marshal[a] =
@@ -284,16 +281,18 @@ namespace Interop/Util/LinkedList {
         };
         loop(st, new1())
 
-    pub def foldLinkedList(f: (b, a) -> b \ ef, s: b, l: LinkedList[a, r]): b \ { Read(r), ef } with Marshal[a] =
-        iterator(l) |> Iterator.foldLeft(f, s)
+    pub def foldLinkedList(f: (b, a) -> b \ ef, s: b, l: LinkedList[a, r]): b \ { Read(r), ef } with Marshal[a] = region r {
+        iterator(r, l) |> Iterator.foldLeft(f, s)
+    }
 
-    pub def toFlixList(l: LinkedList[a, r]): List[a] \ { Read(r) } with Marshal[a] =
-        iterator(l) |> Iterator.toList
+    pub def toFlixList(l: LinkedList[a, r]): List[a] \ { Read(r) } with Marshal[a] = region r {
+        iterator(r, l) |> Iterator.toList
+    }
 
-    pub def toFlixSet(l: LinkedList[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
+    pub def toFlixSet(l: LinkedList[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] = region r {
         let step = (acc, a) -> Set.insert(a, acc);
-        iterator(l) |> Iterator.foldLeft(step, Set.empty())
-
+        iterator(r, l) |> Iterator.foldLeft(step, Set.empty())
+    }
 
     pub def toArray(r1: Region[r1], l: LinkedList[a, r2]): Array[a, r1] \ { Read(r2), Write(r1) } with Marshal[a] =
         let len = size(l);

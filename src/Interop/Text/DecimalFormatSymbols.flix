@@ -22,10 +22,6 @@ namespace Interop/Text {
     ///
     pub enum DecimalFormatSymbols[_: Region](##java.text.DecimalFormatSymbols)
     
-    instance Scoped[DecimalFormatSymbols] {
-        pub def regionOf(_: DecimalFormatSymbols[r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
 
 }
 

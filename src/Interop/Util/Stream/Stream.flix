@@ -22,10 +22,6 @@ namespace Interop/Util/Stream {
     pub enum Stream[_a: Type, _r: Region](##java.util.stream.Stream)
 
 
-    instance Scoped[Stream[a]] {
-        pub def regionOf(_: Stream[a, r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
 }
 
 
@@ -81,13 +77,13 @@ namespace Interop/Util/Stream/Stream {
         iterate(seed1, op1) |> Stream
 
 
-    pub def iterator(s: Stream[a, r]): Iterator[a, r] \ Write(r) with Marshal[a] =
-        iteratorWith(Interop/Flix/Marshal.fromJavaObject, s)
+    pub def iterator(rh: Region[rh], s: Stream[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a] =
+        iteratorWith(rh, Interop/Flix/Marshal.fromJavaObject, s)
 
-    pub def iteratorWith(ocast: ##java.lang.Object -> a, s: Stream[a, r]): Iterator[a, r] \ Write(r) with Marshal[a] =
-        import java.util.stream.BaseStream.iterator(): ##java.util.Iterator & r;
-        import java.util.Iterator.hasNext(): Bool & r;
-        import java.util.Iterator.next(): ##java.lang.Object & r;
+    pub def iteratorWith(_: Region[rh], ocast: ##java.lang.Object -> a, s: Stream[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a] =
+        import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
+        import java.util.Iterator.hasNext(): Bool \ Read(rh);
+        import java.util.Iterator.next(): ##java.lang.Object \ Read(rh);
         let Stream(s1) = s;
         let iter1 = iterator(unsafe_cast s1 as ##java.util.stream.BaseStream);
         let isDone = () -> { 

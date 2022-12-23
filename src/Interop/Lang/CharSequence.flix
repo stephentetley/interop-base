@@ -22,10 +22,6 @@ namespace Interop/Lang {
 
     pub enum CharSequence[_: Region](##java.lang.CharSequence)
 
-    instance Scoped[CharSequence] {
-        pub def regionOf(_: CharSequence[r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
     pub class ImpCharSequence[t: Region -> Type] {
         pub def toCharSequence[r: Region](s: t[r]): CharSequence[r]
         pub def fromCharSequence[r: Region](s: CharSequence[r]): t[r]

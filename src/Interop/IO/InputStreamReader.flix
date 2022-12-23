@@ -21,9 +21,6 @@ namespace Interop/IO {
 
     pub enum InputStreamReader[_: Region](##java.io.InputStreamReader)
 
-    instance Scoped[InputStreamReader] {
-        pub def regionOf(_: InputStreamReader[r]): Region[r] = unsafe_cast () as Region[r]
-    }
 
     instance Interop/IO.SubReader[InputStreamReader] {
         pub def toReader(s: InputStreamReader[r]): Reader[r] = 

@@ -25,10 +25,6 @@ namespace Interop/Util {
     pub enum VectorZ[_a: Type, _r: Region](##java.util.Vector)
 
 
-    instance Scoped[VectorZ[a]] {
-        pub def regionOf(_: VectorZ[a, r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
     instance Interop/Util.ImpCollection[VectorZ] {
         pub def toCollection(t: VectorZ[a, r]): Collection[a, r] = 
             let VectorZ(t1) = t;
@@ -113,24 +109,24 @@ namespace Interop/Util/VectorZ {
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def iterator(v: VectorZ[a, r]): Iterator[a, r] \ { Write(r) } with Marshal[a] =
-        toFlixIterator(Scoped.regionOf(v), Interop/Flix/Marshal.fromJavaObject, v)
+    pub def iterator(rh: Region[rh], v: VectorZ[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a] =
+        toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, v)
 
 
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def toFlixIterator(r2: Region[r2], 
+    pub def toFlixIterator(rh: Region[rh], 
                             ocast: ##java.lang.Object -> a, 
-                            v: VectorZ[a, r]): Iterator[a, r2] \ { Read(r), Write(r2) } =
-        import java.util.Vector.iterator(): ##java.util.Iterator \ Write(r);
+                            v: VectorZ[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } =
+        import java.util.Vector.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
         let VectorZ(v1) = v;
         if (Object.isNull(v1))
-            Iterator.new(r2)
+            Iterator.new(rh)
         else 
             iterator(v1) 
-                |> Interop/Util/IteratorZ.wrapHH(r2)
-                |> Interop/Util/IteratorZ.toFlixIterator(ocast)
+                |> Interop/Util/IteratorZ.wrapHH(rh)
+                |> Interop/Util/IteratorZ.toFlixIterator(rh, ocast)
 
     pub def toFlixSet(v: VectorZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
         region r2 {

@@ -23,11 +23,6 @@ namespace Interop/IO {
 
     pub enum StringWriter[_: Region](##java.io.StringWriter)
 
-    instance Scoped[StringWriter] {
-        pub def regionOf(_: StringWriter[r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
-
     instance SubWriter[StringWriter] {
         pub def toWriter(s: StringWriter[r]): Writer[r] = 
             let StringWriter(s1) = s;

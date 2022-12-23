@@ -19,9 +19,6 @@ namespace Interop/Lang {
 
     pub enum Process[_: Region](##java.lang.Process)
 
-    instance Scoped[Process] {
-        pub def regionOf(_: Process[r]): Region[r] = unsafe_cast () as Region[r]
-    }
 }
 
 
@@ -55,25 +52,20 @@ namespace Interop/Lang/Process {
                 Err(getMessage(ex))
         }
 
-    pub def getOutputStream(p: Process[r]): OutputStream[r] \ {Write(r), IO}=
-        import java.lang.Process.getOutputStream(): ##java.io.OutputStream \ IO;
+    pub def getOutputStream(rh: Region[rh], p: Process[r]): OutputStream[rh] \ { Read(r), Write(rh), IO } =
+        import java.lang.Process.getOutputStream(): ##java.io.OutputStream \ { Read(r), Write(rh), IO };
         let Process(p1) = p;
-        let r = Scoped.regionOf(p);
-        getOutputStream(p1) |> Interop/IO/OutputStream.wrapHH(r)
+        getOutputStream(p1) |> Interop/IO/OutputStream.wrapHH(rh)
 
-
-    pub def getInputStream(p: Process[r]): InputStream[r] \ {Write(r), IO}=
-        import java.lang.Process.getInputStream(): ##java.io.InputStream \ IO;
+    pub def getInputStream(rh: Region[rh], p: Process[r]): InputStream[rh] \ { Read(r), Write(rh), IO } = 
+        import java.lang.Process.getInputStream(): ##java.io.InputStream \ { Read(r), Write(rh), IO };
         let Process(p1) = p;
-        let r = Scoped.regionOf(p);
-        getInputStream(p1) |> Interop/IO/InputStream.wrapHH(r)
-
-
-    pub def getErrorStream(p: Process[r]): InputStream[r] \ {Write(r), IO}=
-        import java.lang.Process.getErrorStream(): ##java.io.InputStream \ IO;
+        getInputStream(p1) |> Interop/IO/InputStream.wrapHH(rh)
+    
+    pub def getErrorStream(rh: Region[rh], p: Process[r]): InputStream[rh] \ { Read(r), Write(rh), IO } =
+        import java.lang.Process.getErrorStream(): ##java.io.InputStream \ { Read(r), Write(rh), IO };
         let Process(p1) = p;
-        let r = Scoped.regionOf(p);
-        getErrorStream(p1) |> Interop/IO/InputStream.wrapHH(r)
+        getErrorStream(p1) |> Interop/IO/InputStream.wrapHH(rh)
 
 
 }

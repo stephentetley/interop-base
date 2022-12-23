@@ -25,10 +25,6 @@ namespace Interop/Util {
     ///
     pub enum ListZ[_: Type, _: Region](##java.util.List)
 
-    instance Scoped[ListZ[a]] {
-        pub def regionOf(_: ListZ[a, r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
     pub class ImpListZ[t: Type -> Region -> Type] {
         pub def toListZ[a: Type, r: Region](s: t[a, r]): ListZ[a, r]
         pub def fromListZ[a: Type, r: Region](s: ListZ[a, r]): t[a, r]
@@ -272,32 +268,30 @@ namespace Interop/Util/ListZ {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def iterator(l: ListZ[a, r]): Iterator[a, r] \ { Write(r) } with Marshal[a] =
-        toFlixIterator(Scoped.regionOf(l), Interop/Flix/Marshal.fromJavaObject, l)
+    pub def iterator(rh: Region[rh], l: ListZ[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a] =
+        toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, l)
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def toFlixIterator(r2: Region[r2], ocast: ##java.lang.Object -> a, l: ListZ[a, r]): Iterator[a, r2] \ { Read(r), Write(r2) } =
-        import java.util.List.iterator(): ##java.util.Iterator \ {r, r2};
+    pub def toFlixIterator(rh: Region[rh], ocast: ##java.lang.Object -> a, l: ListZ[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } =
+        import java.util.List.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
         let ListZ(l1) = l;
         if (Object.isNull(l1))
-            Iterator.new(r2)
+            Iterator.new(rh)
         else 
             iterator(l1) 
-                |> Interop/Util/IteratorZ.wrapHH(r2)
-                |> Interop/Util/IteratorZ.toFlixIterator(ocast)
+                |> Interop/Util/IteratorZ.wrapHH(rh)
+                |> Interop/Util/IteratorZ.toFlixIterator(rh, ocast)
 
 
 
-    pub def toFlixList(l: ListZ[a, r]): List[a] \ { Read(r) } with Marshal[a] =
-        region r2 {
-            toFlixIterator(r2, Interop/Flix/Marshal.fromJavaObject, l) |> Iterator.toList
-        }
+    pub def toFlixList(l: ListZ[a, r]): List[a] \ { Read(r) } with Marshal[a] = region r {
+        toFlixIterator(r, Interop/Flix/Marshal.fromJavaObject, l) |> Iterator.toList
+    }
 
-    pub def toSet(l: ListZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
-        region r2 {
-            toFlixIterator(r2, Interop/Flix/Marshal.fromJavaObject, l) |> Iterator.toSet
-        }
+    pub def toSet(l: ListZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] = region r {
+        toFlixIterator(r, Interop/Flix/Marshal.fromJavaObject, l) |> Iterator.toSet
+    }
 
 
     /// TEMP ...

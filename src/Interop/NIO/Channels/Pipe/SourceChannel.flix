@@ -24,10 +24,6 @@ namespace Interop/NIO/Channels/Pipe {
     // Abstract Class
     pub enum SourceChannel[_: Region](##java.nio.channels.Pipe$SourceChannel)
 
-    instance Scoped[SourceChannel] {
-        pub def regionOf(_: SourceChannel[r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
     instance SubChannel[SourceChannel] {
         pub def toChannel(c: SourceChannel[r]): ChannelZ[r] = 
             let SourceChannel(c1) = c;

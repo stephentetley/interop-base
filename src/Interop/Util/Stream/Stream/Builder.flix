@@ -22,10 +22,6 @@ namespace Interop/Util/Stream/Stream {
     ///
     pub enum Builder[_: Type, _: Region](##java.util.stream.Stream$Builder)
 
-    instance Scoped[Builder[a]] {
-        pub def regionOf(_: Builder[a, r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
 
 }
 

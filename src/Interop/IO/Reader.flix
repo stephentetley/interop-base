@@ -20,10 +20,6 @@ namespace Interop/IO {
 
     pub enum Reader[_: Region](##java.io.Reader)
 
-    instance Scoped[Reader] {
-        pub def regionOf(_: Reader[r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
     pub class SubReader[t: Region -> Type] {
         pub def toReader[r: Region](s: t[r]): Reader[r]
         pub def fromReader[r: Region](s: Reader[r]): t[r]

@@ -21,10 +21,6 @@ namespace Interop/Util/Stream {
     ///
     pub enum IntStream[_r: Region](##java.util.stream.IntStream)
 
-    instance Scoped[IntStream] {
-        pub def regionOf(_: IntStream[r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
 
 }
 
@@ -58,13 +54,12 @@ namespace Interop/Util/Stream/IntStream {
 
     pub def wrapHH(_: Region[r], prim: ##java.util.stream.IntStream): IntStream[r] = IntStream(prim)
 
-    pub def intStreamIterator(s: IntStream[r]): Iterator[Int32, r] \ Write(r) =
-        import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ r;
-        let r = Scoped.regionOf(s);
+    pub def intStreamIterator(rh: Region[rh], s: IntStream[r]): Iterator[Int32, rh] \ { Read(r), Write(rh) } =
+        import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
         let IntStream(s1) = s;
         let iter1 = iterator(unsafe_cast s1 as ##java.util.stream.BaseStream);
-        let iter2 = Interop/Util/IteratorZ.wrapHH(r, iter1);
-        Interop/Util/IteratorZ.iterator(iter2)
+        let iter2 = Interop/Util/IteratorZ.wrapHH(rh, iter1);
+        Interop/Util/IteratorZ.iterator(rh, iter2)
 
     pub def empty(_: Region[r]): IntStream[r] \ Write(r) = 
         import static java.util.stream.IntStream.empty(): ##java.util.stream.IntStream \ r;

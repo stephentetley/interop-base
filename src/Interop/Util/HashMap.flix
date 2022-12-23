@@ -26,10 +26,6 @@ namespace Interop/Util {
         pub def new(r: Region[r]): HashMap[k, v, r] \ Write(r) = Interop/Util/HashMap.new(r)
     }
 
-    instance Scoped[HashMap[k, v]] {
-        pub def regionOf(_: HashMap[k, v, r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
 
     instance Interop/Util.ImpMapZ[HashMap] {
         pub def toMapZ(t: HashMap[k, v, r]): MapZ[k, v, r] = 

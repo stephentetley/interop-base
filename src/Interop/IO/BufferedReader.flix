@@ -20,10 +20,6 @@ namespace Interop/IO {
 
     pub enum BufferedReader[_: Region](##java.io.BufferedReader)
 
-    instance Scoped[BufferedReader] {
-        pub def regionOf(_: BufferedReader[r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
     instance Interop/IO.SubReader[BufferedReader] {
         pub def toReader(s: BufferedReader[r]): Reader[r] = 
             let BufferedReader(s1) = s;

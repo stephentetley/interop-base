@@ -20,9 +20,6 @@ namespace Interop/IO {
     /// Abstract class...
     pub enum InputStream[_: Region](##java.io.InputStream)
 
-    instance Scoped[InputStream] {
-        pub def regionOf(_: InputStream[r]): Region[r] = unsafe_cast () as Region[r]
-    }
 
     pub class SubInputStream[t: Region -> Type] {
         pub def toInputStream[r: Region](s: t[r]): InputStream[r]

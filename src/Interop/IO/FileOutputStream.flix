@@ -21,11 +21,6 @@ namespace Interop/IO {
 
     pub enum FileOutputStream[_: Region](##java.io.FileOutputStream)
 
-    instance Scoped[FileOutputStream] {
-        pub def regionOf(_: FileOutputStream[r]): Region[r] = unsafe_cast () as Region[r]
-    }
-
-
     instance Interop/IO.SubOutputStream[FileOutputStream] {
         pub def toOutputStream(s: FileOutputStream[r]): OutputStream[r] = 
             let FileOutputStream(s1) = s;
