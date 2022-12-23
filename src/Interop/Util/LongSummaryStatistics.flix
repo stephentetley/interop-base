@@ -31,11 +31,16 @@ namespace Interop/Util/LongSummaryStatistics {
     use Interop/Util.LongSummaryStatistics.{LongSummaryStatistics}
     use Interop/Flix.Marshal
 
-    pub def getHH(o: LongSummaryStatistics[r]): ##java.util.LongSummaryStatistics = 
-        let LongSummaryStatistics(o1) = o;
-        o1
+    pub def getHH(ss: LongSummaryStatistics[r]): ##java.util.LongSummaryStatistics = 
+        let LongSummaryStatistics(ss1) = ss;
+        ss1
     
-    pub def combine!(i: LongSummaryStatistics[r], j: LongSummaryStatistics[r]): Result[Unit, String] \ {Read(r), Write(r)} =
+    pub def toString(ss: LongSummaryStatistics[r]): String \ { Read(r) } =
+        import java.util.LongSummaryStatistics.toString(): String \ r;
+        let LongSummaryStatistics(ss1) = ss;
+        ss1 |> toString
+
+    pub def combine!(i: LongSummaryStatistics[r], j: LongSummaryStatistics[r]): Result[Unit, String] \ { Read(r), Write(r) } =
         try {
             import java.util.LongSummaryStatistics.combine(##java.util.LongSummaryStatistics): Unit \ r;
             let LongSummaryStatistics(i1) = i;
@@ -46,5 +51,30 @@ namespace Interop/Util/LongSummaryStatistics {
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
+
+    pub def getCount(ss: LongSummaryStatistics[r]): Int64 \ { Read(r) } =
+        import java.util.LongSummaryStatistics.getCount(): Int64 \ r;
+        let LongSummaryStatistics(ss1) = ss;
+        ss1 |> getCount
+    
+    pub def getSum(ss: LongSummaryStatistics[r]): Int64 \ { Read(r) } =
+        import java.util.LongSummaryStatistics.getSum(): Int64 \ r;
+        let LongSummaryStatistics(ss1) = ss;
+        ss1 |> getSum    
+
+    pub def getMin(ss: LongSummaryStatistics[r]): Int64 \ { Read(r) } =
+        import java.util.LongSummaryStatistics.getMin(): Int64 \ r;
+        let LongSummaryStatistics(ss1) = ss;
+        ss1 |> getMin
+
+    pub def getMax(ss: LongSummaryStatistics[r]): Int64 \ { Read(r) } =
+        import java.util.LongSummaryStatistics.getMax(): Int64 \ r;
+        let LongSummaryStatistics(ss1) = ss;
+        ss1 |> getMax
+
+    pub def getAverage(ss: LongSummaryStatistics[r]): Float64 \ { Read(r) } =
+        import java.util.LongSummaryStatistics.getAverage(): Float64 \ r;
+        let LongSummaryStatistics(ss1) = ss;
+        ss1 |> getAverage
 
 }

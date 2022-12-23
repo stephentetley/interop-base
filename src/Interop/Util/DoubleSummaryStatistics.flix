@@ -35,6 +35,12 @@ namespace Interop/Util/DoubleSummaryStatistics {
         let DoubleSummaryStatistics(o1) = o;
         o1
     
+
+    pub def toString(ss: DoubleSummaryStatistics[r]): String \ { Read(r) } =
+        import java.util.DoubleSummaryStatistics.toString(): String \ r;
+        let DoubleSummaryStatistics(ss1) = ss;
+        ss1 |> toString
+
     pub def combine!(i: DoubleSummaryStatistics[r], j: DoubleSummaryStatistics[r]): Result[Unit, String] \ {Read(r), Write(r)} =
         try {
             import java.util.DoubleSummaryStatistics.combine(##java.util.DoubleSummaryStatistics): Unit \ r;
@@ -46,5 +52,30 @@ namespace Interop/Util/DoubleSummaryStatistics {
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
+
+    pub def getCount(ss: DoubleSummaryStatistics[r]): Int64 \ { Read(r) } =
+        import java.util.DoubleSummaryStatistics.getCount(): Int64 \ r;
+        let DoubleSummaryStatistics(ss1) = ss;
+        ss1 |> getCount
+    
+    pub def getSum(ss: DoubleSummaryStatistics[r]): Float64 \ { Read(r) } =
+        import java.util.DoubleSummaryStatistics.getSum(): Float64 \ r;
+        let DoubleSummaryStatistics(ss1) = ss;
+        ss1 |> getSum    
+
+    pub def getMin(ss: DoubleSummaryStatistics[r]): Float64 \ { Read(r) } =
+        import java.util.DoubleSummaryStatistics.getMin(): Float64 \ r;
+        let DoubleSummaryStatistics(ss1) = ss;
+        ss1 |> getMin
+
+    pub def getMax(ss: DoubleSummaryStatistics[r]): Float64 \ { Read(r) } =
+        import java.util.DoubleSummaryStatistics.getMax(): Float64 \ r;
+        let DoubleSummaryStatistics(ss1) = ss;
+        ss1 |> getMax
+
+    pub def getAverage(ss: DoubleSummaryStatistics[r]): Float64 \ { Read(r) } =
+        import java.util.DoubleSummaryStatistics.getAverage(): Float64 \ r;
+        let DoubleSummaryStatistics(ss1) = ss;
+        ss1 |> getAverage
 
 }

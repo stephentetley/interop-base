@@ -31,10 +31,15 @@ namespace Interop/Util/IntSummaryStatistics {
     use Interop/Util.IntSummaryStatistics.{IntSummaryStatistics}
     use Interop/Flix.Marshal
 
-    pub def getHH(o: IntSummaryStatistics[r]): ##java.util.IntSummaryStatistics = 
-        let IntSummaryStatistics(o1) = o;
-        o1
+    pub def getHH(ss: IntSummaryStatistics[r]): ##java.util.IntSummaryStatistics = 
+        let IntSummaryStatistics(ss1) = ss;
+        ss1
     
+    pub def toString(ss: IntSummaryStatistics[r]): String \ { Read(r) } =
+        import java.util.IntSummaryStatistics.toString(): String \ r;
+        let IntSummaryStatistics(ss1) = ss;
+        ss1 |> toString
+
     pub def combine!(i: IntSummaryStatistics[r], j: IntSummaryStatistics[r]): Result[Unit, String] \ {Read(r), Write(r)} =
         try {
             import java.util.IntSummaryStatistics.combine(##java.util.IntSummaryStatistics): Unit \ r;
@@ -46,5 +51,30 @@ namespace Interop/Util/IntSummaryStatistics {
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
+
+    pub def getCount(ss: IntSummaryStatistics[r]): Int64 \ { Read(r) } =
+        import java.util.IntSummaryStatistics.getCount(): Int64 \ r;
+        let IntSummaryStatistics(ss1) = ss;
+        ss1 |> getCount
+    
+    pub def getSum(ss: IntSummaryStatistics[r]): Int64 \ { Read(r) } =
+        import java.util.IntSummaryStatistics.getSum(): Int64 \ r;
+        let IntSummaryStatistics(ss1) = ss;
+        ss1 |> getSum    
+
+    pub def getMin(ss: IntSummaryStatistics[r]): Int32 \ { Read(r) } =
+        import java.util.IntSummaryStatistics.getMin(): Int32 \ r;
+        let IntSummaryStatistics(ss1) = ss;
+        ss1 |> getMin
+
+    pub def getMax(ss: IntSummaryStatistics[r]): Int32 \ { Read(r) } =
+        import java.util.IntSummaryStatistics.getMax(): Int32 \ r;
+        let IntSummaryStatistics(ss1) = ss;
+        ss1 |> getMax
+
+    pub def getAverage(ss: IntSummaryStatistics[r]): Float64 \ { Read(r) } =
+        import java.util.IntSummaryStatistics.getAverage(): Float64 \ r;
+        let IntSummaryStatistics(ss1) = ss;
+        ss1 |> getAverage
 
 }
