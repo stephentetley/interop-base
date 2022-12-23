@@ -42,14 +42,6 @@ namespace Interop/IO {
 
 }
 
-namespace Interop/IO/SubWriter {
-    
-    use Interop/IO.SubWriter;
-
-    pub def getHH[r: Region, writer: Region -> Type](rd: writer[r]): ##java.io.Writer with SubWriter[writer] = 
-        Interop/IO/SubWriter.toWriter(rd) |> Interop/IO/Writer.getHH
-
-}
 
 namespace Interop/IO/Writer {
 

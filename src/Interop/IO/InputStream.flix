@@ -29,16 +29,6 @@ namespace Interop/IO {
 }
 
 
-namespace Interop/IO/SubInputStream {
-    
-    use Interop/IO.SubInputStream;
-
-    pub def getHH[r: Region, ins: Region -> Type](ins: ins[r]): ##java.io.InputStream with SubInputStream[ins] = 
-        Interop/IO/SubInputStream.toInputStream(ins) |> Interop/IO/InputStream.getHH
-
-}
-
-
 namespace Interop/IO/InputStream {
 
     use Interop/IO.InputStream;

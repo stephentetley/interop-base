@@ -28,14 +28,6 @@ namespace Interop/IO {
 
 }
 
-namespace Interop/IO/SubReader {
-    
-    use Interop/IO.SubReader;
-
-    pub def getHH[r: Region, reader: Region -> Type](rd: reader[r]): ##java.io.Reader with SubReader[reader] = 
-        Interop/IO/SubReader.toReader(rd) |> Interop/IO/Reader.getHH
-
-}
 
 namespace Interop/IO/Reader {
 
