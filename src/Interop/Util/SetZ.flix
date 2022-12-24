@@ -245,7 +245,7 @@ namespace Interop/Util/SetZ {
     pub def toFlixIterator(rh: Region[rh], 
                             ocast: ##java.lang.Object -> a, 
                             s: SetZ[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } =
-        import java.util.Set.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) } ;
+        import java.util.Set.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
         let SetZ(s1) = s;
         if (Object.isNull(s1))
             Iterator.new(rh)
