@@ -93,7 +93,7 @@ namespace Interop/IO/StringWriter {
 
     pub def appendSubCharSequence!(cs: CharSequence[r2], 
                                     sub: {start = Int32, end = Int32}, 
-                                    sr: StringWriter[r]): Result[StringWriter[r], String] \ Write(r) =
+                                    sr: StringWriter[r]): Result[String, StringWriter[r]] \ Write(r) =
         try {
             import java.io.StringWriter.append(##java.lang.CharSequence, Int32, Int32): ##java.io.StringWriter \ r;
             let StringWriter(sr1) = sr;
@@ -112,7 +112,7 @@ namespace Interop/IO/StringWriter {
         flush(sr1) 
 
 
-    pub def close!(sr: StringWriter[r]): Result[Unit, String] \ Write(r) =
+    pub def close!(sr: StringWriter[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.io.StringWriter.close(): Unit \ r;
             let StringWriter(sr1) = sr;
@@ -126,7 +126,7 @@ namespace Interop/IO/StringWriter {
 
     pub def writeSubCharArray!(arr: Array[Char, r2], 
                                 sub: {offset = Int32, len = Int32}, 
-                                sr: StringWriter[r]): Result[Unit, String] \ {Read(r2), Write(r)} =
+                                sr: StringWriter[r]): Result[String, Unit] \ {Read(r2), Write(r)} =
         try {
             import java.io.StringWriter.write(Array[Char, r2], Int32, Int32): Unit \ {r, r2};
             let StringWriter(sr1) = sr;
@@ -153,7 +153,7 @@ namespace Interop/IO/StringWriter {
     pub def writeSubstring!(s: String, 
                             offset: {offset = Int32}, 
                             len: {len = Int32}, 
-                            sr: StringWriter[r]): Result[Unit, String] \ Write(r) =
+                            sr: StringWriter[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.io.StringWriter.write(String, Int32, Int32): Unit \ r;
             let StringWriter(sr1) = sr;

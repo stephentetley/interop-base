@@ -77,7 +77,7 @@ namespace Interop/Text/NumberFormat {
         import static java.text.NumberFormat.getInstance(): ##java.text.NumberFormat \ {IO, r};
         getInstance() |> NumberFormat
 
-    pub def parse(s: String, nf: NumberFormat[r]): Result[Number, String] \ Read(r) = 
+    pub def parse(s: String, nf: NumberFormat[r]): Result[String, Number] \ Read(r) = 
         try {
             import java.text.NumberFormat.parse(String): ##java.lang.Number \ r;
             let NumberFormat(nf1) = nf;
@@ -117,7 +117,7 @@ namespace Interop/Text/NumberFormat {
         getAvailableLocales() |> Array.toList |> List.map(Locale)
     }
    
-    pub def getCurrency(nf: NumberFormat[r]): Result[Currency, String] \ Write(r) = 
+    pub def getCurrency(nf: NumberFormat[r]): Result[String, Currency] \ Write(r) = 
         try {
             import java.text.NumberFormat.getCurrency(): ##java.util.Currency \ r;
             let NumberFormat(nf1) = nf;
@@ -128,7 +128,7 @@ namespace Interop/Text/NumberFormat {
                 Err(getMessage(ex))
         }
    
-    pub def setCurrency!(c: Currency, nf: NumberFormat[r]): Result[Unit, String] \ Write(r) = 
+    pub def setCurrency!(c: Currency, nf: NumberFormat[r]): Result[String, Unit] \ Write(r) = 
         try {
             import java.text.NumberFormat.setCurrency(##java.util.Currency): Unit \ r;
             let NumberFormat(nf1) = nf;
@@ -199,7 +199,7 @@ namespace Interop/Text/NumberFormat {
         let NumberFormat(nf1) = nf;
         getRoundingMode(nf1) |> RoundingMode 
    
-    pub def setRoundingMode!(mode: RoundingMode, nf: NumberFormat[r]): Result[Unit, String] \ Write(r) = 
+    pub def setRoundingMode!(mode: RoundingMode, nf: NumberFormat[r]): Result[String, Unit] \ Write(r) = 
         try {
             import java.text.NumberFormat.setRoundingMode(##java.math.RoundingMode): Unit \ r;
             let NumberFormat(nf1) = nf;

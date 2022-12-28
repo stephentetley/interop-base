@@ -40,7 +40,7 @@ namespace Interop/Util/LongSummaryStatistics {
         let LongSummaryStatistics(ss1) = ss;
         ss1 |> toString
 
-    pub def combine!(i: LongSummaryStatistics[r], j: LongSummaryStatistics[r]): Result[Unit, String] \ { Read(r), Write(r) } =
+    pub def combine!(i: LongSummaryStatistics[r], j: LongSummaryStatistics[r]): Result[String, Unit] \ { Read(r), Write(r) } =
         try {
             import java.util.LongSummaryStatistics.combine(##java.util.LongSummaryStatistics): Unit \ r;
             let LongSummaryStatistics(i1) = i;

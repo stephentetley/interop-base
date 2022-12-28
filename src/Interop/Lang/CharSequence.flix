@@ -37,7 +37,7 @@ namespace Interop/Lang {
             StringBuilder(unsafe_cast s1 as ##java.lang.StringBuilder) 
     }
 
-
+    /// Appendable?
 }
 
 namespace Interop/Lang/ImpCharSequence {
@@ -80,7 +80,7 @@ namespace Interop/Lang/CharSequence {
         let CharSequence(cs1) = cs;
         length(cs1)
 
-    pub def charAt(ix: Int32, cs: CharSequence[r]): Result[Char, String] \ Read(r) = 
+    pub def charAt(ix: Int32, cs: CharSequence[r]): Result[String, Char] \ Read(r) = 
         try {
             import java.lang.CharSequence.charAt(Int32): Char \ r;
             let CharSequence(cs1) = cs;
@@ -91,7 +91,7 @@ namespace Interop/Lang/CharSequence {
                 Err(getMessage(ex))
         }
 
-    pub def subSequence(start: {start = Int32}, end: {end = Int32}, cs: CharSequence[r]): Result[CharSequence[r], String] \ {Read(r), Write(r)} = 
+    pub def subSequence(start: {start = Int32}, end: {end = Int32}, cs: CharSequence[r]): Result[String, CharSequence[r]] \ {Read(r), Write(r)} = 
         try {
             import java.lang.CharSequence.subSequence(Int32, Int32): ##java.lang.CharSequence \ r;
             let CharSequence(cs1) = cs;

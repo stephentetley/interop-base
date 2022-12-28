@@ -148,7 +148,7 @@ namespace Interop/Util/Locale {
 
 
 
-    pub def setJvmDefaultLocale!(x: Locale): Result[Unit, String] \ IO =
+    pub def setJvmDefaultLocale!(x: Locale): Result[String, Unit] \ IO =
         try {
             import static java.util.Locale.setDefault(##java.util.Locale): Unit \ IO;
             let Locale(x1) = x;
@@ -163,7 +163,7 @@ namespace Interop/Util/Locale {
 
 
 
-    pub def setJvmDefaultLocaleWithCategory!(category: Category, x: Locale): Result[Unit, String] \ IO =
+    pub def setJvmDefaultLocaleWithCategory!(category: Category, x: Locale): Result[String, Unit] \ IO =
         import static java.util.Locale.setDefault(##java.util.Locale$Category, ##java.util.Locale): Unit \ IO;
         import static get java.util.Locale$Category.DISPLAY: ##java.util.Locale$Category \ {} as getDisplay;
         import static get java.util.Locale$Category.FORMAT: ##java.util.Locale$Category \ {} as getFormat;
@@ -440,7 +440,7 @@ namespace Interop/Util/Locale {
         getISOCountries() |> Array.toList
     }
 
-    pub def getIsoCountriesWithIsoCountryCode(icc: IsoCountryCode): Result[Set[String], String] = region r {
+    pub def getIsoCountriesWithIsoCountryCode(icc: IsoCountryCode): Result[String, Set[String]] = region r {
         try {
             import static java.util.Locale.getISOCountries(##java.util.Locale$IsoCountryCode): ##java.util.Set \ {};
             let icc1 = marshalIsoCountryCode(icc);
@@ -455,7 +455,7 @@ namespace Interop/Util/Locale {
         }
     }
 
-    pub def getIsoLanguages(): Result[List[String], String] = region r {
+    pub def getIsoLanguages(): Result[String, List[String]] = region r {
         try {
             import static java.util.Locale.getISOLanguages(): Array[String, r] \ Write(r);
             let _ = [] @ r;            
@@ -506,7 +506,7 @@ namespace Interop/Util/Locale {
                 |> Interop/Util/SetZ.toFlixSet
         }
 
-    pub def lookup(priorityList: List[LanguageRange], locales: List[Locale]): Result[Option[Locale], String] =         
+    pub def lookup(priorityList: List[LanguageRange], locales: List[Locale]): Result[String, Option[Locale]] =         
         region r1 {
             try {
                 import static java.util.Locale.lookup(##java.util.List, ##java.util.Collection): ##java.util.Locale \ {};
@@ -521,7 +521,7 @@ namespace Interop/Util/Locale {
             }
         }
 
-    pub def lookupTag(priorityList: List[LanguageRange], tags: List[String]): Result[Option[String], String] =
+    pub def lookupTag(priorityList: List[LanguageRange], tags: List[String]): Result[String, Option[String]] =
         region r1 {
             try { 
                 import static java.util.Locale.lookupTag(##java.util.List, ##java.util.Collection): String \ {};
@@ -536,7 +536,7 @@ namespace Interop/Util/Locale {
             }
         }
 
-    pub def filter(priorityList: List[LanguageRange], locales: List[Locale]): Result[List[Locale], String] = 
+    pub def filter(priorityList: List[LanguageRange], locales: List[Locale]): Result[String, List[Locale]] = 
         import static java.util.Locale.filter(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
         region r1 {
             try {
@@ -553,7 +553,9 @@ namespace Interop/Util/Locale {
             }
         }
 
-    pub def filterWithFilteringMode(priorityList: List[LanguageRange], mode: FilteringMode, locales: List[Locale]): Result[List[Locale], String] = 
+    pub def filterWithFilteringMode(priorityList: List[LanguageRange], 
+                                    mode: FilteringMode, 
+                                    locales: List[Locale]): Result[String, List[Locale]] = 
         region r1 {
             try {
                 import static java.util.Locale.filter(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};
@@ -571,7 +573,7 @@ namespace Interop/Util/Locale {
             }
         }
 
-    pub def filterTags(priorityList: List[LanguageRange], tags: List[String]): Result[List[String], String] = 
+    pub def filterTags(priorityList: List[LanguageRange], tags: List[String]): Result[String, List[String]] = 
         region r1 {
             try {
             import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
@@ -588,7 +590,9 @@ namespace Interop/Util/Locale {
             }
         }
 
-    pub def filterTagsWithFilteringMode(priorityList: List[LanguageRange], mode: FilteringMode, tags: List[String]): Result[List[String], String] = 
+    pub def filterTagsWithFilteringMode(priorityList: List[LanguageRange], 
+                                        mode: FilteringMode, 
+                                        tags: List[String]): Result[String, List[String]] = 
         region r1 {
             try {
                 import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};

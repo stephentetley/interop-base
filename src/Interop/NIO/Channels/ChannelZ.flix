@@ -46,7 +46,7 @@ namespace Interop/NIO/Channels/ChannelZ {
         isOpen(c1)
         
         
-    pub def close!(c: ChannelZ[r]): Result[Unit, String] \ Write(r) =
+    pub def close!(c: ChannelZ[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.nio.channels.Channel.close(): Unit \ r;
             let ChannelZ(c1) = c;

@@ -66,7 +66,7 @@ namespace Interop/NIO/Charset/Charset {
         cs1
 
 
-    pub def forName(name: String): Result[Charset, String] =
+    pub def forName(name: String): Result[String, Charset] =
         try {
             import static java.nio.charset.Charset.forName(String): ##java.nio.charset.Charset \ {};
             Charset(forName(name)) |> Ok
@@ -83,7 +83,7 @@ namespace Interop/NIO/Charset/Charset {
         Charset(defaultCharset())
 
 
-    pub def isSupported(name: String): Result[Bool, String] \ IO =
+    pub def isSupported(name: String): Result[String, Bool] \ IO =
         try {
             import static java.nio.charset.Charset.isSupported(String): Bool \ IO;
             isSupported(name) |> Ok

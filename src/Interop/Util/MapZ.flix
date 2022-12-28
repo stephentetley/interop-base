@@ -141,7 +141,7 @@ namespace Interop/Util/MapZ {
         let MapZ(m1) = m;
         clear(m1)
 
-    pub def get(k: k, m: MapZ[k, v, r]): Result[Option[v], String] \ Write(r) with Marshal[k], Marshal[v] =
+    pub def get(k: k, m: MapZ[k, v, r]): Result[String, Option[v]] \ Write(r) with Marshal[k], Marshal[v] =
         try {
             import java.util.Map.get(##java.lang.Object): ##java.lang.Object \ r; 
             let MapZ(m1) = m;
@@ -153,7 +153,7 @@ namespace Interop/Util/MapZ {
                 Err(getMessage(ex))
         }
 
-    pub def put!(k: k, v: v, m: MapZ[k, v, r]): Result[Option[v], String] \ Write(r) with Marshal[k], Marshal[v] =
+    pub def put!(k: k, v: v, m: MapZ[k, v, r]): Result[String, Option[v]] \ Write(r) with Marshal[k], Marshal[v] =
         try {
             import java.util.Map.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
             let MapZ(m1) = m;
@@ -166,7 +166,7 @@ namespace Interop/Util/MapZ {
                 Err(getMessage(ex))
         }
 
-    pub def containsKey(k: k, m: MapZ[k, v, r]): Result[Bool, String] \ Read(r) with Marshal[k] =
+    pub def containsKey(k: k, m: MapZ[k, v, r]): Result[String, Bool] \ Read(r) with Marshal[k] =
         try {
             import java.util.Map.containsKey(##java.lang.Object): Bool \ r; 
             let MapZ(m1) = m;
@@ -178,7 +178,7 @@ namespace Interop/Util/MapZ {
                 Err(getMessage(ex))
         }
 
-    pub def containsValue(v: v, m: MapZ[k, v, r]): Result[Bool, String] \ Read(r) with Marshal[v] =
+    pub def containsValue(v: v, m: MapZ[k, v, r]): Result[String, Bool] \ Read(r) with Marshal[v] =
         try {
             import java.util.Map.containsValue(##java.lang.Object): Bool \ r; 
             let MapZ(m1) = m;
@@ -203,7 +203,7 @@ namespace Interop/Util/MapZ {
         let MapZ(m1) = m;
         values(m1) |> Collection
 
-    pub def remove!(k: k, m: MapZ[k, v, r]): Result[Option[v], String] \  Write(r) with Marshal[k], Marshal[v] =
+    pub def remove!(k: k, m: MapZ[k, v, r]): Result[String, Option[v]] \  Write(r) with Marshal[k], Marshal[v] =
         try {
             import java.util.Map.remove(##java.lang.Object): ##java.lang.Object \ r; 
             let MapZ(m1) = m;
@@ -215,7 +215,7 @@ namespace Interop/Util/MapZ {
                 Err(getMessage(ex))
         }
 
-    pub def forEach(f: (k, v) -> Unit \ ef, m: MapZ[k, v, r]): Result[Unit, String] \  {ef, Read(r)} with Marshal[k], Marshal[v] =
+    pub def forEach(f: (k, v) -> Unit \ ef, m: MapZ[k, v, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[k], Marshal[v] =
         try {
             import java.util.Map.forEach(##java.util.function.BiConsumer): Unit \ r; 
             let MapZ(m1) = m;

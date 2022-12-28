@@ -49,7 +49,7 @@ namespace Interop/IO/FileOutputStream {
         FileOutputStream(prim)
 
 
-    pub def newWithFile(file: File[r]): Result[FileOutputStream[r], String] \ {Write(r), IO} = 
+    pub def newWithFile(file: File[r]): Result[String, FileOutputStream[r]] \ {Write(r), IO} = 
         try {
             import new java.io.FileOutputStream(##java.io.File): ##java.io.FileOutputStream \ IO as newOutputStream;
             let file1 = Interop/IO/File.getHH(file);
@@ -60,7 +60,7 @@ namespace Interop/IO/FileOutputStream {
                 Err(getMessage(ex))
         }
 
-    pub def newWithPath(path: String): Result[FileOutputStream[r], String] \ {Write(r), IO} = 
+    pub def newWithPath(path: String): Result[String, FileOutputStream[r]] \ {Write(r), IO} = 
         try {
             import new java.io.FileOutputStream(String): ##java.io.FileOutputStream \ IO as newOutputStream;
             newOutputStream(path) |> FileOutputStream |> Ok
@@ -72,7 +72,7 @@ namespace Interop/IO/FileOutputStream {
 
 
 
-    pub def write!(b: Int32, fos: FileOutputStream[r]): Result[Unit, String] \ IO = 
+    pub def write!(b: Int32, fos: FileOutputStream[r]): Result[String, Unit] \ IO = 
         try {
             import java.io.FileOutputStream.write(Int32): Unit \ { IO };
             let FileOutputStream(fos1) = fos;
@@ -84,7 +84,7 @@ namespace Interop/IO/FileOutputStream {
         }
 
 
-    pub def close!(fos: FileOutputStream[r]): Result[Unit, String] \ IO = 
+    pub def close!(fos: FileOutputStream[r]): Result[String, Unit] \ IO = 
         try {
             import java.io.FileOutputStream.close(): Unit \ { IO };
             let FileOutputStream(fos1) = fos;

@@ -86,7 +86,7 @@ namespace Interop/Text/DecimalFormat {
         hashCode(df1)
 
 
-    pub def getCurrency(df: DecimalFormat[r]): Result[Currency, String] \ Write(r) =
+    pub def getCurrency(df: DecimalFormat[r]): Result[String, Currency] \ Write(r) =
         try {
             import java.text.DecimalFormat.getCurrency(): ##java.util.Currency \ r;
             let DecimalFormat(df1) = df;
@@ -98,7 +98,7 @@ namespace Interop/Text/DecimalFormat {
         }
 
 
-    pub def setCurrency!(cur: Currency, df: DecimalFormat[r]): Result[Unit, String] \ Write(r) =
+    pub def setCurrency!(cur: Currency, df: DecimalFormat[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.text.DecimalFormat.setCurrency(##java.util.Currency): Unit  \ r;
             let DecimalFormat(df1) = df;
@@ -111,7 +111,7 @@ namespace Interop/Text/DecimalFormat {
         }
 
 
-    pub def getDecimalFormatSymbols(df: DecimalFormat[r]): Result[DecimalFormatSymbols[r], String] \ Write(r) =
+    pub def getDecimalFormatSymbols(df: DecimalFormat[r]): Result[String, DecimalFormatSymbols[r]] \ Write(r) =
         try {
             import java.text.DecimalFormat.getDecimalFormatSymbols(): ##java.text.DecimalFormatSymbols \ r;
             let DecimalFormat(df1) = df;
@@ -122,7 +122,7 @@ namespace Interop/Text/DecimalFormat {
                 Err(getMessage(ex))
         }
 
-    pub def setDecimalFormatSymbols!(syms: DecimalFormatSymbols[r], df: DecimalFormat[r]): Result[Unit, String] \ Write(r) =
+    pub def setDecimalFormatSymbols!(syms: DecimalFormatSymbols[r], df: DecimalFormat[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.text.DecimalFormat.setDecimalFormatSymbols(##java.text.DecimalFormatSymbols): Unit \ r;
             let DecimalFormat(df1) = df;
@@ -182,7 +182,7 @@ namespace Interop/Text/DecimalFormat {
         setPositiveSuffix(df1, s)
 
    
-    pub def setRoundingMode!(mode: RoundingMode, nf: DecimalFormat[r]): Result[Unit, String] \ Write(r) = 
+    pub def setRoundingMode!(mode: RoundingMode, nf: DecimalFormat[r]): Result[String, Unit] \ Write(r) = 
         try {
             import java.text.DecimalFormat.setRoundingMode(##java.math.RoundingMode): Unit \ r;
             let DecimalFormat(nf1) = nf;
@@ -209,7 +209,7 @@ namespace Interop/Text/DecimalFormat {
         toLocalizedPattern(df1)
 
     ///
-    pub def applyPattern!(patt: String, df: DecimalFormat[r]): Result[Unit, String] \ Write(r) =
+    pub def applyPattern!(patt: String, df: DecimalFormat[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.text.DecimalFormat.applyPattern(String): Unit \ r;
             let DecimalFormat(df1) = df;
@@ -221,7 +221,7 @@ namespace Interop/Text/DecimalFormat {
         }
 
     ///
-    pub def applyLocalizedPattern!(patt: String, df: DecimalFormat[r]): Result[Unit, String] \ Write(r) =
+    pub def applyLocalizedPattern!(patt: String, df: DecimalFormat[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.text.DecimalFormat.applyLocalizedPattern(String): Unit \ r;
             let DecimalFormat(df1) = df;

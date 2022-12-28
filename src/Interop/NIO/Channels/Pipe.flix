@@ -39,7 +39,7 @@ namespace Interop/NIO/Channels/Pipe {
     pub def wrapHH(_: Region[r], prim: ##java.nio.channels.Pipe): Pipe[r] =
         Pipe(prim)
 
-    pub def open(): Result[Pipe[r], String] \ Write(r) =
+    pub def open(): Result[String, Pipe[r]] \ Write(r) =
         try {
             import static java.nio.channels.Pipe.open(): ##java.nio.channels.Pipe \ r;
             open() |> Pipe |> Ok

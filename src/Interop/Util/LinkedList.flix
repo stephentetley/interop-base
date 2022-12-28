@@ -114,7 +114,7 @@ namespace Interop/Util/LinkedList {
         let LinkedList(l1) = l;
         add(l1, Interop/Flix/Marshal.toJavaObject(x))
 
-    pub def addAt!(ix: Int32, x: a, l: LinkedList[a, r]): Result[Unit, String] \ { Write(r) } with Marshal[a] = 
+    pub def addAt!(ix: Int32, x: a, l: LinkedList[a, r]): Result[String, Unit] \ { Write(r) } with Marshal[a] = 
         try {
             import java.util.LinkedList.add(Int32, ##java.lang.Object): Unit \ r;
             let LinkedList(l1) = l;
@@ -130,7 +130,7 @@ namespace Interop/Util/LinkedList {
         let LinkedList(l1) = l;
         add(l1, ocast(x))
 
-    pub def addAll!(c: Collection[a, r], l: LinkedList[a, r]): Result[Bool, String] \ Write(r) = 
+    pub def addAll!(c: Collection[a, r], l: LinkedList[a, r]): Result[String, Bool] \ Write(r) = 
         try { 
             import java.util.LinkedList.addAll(##java.util.Collection): Bool \ r;
             let LinkedList(l1) = l;
@@ -144,7 +144,7 @@ namespace Interop/Util/LinkedList {
         
 
 
-    pub def remove!(x: a, l: LinkedList[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+    pub def remove!(x: a, l: LinkedList[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
         try {
             import java.util.LinkedList.remove(##java.lang.Object): Bool \ r; 
             let LinkedList(l1) = l;
@@ -156,7 +156,7 @@ namespace Interop/Util/LinkedList {
                 Err(getMessage(ex))
         }
 
-    pub def removeAll!(c: Collection[a, r], l: LinkedList[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+    pub def removeAll!(c: Collection[a, r], l: LinkedList[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
         try {
             import java.util.LinkedList.removeAll(##java.util.Collection): Bool \ r; 
             let LinkedList(l1) = l;
@@ -168,7 +168,7 @@ namespace Interop/Util/LinkedList {
                 Err(getMessage(ex))
         }
 
-    pub def removeIf!(f: a -> Bool \ ef, l: LinkedList[a, r]): Result[Bool, String] \  {ef, Write(r)} with Marshal[a] =
+    pub def removeIf!(f: a -> Bool \ ef, l: LinkedList[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
         try {
             import java.util.LinkedList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let LinkedList(l1) = l;            
@@ -182,7 +182,7 @@ namespace Interop/Util/LinkedList {
 
 
 
-    pub def retainAll!(c: Collection[a, r], l: LinkedList[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+    pub def retainAll!(c: Collection[a, r], l: LinkedList[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
         try {
             import java.util.LinkedList.retainAll(##java.util.Collection): Bool \ r; 
             let LinkedList(l1) = l;
@@ -195,7 +195,7 @@ namespace Interop/Util/LinkedList {
         }
 
 
-    pub def forEach(f: a -> Unit \ ef, l: LinkedList[a, r]): Result[Unit, String] \  {ef, Read(r)} with Marshal[a] =
+    pub def forEach(f: a -> Unit \ ef, l: LinkedList[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
         try {
             import java.util.LinkedList.forEach(##java.util.function.Consumer): Unit \ r; 
             let LinkedList(l1) = l;
@@ -208,12 +208,12 @@ namespace Interop/Util/LinkedList {
         }
 
 
-    pub def sort!(f: (a, a) -> Int32, l: LinkedList[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
+    pub def sort!(f: (a, a) -> Int32, l: LinkedList[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
         let f1 = Interop/Util/Comparator.makeComparator(f);
         sortWithComparator!(f1, l)
 
 
-    pub def sortWithComparator!(c: Comparator[a], l: LinkedList[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
+    pub def sortWithComparator!(c: Comparator[a], l: LinkedList[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
         try {
             import java.util.LinkedList.sort(##java.util.Comparator): Unit \ r; 
             let LinkedList(l1) = l;
@@ -224,12 +224,12 @@ namespace Interop/Util/LinkedList {
                 Err(getMessage(ex))
         }
 
-    pub def fromIterable[a: Type, t: Type -> Region -> Type, r: Region, r2: Region]
-                        (r: Region[r2], t: t[a, r]): LinkedList[a, r2] \ { Read(r), Write(r2) } with Iterable[t], Marshal[a] =
-        let als = new(r);
-        let iter1 = Iterable.iterator(t);
-        Iterator.forEach(x -> discard add!(x, als), iter1);
-        als
+    // pub def fromIterable[a: Type, t: Type -> Region -> Type, r: Region, r2: Region]
+    //                     (r: Region[r2], t: t[a, r]): LinkedList[a, r2] \ { Read(r), Write(r2) } with Iterable[t], Marshal[a] =
+    //     let als = new(r);
+    //     let iter1 = Iterable.iterator(t);
+    //     Iterator.forEach(x -> discard add!(x, als), iter1);
+    //     als
 
     pub def fromFoldable(r: Region[r], t: t[a]): LinkedList[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
         let als = new(r);
@@ -299,8 +299,8 @@ namespace Interop/Util/LinkedList {
         if (len < 1) 
             [] @ r1
         else {
-            let head = get(0, l);
-            let aout = Array.new(r1, head, len);
+            ///let head = get(0, l);
+            let aout = Array.new(r1, len);
             let step = (ix, a) -> {aout[ix] = a; ix+1};
             discard foldLinkedList(step, 0, l);
             aout

@@ -85,7 +85,7 @@ namespace Interop/Text/DecimalFormatSymbols {
         getInstance() |> DecimalFormatSymbols
 
 
-    pub def getInstanceWithLocale(_: Region[r], loc: Locale): Result[DecimalFormatSymbols[r], String] \ {IO, Write(r)} = 
+    pub def getInstanceWithLocale(_: Region[r], loc: Locale): Result[String, DecimalFormatSymbols[r]] \ {IO, Write(r)} = 
         try {
             import static java.text.DecimalFormatSymbols.getInstance(##java.util.Locale): ##java.text.DecimalFormatSymbols \ {IO, r};
             let Locale(loc1) = loc;
@@ -101,7 +101,7 @@ namespace Interop/Text/DecimalFormatSymbols {
         let DecimalFormatSymbols(dfs1) = dfs;
         getCurrency(dfs1) |> Object.toOption |> Option.map(Currency)
         
-    pub def setCurrency!(cur: Currency, dfs: DecimalFormatSymbols[r]): Result[Unit, String] \ Write(r) =
+    pub def setCurrency!(cur: Currency, dfs: DecimalFormatSymbols[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.text.DecimalFormatSymbols.setCurrency(##java.util.Currency): Unit \ r;
             let DecimalFormatSymbols(dfs1) = dfs;

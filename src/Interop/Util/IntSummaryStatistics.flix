@@ -40,7 +40,7 @@ namespace Interop/Util/IntSummaryStatistics {
         let IntSummaryStatistics(ss1) = ss;
         ss1 |> toString
 
-    pub def combine!(i: IntSummaryStatistics[r], j: IntSummaryStatistics[r]): Result[Unit, String] \ {Read(r), Write(r)} =
+    pub def combine!(i: IntSummaryStatistics[r], j: IntSummaryStatistics[r]): Result[String, Unit] \ {Read(r), Write(r)} =
         try {
             import java.util.IntSummaryStatistics.combine(##java.util.IntSummaryStatistics): Unit \ r;
             let IntSummaryStatistics(i1) = i;

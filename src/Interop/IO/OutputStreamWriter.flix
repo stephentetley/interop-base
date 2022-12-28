@@ -72,7 +72,7 @@ namespace Interop/IO/OutputStreamWriter {
         let outs1 = Interop/IO/OutputStream.getHH(outs);
         newOutputStreamWriter(outs1, cs1) |> OutputStreamWriter
 
-    pub def flush!(wr: OutputStreamWriter[r]): Result[Unit, String] \ Write(r) =
+    pub def flush!(wr: OutputStreamWriter[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.io.OutputStreamWriter.flush(): Unit \ r;
             let wr1 = getHH(wr);
@@ -83,7 +83,7 @@ namespace Interop/IO/OutputStreamWriter {
                 Err(getMessage(ex))
         }
 
-    pub def close!(wr: OutputStreamWriter[r]): Result[Unit, String] \ Write(r) =
+    pub def close!(wr: OutputStreamWriter[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.io.OutputStreamWriter.flush(): Unit \ r;
             let OutputStreamWriter(wr1) = wr;
@@ -101,7 +101,7 @@ namespace Interop/IO/OutputStreamWriter {
 
     pub def writeSubCharArray!(arr: Array[Char, r2], 
                                 sub: {offset = Int32, len = Int32}, 
-                                wr: OutputStreamWriter[r]): Result[Unit, String] \ {Read(r2), Write(r)} =
+                                wr: OutputStreamWriter[r]): Result[String, Unit] \ {Read(r2), Write(r)} =
         try {
             import java.io.OutputStreamWriter.write(Array[Char, r2], Int32, Int32): Unit \ {r, r2};
             let OutputStreamWriter(wr1) = wr;
@@ -112,7 +112,7 @@ namespace Interop/IO/OutputStreamWriter {
                 Err(getMessage(ex))
         }
 
-    pub def writeCharacter!(i: Int32, wr: OutputStreamWriter[r]): Result[Unit, String] \ Write(r) =
+    pub def writeCharacter!(i: Int32, wr: OutputStreamWriter[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.io.OutputStreamWriter.write(Int32): Unit \ r;
             let OutputStreamWriter(wr1) = wr;
@@ -123,7 +123,7 @@ namespace Interop/IO/OutputStreamWriter {
                 Err(getMessage(ex))
         }
 
-    pub def writeSubstring!(s: String, sub: {offset = Int32, len = Int32}, wr: OutputStreamWriter[r]): Result[Unit, String] \ Write(r) =
+    pub def writeSubstring!(s: String, sub: {offset = Int32, len = Int32}, wr: OutputStreamWriter[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.io.OutputStreamWriter.write(String, Int32, Int32): Unit \ r;
             let OutputStreamWriter(wr1) = wr;

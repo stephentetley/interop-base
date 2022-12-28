@@ -45,7 +45,7 @@ namespace Interop/IO/File {
         File(newFile(path))
 
 
-    pub def toPath(file: File[r]): Result[Path, String] \ Read(r) =
+    pub def toPath(file: File[r]): Result[String, Path] \ Read(r) =
         try {
             import java.io.File.toPath(): ##java.nio.file.Path \ r;
             let File(file1) = file;

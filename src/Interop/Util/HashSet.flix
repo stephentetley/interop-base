@@ -119,7 +119,7 @@ namespace Interop/Util/HashSet {
         clear(s1)
 
     /// Use Result - `s` could be null...
-    pub def remove!(x: a, s: HashSet[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+    pub def remove!(x: a, s: HashSet[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
         try {
             import java.util.HashSet.remove(##java.lang.Object): Bool \ r; 
             let HashSet(s1) = s;
@@ -132,7 +132,7 @@ namespace Interop/Util/HashSet {
         }
         
 
-    pub def removeAll!(c: Collection[a, r], s: HashSet[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+    pub def removeAll!(c: Collection[a, r], s: HashSet[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
         try {
             import java.util.HashSet.removeAll(##java.util.Collection): Bool \ r; 
             let HashSet(s1) = s;
@@ -145,7 +145,7 @@ namespace Interop/Util/HashSet {
         }
 
     
-    pub def removeIf!(f: a -> Bool \ ef, s: HashSet[a, r]): Result[Bool, String] \  {ef, Write(r)} with Marshal[a] =
+    pub def removeIf!(f: a -> Bool \ ef, s: HashSet[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
         try {
             import java.util.HashSet.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let HashSet(s1) = s;        
@@ -157,7 +157,7 @@ namespace Interop/Util/HashSet {
                 Err(getMessage(ex))
         }
 
-    pub def retainAll!(c: Collection[a, r], s: HashSet[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+    pub def retainAll!(c: Collection[a, r], s: HashSet[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
         try {
             import java.util.HashSet.retainAll(##java.util.Collection): Bool \ r; 
             let HashSet(s1) = s;

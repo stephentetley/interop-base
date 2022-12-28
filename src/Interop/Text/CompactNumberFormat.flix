@@ -160,7 +160,7 @@ namespace Interop/Text/CompactNumberFormat {
         let CompactNumberFormat(nf1) = nf;
         getRoundingMode(nf1) |> RoundingMode
 
-    pub def setRoundingMode!(mode: RoundingMode, nf: CompactNumberFormat[r]): Result[Unit, String] \ Write(r) = 
+    pub def setRoundingMode!(mode: RoundingMode, nf: CompactNumberFormat[r]): Result[String, Unit] \ Write(r) = 
         try {
             import java.text.CompactNumberFormat.setRoundingMode(##java.math.RoundingMode): Unit \ r;
             let CompactNumberFormat(nf1) = nf;

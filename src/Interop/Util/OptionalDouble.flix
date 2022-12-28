@@ -53,7 +53,7 @@ namespace Interop/Util/OptionalDouble {
         import static java.util.OptionalDouble.of(Float64): ##java.util.OptionalDouble \ {};
         of(d) |> OptionalDouble
 
-    pub def getAsDouble(o: OptionalDouble): Result[Float64, String] = 
+    pub def getAsDouble(o: OptionalDouble): Result[String, Float64] = 
         try {
             import java.util.OptionalDouble.getAsDouble(): Float64 \ {};
             let OptionalDouble(o1) = o;

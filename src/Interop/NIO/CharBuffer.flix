@@ -38,7 +38,7 @@ namespace Interop/NIO/CharBuffer {
 
 
 
-    pub def allocate(_: Region[r], capacity: Int32): Result[CharBuffer[r], String] \ Write(r) = 
+    pub def allocate(_: Region[r], capacity: Int32): Result[String, CharBuffer[r]] \ Write(r) = 
         try {
             import static java.nio.CharBuffer.allocate(Int32): ##java.nio.CharBuffer \ r;
             allocate(capacity) |> CharBuffer |> Ok
@@ -48,7 +48,7 @@ namespace Interop/NIO/CharBuffer {
                 Err(getMessage(ex))
         }
 
-    pub def append!(c: Char, cb: CharBuffer[r]): Result[CharBuffer[r], String] \ Write(r) = 
+    pub def append!(c: Char, cb: CharBuffer[r]): Result[String, CharBuffer[r]] \ Write(r) = 
         try {
             import java.nio.CharBuffer.append(Char): ##java.nio.CharBuffer \ r;
             let CharBuffer(cb1) = cb;
@@ -59,7 +59,7 @@ namespace Interop/NIO/CharBuffer {
                 Err(getMessage(ex))
         }
 
-    pub def appendCharSequence!(cs: CharSequence[r2], cb: CharBuffer[r]): Result[CharBuffer[r], String] \ {Write(r), Read(r2)} = 
+    pub def appendCharSequence!(cs: CharSequence[r2], cb: CharBuffer[r]): Result[String, CharBuffer[r]] \ {Write(r), Read(r2)} = 
         try {
             import java.nio.CharBuffer.append(##java.lang.CharSequence): ##java.nio.CharBuffer \ {r, r2};
             let CharBuffer(cb1) = cb;
@@ -75,7 +75,7 @@ namespace Interop/NIO/CharBuffer {
     pub def appendSubCharSequence!(cs: CharSequence[r2], 
                                     offset: {offset = Int32}, 
                                     len: {len = Int32}, 
-                                    cb: CharBuffer[r]): Result[CharBuffer[r], String] \ {Write(r), Read(r2)} = 
+                                    cb: CharBuffer[r]): Result[String, CharBuffer[r]] \ {Write(r), Read(r2)} = 
         try {
             import java.nio.CharBuffer.append(##java.lang.CharSequence, Int32, Int32): ##java.nio.CharBuffer \ {r, r2};
             let CharBuffer(cb1) = cb;

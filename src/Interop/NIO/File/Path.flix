@@ -96,7 +96,7 @@ namespace Interop/NIO/File/Path {
     ///
     /// Returns a new FilePath.
     ///
-    pub def of(s: String, l: List[String]): Result[Path, String] = region r {
+    pub def of(s: String, l: List[String]): Result[String, Path] = region r {
         try {
             // Currently we have to use a wrapper due to java.nio.file.Path.of using varargs 
             import static flixinterop.nio.file.Pathz.ofList(String, ##java.util.List): ##java.nio.file.Path \ {Read(r)} as of1;
@@ -118,7 +118,7 @@ namespace Interop/NIO/File/Path {
 
     /// If `path` is a relative path `toAbsolutePath` resolves the path in a system specific manner.
     /// Should this be Impure?
-    pub def toAbsolutePath(path: Path): Result[Path, String] =        
+    pub def toAbsolutePath(path: Path): Result[String, Path] =        
         try {
             import java.nio.file.Path.toAbsolutePath(): ##java.nio.file.Path \ {};
             let Path(p1) = path;
@@ -194,7 +194,7 @@ namespace Interop/NIO/File/Path {
         getNameCount(path1)
 
 
-    pub def getNameAt(ix: Int32, path: Path): Result[Path, String] =
+    pub def getNameAt(ix: Int32, path: Path): Result[String, Path] =
         try {
             import java.nio.file.Path.getName(Int32): ##java.nio.file.Path \ {};
             let Path(path1) = path;
@@ -205,7 +205,7 @@ namespace Interop/NIO/File/Path {
                 Err(getMessage(ex))
         }
 
-    pub def toFile(_: Region[r], path: Path): Result[File[r], String] \ Write(r) =
+    pub def toFile(_: Region[r], path: Path): Result[String, File[r]] \ Write(r) =
         try {
             import java.nio.file.Path.toFile(): ##java.io.File \ r;
             let Path(path1) = path;

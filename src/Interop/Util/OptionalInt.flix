@@ -53,7 +53,7 @@ namespace Interop/Util/OptionalInt {
         import static java.util.OptionalInt.of(Int32): ##java.util.OptionalInt \ {};
         of(i) |> OptionalInt
 
-    pub def getAsInt(o: OptionalInt): Result[Int32, String] = 
+    pub def getAsInt(o: OptionalInt): Result[String, Int32] = 
         try {
             import java.util.OptionalInt.getAsInt(): Int32 \ {};
             let OptionalInt(o1) = o;

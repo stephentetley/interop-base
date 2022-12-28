@@ -62,7 +62,7 @@ namespace Interop/Util/Map/Entry {
         let Entry(ent1) = ent;
         getValue(ent1) |> Interop/Flix/Marshal.fromJavaObject
 
-    pub def copyOf(_: Region[rh], ent: Entry[k, v, r]): Result[Entry[k, v, r], String] \ { Read(r), Write(rh) } = 
+    pub def copyOf(_: Region[rh], ent: Entry[k, v, r]): Result[String, Entry[k, v, r]] \ { Read(r), Write(rh) } = 
         try {
             import static java.util.Map$Entry.copyOf(##java.util.Map$Entry): ##java.util.Map$Entry \ { Read(r), Write(rh) };
             let Entry(ent1) = ent;

@@ -50,7 +50,7 @@ namespace Interop/IO/FilterInputStream {
         FilterInputStream(prim)
 
 
-    pub def read!(rd: FilterInputStream[r]): Result[Option[Int32], String] \ IO = 
+    pub def read!(rd: FilterInputStream[r]): Result[String, Option[Int32]] \ IO = 
         try {
             import java.io.FilterInputStream.read(): Int32 \ { IO };
             let FilterInputStream(rd1) = rd;
@@ -65,7 +65,7 @@ namespace Interop/IO/FilterInputStream {
         }
 
     // read (into-array) to figure out...
-    pub def readIntoArray!(buf: Array[Int8, r2], ins: FilterInputStream[r]): Result[Int32, String] \ { Write(r2), IO } = 
+    pub def readIntoArray!(buf: Array[Int8, r2], ins: FilterInputStream[r]): Result[String, Int32] \ { Write(r2), IO } = 
         try {
             import java.io.FilterInputStream.read(Array[Int8, r2]): Int32 \ { IO };
             let FilterInputStream(ins1) = ins;
@@ -81,7 +81,7 @@ namespace Interop/IO/FilterInputStream {
     pub def readIntoArrayWith!(buf: Array[Int8, r2], 
                                 offset: {offset = Int32}, 
                                 len: {len = Int32}, 
-                                ins: FilterInputStream[r]): Result[Int32, String] \ { Write(r2), IO } = 
+                                ins: FilterInputStream[r]): Result[String, Int32] \ { Write(r2), IO } = 
         try {
             import java.io.FilterInputStream.read(Array[Int8, r2], Int32, Int32): Int32 \ { IO };
             let FilterInputStream(ins1) = ins;
@@ -92,7 +92,7 @@ namespace Interop/IO/FilterInputStream {
                 Err(getMessage(ex))
         }
 
-    pub def skip!(n: Int64, ins: FilterInputStream[r]): Result[Int64, String] \ IO = 
+    pub def skip!(n: Int64, ins: FilterInputStream[r]): Result[String, Int64] \ IO = 
         try {
             import java.io.FilterInputStream.skip(Int64): Int64 \ { IO };
             let FilterInputStream(ins1) = ins;
@@ -105,7 +105,7 @@ namespace Interop/IO/FilterInputStream {
 
 
     /// Estimate!
-    pub def available(ins: FilterInputStream[r]): Result[Int32, String] \ IO = 
+    pub def available(ins: FilterInputStream[r]): Result[String, Int32] \ IO = 
         try {
             import java.io.FilterInputStream.available(): Int32 \ { IO };
             let FilterInputStream(ins1) = ins;
@@ -117,7 +117,7 @@ namespace Interop/IO/FilterInputStream {
         }
 
 
-    pub def close!(ins: FilterInputStream[r]): Result[Unit, String] \ IO = 
+    pub def close!(ins: FilterInputStream[r]): Result[String, Unit] \ IO = 
         try {
             import java.io.FilterInputStream.close(): Unit \ { IO };
             let FilterInputStream(ins1) = ins;

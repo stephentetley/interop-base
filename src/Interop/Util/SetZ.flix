@@ -123,7 +123,7 @@ namespace Interop/Util/SetZ {
         let SetZ(s1) = s;
         size(s1)
 
-    pub def add!(x: a, s: SetZ[a, r]): Result[Bool, String] \  Read(r) with Marshal[a] =
+    pub def add!(x: a, s: SetZ[a, r]): Result[String, Bool] \  Read(r) with Marshal[a] =
         try {
             import java.util.Set.add(##java.lang.Object): Bool \ r; 
             let SetZ(s1) = s;
@@ -135,7 +135,7 @@ namespace Interop/Util/SetZ {
                 Err(getMessage(ex))
         }
 
-    pub def addAll!(c: Collection[a, r], s: SetZ[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+    pub def addAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
         try {
             import java.util.Set.addAll(##java.util.Collection): Bool \ r; 
             let SetZ(s1) = s;
@@ -147,7 +147,7 @@ namespace Interop/Util/SetZ {
                 Err(getMessage(ex))
         }
 
-    pub def contains(x: a, s: SetZ[a, r]): Result[Bool, String] \  Read(r) with Marshal[a] =
+    pub def contains(x: a, s: SetZ[a, r]): Result[String, Bool] \  Read(r) with Marshal[a] =
         try {
             import java.util.Set.contains(##java.lang.Object): Bool \ r; 
             let SetZ(s1) = s;
@@ -159,7 +159,7 @@ namespace Interop/Util/SetZ {
                 Err(getMessage(ex))
         }
 
-    pub def containsAll(c: Collection[a, r], s: SetZ[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+    pub def containsAll(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
         try {
             import java.util.Set.containsAll(##java.util.Collection): Bool \ r; 
             let SetZ(s1) = s;
@@ -171,7 +171,7 @@ namespace Interop/Util/SetZ {
                 Err(getMessage(ex))
         }
 
-    pub def clear!(s: SetZ[a, r]): Result[Unit, String] \ Read(r) = 
+    pub def clear!(s: SetZ[a, r]): Result[String, Unit] \ Read(r) = 
         try {
             import java.util.Set.clear(): Unit \ r;
             let SetZ(s1) = s;
@@ -182,7 +182,7 @@ namespace Interop/Util/SetZ {
                 Err(getMessage(ex))
         }
 
-    pub def remove!(x: a, s: SetZ[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+    pub def remove!(x: a, s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
         try {
             import java.util.Set.remove(##java.lang.Object): Bool \ r; 
             let SetZ(s1) = s;
@@ -194,7 +194,7 @@ namespace Interop/Util/SetZ {
                 Err(getMessage(ex))
         }
 
-    pub def removeAll!(c: Collection[a, r], s: SetZ[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+    pub def removeAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
         try {
             import java.util.Set.removeAll(##java.util.Collection): Bool \ r; 
             let SetZ(s1) = s;
@@ -207,7 +207,7 @@ namespace Interop/Util/SetZ {
         }
 
     
-    pub def removeIf!(f: a -> Bool \ ef, s: SetZ[a, r]): Result[Bool, String] \  {ef, Write(r)} with Marshal[a] =
+    pub def removeIf!(f: a -> Bool \ ef, s: SetZ[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
         try {
             import java.util.Set.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let SetZ(s1) = s;        
@@ -219,7 +219,7 @@ namespace Interop/Util/SetZ {
                 Err(getMessage(ex))
         }
 
-    pub def retainAll!(c: Collection[a, r], s: SetZ[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+    pub def retainAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
         try {
             import java.util.Set.retainAll(##java.util.Collection): Bool \ r; 
             let SetZ(s1) = s;

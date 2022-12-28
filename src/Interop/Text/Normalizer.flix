@@ -33,7 +33,7 @@ namespace Interop/Text/Normalizer {
                 Err(getMessage(ex))
         }
 
-    pub def isNormalized(nform: NormalizerForm, src: String): Result[Bool, String] =
+    pub def isNormalized(nform: NormalizerForm, src: String): Result[String, Bool] =
         import static java.text.Normalizer.isNormalized(##java.lang.CharSequence, ##java.text.Normalizer$Form): Bool & Pure;
         try {
             let NormalizerForm(nform1) = nform;

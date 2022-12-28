@@ -50,7 +50,7 @@ namespace Interop/IO/FileInputStream {
     pub def wrapHH(_: Region[r], prim: ##java.io.FileInputStream): FileInputStream[r] =
         FileInputStream(prim)
 
-    pub def newWithFile(file: File[r]): Result[FileInputStream[r], String] \ {Write(r), IO} = 
+    pub def newWithFile(file: File[r]): Result[String, FileInputStream[r]] \ {Write(r), IO} = 
         try {
             import new java.io.FileInputStream(##java.io.File): ##java.io.FileInputStream \ {IO, r} as newFileInputStream;
             let file1 = Interop/IO/File.getHH(file);
@@ -61,7 +61,7 @@ namespace Interop/IO/FileInputStream {
                 Err(getMessage(ex))
         }
 
-    pub def newWithPath(_: Region[r], path: String): Result[FileInputStream[r], String] \ {Write(r), IO} = 
+    pub def newWithPath(_: Region[r], path: String): Result[String, FileInputStream[r]] \ {Write(r), IO} = 
         try {
             import new java.io.FileInputStream(String): ##java.io.FileInputStream \ {IO, r} as newFileInputStream;
             newFileInputStream(path) |> FileInputStream |> Ok
@@ -73,7 +73,7 @@ namespace Interop/IO/FileInputStream {
 
 
 
-    pub def read!(rd: FileInputStream[r]): Result[Option[Int32], String] \ IO = 
+    pub def read!(rd: FileInputStream[r]): Result[String, Option[Int32]] \ IO = 
         try {
             import java.io.FileInputStream.read(): Int32 \ { IO };
             let FileInputStream(rd1) = rd;
@@ -88,7 +88,7 @@ namespace Interop/IO/FileInputStream {
         }
 
     // read (into-array) to figure out...
-    pub def readIntoArray!(buf: Array[Int8, r2], ins: FileInputStream[r]): Result[Int32, String] \ { Write(r2), IO } = 
+    pub def readIntoArray!(buf: Array[Int8, r2], ins: FileInputStream[r]): Result[String, Int32] \ { Write(r2), IO } = 
         try {
             import java.io.FileInputStream.read(Array[Int8, r2]): Int32 \ { IO };
             let FileInputStream(ins1) = ins;
@@ -104,7 +104,7 @@ namespace Interop/IO/FileInputStream {
     pub def readIntoArrayWith!(buf: Array[Int8, r2], 
                                 offset: {offset = Int32}, 
                                 len: {len = Int32}, 
-                                ins: FileInputStream[r]): Result[Int32, String] \ { Write(r2), IO } = 
+                                ins: FileInputStream[r]): Result[String, Int32] \ { Write(r2), IO } = 
         try {
             import java.io.FileInputStream.read(Array[Int8, r2], Int32, Int32): Int32 \ { IO };
             let FileInputStream(ins1) = ins;
@@ -115,7 +115,7 @@ namespace Interop/IO/FileInputStream {
                 Err(getMessage(ex))
         }
 
-    pub def skip!(n: Int64, ins: FileInputStream[r]): Result[Int64, String] \ IO = 
+    pub def skip!(n: Int64, ins: FileInputStream[r]): Result[String, Int64] \ IO = 
         try {
             import java.io.FileInputStream.skip(Int64): Int64 \ { IO };
             let FileInputStream(ins1) = ins;
@@ -127,7 +127,7 @@ namespace Interop/IO/FileInputStream {
         }
 
     /// Estimate!
-    pub def available(ins: FileInputStream[r]): Result[Int32, String] \ IO = 
+    pub def available(ins: FileInputStream[r]): Result[String, Int32] \ IO = 
         try {
             import java.io.FileInputStream.available(): Int32 \ { IO };
             let FileInputStream(ins1) = ins;
@@ -139,7 +139,7 @@ namespace Interop/IO/FileInputStream {
         }
 
 
-    pub def close!(ins: FileInputStream[r]): Result[Unit, String] \ IO = 
+    pub def close!(ins: FileInputStream[r]): Result[String, Unit] \ IO = 
         try {
             import java.io.FileInputStream.close(): Unit \ { IO };
             let FileInputStream(ins1) = ins;

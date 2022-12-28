@@ -89,12 +89,12 @@ namespace Interop/Util/VectorZ {
         add(v1, Interop/Flix/Marshal.toJavaObject(x))
 
 
-    pub def sort!(f: (a, a) -> Int32, v: VectorZ[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
+    pub def sort!(f: (a, a) -> Int32, v: VectorZ[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
         let f1 = Interop/Util/Comparator.makeComparator(f);
         sortWithComparator!(f1, v)
 
 
-    pub def sortWithComparator!(c: Comparator[a], v: VectorZ[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
+    pub def sortWithComparator!(c: Comparator[a], v: VectorZ[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
         try {
             import java.util.Vector.sort(##java.util.Comparator): Unit \ r; 
             let VectorZ(v1) = v;

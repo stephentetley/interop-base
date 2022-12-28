@@ -35,7 +35,7 @@ namespace Interop/NIO/Channels/FileChannel {
     pub def wrapHH(_: Region[r], prim: ##java.nio.channels.FileChannel): FileChannel[r] =
         FileChannel(prim)
 
-    pub def forcez!(metaData: Bool, c: FileChannel[r]): Result[Unit, String] \ Write(r) =
+    pub def forcez!(metaData: Bool, c: FileChannel[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.nio.channels.FileChannel.force(Bool): Unit \ r as forcez;
             let FileChannel(c1) = c;
@@ -52,7 +52,7 @@ namespace Interop/NIO/Channels/FileChannel {
         let FileChannel(c1) = c;
         isOpen(c1)
         
-    pub def position(c: FileChannel[r]): Result[Int64, String] \ Read(r) =
+    pub def position(c: FileChannel[r]): Result[String, Int64] \ Read(r) =
         try {
             import java.nio.channels.FileChannel.position(): Int64 \ r;
             let FileChannel(c1) = c;
@@ -63,7 +63,7 @@ namespace Interop/NIO/Channels/FileChannel {
                 Err(getMessage(ex))
         }
 
-    pub def close!(c: FileChannel[r]): Result[Unit, String] \ Write(r) =
+    pub def close!(c: FileChannel[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.nio.channels.FileChannel.close(): Unit \ r;
             let FileChannel(c1) = c;

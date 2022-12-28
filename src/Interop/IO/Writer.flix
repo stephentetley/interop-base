@@ -66,7 +66,7 @@ namespace Interop/IO/Writer {
         nullWriter() |> Writer
 
 
-    pub def appendChar!(c: Char, wr: Writer[r]): Result[Writer[r], String] \ Write(r) =
+    pub def appendChar!(c: Char, wr: Writer[r]): Result[String, Writer[r]] \ Write(r) =
         try {
             import java.io.Writer.append(Char): ##java.io.Writer \ r;
             let wr1 = getHH(wr);
@@ -78,7 +78,7 @@ namespace Interop/IO/Writer {
         }
 
 
-    pub def appendCharSequence!(cs: CharSequence[r2], wr: Writer[r]): Result[Writer[r], String] \ Write(r) =
+    pub def appendCharSequence!(cs: CharSequence[r2], wr: Writer[r]): Result[String, Writer[r]] \ Write(r) =
         try {
             import java.io.Writer.append(##java.lang.CharSequence): ##java.io.Writer \ r;
             let wr1 = getHH(wr);
@@ -92,7 +92,7 @@ namespace Interop/IO/Writer {
 
     pub def appendSubCharSequence!(cs: CharSequence[r2], 
                                     sub: {start = Int32, end = Int32}, 
-                                    wr: Writer[r]): Result[Writer[r], String] \ Write(r) =
+                                    wr: Writer[r]): Result[String, Writer[r]] \ Write(r) =
         try {
             import java.io.Writer.append(##java.lang.CharSequence, Int32, Int32): ##java.io.Writer \ r;
             let wr1 = getHH(wr);
@@ -104,7 +104,7 @@ namespace Interop/IO/Writer {
                 Err(getMessage(ex))
         }
 
-    pub def flush!(wr: Writer[r]): Result[Unit, String] \ Write(r) =
+    pub def flush!(wr: Writer[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.io.Writer.flush(): Unit \ r;
             let wr1 = getHH(wr);
@@ -115,7 +115,7 @@ namespace Interop/IO/Writer {
                 Err(getMessage(ex))
         }
 
-    pub def close!(wr: Writer[r]): Result[Unit, String] \ Write(r) =
+    pub def close!(wr: Writer[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.io.Writer.close(): Unit \ r;
             let wr1 = getHH(wr);
@@ -126,7 +126,7 @@ namespace Interop/IO/Writer {
                 Err(getMessage(ex))
         }
 
-    pub def writeCharArray!(arr: Array[Char, r2], wr: Writer[r]): Result[Unit, String] \ {Read(r2), Write(r)} =
+    pub def writeCharArray!(arr: Array[Char, r2], wr: Writer[r]): Result[String, Unit] \ {Read(r2), Write(r)} =
         try {
             import java.io.Writer.write(Array[Char, r2]): Unit \ {r, r2};
             let wr1 = getHH(wr);
@@ -139,7 +139,7 @@ namespace Interop/IO/Writer {
 
     pub def writeSubCharArray!(arr: Array[Char, r2], 
                                 sub: {offset = Int32, len = Int32}, 
-                                wr: Writer[r]): Result[Unit, String] \ {Read(r2), Write(r)} =
+                                wr: Writer[r]): Result[String, Unit] \ {Read(r2), Write(r)} =
         try {
             import java.io.Writer.write(Array[Char, r2], Int32, Int32): Unit \ {r, r2};
             let wr1 = getHH(wr);
@@ -150,7 +150,7 @@ namespace Interop/IO/Writer {
                 Err(getMessage(ex))
         }
 
-    pub def writeCharacter!(i: Int32, wr: Writer[r]): Result[Unit, String] \ Write(r) =
+    pub def writeCharacter!(i: Int32, wr: Writer[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.io.Writer.write(Int32): Unit \ r;
             let wr1 = getHH(wr);
@@ -161,7 +161,7 @@ namespace Interop/IO/Writer {
                 Err(getMessage(ex))
         }
 
-    pub def writeString!(s: String, wr: Writer[r]): Result[Unit, String] \ Write(r) =
+    pub def writeString!(s: String, wr: Writer[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.io.Writer.write(String): Unit \ r;
             let wr1 = getHH(wr);
@@ -172,7 +172,7 @@ namespace Interop/IO/Writer {
                 Err(getMessage(ex))
         }
 
-    pub def writeSubstring!(s: String, sub: {offset = Int32, len = Int32}, wr: Writer[r]): Result[Unit, String] \ Write(r) =
+    pub def writeSubstring!(s: String, sub: {offset = Int32, len = Int32}, wr: Writer[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.io.Writer.write(String, Int32, Int32): Unit \ r;
             let wr1 = getHH(wr);

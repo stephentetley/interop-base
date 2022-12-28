@@ -78,7 +78,7 @@ namespace Interop/Util/SortedMap {
         let SortedMap(m1) = m;
         hashCode(m1)
 
-    pub def get(k: k, m: SortedMap[k, v, r]): Result[Option[v], String] \ Write(r) with Marshal[k], Marshal[v] =
+    pub def get(k: k, m: SortedMap[k, v, r]): Result[String, Option[v]] \ Write(r) with Marshal[k], Marshal[v] =
         try {
             import java.util.SortedMap.get(##java.lang.Object): ##java.lang.Object \ r; 
             let SortedMap(m1) = m;

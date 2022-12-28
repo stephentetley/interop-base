@@ -30,7 +30,7 @@ namespace Interop/NIO/File/Files {
     use Interop/IO.OutputStream;
     use Interop/IO.OutputStream.{OutputStream};
 
-    pub def newInputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[InputStream[r], String] \ IO = region r1 {
+    pub def newInputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, InputStream[r]] \ IO = region r1 {
         try {
             import static flixinterop.nio.file.Filesz.newInputStream(##java.nio.file.Path, ##java.util.List): ##java.io.InputStream \ {IO, r};
             let Path(path1) = path;
@@ -43,7 +43,7 @@ namespace Interop/NIO/File/Files {
         }
     }
 
-    pub def newOutputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[OutputStream[r], String] \ {IO, Write(r)} = region r1 {
+    pub def newOutputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, OutputStream[r]] \ {IO, Write(r)} = region r1 {
         try {
             import static flixinterop.nio.file.Filesz.newOutputStream(##java.nio.file.Path, ##java.util.List): ##java.io.OutputStream \ {IO, r};
             let Path(path1) = path;
@@ -57,7 +57,7 @@ namespace Interop/NIO/File/Files {
     }
 
     /// UTF_8
-    pub def exists(path: Path, opts: List[LinkOption]): Result[Bool, String] \ IO = region r1 {
+    pub def exists(path: Path, opts: List[LinkOption]): Result[String, Bool] \ IO = region r1 {
         try {
             import static flixinterop.nio.file.Filesz.exists(##java.nio.file.Path, ##java.util.List): Bool \ IO;
             let Path(path1) = path;
@@ -95,7 +95,7 @@ namespace Interop/NIO/File/Files {
         }
 
     /// UTF_8
-    pub def writeStringUtf8!(path: Path, s: CharSequence[r], opts: List[OpenOption]): Result[Path, String] \ IO = region r {
+    pub def writeStringUtf8!(path: Path, s: CharSequence[r], opts: List[OpenOption]): Result[String, Path] \ IO = region r {
         try {
             import static flixinterop.nio.file.Filesz.writeString(##java.nio.file.Path, 
                             ##java.lang.CharSequence, ##java.util.List): ##java.nio.file.Path \ IO;
@@ -110,7 +110,7 @@ namespace Interop/NIO/File/Files {
         }
     }
 
-    pub def writeString!(path: Path, s: CharSequence[r], cs: Charset, opts: List[OpenOption]): Result[Path, String] \ IO = region r {
+    pub def writeString!(path: Path, s: CharSequence[r], cs: Charset, opts: List[OpenOption]): Result[String, Path] \ IO = region r {
         try {
             import static flixinterop.nio.file.Filesz.writeString(##java.nio.file.Path, 
                             ##java.lang.CharSequence, ##java.nio.charset.Charset, ##java.util.List): ##java.nio.file.Path \ IO;

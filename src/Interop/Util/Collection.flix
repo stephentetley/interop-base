@@ -71,7 +71,7 @@ namespace Interop/Util/Collection {
         let Collection(c1) = c;
         hashCode(c1)
 
-    pub def clear!(c: Collection[a, r]): Result[Unit, String] \ Write(r) =
+    pub def clear!(c: Collection[a, r]): Result[String, Unit] \ Write(r) =
         try {
             import java.util.Collection.clear(): Unit \ r;
             let Collection(c1) = c;
@@ -82,7 +82,7 @@ namespace Interop/Util/Collection {
                 Err(getMessage(ex))
         }
 
-    pub def add!(x: a, s: Collection[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+    pub def add!(x: a, s: Collection[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
         try {
             import java.util.Collection.add(##java.lang.Object): Bool \ r; 
             let Collection(s1) = s;
@@ -94,7 +94,7 @@ namespace Interop/Util/Collection {
                 Err(getMessage(ex))
         }
 
-    pub def remove!(x: a, c: Collection[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+    pub def remove!(x: a, c: Collection[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
         try {
             import java.util.Collection.remove(##java.lang.Object): Bool \ r; 
             let Collection(c1) = c;
@@ -107,7 +107,7 @@ namespace Interop/Util/Collection {
         }
 
 
-    pub def removeIf!(f: a -> Bool \ ef, c: Collection[a, r]): Result[Bool, String] \  {ef, Write(r)} with Marshal[a] =
+    pub def removeIf!(f: a -> Bool \ ef, c: Collection[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
         try {
             import java.util.Collection.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let Collection(c1) = c;            
@@ -119,7 +119,7 @@ namespace Interop/Util/Collection {
                 Err(getMessage(ex))
         }
 
-    pub def forEach(f: a -> Unit \ ef, c: Collection[a, r]): Result[Unit, String] \  {ef, Read(r)} with Marshal[a] =
+    pub def forEach(f: a -> Unit \ ef, c: Collection[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
         try {
             import java.util.Collection.forEach(##java.util.function.Consumer): Unit \ r; 
             let Collection(c1) = c;
@@ -133,7 +133,7 @@ namespace Interop/Util/Collection {
 
 
     // Uses `Object.equals` for comparing.
-    pub def contains(x: a, c: Collection[a, r]): Result[Bool, String] \  Write(r) with Marshal[a] =
+    pub def contains(x: a, c: Collection[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
         try {
             import java.util.Collection.contains(##java.lang.Object): Bool \ r; 
             let Collection(c1) = c;

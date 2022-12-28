@@ -57,7 +57,7 @@ namespace Interop/IO/InputStreamReader {
         InputStreamReader(newInputStreamReader(ins1, cs1))
 
     /// None indicates end-of-stream.
-    pub def read!(rd: InputStreamReader[r]): Result[Option[Int32], String] \ Read(r) = 
+    pub def read!(rd: InputStreamReader[r]): Result[String, Option[Int32]] \ Read(r) = 
         try {
             import java.io.InputStreamReader.read(): Int32 \ r;
             let InputStreamReader(rd1) = rd;
@@ -75,7 +75,7 @@ namespace Interop/IO/InputStreamReader {
     pub def readSubArray!(buf: Array[Char, r2], 
                         offset: {offset = Int32}, 
                         len: {len = Int32}, 
-                        rd: InputStreamReader[r]): Result[Int32, String] \ { Write(r2), Read(r) } = 
+                        rd: InputStreamReader[r]): Result[String, Int32] \ { Write(r2), Read(r) } = 
         try {
             import java.io.InputStreamReader.read(Array[Char, r2], Int32, Int32): Int32 \ {r, r2};
             let InputStreamReader(rd1) = rd;
@@ -91,7 +91,7 @@ namespace Interop/IO/InputStreamReader {
         let InputStreamReader(rd1) = rd;
         getEncoding(rd1)
 
-    pub def ready(rd: InputStreamReader[r]): Result[Bool, String] \ Read(r) = 
+    pub def ready(rd: InputStreamReader[r]): Result[String, Bool] \ Read(r) = 
         try {
             import java.io.InputStreamReader.ready(): Bool \ r;
             let InputStreamReader(rd1) = rd;
@@ -102,7 +102,7 @@ namespace Interop/IO/InputStreamReader {
                 Err(getMessage(ex))
         }
 
-    pub def close!(rd: InputStreamReader[r]): Result[Unit, String] \ Write(r) = 
+    pub def close!(rd: InputStreamReader[r]): Result[String, Unit] \ Write(r) = 
         try {
             import java.io.InputStreamReader.close(): Unit \ r;
             let InputStreamReader(rd1) = rd;

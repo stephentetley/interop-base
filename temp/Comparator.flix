@@ -6,13 +6,13 @@ def main(): Int32 \ IO =
     test02 |> runIt;
     0
 
-pub def runIt(f: Unit -> Result[Unit, String] \ ef): Unit \ {ef, IO} = match f() {
+pub def runIt(f: Unit -> Result[String, Unit] \ ef): Unit \ {ef, IO} = match f() {
     case Ok() => ()
     case Err(msg) => println(msg)
 }
 
 
-pub def test01(): Result[Unit, String] \ IO = 
+pub def test01(): Result[String, Unit] \ IO = 
     use Result.flatMap;
     region r {
         let* xs = Interop/Util/ArrayList.newWithCollection(r, Interop/Util/ListZ.of5(r, "dddd", "aaa", "BBB", "EE", "c") |> Interop/Util/ImpCollection.toCollection);
@@ -23,7 +23,7 @@ pub def test01(): Result[Unit, String] \ IO =
     }    
 
 
-pub def test02(): Result[Unit, String] \ IO = 
+pub def test02(): Result[String, Unit] \ IO = 
     use Result.flatMap;
     use Interop/Util.Comparator;
     region r {

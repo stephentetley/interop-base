@@ -74,7 +74,7 @@ namespace Interop/Lang/ProcessBuilder {
         let ProcessBuilder(pb1) = pb;
         directory(pb1) |> File
 
-    pub def environment(pb: ProcessBuilder[r]): Result[Map[String, String], String] \ Read(r) = 
+    pub def environment(pb: ProcessBuilder[r]): Result[String, Map[String, String]] \ Read(r) = 
         region r1 {
             try {
                 import java.lang.ProcessBuilder.environment(): ##java.util.Map \ r;
@@ -134,7 +134,7 @@ namespace Interop/Lang/ProcessBuilder {
         redirectOutput(pb1, file1) |> ProcessBuilder
 
 
-    pub def start(pb: ProcessBuilder[r]): Result[Process[r], String] \ Write(r) =
+    pub def start(pb: ProcessBuilder[r]): Result[String, Process[r]] \ Write(r) =
         try {
             import java.lang.ProcessBuilder.start(): ##java.lang.Process \ r;
             let ProcessBuilder(pb1) = pb;

@@ -39,7 +39,7 @@ namespace Interop/Util/Locale/LanguageRange {
     ///
     /// Returns a new LanguageRange for the supplied `range`.
     ///
-    pub def newLanguageRange(range: String): Result[LanguageRange, String] =
+    pub def newLanguageRange(range: String): Result[String, LanguageRange] =
         try {
             import new java.util.Locale$LanguageRange(String): ##java.util.Locale$LanguageRange \ {} as new1;
             LanguageRange(new1(range)) |> Ok
@@ -84,7 +84,7 @@ namespace Interop/Util/Locale/LanguageRange {
         getWeight(x1)
 
 
-    pub def parse(ranges: String): Result[List[LanguageRange], String] =
+    pub def parse(ranges: String): Result[String, List[LanguageRange]] =
         region r1 {
             try {
                 import static java.util.Locale$LanguageRange.parse(String): ##java.util.List \ {};
@@ -99,7 +99,7 @@ namespace Interop/Util/Locale/LanguageRange {
             }
         }
 
-    pub def parseWithCustomizations(ranges: String, customizations: Map[String, List[String]]): Result[List[LanguageRange], String] =
+    pub def parseWithCustomizations(ranges: String, customizations: Map[String, List[String]]): Result[String, List[LanguageRange]] =
         region r1 {
             try {
                 import static java.util.Locale$LanguageRange.parse(String, ##java.util.Map): ##java.util.List \ {};
@@ -115,7 +115,7 @@ namespace Interop/Util/Locale/LanguageRange {
             }
         }
 
-    pub def mapEquivalents(priorityList: List[LanguageRange], customizations: Map[String, List[String]]): Result[List[LanguageRange], String] =
+    pub def mapEquivalents(priorityList: List[LanguageRange], customizations: Map[String, List[String]]): Result[String, List[LanguageRange]] =
         region r1 {
             try {
                 import static java.util.Locale$LanguageRange.mapEquivalents(##java.util.List, ##java.util.Map): ##java.util.List \ {};

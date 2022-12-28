@@ -10,7 +10,7 @@ def main(): Int32 \ IO =
     test01 |> runIt;
     0
 
-pub def runIt(f: Unit -> Result[Unit, String] \ ef): Unit \ {ef, IO} = match f() {
+pub def runIt(f: Unit -> Result[String, Unit] \ ef): Unit \ {ef, IO} = match f() {
     case Ok() => ()
     case Err(msg) => println(msg)
 }
@@ -24,7 +24,7 @@ pub def arrayListCollector(r: Region[r]): Collector[String, a, ArrayList[String,
     Interop/Util/Stream/Collector.of5(supplier, accumulator, combiner, finisher, [])
 
 
-pub def test01(): Result[Unit, String] \ IO = 
+pub def test01(): Result[String, Unit] \ IO = 
     use Result.flatMap;
     region r {
         let strm    = Interop/Util/Stream/Stream.ofArray(r, ["Hello", "World", "!"] @ r);

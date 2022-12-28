@@ -41,7 +41,7 @@ namespace Interop/Lang/Process {
         let Process(x1) = x;
         x1
 
-    pub def waitFor!(p: Process[r]): Result[Int32, String] \ { Write(r), IO } =
+    pub def waitFor!(p: Process[r]): Result[String, Int32] \ { Write(r), IO } =
         try {
             import java.lang.Process.waitFor(): Int32 \ { Write(r), IO };
             let Process(p1) = p;

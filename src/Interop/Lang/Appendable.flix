@@ -51,7 +51,7 @@ namespace Interop/Lang/Appendable {
         let Appendable(ap1) = ap;
         ap1
 
-    pub def appendChar![r: Region, t: Region -> Type](c: Char, ss: t[r]): Result[Unit, String] \ Write(r) with ImpAppendable[t] = 
+    pub def appendChar![r: Region, t: Region -> Type](c: Char, ss: t[r]): Result[String, Unit] \ Write(r) with ImpAppendable[t] = 
         try {
             import java.lang.Appendable.append(Char): ##java.lang.Appendable & r;
             let Appendable(ss1) = Interop/Lang/ImpAppendable.toAppendable(ss);
@@ -65,7 +65,7 @@ namespace Interop/Lang/Appendable {
 
     /// TODO - use concrete types
     pub def appendCharSequence![r1: Region, r2: Region, t1: Region -> Type, t2: Region -> Type]
-                                (cs: t1[r1], ss: t2[r2]): Result[Unit, String] \ {Read(r1), Write(r2)} with ImpCharSequence[t1], ImpAppendable[t2] = 
+                                (cs: t1[r1], ss: t2[r2]): Result[String, Unit] \ {Read(r1), Write(r2)} with ImpCharSequence[t1], ImpAppendable[t2] = 
         try {
             import java.lang.Appendable.append(##java.lang.CharSequence): ##java.lang.Appendable & r2;
             let Appendable(ss1) = Interop/Lang/ImpAppendable.toAppendable(ss);

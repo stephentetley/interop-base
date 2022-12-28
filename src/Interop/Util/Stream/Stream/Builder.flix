@@ -41,7 +41,7 @@ namespace Interop/Util/Stream/Stream/Builder {
     pub def wrapHH(_: Region[r], prim: ##java.util.stream.Stream$Builder): Builder[a, r] = Builder(prim)
 
 
-    pub def accept(t: a, b: Builder[a, r]): Result[Unit, String] \ Write(r) with Marshal[a] =
+    pub def accept(t: a, b: Builder[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
         try {
             import java.util.stream.Stream$Builder.accept(##java.lang.Object): Unit \ r;
             let Builder(b1) = b;
@@ -53,7 +53,7 @@ namespace Interop/Util/Stream/Stream/Builder {
                 Err(getMessage(ex))
         }
 
-    pub def add(t: a, b: Builder[a, r]): Result[Builder[a, r], String] \ Write(r) with Marshal[a] =
+    pub def add(t: a, b: Builder[a, r]): Result[String, Builder[a, r]] \ Write(r) with Marshal[a] =
         try {
             import java.util.stream.Stream$Builder.add(##java.lang.Object): ##java.util.stream.Stream$Builder \ r;
             let Builder(b1) = b;
@@ -65,7 +65,7 @@ namespace Interop/Util/Stream/Stream/Builder {
                 Err(getMessage(ex))
         }
 
-    pub def build(b: Builder[a, r]): Result[Stream[a, r], String] \ Write(r) =
+    pub def build(b: Builder[a, r]): Result[String, Stream[a, r]] \ Write(r) =
         try {
             import java.util.stream.Stream$Builder.build(): ##java.util.stream.Stream \ r;
             let Builder(b1) = b;

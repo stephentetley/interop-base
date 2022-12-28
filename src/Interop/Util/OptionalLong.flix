@@ -53,7 +53,7 @@ namespace Interop/Util/OptionalLong {
         import static java.util.OptionalLong.of(Int64): ##java.util.OptionalLong \ {};
         of(i) |> OptionalLong
 
-    pub def getAsLong(o: OptionalLong): Result[Int64, String] = 
+    pub def getAsLong(o: OptionalLong): Result[String, Int64] = 
         try {
             import java.util.OptionalLong.getAsLong(): Int64 \ {};
             let OptionalLong(o1) = o;
