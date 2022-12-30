@@ -268,7 +268,7 @@ namespace Interop/Util/LinkedList {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def enumerator(rh: Region[rh], l: LinkedList[a, r]): Iterator[(a, Int32), rh] \ { Read(r), Write(rh) } with Marshal[a] =
+    pub def enumerator(rh: Region[rh], l: LinkedList[a, r]): Iterator[(Int32, a), rh] \ { Read(r), Write(rh) } with Marshal[a] =
         iterator(rh, l) |> Iterator.enumerator
 
 

@@ -63,7 +63,7 @@ namespace Interop/Util/IteratorZ {
 
 
 
-    pub def enumerator(rh: Region[rh], iter: IteratorZ[a, r]): Iterator[(a, Int32), rh] \ { Read(r), Write(rh) } with Marshal[a] =
+    pub def enumerator(rh: Region[rh], iter: IteratorZ[a, r]): Iterator[(Int32, a), rh] \ { Read(r), Write(rh) } with Marshal[a] =
         iterator(rh, iter) |> Iterator.enumerator
 
     ///
