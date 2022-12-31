@@ -138,8 +138,8 @@ namespace Interop/Util/Stream/DoubleStream {
         let DoubleStream(s1) = s;
         average(s1) |> OptionalDouble
 
-    pub def summaryStatistics(s: DoubleStream[r]): DoubleSummaryStatistics[r] \ Read(r) = 
-        import java.util.stream.DoubleStream.summaryStatistics(): ##java.util.DoubleSummaryStatistics \ r;
+    pub def summaryStatistics(_: Region[r1], s: DoubleStream[r]): DoubleSummaryStatistics[r1] \ { Read(r), Write(r1) } = 
+        import java.util.stream.DoubleStream.summaryStatistics(): ##java.util.DoubleSummaryStatistics \ { Read(r), Write(r1) };
         let DoubleStream(s1) = s;
         summaryStatistics(s1) |> DoubleSummaryStatistics
 

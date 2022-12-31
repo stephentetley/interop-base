@@ -22,6 +22,16 @@ namespace Interop/Lang {
     pub enum Character(##java.lang.Character)
 
 
+    instance Interop/Flix.Marshal[Character] {
+        pub def toJavaObject(x: Character): ##java.lang.Object = 
+            let Character(x1) = x;
+            unsafe_cast x1 as ##java.lang.Object
+
+        pub def fromJavaObject(o: ##java.lang.Object): Character = 
+            Character(unsafe_cast o as ##java.lang.Character)
+    }
+
+
 }
 
 namespace Interop/Lang/Character {
@@ -61,11 +71,32 @@ namespace Interop/Lang/Character {
         let Character(x1) = x;
         hashCode(x1)
 
-    pub def valueOf(x: Char): Character =
+    pub def valueOf(c: Char): Character =
         import static java.lang.Character.valueOf(Char): ##java.lang.Character \ {};
-        valueOf(x) |> Character
+        valueOf(c) |> Character
 
-    pub def getName(cp: Int32): String =
+    pub def getDirectionality(c: Char): Int8 =
+        import static java.lang.Character.getDirectionality(Char): Int8 \ {};
+        getDirectionality(c)
+
+    pub def getName(cp: Int32): Option[String] =
         import static java.lang.Character.getName(Int32): String \ {};
-        getName(cp)
+        getName(cp) |> Object.toOption
+
+    pub def getNumericValue(c: Char): Int32 =
+        import static java.lang.Character.getNumericValue(Char): Int32 \ {};
+        getNumericValue(c)
+
+    pub def getType(c: Char): Int32 =
+        import static java.lang.Character.getType(Char): Int32 \ {};
+        getType(c)
+
+    pub def highSurrogate(cp: Int32): Char =
+        import static java.lang.Character.highSurrogate(Int32): Char \ {};
+        highSurrogate(cp)
+
+    pub def lowSurrogate(cp: Int32): Char =
+        import static java.lang.Character.lowSurrogate(Int32): Char \ {};
+        lowSurrogate(cp)
+
 }

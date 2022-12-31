@@ -22,6 +22,15 @@ namespace Interop/Lang {
     pub enum Boolean(##java.lang.Boolean)
 
 
+    instance Interop/Flix.Marshal[Boolean] {
+        pub def toJavaObject(x: Boolean): ##java.lang.Object = 
+            let Boolean(x1) = x;
+            unsafe_cast x1 as ##java.lang.Object
+
+        pub def fromJavaObject(o: ##java.lang.Object): Boolean = 
+            Boolean(unsafe_cast o as ##java.lang.Boolean)
+    }
+
 }
 
 namespace Interop/Lang/Boolean {
@@ -45,6 +54,18 @@ namespace Interop/Lang/Boolean {
     pub def compare(x: Bool, y: Bool): Int32 =
         import static java.lang.Boolean.compare(Bool, Bool): Int32 \ {};
         compare(x, y)
+
+    pub def truez(): Boolean = 
+        import static get java.lang.Boolean.TRUE: ##java.lang.Boolean \ {} as get_TRUE;
+        get_TRUE() |> Boolean
+
+    pub def falsez(): Boolean = 
+        import static get java.lang.Boolean.FALSE: ##java.lang.Boolean \ {} as get_FALSE;
+        get_FALSE() |> Boolean
+
+    pub def parseBoolean(s: String): Bool = 
+        import static java.lang.Boolean.parseBoolean(String): Bool \ {};
+        parseBoolean(s)
 
     pub def booleanValue(x: Boolean): Bool =
         import java.lang.Boolean.booleanValue(): Bool \ {};

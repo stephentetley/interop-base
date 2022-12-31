@@ -153,8 +153,8 @@ namespace Interop/Util/Stream/LongStream {
         let LongStream(s1) = s;
         average(s1) |> OptionalDouble
 
-    pub def summaryStatistics(s: LongStream[r]): LongSummaryStatistics[r] \ Read(r) = 
-        import java.util.stream.LongStream.summaryStatistics(): ##java.util.LongSummaryStatistics \ r;
+    pub def summaryStatistics(_: Region[r1], s: LongStream[r]): LongSummaryStatistics[r1] \ { Read(r), Write(r1) } = 
+        import java.util.stream.LongStream.summaryStatistics(): ##java.util.LongSummaryStatistics \ { Read(r), Write(r1) };
         let LongStream(s1) = s;
         summaryStatistics(s1) |> LongSummaryStatistics
 

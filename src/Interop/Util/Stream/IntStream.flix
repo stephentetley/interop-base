@@ -152,8 +152,8 @@ namespace Interop/Util/Stream/IntStream {
         let IntStream(s1) = s;
         average(s1) |> OptionalDouble
 
-    pub def summaryStatistics(s: IntStream[r]): IntSummaryStatistics[r] \ Read(r) = 
-        import java.util.stream.IntStream.summaryStatistics(): ##java.util.IntSummaryStatistics \ r;
+    pub def summaryStatistics(_: Region[r1], s: IntStream[r]): IntSummaryStatistics[r1] \ { Read(r), Write(r1) } = 
+        import java.util.stream.IntStream.summaryStatistics(): ##java.util.IntSummaryStatistics \ { Read(r), Write(r1) };
         let IntStream(s1) = s;
         summaryStatistics(s1) |> IntSummaryStatistics
 

@@ -41,20 +41,19 @@ namespace Interop/Lang/Appendable {
 
     use Interop/Lang.Appendable;
     use Interop/Lang.Appendable.{Appendable};
-    use Interop/Lang.ImpAppendable;
 
-    use Interop/Lang.CharSequence;
-    use Interop/Lang.CharSequence.{CharSequence};
-    use Interop/Lang.ImpCharSequence;
+    use Interop/Lang.CharSequence
+    use Interop/Lang.CharSequence.{CharSequence}
+    use Interop/Lang.ImpCharSequence
 
     pub def getHH(ap: Appendable[r]): ##java.lang.Appendable = 
         let Appendable(ap1) = ap;
         ap1
 
-    pub def appendChar![r: Region, t: Region -> Type](c: Char, ss: t[r]): Result[String, Unit] \ Write(r) with ImpAppendable[t] = 
+    pub def appendChar!(c: Char, ss: Appendable[r]): Result[String, Unit] \ Write(r) = 
         try {
-            import java.lang.Appendable.append(Char): ##java.lang.Appendable & r;
-            let Appendable(ss1) = Interop/Lang/ImpAppendable.toAppendable(ss);
+            import java.lang.Appendable.append(Char): ##java.lang.Appendable \ Write(r);
+            let Appendable(ss1) = ss;
             discard append(ss1, c);
             Ok()
         } catch {
@@ -63,13 +62,11 @@ namespace Interop/Lang/Appendable {
                 Err(getMessage(ex))
         }
 
-    /// TODO - use concrete types
-    pub def appendCharSequence![r1: Region, r2: Region, t1: Region -> Type, t2: Region -> Type]
-                                (cs: t1[r1], ss: t2[r2]): Result[String, Unit] \ {Read(r1), Write(r2)} with ImpCharSequence[t1], ImpAppendable[t2] = 
+    pub def appendCharSequence!(cs: CharSequence[r1], ss: Appendable[r2]): Result[String, Unit] \ { Read(r1), Write(r2) } = 
         try {
-            import java.lang.Appendable.append(##java.lang.CharSequence): ##java.lang.Appendable & r2;
-            let Appendable(ss1) = Interop/Lang/ImpAppendable.toAppendable(ss);
-            let CharSequence(cs1) = Interop/Lang/ImpCharSequence.toCharSequence(cs);
+            import java.lang.Appendable.append(##java.lang.CharSequence): ##java.lang.Appendable \ { Read(r1), Write(r2) };
+            let cs1 = Interop/Lang/CharSequence.getHH(cs);
+            let Appendable(ss1) = ss;
             discard append(ss1, cs1);
             unsafe_cast Ok() as _ \ {Read(r1), Write(r2)} 
         } catch {
@@ -78,5 +75,20 @@ namespace Interop/Lang/Appendable {
                 Err(getMessage(ex))
         }
 
+    pub def appendCharSubSequence!(cs: CharSequence[r1], 
+                                    start: {start = Int32},
+                                    end: {end = Int32},
+                                    ss: Appendable[r2]): Result[String, Unit] \ { Read(r1), Write(r2) } = 
+        try {
+            import java.lang.Appendable.append(##java.lang.CharSequence, Int32, Int32): ##java.lang.Appendable \ { Read(r1), Write(r2) };
+            let cs1 = Interop/Lang/CharSequence.getHH(cs);
+            let Appendable(ss1) = ss;
+            discard append(ss1, cs1, start.start, end.end);
+            unsafe_cast Ok() as _ \ {Read(r1), Write(r2)} 
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String & r2;
+                Err(getMessage(ex))
+        }
 
 }
