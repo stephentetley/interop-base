@@ -268,20 +268,20 @@ namespace Interop/Util/ListZ {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def iterator(rh: Region[rh], l: ListZ[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a] =
+    pub def iterator(rh: Region[rh], l: ListZ[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } with Marshal[a] =
         toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, l)
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def toFlixIterator(rh: Region[rh], ocast: ##java.lang.Object -> a, l: ListZ[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } =
+    pub def toFlixIterator(rc: Region[rh], ocast: ##java.lang.Object -> a, l: ListZ[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } =
         import java.util.List.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
         let ListZ(l1) = l;
         if (Object.isNull(l1))
-            Iterator.new(rh)
+            Iterator.empty(rc)
         else 
             iterator(l1) 
-                |> Interop/Util/IteratorZ.wrapHH(rh)
-                |> Interop/Util/IteratorZ.toFlixIterator(rh, ocast)
+                |> Interop/Util/IteratorZ.wrapHH(rc)
+                |> Interop/Util/IteratorZ.toFlixIterator(rc, ocast)
 
 
 
@@ -309,7 +309,7 @@ namespace Interop/Util/ListZ {
     pub def toArrayOfString(r1: Region[r1], l: ListZ[String, r2]): Result[String, Array[String, r1]] \ { Read(r2), Write(r1) } =
         try {
             import java.util.List.toArray(): Array[String, r1] \ { Read(r2), Write(r1) };
-            let _ = [] @ r1;
+            let _ = Array#{} @ r1;
             let ListZ(l1) = l;
             toArray(l1) |> Ok
         } catch {

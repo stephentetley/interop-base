@@ -54,7 +54,7 @@ namespace Interop/Util/Stream/IntStream {
 
     pub def wrapHH(_: Region[r], prim: ##java.util.stream.IntStream): IntStream[r] = IntStream(prim)
 
-    pub def intStreamIterator(rh: Region[rh], s: IntStream[r]): Iterator[Int32, rh] \ { Read(r), Write(rh) } =
+    pub def intStreamIterator(rh: Region[rh], s: IntStream[r]): Iterator[Int32, ef, rh] \ { Read(r), Write(rh) } =
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
         let IntStream(s1) = s;
         let iter1 = iterator(unsafe_cast s1 as ##java.util.stream.BaseStream);

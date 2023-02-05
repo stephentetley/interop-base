@@ -427,16 +427,16 @@ namespace Interop/Util/Locale {
 
 
     /// This marshals okay...
-    pub def getAvailableLocales(): List[Locale] \ IO = region r {
-        import static java.util.Locale.getAvailableLocales(): Array[##java.util.Locale, r] \ { Write(r), IO } ;
-        let _ = [] @ r;
+    pub def getAvailableLocales(): List[Locale] \ IO = region rc {
+        import static java.util.Locale.getAvailableLocales(): Array[##java.util.Locale, rc] \ { Write(rc), IO } ;
+        let _ = Array#{} @ rc;
         let xs = getAvailableLocales() |> Array.toList;
         List.map(Locale, xs)
     }
 
-    pub def getIsoCountries(): List[String] = region r {
-        import static java.util.Locale.getISOCountries(): Array[String, r] \ Write(r);
-        let _ = [] @ r;
+    pub def getIsoCountries(): List[String] = region rc {
+        import static java.util.Locale.getISOCountries(): Array[String, rc] \ Write(rc);
+        let _ = Array#{} @ rc;
         getISOCountries() |> Array.toList
     }
 
@@ -455,10 +455,10 @@ namespace Interop/Util/Locale {
         }
     }
 
-    pub def getIsoLanguages(): Result[String, List[String]] = region r {
+    pub def getIsoLanguages(): Result[String, List[String]] = region rc {
         try {
-            import static java.util.Locale.getISOLanguages(): Array[String, r] \ Write(r);
-            let _ = [] @ r;            
+            import static java.util.Locale.getISOLanguages(): Array[String, rc] \ Write(rc);
+            let _ = Array#{} @ rc;            
             getISOLanguages() |> Array.toList |> Ok
         } catch {
             case ex: ##java.lang.Exception =>

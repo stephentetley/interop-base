@@ -137,7 +137,7 @@ namespace Interop/Util/SortedMap {
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     ///
-    pub def iterator(rh: Region[rh], m: SortedMap[k, v, r]): Iterator[(k, v), rh] \ { Read(r), Write(rh) } with Marshal[k], Marshal[v] =
+    pub def iterator(rh: Region[rh], m: SortedMap[k, v, r]): Iterator[(k, v), ef, rh] \ { Read(r), Write(rh) } with Marshal[k], Marshal[v] =
         toIterator(rh, Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)
     ///
     /// Returns an iterator over all key-value pairs in `m`.
@@ -146,7 +146,7 @@ namespace Interop/Util/SortedMap {
     pub def toIterator(rh: Region[rh],
                         kcast: ##java.lang.Object -> k, 
                         vcast: ##java.lang.Object -> v,  
-                        m: SortedMap[k, v, r]): Iterator[(k, v), rh] \ { Read(r), Write(rh) } =
+                        m: SortedMap[k, v, r]): Iterator[(k, v), ef, rh] \ { Read(r), Write(rh) } =
         import java.util.SortedMap.entrySet(): ##java.util.Set \ r;
         import java.util.Set.iterator(): ##java.util.Iterator \ {r, rh};
         import java.util.Iterator.hasNext(): Bool \ rh;

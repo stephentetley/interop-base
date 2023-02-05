@@ -77,13 +77,13 @@ namespace Interop/Util/Stream/Stream {
         iterate(seed1, op1) |> Stream
 
 
-    pub def iterator(rh: Region[rh], s: Stream[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a] =
-        iteratorWith(rh, Interop/Flix/Marshal.fromJavaObject, s)
+    pub def iterator(rc: Region[r1], s: Stream[a, r]): Iterator[a, ef, r1] \ { Read(r), Write(rh) } with Marshal[a] =
+        iteratorWith(rc, Interop/Flix/Marshal.fromJavaObject, s)
 
-    pub def iteratorWith(_: Region[rh], ocast: ##java.lang.Object -> a, s: Stream[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a] =
-        import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
-        import java.util.Iterator.hasNext(): Bool \ Read(rh);
-        import java.util.Iterator.next(): ##java.lang.Object \ Read(rh);
+    pub def iteratorWith(_: Region[rc], ocast: ##java.lang.Object -> a, s: Stream[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } with Marshal[a] =
+        import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ { Read(r), Write(rc) };
+        import java.util.Iterator.hasNext(): Bool \ Read(rc);
+        import java.util.Iterator.next(): ##java.lang.Object \ Read(rc);
         let Stream(s1) = s;
         let iter1 = iterator(unsafe_cast s1 as ##java.util.stream.BaseStream);
         let isDone = () -> { 

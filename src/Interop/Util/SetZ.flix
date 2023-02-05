@@ -235,24 +235,24 @@ namespace Interop/Util/SetZ {
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def iterator(rh: Region[rh], s: SetZ[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a] =
+    pub def iterator(rh: Region[rh], s: SetZ[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } with Marshal[a] =
         toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, s)
 
 
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def toFlixIterator(rh: Region[rh], 
+    pub def toFlixIterator(rc: Region[rh], 
                             ocast: ##java.lang.Object -> a, 
-                            s: SetZ[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } =
+                            s: SetZ[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } =
         import java.util.Set.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
         let SetZ(s1) = s;
         if (Object.isNull(s1))
-            Iterator.new(rh)
+            Iterator.empty(rc)
         else 
             iterator(s1) 
-                |> Interop/Util/IteratorZ.wrapHH(rh)
-                |> Interop/Util/IteratorZ.toFlixIterator(rh, ocast)
+                |> Interop/Util/IteratorZ.wrapHH(rc)
+                |> Interop/Util/IteratorZ.toFlixIterator(rc, ocast)
 
     pub def toFlixSet(s: SetZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
         region r2 {

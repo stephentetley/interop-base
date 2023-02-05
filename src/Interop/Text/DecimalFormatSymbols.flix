@@ -74,7 +74,7 @@ namespace Interop/Text/DecimalFormatSymbols {
     /// This marshals okay...
     pub def getAvailableLocales(): List[Locale] \ IO = region r {
         import static java.text.DecimalFormatSymbols.getAvailableLocales(): Array[##java.util.Locale, r] \ { Write(r), IO } ;
-        let _ = [] @ r;
+        let _ = Array#{} @ r;
         let xs = getAvailableLocales() |> Array.toList;
         List.map(Locale, xs)
     }

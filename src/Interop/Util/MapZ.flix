@@ -230,7 +230,7 @@ namespace Interop/Util/MapZ {
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     ///
-    pub def iterator(rh: Region[rh], m: MapZ[k, v, r]): Iterator[(k, v), rh] \ { Read(r), Write(rh) } with Marshal[k], Marshal[v] =
+    pub def iterator(rh: Region[rh], m: MapZ[k, v, r]): Iterator[(k, v), ef, rh] \ { Read(r), Write(rh) } with Marshal[k], Marshal[v] =
         toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)
 
     ///
@@ -240,7 +240,7 @@ namespace Interop/Util/MapZ {
     pub def toFlixIterator(rh: Region[rh], 
                             kcast: ##java.lang.Object -> k, 
                             vcast: ##java.lang.Object -> v, 
-                            m: MapZ[k, v, r]): Iterator[(k, v), rh] \ { Read(r), Write(rh) } with Marshal[k], Marshal[v] =
+                            m: MapZ[k, v, r]): Iterator[(k, v), ef, rh] \ { Read(r), Write(rh) } with Marshal[k], Marshal[v] =
         import java.util.Map.entrySet(): ##java.util.Set \ r;
         import java.util.Set.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
         import java.util.Iterator.hasNext(): Bool \ Read(rh);

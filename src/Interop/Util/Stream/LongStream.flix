@@ -56,7 +56,7 @@ namespace Interop/Util/Stream/LongStream {
 
     pub def newLongStream(_: Region[r], prim: ##java.util.stream.LongStream): LongStream[r] = LongStream(prim)
 
-    pub def longStreamIterator(rh: Region[rh], s: LongStream[r]): Iterator[Int64, rh] \ { Read(r), Write(rh) } =
+    pub def longStreamIterator(rh: Region[rh], s: LongStream[r]): Iterator[Int64, ef, rh] \ { Read(r), Write(rh) } =
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
         let LongStream(s1) = s;
         let iter1 = iterator(unsafe_cast s1 as ##java.util.stream.BaseStream);

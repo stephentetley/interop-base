@@ -150,21 +150,21 @@ namespace Interop/Util/Collection {
         let Collection(c1) = c;
         stream(c1) |> Stream
 
-    pub def iterator(rh: Region[rh], c: Collection[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a] =
+    pub def iterator(rh: Region[rh], c: Collection[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } with Marshal[a] =
         toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, c)
         
 
-    pub def toFlixIterator(rh: Region[rh], 
+    pub def toFlixIterator(rc: Region[rh], 
                             ocast: ##java.lang.Object -> a,
-                            c: Collection[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a] =
+                            c: Collection[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } with Marshal[a] =
         import java.util.Collection.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) } as iterator;
         let Collection(c1) = c;
         if (Object.isNull(c1))
-            Iterator.new(rh)
+            Iterator.empty(rc)
         else 
             iterator(c1) 
-                |> Interop/Util/IteratorZ.wrapHH(rh)
-                |> Interop/Util/IteratorZ.toFlixIterator(rh, ocast)
+                |> Interop/Util/IteratorZ.wrapHH(rc)
+                |> Interop/Util/IteratorZ.toFlixIterator(rc, ocast)
 
     /// pub def enumerator(r: Region[r1], c: Collection[a, r2]): Iterator[(a, Int32), r] \ { Read(r2), Write(r1) }  with Marshal[a] =
     ///     iterator(r, c) |> Iterator.enumerator

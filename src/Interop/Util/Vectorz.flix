@@ -109,24 +109,24 @@ namespace Interop/Util/VectorZ {
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def iterator(rh: Region[rh], v: VectorZ[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a] =
-        toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, v)
+    pub def iterator(rc: Region[r1], v: VectorZ[a, r]): Iterator[a, ef, rc] \ { Read(r), Write(rc) } with Marshal[a] =
+        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, v)
 
 
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def toFlixIterator(rh: Region[rh], 
+    pub def toFlixIterator(rc: Region[r1], 
                             ocast: ##java.lang.Object -> a, 
-                            v: VectorZ[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } =
-        import java.util.Vector.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
+                            v: VectorZ[a, r]): Iterator[a, ef, r1] \ { Read(r), Write(r1) } =
+        import java.util.Vector.iterator(): ##java.util.Iterator \ { Read(r), Write(r1) };
         let VectorZ(v1) = v;
         if (Object.isNull(v1))
-            Iterator.new(rh)
+            Iterator.empty(rc)
         else 
             iterator(v1) 
-                |> Interop/Util/IteratorZ.wrapHH(rh)
-                |> Interop/Util/IteratorZ.toFlixIterator(rh, ocast)
+                |> Interop/Util/IteratorZ.wrapHH(rc)
+                |> Interop/Util/IteratorZ.toFlixIterator(rc, ocast)
 
     pub def toFlixSet(v: VectorZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
         region r2 {

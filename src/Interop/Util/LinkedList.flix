@@ -245,30 +245,30 @@ namespace Interop/Util/LinkedList {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def iterator(rh: Region[rh], l: LinkedList[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } with Marshal[a] =
+    pub def iterator(rh: Region[rh], l: LinkedList[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } with Marshal[a] =
         toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, l)
 
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def toFlixIterator(rh: Region[rh], 
+    pub def toFlixIterator(rc: Region[rh], 
                             ocast: ##java.lang.Object -> a, 
-                            l: LinkedList[a, r]): Iterator[a, rh] \ { Read(r), Write(rh) } =
+                            l: LinkedList[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } =
         import java.util.LinkedList.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) } as iterator;
         let LinkedList(l1) = l;
         if (Object.isNull(l1))
-            Iterator.new(rh)
+            Iterator.empty(rc)
         else 
             iterator(l1) 
-                |> Interop/Util/IteratorZ.wrapHH(rh) 
-                |> Interop/Util/IteratorZ.toFlixIterator(rh, ocast)
+                |> Interop/Util/IteratorZ.wrapHH(rc) 
+                |> Interop/Util/IteratorZ.toFlixIterator(rc, ocast)
 
 
 
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def enumerator(rh: Region[rh], l: LinkedList[a, r]): Iterator[(Int32, a), rh] \ { Read(r), Write(rh) } with Marshal[a] =
+    pub def enumerator(rh: Region[rh], l: LinkedList[a, r]): Iterator[(Int32, a), ef, rh] \ { Read(r), Write(rh) } with Marshal[a] =
         iterator(rh, l) |> Iterator.enumerator
 
 
@@ -297,7 +297,7 @@ namespace Interop/Util/LinkedList {
     pub def toArray(r1: Region[r1], l: LinkedList[a, r2]): Array[a, r1] \ { Read(r2), Write(r1) } with Marshal[a] =
         let len = size(l);
         if (len < 1) 
-            [] @ r1
+            Array#{} @ r1
         else {
             ///let head = get(0, l);
             let aout = Array.new(r1, len);

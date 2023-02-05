@@ -113,7 +113,7 @@ namespace Interop/Text/NumberFormat {
 
     pub def getAvailableLocales(): List[Locale] \ IO = region r {
         import static java.text.NumberFormat.getAvailableLocales(): Array[##java.util.Locale, r] \ { Write(r), IO } ;
-        let _ = [] @ r;
+        let _ = Array#{} @ r;
         getAvailableLocales() |> Array.toList |> List.map(Locale)
     }
    
