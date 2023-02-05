@@ -20,7 +20,9 @@ namespace Interop/Util/Stream/Stream {
     ///
     /// Represents a Java Stream.Builder
     ///
-    pub enum Builder[_: Type, _: Region](##java.util.stream.Stream$Builder)
+    pub enum Builder[_a: Type, r: Region] { 
+        case Builder(Region[r], ##java.util.stream.Stream$Builder)
+    }
 
 
 }
@@ -35,16 +37,16 @@ namespace Interop/Util/Stream/Stream/Builder {
     use Interop/Flix.Marshal;
     
     pub def getHH(x: Builder[a, r]): ##java.util.stream.Stream$Builder = 
-        let Builder(x1) = x;
+        let Builder(_, x1) = x;
         x1
 
-    pub def wrapHH(_: Region[r], prim: ##java.util.stream.Stream$Builder): Builder[a, r] = Builder(prim)
+    pub def wrapHH(rc: Region[r], prim: ##java.util.stream.Stream$Builder): Builder[a, r] = Builder(rc, prim)
 
 
     pub def accept(t: a, b: Builder[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
         try {
             import java.util.stream.Stream$Builder.accept(##java.lang.Object): Unit \ r;
-            let Builder(b1) = b;
+            let Builder(_, b1) = b;
             let t1 = Interop/Flix/Marshal.toJavaObject(t);
             accept(b1, t1) |> Ok
         } catch {
@@ -56,9 +58,9 @@ namespace Interop/Util/Stream/Stream/Builder {
     pub def add(t: a, b: Builder[a, r]): Result[String, Builder[a, r]] \ Write(r) with Marshal[a] =
         try {
             import java.util.stream.Stream$Builder.add(##java.lang.Object): ##java.util.stream.Stream$Builder \ r;
-            let Builder(b1) = b;
+            let Builder(rc, b1) = b;
             let t1 = Interop/Flix/Marshal.toJavaObject(t);
-            add(b1, t1) |> Builder |> Ok
+            Builder(rc, add(b1, t1)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
@@ -68,8 +70,8 @@ namespace Interop/Util/Stream/Stream/Builder {
     pub def build(b: Builder[a, r]): Result[String, Stream[a, r]] \ Write(r) =
         try {
             import java.util.stream.Stream$Builder.build(): ##java.util.stream.Stream \ r;
-            let Builder(b1) = b;
-            build(b1) |> Stream |> Ok
+            let Builder(rc, b1) = b;
+            Stream(rc, build(b1)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
