@@ -97,12 +97,12 @@ namespace Interop/Lang/StringZ {
                 Err(getMessage(ex))
         }
 
-    pub def chars(_: Region[r], s: String): IntStream[r] \ Write(r) = 
+    pub def chars(rc: Region[r], s: String): IntStream[r] \ Write(r) = 
         import java.lang.String.chars(): ##java.util.stream.IntStream \ r ;
-        chars(s) |> IntStream
+        IntStream(rc, chars(s))
 
-    pub def codePoints(_: Region[r], s: String): IntStream[r] \ Write(r) = 
+    pub def codePoints(rc: Region[r], s: String): IntStream[r] \ Write(r) = 
         import java.lang.String.codePoints(): ##java.util.stream.IntStream \ r ;
-        codePoints(s) |> IntStream
+        IntStream(rc, codePoints(s))
 
 }

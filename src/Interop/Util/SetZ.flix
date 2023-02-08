@@ -235,17 +235,17 @@ namespace Interop/Util/SetZ {
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def iterator(rh: Region[rh], s: SetZ[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } with Marshal[a] =
-        toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, s)
+    pub def iterator(rc: Region[r1], s: SetZ[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
+        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, s)
 
 
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def toFlixIterator(rc: Region[rh], 
+    pub def toFlixIterator(rc: Region[r1], 
                             ocast: ##java.lang.Object -> a, 
-                            s: SetZ[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } =
-        import java.util.Set.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
+                            s: SetZ[a, r]): Iterator[a, r1, r1] \ { Read(r) } =
+        import java.util.Set.iterator(): ##java.util.Iterator \ { Read(r) };
         let SetZ(s1) = s;
         if (Object.isNull(s1))
             Iterator.empty(rc)

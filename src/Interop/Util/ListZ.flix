@@ -268,13 +268,14 @@ namespace Interop/Util/ListZ {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def iterator(rh: Region[rh], l: ListZ[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } with Marshal[a] =
-        toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, l)
+    pub def iterator(rc: Region[r1], l: ListZ[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
+        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, l)
+
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def toFlixIterator(rc: Region[rh], ocast: ##java.lang.Object -> a, l: ListZ[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } =
-        import java.util.List.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
+    pub def toFlixIterator(rc: Region[r1], ocast: ##java.lang.Object -> a, l: ListZ[a, r]): Iterator[a, r1, r1] \ { Read(r)} =
+        import java.util.List.iterator(): ##java.util.Iterator \ { Read(r) };
         let ListZ(l1) = l;
         if (Object.isNull(l1))
             Iterator.empty(rc)

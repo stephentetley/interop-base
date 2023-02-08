@@ -137,31 +137,31 @@ namespace Interop/Util/SortedMap {
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     ///
-    pub def iterator(rh: Region[rh], m: SortedMap[k, v, r]): Iterator[(k, v), ef, rh] \ { Read(r), Write(rh) } with Marshal[k], Marshal[v] =
-        toIterator(rh, Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)
+    pub def iterator(rc: Region[r1], m: SortedMap[k, v, r]): Iterator[(k, v), r1, r1] \ { Read(r) } with Marshal[k], Marshal[v] =
+        toIterator(rc, Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)
+
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     /// Can't use RawIterator because no Marshal instance for MapEntry
     ///
-    pub def toIterator(rh: Region[rh],
+    pub def toIterator(rc: Region[r1],
                         kcast: ##java.lang.Object -> k, 
                         vcast: ##java.lang.Object -> v,  
-                        m: SortedMap[k, v, r]): Iterator[(k, v), ef, rh] \ { Read(r), Write(rh) } =
+                        m: SortedMap[k, v, r]): Iterator[(k, v), r1, r1] \ { Read(r) } =
         import java.util.SortedMap.entrySet(): ##java.util.Set \ r;
-        import java.util.Set.iterator(): ##java.util.Iterator \ {r, rh};
-        import java.util.Iterator.hasNext(): Bool \ rh;
-        import java.util.Iterator.next(): ##java.lang.Object \ rh;
+        import java.util.Set.iterator(): ##java.util.Iterator \ r;
+        import java.util.Iterator.hasNext(): Bool \ r1;
+        import java.util.Iterator.next(): ##java.lang.Object \ r1;
         let set1 = entrySet(getHH(m));
         let iter = iterator(set1);
-        let isDone = () -> { 
-            let ans = hasNext(iter);
-            not ans
+        let getNext = () -> match hasNext(iter) {
+            case true  => {
+                let entry = next(iter) |> Interop/Util/Map/Entry.castObject(rc);
+                Interop/Util/Map/Entry.toKeyValueWith(kcast, vcast, entry) |> Some
+            }
+            case false => None
         };
-        let getNext = () -> {
-            let entry = next(iter) |> Interop/Util/Map/Entry.castObject(rh);
-            Interop/Util/Map/Entry.toKeyValueWith(kcast, vcast, entry)
-        };
-        Iterator(isDone, getNext)
+        Iterator.iterate(rc, getNext)
 
     
     

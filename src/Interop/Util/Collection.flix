@@ -145,19 +145,19 @@ namespace Interop/Util/Collection {
                 Err(getMessage(ex))
         }
 
-    pub def stream(c: Collection[a, r]): Stream[a, r] \ { Read(r), Write(r) }  with Marshal[a] =
+    pub def stream(rc: Region[r1], c: Collection[a, r]): Stream[a, r1] \ { Read(r) }  with Marshal[a] =
         import java.util.Collection.stream(): ##java.util.stream.Stream \ r; 
         let Collection(c1) = c;
-        stream(c1) |> Stream
+        Stream(rc, stream(c1))
 
-    pub def iterator(rh: Region[rh], c: Collection[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } with Marshal[a] =
-        toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, c)
+    pub def iterator(rc: Region[r1], c: Collection[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
+        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, c)
         
 
-    pub def toFlixIterator(rc: Region[rh], 
+    pub def toFlixIterator(rc: Region[r1], 
                             ocast: ##java.lang.Object -> a,
-                            c: Collection[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } with Marshal[a] =
-        import java.util.Collection.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) } as iterator;
+                            c: Collection[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
+        import java.util.Collection.iterator(): ##java.util.Iterator \ { Read(r) } as iterator;
         let Collection(c1) = c;
         if (Object.isNull(c1))
             Iterator.empty(rc)

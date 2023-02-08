@@ -152,11 +152,11 @@ namespace Interop/IO/BufferedReader {
                 Err(getMessage(ex))
         }
 
-    pub def lines!(rd: BufferedReader[r]): Result[String, Stream[String, r]] \ Read(r) = 
+    pub def lines!(rc: Region[r1], rd: BufferedReader[r]): Result[String, Stream[String, r1]] \ Read(r) = 
         try {
             import java.io.BufferedReader.lines(): ##java.util.stream.Stream \ r;
             let BufferedReader(rd1) = rd;
-            lines(rd1) |> Stream |> Ok
+            Stream(rc, lines(rd1)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};

@@ -109,7 +109,7 @@ namespace Interop/Util/VectorZ {
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def iterator(rc: Region[r1], v: VectorZ[a, r]): Iterator[a, ef, rc] \ { Read(r), Write(rc) } with Marshal[a] =
+    pub def iterator(rc: Region[r1], v: VectorZ[a, r]): Iterator[a, r1, r1] \ Read(r) with Marshal[a] =
         toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, v)
 
 
@@ -118,8 +118,8 @@ namespace Interop/Util/VectorZ {
     ///
     pub def toFlixIterator(rc: Region[r1], 
                             ocast: ##java.lang.Object -> a, 
-                            v: VectorZ[a, r]): Iterator[a, ef, r1] \ { Read(r), Write(r1) } =
-        import java.util.Vector.iterator(): ##java.util.Iterator \ { Read(r), Write(r1) };
+                            v: VectorZ[a, r]): Iterator[a, r1, r1] \ { Read(r) } =
+        import java.util.Vector.iterator(): ##java.util.Iterator \ r;
         let VectorZ(v1) = v;
         if (Object.isNull(v1))
             Iterator.empty(rc)

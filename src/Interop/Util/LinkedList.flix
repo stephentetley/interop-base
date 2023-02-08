@@ -245,16 +245,16 @@ namespace Interop/Util/LinkedList {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def iterator(rh: Region[rh], l: LinkedList[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } with Marshal[a] =
-        toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, l)
+    pub def iterator(rc: Region[r1], l: LinkedList[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
+        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, l)
 
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def toFlixIterator(rc: Region[rh], 
+    pub def toFlixIterator(rc: Region[r1], 
                             ocast: ##java.lang.Object -> a, 
-                            l: LinkedList[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } =
-        import java.util.LinkedList.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) } as iterator;
+                            l: LinkedList[a, r]): Iterator[a, r1, r1] \ { Read(r) } =
+        import java.util.LinkedList.iterator(): ##java.util.Iterator \ { Read(r) } as iterator;
         let LinkedList(l1) = l;
         if (Object.isNull(l1))
             Iterator.empty(rc)
@@ -268,8 +268,8 @@ namespace Interop/Util/LinkedList {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def enumerator(rh: Region[rh], l: LinkedList[a, r]): Iterator[(Int32, a), ef, rh] \ { Read(r), Write(rh) } with Marshal[a] =
-        iterator(rh, l) |> Iterator.enumerator
+    pub def enumerator(rc: Region[r1], l: LinkedList[a, r]): Iterator[(Int32, a), r1, r1] \ { Read(r), r1 } with Marshal[a] =
+        iterator(rc, l) |> Iterator.enumerator
 
 
     pub def unfoldLinkedList(_: Region[r], f: s -> Option[(a, s)] \ ef, st: s): LinkedList[a, r] \ { Write(r),  ef } with Marshal[a] =

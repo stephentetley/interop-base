@@ -283,16 +283,16 @@ namespace Interop/Util/ArrayList {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def iterator(rh: Region[rh], l: ArrayList[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } with Marshal[a] =
-        toFlixIterator(rh, Interop/Flix/Marshal.fromJavaObject, l)
+    pub def iterator(rc: Region[r1], l: ArrayList[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
+        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, l)
 
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def toFlixIterator(rc: Region[rh], 
+    pub def toFlixIterator(rc: Region[r1], 
                             ocast: ##java.lang.Object -> a, 
-                            l: ArrayList[a, r]): Iterator[a, ef, rh] \ { Read(r), Write(rh) } =
-        import java.util.ArrayList.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) } as iterator;
+                            l: ArrayList[a, r]): Iterator[a, r1, r1] \ { Read(r) } =
+        import java.util.ArrayList.iterator(): ##java.util.Iterator \ { Read(r) } as iterator;
         let ArrayList(l1) = l;
         if (Object.isNull(l1))
             Iterator.empty(rc)
@@ -306,8 +306,8 @@ namespace Interop/Util/ArrayList {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def enumerator(rh: Region[rh], l: ArrayList[a, r]): Iterator[(Int32, a), ef, rh] \ { Read(r), Write(rh) } with Marshal[a] =
-        iterator(rh, l) |> Iterator.enumerator
+    pub def enumerator(rc: Region[r1], l: ArrayList[a, r]): Iterator[(Int32, a), r1, r1] \ { Read(r), Write(r1) } with Marshal[a] =
+        iterator(rc, l) |> Iterator.enumerator
 
 
     pub def unfoldArrayList(_: Region[r], f: s -> Option[(a, s)] \ ef, st: s): ArrayList[a, r] \ { Write(r),  ef } with Marshal[a] =
