@@ -20,7 +20,9 @@ namespace Interop/Util/Stream {
     ///
     /// Represents a Java LongStream.
     ///
-    pub enum LongStream[_r: Region](##java.util.stream.LongStream)
+    pub enum LongStream[r: Region]{ 
+        case LongStream(Region[r], ##java.util.stream.LongStream)
+    }
 
 }
 
@@ -48,163 +50,165 @@ namespace Interop/Util/Stream/LongStream {
 
 
     pub def getHH(x: LongStream[r]): ##java.util.stream.LongStream = 
-        let LongStream(x1) = x;
+        let LongStream(_, x1) = x;
         x1
 
-    pub def wrapHH(_: Region[r], prim: ##java.util.stream.LongStream): LongStream[r] = LongStream(prim)
+    pub def wrapHH(rc: Region[r], prim: ##java.util.stream.LongStream): LongStream[r] = 
+        LongStream(rc, prim)
 
 
-    pub def newLongStream(_: Region[r], prim: ##java.util.stream.LongStream): LongStream[r] = LongStream(prim)
+    pub def newLongStream(rc: Region[r], prim: ##java.util.stream.LongStream): LongStream[r] = 
+        LongStream(rc, prim)
 
-    pub def longStreamIterator(rh: Region[rh], s: LongStream[r]): Iterator[Int64, ef, rh] \ { Read(r), Write(rh) } =
-        import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ { Read(r), Write(rh) };
-        let LongStream(s1) = s;
+    pub def longStreamIterator(rc: Region[r1], s: LongStream[r]): Iterator[Int64, r1, r1] \ { Read(r), Write(r1) } =
+        import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ { Read(r), Write(r1) };
+        let LongStream(_, s1) = s;
         let iter1 = iterator(unsafe_cast s1 as ##java.util.stream.BaseStream);
-        let iter2 = Interop/Util/IteratorZ.wrapHH(rh, iter1);
-        Interop/Util/IteratorZ.iterator(rh, iter2)
+        let iter2 = Interop/Util/IteratorZ.wrapHH(rc, iter1);
+        Interop/Util/IteratorZ.iterator(rc, iter2)
 
-    pub def empty(_: Region[r]): LongStream[r] \ Write(r) = 
+    pub def empty(rc: Region[r]): LongStream[r] \ Write(r) = 
         import static java.util.stream.LongStream.empty(): ##java.util.stream.LongStream \ r;
-        empty() |> LongStream
+        LongStream(rc, empty())
 
-    pub def ofInt64(_: Region[r], i: Int64): LongStream[r] \ Write(r) = 
+    pub def ofInt64(rc: Region[r], i: Int64): LongStream[r] \ Write(r) = 
         import static java.util.stream.LongStream.of(Int64): ##java.util.stream.LongStream \ r;
-        of(i) |> LongStream
+        LongStream(rc, of(i))
 
-    pub def ofArray(_: Region[r], arr: Array[Int64, r2]): LongStream[r] \ {Write(r), Read(r2)} = 
+    pub def ofArray(rc: Region[r], arr: Array[Int64, r2]): LongStream[r] \ {Write(r), Read(r2)} = 
         import static java.util.stream.LongStream.of(Array[Int64, r2]): ##java.util.stream.LongStream \ {r, r2};
-        of(arr) |> LongStream
+        LongStream(rc, of(arr))
 
-    pub def iterate(_: Region[r], seed: Int64, f: Int64 -> Int64 \ ef): LongStream[r] \ {Write(r), ef} = 
+    pub def iterate(rc: Region[r], seed: Int64, f: Int64 -> Int64 \ ef): LongStream[r] \ {Write(r), ef} = 
         import static java.util.stream.LongStream.iterate(Int64, LongUnaryOperator): ##java.util.stream.LongStream \ {r, ef};
         let f1 = Interop/Util/Function/LongUnaryOperator.makeLongUnaryOperator(f);
-        iterate(seed, f1) |> LongStream
+        LongStream(rc, iterate(seed, f1))
 
-    pub def generate(_: Region[r], f: Unit -> Int64 \ ef): LongStream[r] \ {Write(r), ef} = 
+    pub def generate(rc: Region[r], f: Unit -> Int64 \ ef): LongStream[r] \ {Write(r), ef} = 
         import static java.util.stream.LongStream.generate(LongSupplier): ##java.util.stream.LongStream \ r;
         let s1 = Interop/Util/Function/LongSupplier.makeLongSupplier(f);
-        generate(s1) |> LongStream
+        LongStream(rc, generate(s1))
 
 
-    pub def range(_: Region[r], b: Int64, e: Int64): LongStream[r] \ Write(r) = 
+    pub def range(rc: Region[r], b: Int64, e: Int64): LongStream[r] \ Write(r) = 
         import static java.util.stream.LongStream.range(Int64, Int64): ##java.util.stream.LongStream \ r;
-        range(b, e) |> LongStream
+        LongStream(rc, range(b, e))
 
-    pub def rangeClosed(_: Region[r], b: Int64, e: Int64): LongStream[r] \ Write(r) = 
+    pub def rangeClosed(rc: Region[r], b: Int64, e: Int64): LongStream[r] \ Write(r) = 
         import static java.util.stream.LongStream.rangeClosed(Int64, Int64): ##java.util.stream.LongStream \ r;
-        rangeClosed(b, e) |> LongStream
+        LongStream(rc, rangeClosed(b, e))
 
     pub def boxed(s: LongStream[r]): Stream[##java.lang.Long, r] \ {Write(r), ef} = 
         import java.util.stream.LongStream.boxed(): ##java.util.stream.Stream \ {r, ef};
-        let LongStream(s1) = s;
-        boxed(s1) |> Stream
+        let LongStream(rc, s1) = s;
+        Stream(rc, boxed(s1))
 
     pub def count(s: LongStream[r]): Int64 \ Read(r) = 
         import java.util.stream.LongStream.count(): Int64 \ r;
-        let LongStream(s1) = s;
+        let LongStream(_, s1) = s;
         count(s1)
 
     pub def concat(s: LongStream[r], t: LongStream[r]): LongStream[r] \ Write(r) = 
         import static java.util.stream.LongStream.concat(##java.util.stream.LongStream, ##java.util.stream.LongStream): ##java.util.stream.LongStream \ r;
-        let LongStream(s1) = s;
-        let LongStream(t1) = t;
-        concat(s1, t1) |> LongStream
+        let LongStream(rc, s1) = s;
+        let LongStream(_, t1) = t;
+        LongStream(rc, concat(s1, t1))
 
 
     pub def filter(p: Int64 -> Bool \ ef, s: LongStream[r]): LongStream[r] \ {Write(r), ef} = 
         import java.util.stream.LongStream.filter(LongPredicate): ##java.util.stream.LongStream \ {r, ef};
-        let LongStream(s1) = s;
+        let LongStream(rc, s1) = s;
         let p1 = Interop/Util/Function/LongPredicate.makeLongPredicate(p);
-        filter(s1, p1) |> LongStream
+        LongStream(rc, filter(s1, p1))
 
     pub def dropWhile(p: Int64 -> Bool \ ef, s: LongStream[r]): LongStream[r] \ {Write(r), ef} = 
         import java.util.stream.LongStream.dropWhile(LongPredicate): ##java.util.stream.LongStream \ {r, ef};
-        let LongStream(s1) = s;
+        let LongStream(rc, s1) = s;
         let p1 = Interop/Util/Function/LongPredicate.makeLongPredicate(p);
-        dropWhile(s1, p1) |> LongStream
+        LongStream(rc, dropWhile(s1, p1))
 
     pub def map(f: Int64 -> Int64 \ ef, s: LongStream[r]): LongStream[r] \ {Write(r), ef} = 
         import java.util.stream.LongStream.map(LongUnaryOperator): ##java.util.stream.LongStream \ {r, ef};
-        let LongStream(s1) = s;
+        let LongStream(rc, s1) = s;
         let f1 = Interop/Util/Function/LongUnaryOperator.makeLongUnaryOperator(f);
-        map(s1, f1) |> LongStream
+        LongStream(rc, map(s1, f1))
 
     pub def flatMap(f: Int64 -> LongStream[r] \ ef, s: LongStream[r]): LongStream[r] \ {Write(r), ef} = 
         import java.util.stream.LongStream.flatMap(LongFunction[##java.util.stream.LongStream]): ##java.util.stream.LongStream \ {r, ef};
-        let LongStream(s1) = s;
+        let LongStream(rc, s1) = s;
         let f1 = Interop/Util/Function/LongFunction.makeLongFunctionWith(f, t -> {let LongStream(t1) = t; unsafe_cast t1 as ##java.lang.Object});
-        (unsafe_cast (flatMap(s1, f1)) as _ \ {Write(r), ef}) |> LongStream
+        LongStream(rc, unsafe_cast (flatMap(s1, f1)) as _ \ {Write(r), ef})
 
 
     pub def forEach(f: Int64 -> Unit \ ef, s: LongStream[r]): Unit \ {Read(r), ef} = 
         import java.util.stream.LongStream.forEach(LongConsumer): Unit \ {r, ef};
         let f1 = Interop/Util/Function/LongConsumer.makeLongConsumer(f);
-        let LongStream(s1) = s;
+        let LongStream(_, s1) = s;
         forEach(s1, f1)
 
     pub def toArray(s: LongStream[r]): Array[Int64, r] \ Write(r) = 
         import java.util.stream.LongStream.toArray(): Array[Int64, r] \ r;
-        let LongStream(s1) = s;
+        let LongStream(_, s1) = s;
         toArray(s1)
 
 
     pub def average(s: LongStream[r]): OptionalDouble \ Read(r) = 
         import java.util.stream.LongStream.average(): ##java.util.OptionalDouble \ r;
-        let LongStream(s1) = s;
+        let LongStream(_, s1) = s;
         average(s1) |> OptionalDouble
 
     pub def summaryStatistics(_: Region[r1], s: LongStream[r]): LongSummaryStatistics[r1] \ { Read(r), Write(r1) } = 
         import java.util.stream.LongStream.summaryStatistics(): ##java.util.LongSummaryStatistics \ { Read(r), Write(r1) };
-        let LongStream(s1) = s;
+        let LongStream(_, s1) = s;
         summaryStatistics(s1) |> LongSummaryStatistics
 
     pub def anyMatch(f: Int64 -> Bool \ ef, s: LongStream[r]): Bool \ {Read(r), ef} = 
         import java.util.stream.LongStream.anyMatch(LongPredicate): Bool \ {r, ef};
-        let LongStream(s1) = s;
+        let LongStream(_, s1) = s;
         let f1 = Interop/Util/Function/LongPredicate.makeLongPredicate(f);
         anyMatch(s1, f1)
 
     pub def allMatch(f: Int64 -> Bool \ ef, s: LongStream[r]): Bool \ {Read(r), ef} = 
         import java.util.stream.LongStream.allMatch(LongPredicate): Bool \ {r, ef};
-        let LongStream(s1) = s;
+        let LongStream(_, s1) = s;
         let f1 = Interop/Util/Function/LongPredicate.makeLongPredicate(f);
         allMatch(s1, f1)
 
 
     pub def noneMatch(f: Int64 -> Bool \ ef, s: LongStream[r]): Bool \ {Read(r), ef} = 
         import java.util.stream.LongStream.noneMatch(LongPredicate): Bool \ {r, ef};
-        let LongStream(s1) = s;
+        let LongStream(_, s1) = s;
         let f1 = Interop/Util/Function/LongPredicate.makeLongPredicate(f);
         noneMatch(s1, f1)
 
 
     pub def findFirst(s: LongStream[r]): OptionalLong \ Read(r) = 
         import java.util.stream.LongStream.findFirst(): ##java.util.OptionalLong \ r;
-        let LongStream(s1) = s;
+        let LongStream(_, s1) = s;
         findFirst(s1) |> OptionalLong
 
     pub def findAny(s: LongStream[r]): OptionalLong \ Read(r) = 
         import java.util.stream.LongStream.findAny(): ##java.util.OptionalLong \ r;
-        let LongStream(s1) = s;
+        let LongStream(_, s1) = s;
         findAny(s1) |> OptionalLong
 
     pub def max(s: LongStream[r]): OptionalLong \ Read(r) = 
         import java.util.stream.LongStream.max(): ##java.util.OptionalLong \ r;
-        let LongStream(s1) = s;
+        let LongStream(_, s1) = s;
         max(s1) |> OptionalLong
 
     pub def min(s: LongStream[r]): OptionalLong \ Read(r) = 
         import java.util.stream.LongStream.min(): ##java.util.OptionalLong \ r;
-        let LongStream(s1) = s;
+        let LongStream(_, s1) = s;
         min(s1) |> OptionalLong
 
     pub def sorted(s: LongStream[r]): LongStream[r] \ Write(r) = 
         import java.util.stream.LongStream.sorted(): ##java.util.stream.LongStream \ r;
-        let LongStream(s1) = s;
-        sorted(s1) |> LongStream
+        let LongStream(rc, s1) = s;
+        LongStream(rc, sorted(s1))
 
-    pub def asDoubleStream(s: LongStream[r]): DoubleStream[r] \ Write(r) = 
+    pub def asDoubleStream(rc: Region[r1], s: LongStream[r]): DoubleStream[r1] \ Write(r) = 
         import java.util.stream.LongStream.asDoubleStream(): ##java.util.stream.DoubleStream \ r;
-        let LongStream(s1) = s;
-        asDoubleStream(s1) |> DoubleStream
+        let LongStream(_, s1) = s;
+        DoubleStream(rc, asDoubleStream(s1))
 }
