@@ -85,16 +85,14 @@ namespace Interop/Flix {
     }
 
     instance Marshal[List[a]] with Marshal[a] {
-        pub def toJavaObject(l: List[a]): ##java.lang.Object =
-            region r {
-                let als = Interop/Util/ArrayList.fromFoldable(r, l);
-                unsafe_cast Interop/Util/ListZ.toListHH(als) as ##java.lang.Object
-            } 
+        pub def toJavaObject(l: List[a]): ##java.lang.Object = region rc {
+            let l1 = Interop/Util/ArrayList.fromFoldable(rc, l);
+            unsafe_cast Interop/Util/ListZ.toListHH(rc, l1) as ##java.lang.Object
+        } 
         
-        pub def fromJavaObject(o: ##java.lang.Object): List[a] = 
-            region r {
-                Interop/Util/ListZ.wrapHH(r, unsafe_cast o as ##java.util.List) |> Interop/Util/ListZ.toFlixList
-            }
+        pub def fromJavaObject(o: ##java.lang.Object): List[a] = region rc {
+            Interop/Util/ListZ.wrapHH(rc, unsafe_cast o as ##java.util.List) |> Interop/Util/ListZ.toFlixList
+        }
             
     }
 

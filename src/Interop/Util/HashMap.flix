@@ -136,10 +136,10 @@ namespace Interop/Util/HashMap {
         let HashMap(_, m1) = m;
         SetZ(rc, keySet(m1))
 
-    pub def values(_: Region[r1], m: HashMap[k, v, r]): Collection[k, r] \ {Write(r)}= 
-        import java.util.HashMap.values(): ##java.util.Collection \ Write(r);
+    pub def values(rc: Region[r1], m: HashMap[k, v, r]): Collection[k, r1] \ { Read(r), Write(r1) } = 
+        import java.util.HashMap.values(): ##java.util.Collection \ {r1, r};
         let HashMap(_, m1) = m;
-        values(m1) |> Collection
+        Collection(rc, values(m1))
 
 
     pub def remove!(k: k, m: HashMap[k, v, r]): Option[v] \  Write(r) with Marshal[k], Marshal[v] =

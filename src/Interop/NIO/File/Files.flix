@@ -30,11 +30,11 @@ namespace Interop/NIO/File/Files {
     use Interop/IO.OutputStream;
     use Interop/IO.OutputStream.{OutputStream};
 
-    pub def newInputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, InputStream[r]] \ IO = region r1 {
+    pub def newInputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, InputStream[r]] \ IO = region rc {
         try {
             import static flixinterop.nio.file.Filesz.newInputStream(##java.nio.file.Path, ##java.util.List): ##java.io.InputStream \ {IO, r};
             let Path(path1) = path;
-            let opts1 = Interop/Util/ArrayList.fromFoldable(r1, opts) |> Interop/Util/ListZ.toListHH;
+            let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ListZ.toListHH(rc);
             newInputStream(path1, opts1)|> InputStream |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -43,11 +43,11 @@ namespace Interop/NIO/File/Files {
         }
     }
 
-    pub def newOutputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, OutputStream[r]] \ {IO, Write(r)} = region r1 {
+    pub def newOutputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, OutputStream[r]] \ {IO, Write(r)} = region rc {
         try {
             import static flixinterop.nio.file.Filesz.newOutputStream(##java.nio.file.Path, ##java.util.List): ##java.io.OutputStream \ {IO, r};
             let Path(path1) = path;
-            let opts1 = Interop/Util/ArrayList.fromFoldable(r1, opts) |> Interop/Util/ListZ.toListHH;
+            let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ListZ.toListHH(rc);
             newOutputStream(path1, opts1)|> OutputStream |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -57,11 +57,11 @@ namespace Interop/NIO/File/Files {
     }
 
     /// UTF_8
-    pub def exists(path: Path, opts: List[LinkOption]): Result[String, Bool] \ IO = region r1 {
+    pub def exists(path: Path, opts: List[LinkOption]): Result[String, Bool] \ IO = region rc {
         try {
             import static flixinterop.nio.file.Filesz.exists(##java.nio.file.Path, ##java.util.List): Bool \ IO;
             let Path(path1) = path;
-            let opts1 = Interop/Util/ArrayList.fromFoldable(r1, opts) |> Interop/Util/ListZ.toListHH;
+            let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ListZ.toListHH(rc);
             exists(path1, opts1)|> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -95,13 +95,13 @@ namespace Interop/NIO/File/Files {
         }
 
     /// UTF_8
-    pub def writeStringUtf8!(path: Path, s: CharSequence[r], opts: List[OpenOption]): Result[String, Path] \ IO = region r {
+    pub def writeStringUtf8!(path: Path, s: CharSequence[r], opts: List[OpenOption]): Result[String, Path] \ IO = region rc {
         try {
             import static flixinterop.nio.file.Filesz.writeString(##java.nio.file.Path, 
                             ##java.lang.CharSequence, ##java.util.List): ##java.nio.file.Path \ IO;
             let Path(path1) = path;
             let s1 = Interop/Lang/CharSequence.getHH(s);
-            let opts1 = Interop/Util/ArrayList.fromFoldable(r, opts) |> Interop/Util/ListZ.toListHH;
+            let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ListZ.toListHH(rc);
             writeString(path1, s1, opts1) |> Path |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -110,14 +110,14 @@ namespace Interop/NIO/File/Files {
         }
     }
 
-    pub def writeString!(path: Path, s: CharSequence[r], cs: Charset, opts: List[OpenOption]): Result[String, Path] \ IO = region r {
+    pub def writeString!(path: Path, s: CharSequence[r], cs: Charset, opts: List[OpenOption]): Result[String, Path] \ IO = region rc {
         try {
             import static flixinterop.nio.file.Filesz.writeString(##java.nio.file.Path, 
                             ##java.lang.CharSequence, ##java.nio.charset.Charset, ##java.util.List): ##java.nio.file.Path \ IO;
             let Path(path1) = path;
             let s1 = Interop/Lang/CharSequence.getHH(s);
             let Charset(cs1) = cs;
-            let opts1 = Interop/Util/ArrayList.fromFoldable(r, opts) |> Interop/Util/ListZ.toListHH;
+            let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ListZ.toListHH(rc);
             writeString(path1, s1, cs1, opts1) |> Path |> Ok
         } catch {
             case ex: ##java.lang.Exception =>

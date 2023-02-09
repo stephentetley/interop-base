@@ -42,15 +42,15 @@ namespace Interop/Lang/ProcessBuilder {
         let ProcessBuilder(x1) = x;
         x1
 
-    pub def new(r: Region[r], l: List[String]): ProcessBuilder[r] \ Write(r) = 
+    pub def new(rc: Region[r], l: List[String]): ProcessBuilder[r] \ Write(r) = 
         import new java.lang.ProcessBuilder(##java.util.List): ##java.lang.ProcessBuilder \ r as newProcessBuilder;
-        let ls1 = Interop/Util/ArrayList.fromFoldable(r, l) |> Interop/Util/ListZ.toListHH;
+        let ls1 = Interop/Util/ArrayList.fromFoldable(rc, l) |> Interop/Util/ListZ.toListHH(rc);
         newProcessBuilder(ls1) |> ProcessBuilder
 
-    pub def command!(l: List[String], pb: ProcessBuilder[r]): ProcessBuilder[r] \ Write(r) = region r1 {
+    pub def command!(l: List[String], pb: ProcessBuilder[r]): ProcessBuilder[r] \ Write(r) = region rc {
         import java.lang.ProcessBuilder.command(##java.util.List): ##java.lang.ProcessBuilder \ Write(r);
         let ProcessBuilder(pb1) = pb;
-        let ls1 = Interop/Util/ArrayList.fromFoldable(r1, l) |> Interop/Util/ListZ.toListHH;
+        let ls1 = Interop/Util/ArrayList.fromFoldable(rc, l) |> Interop/Util/ListZ.toListHH(rc);
         command(pb1, ls1) |> ProcessBuilder
     }
 

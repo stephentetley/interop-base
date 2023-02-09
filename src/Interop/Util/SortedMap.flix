@@ -100,17 +100,17 @@ namespace Interop/Util/SortedMap {
         put(m1, k1, v1) |> Interop/Flix/Marshal.fromJavaObject
 
     /// Can't guarantee `Ord[k]` at this point...
-    pub def entrySet(rc: Region[rh], m: SortedMap[k, v, r]): SetZ[Entry[k, v, rh], rh] \ { Read(r), Write(rh) } = 
-        import java.util.SortedMap.entrySet(): ##java.util.Set \ { Read(r), Write(rh) };
+    pub def entrySet(rc: Region[r1], m: SortedMap[k, v, r]): SetZ[Entry[k, v, r1], r1] \ { Read(r), Write(r1) } = 
+        import java.util.SortedMap.entrySet(): ##java.util.Set \ { Read(r), Write(r1) };
         let SortedMap(_, m1) = m;
         let sz = entrySet(m1);
         SetZ(rc, sz)
 
 
-    pub def values(_: Region[rh], m: SortedMap[k, v, r]): Collection[k, rh] \ { Read(r), Write(rh) } = 
-        import java.util.SortedMap.values(): ##java.util.Collection \ { Read(r), Write(rh) };
+    pub def values(rc: Region[r1], m: SortedMap[k, v, r]): Collection[k, r1] \ { Read(r), Write(r1) } = 
+        import java.util.SortedMap.values(): ##java.util.Collection \ { Read(r), Write(r1) };
         let SortedMap(_, m1) = m;
-        values(m1) |> Collection
+        Collection(rc, values(m1))
 
 
     pub def foldMap(f: (b, (k, v)) -> b & ef, s: b, m: SortedMap[k, v, r]): b \ { Read(r), ef} with Order[k], Marshal[k], Marshal[v] = region r {

@@ -479,54 +479,50 @@ namespace Interop/Util/Locale {
                 Err(getMessage(ex))
         }
 
-    pub def getExtensionKeys(x: Locale): Set[Char] =
-        region r {
-            import java.util.Locale.getExtensionKeys(): ##java.util.Set \ {};
-            let Locale(x1) = x;
-            getExtensionKeys(x1) 
-                |> Interop/Util/SetZ.wrapHH(r)
-                |> Interop/Util/SetZ.toFlixSet
-        }
+    pub def getExtensionKeys(x: Locale): Set[Char] = region rc {
+        import java.util.Locale.getExtensionKeys(): ##java.util.Set \ {};
+        let Locale(x1) = x;
+        getExtensionKeys(x1) 
+            |> Interop/Util/SetZ.wrapHH(rc)
+            |> Interop/Util/SetZ.toFlixSet
+    }
 
-    pub def getUnicodeLocaleAttributes(x: Locale): Set[String] =
-        region r {
-            import java.util.Locale.getUnicodeLocaleAttributes(): ##java.util.Set \ {};
-            let Locale(x1) = x;
-            getUnicodeLocaleAttributes(x1) 
-                |> Interop/Util/SetZ.wrapHH(r)
-                |> Interop/Util/SetZ.toFlixSet
-        }
+    pub def getUnicodeLocaleAttributes(x: Locale): Set[String] = region rc {
+        import java.util.Locale.getUnicodeLocaleAttributes(): ##java.util.Set \ {};
+        let Locale(x1) = x;
+        getUnicodeLocaleAttributes(x1) 
+            |> Interop/Util/SetZ.wrapHH(rc)
+            |> Interop/Util/SetZ.toFlixSet
+    }
 
-    pub def getUnicodeLocaleKeys(x: Locale): Set[String] =
-        region r {
-            import java.util.Locale.getUnicodeLocaleKeys(): ##java.util.Set \ {};
-            let Locale(x1) = x;
-            getUnicodeLocaleKeys(x1) 
-                |> Interop/Util/SetZ.wrapHH(r)
-                |> Interop/Util/SetZ.toFlixSet
-        }
+    pub def getUnicodeLocaleKeys(x: Locale): Set[String] = region rc {
+        import java.util.Locale.getUnicodeLocaleKeys(): ##java.util.Set \ {};
+        let Locale(x1) = x;
+        getUnicodeLocaleKeys(x1) 
+            |> Interop/Util/SetZ.wrapHH(rc)
+            |> Interop/Util/SetZ.toFlixSet
+    }
 
-    pub def lookup(priorityList: List[LanguageRange], locales: List[Locale]): Result[String, Option[Locale]] =         
-        region r1 {
-            try {
-                import static java.util.Locale.lookup(##java.util.List, ##java.util.Collection): ##java.util.Locale \ {};
-                let ls  = Interop/Util/ArrayList.fromFoldable(r1, priorityList) |> Interop/Util/ListZ.toListHH;
-                let col = Interop/Util/ArrayList.fromFoldable(r1, locales)      |> Interop/Util/Collection.toCollectionHH;
-                let ans = lookup(ls, col);
-                Object.toOption(ans) |> Option.map(Locale) |> Ok
-            } catch {
-                case ex: ##java.lang.Exception =>
-                    import java.lang.Throwable.getMessage(): String \ {};
-                    Err(getMessage(ex))
-            }
+    pub def lookup(priorityList: List[LanguageRange], locales: List[Locale]): Result[String, Option[Locale]] = region rc {
+        try {
+            import static java.util.Locale.lookup(##java.util.List, ##java.util.Collection): ##java.util.Locale \ {};
+            let ls  = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH(rc);
+            let col = Interop/Util/ArrayList.fromFoldable(rc, locales)      |> Interop/Util/Collection.toCollectionHH(rc);
+            let ans = lookup(ls, col);
+            Object.toOption(ans) |> Option.map(Locale) |> Ok
+        } catch {
+            case ex: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(ex))
         }
+    }
 
     pub def lookupTag(priorityList: List[LanguageRange], tags: List[String]): Result[String, Option[String]] =
-        region r1 {
+        region rc {
             try { 
                 import static java.util.Locale.lookupTag(##java.util.List, ##java.util.Collection): String \ {};
-                let ls      = Interop/Util/ArrayList.fromFoldable(r1, priorityList) |> Interop/Util/ListZ.toListHH;
-                let col     = Interop/Util/ArrayList.fromFoldable(r1, tags)         |> Interop/Util/Collection.toCollectionHH;
+                let ls      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH(rc);
+                let col     = Interop/Util/ArrayList.fromFoldable(rc, tags)         |> Interop/Util/Collection.toCollectionHH(rc);
                 let ans     = lookupTag(ls, col);
                 Object.toOption(ans) |> Ok
             } catch {
@@ -538,12 +534,12 @@ namespace Interop/Util/Locale {
 
     pub def filter(priorityList: List[LanguageRange], locales: List[Locale]): Result[String, List[Locale]] = 
         import static java.util.Locale.filter(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
-        region r1 {
+        region rc {
             try {
-                let ls      = Interop/Util/ArrayList.fromFoldable(r1, priorityList) |> Interop/Util/ListZ.toListHH;
-                let col     = Interop/Util/ArrayList.fromFoldable(r1, locales)      |> Interop/Util/Collection.toCollectionHH;
+                let ls      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH(rc);
+                let col     = Interop/Util/ArrayList.fromFoldable(rc, locales)      |> Interop/Util/Collection.toCollectionHH(rc);
                 let prim    = filter(ls, col);
-                Interop/Util/ListZ.wrapHH(r1, prim) 
+                Interop/Util/ListZ.wrapHH(rc, prim) 
                     |> Interop/Util/ListZ.toFlixList
                     |> Ok
             } catch {
@@ -556,14 +552,14 @@ namespace Interop/Util/Locale {
     pub def filterWithFilteringMode(priorityList: List[LanguageRange], 
                                     mode: FilteringMode, 
                                     locales: List[Locale]): Result[String, List[Locale]] = 
-        region r1 {
+        region rc {
             try {
                 import static java.util.Locale.filter(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};
-                let ps      = Interop/Util/ArrayList.fromFoldable(r1, priorityList) |> Interop/Util/ListZ.toListHH;
-                let col     = Interop/Util/ArrayList.fromFoldable(r1, locales)      |> Interop/Util/Collection.toCollectionHH;
+                let ps      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH(rc);
+                let col     = Interop/Util/ArrayList.fromFoldable(rc, locales)      |> Interop/Util/Collection.toCollectionHH(rc);
                 let mode1   = marshalFilteringMode(mode);
                 let prim    = filter(ps, col, mode1);
-                Interop/Util/ListZ.wrapHH(r1, prim) 
+                Interop/Util/ListZ.wrapHH(rc, prim) 
                     |> Interop/Util/ListZ.toFlixList
                     |> Ok
             } catch {
@@ -574,13 +570,13 @@ namespace Interop/Util/Locale {
         }
 
     pub def filterTags(priorityList: List[LanguageRange], tags: List[String]): Result[String, List[String]] = 
-        region r1 {
+        region rc {
             try {
-            import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
-                let ls      = Interop/Util/ArrayList.fromFoldable(r1, priorityList) |> Interop/Util/ListZ.toListHH;
-                let col     = Interop/Util/ArrayList.fromFoldable(r1, tags)         |> Interop/Util/Collection.toCollectionHH;
+                import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
+                let ls      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH(rc);
+                let col     = Interop/Util/ArrayList.fromFoldable(rc, tags)         |> Interop/Util/Collection.toCollectionHH(rc);
                 let prim    = filterTags(ls, col);
-                Interop/Util/ListZ.wrapHH(r1, prim) 
+                Interop/Util/ListZ.wrapHH(rc, prim) 
                     |> Interop/Util/ListZ.toFlixList
                     |> Ok
             } catch {
@@ -593,14 +589,14 @@ namespace Interop/Util/Locale {
     pub def filterTagsWithFilteringMode(priorityList: List[LanguageRange], 
                                         mode: FilteringMode, 
                                         tags: List[String]): Result[String, List[String]] = 
-        region r1 {
+        region rc {
             try {
                 import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};
-                let ls      = Interop/Util/ArrayList.fromFoldable(r1, priorityList) |> Interop/Util/ListZ.toListHH;
-                let col     = Interop/Util/ArrayList.fromFoldable(r1, tags)         |> Interop/Util/Collection.toCollectionHH;
+                let ls      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH(rc);
+                let col     = Interop/Util/ArrayList.fromFoldable(rc, tags)         |> Interop/Util/Collection.toCollectionHH(rc);
                 let mode1   = marshalFilteringMode(mode);
                 let prim    = filterTags(ls, col, mode1);
-                Interop/Util/ListZ.wrapHH(r1, prim) 
+                Interop/Util/ListZ.wrapHH(rc, prim) 
                     |> Interop/Util/ListZ.toFlixList
                     |> Ok
             } catch {

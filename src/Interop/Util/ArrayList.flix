@@ -25,37 +25,39 @@ namespace Interop/Util {
     /// Represents a ArrayList.
     /// Class / Mutable
     ///
-    pub enum ArrayList[_: Type, _: Region](##java.util.ArrayList)
-
-    instance Interop/Flix.MutMarshal[ArrayList] {
-        pub def mmToJavaObject(x: ArrayList[a, r]): ##java.lang.Object =
-            let ArrayList(x1) = x;
-            unsafe_cast x1 as ##java.lang.Object
-
-        pub def mmFromJavaObject(_: Region[r], o: ##java.lang.Object): ArrayList[a, r] = 
-            ArrayList(unsafe_cast o as ##java.util.ArrayList)
+    pub enum ArrayList[_a: Type, r: Region] {
+        case ArrayList(Region[r], ##java.util.ArrayList)
     }
+
+    // instance Interop/Flix.MutMarshal[ArrayList] {
+    //     pub def mmToJavaObject(x: ArrayList[a, r]): ##java.lang.Object =
+    //         let ArrayList(x1) = x;
+    //         unsafe_cast x1 as ##java.lang.Object
+
+    //     pub def mmFromJavaObject(_: Region[r], o: ##java.lang.Object): ArrayList[a, r] = 
+    //         ArrayList(unsafe_cast o as ##java.util.ArrayList)
+    // }
 
 
     instance Interop/Util.ImpCollection[ArrayList] {
-        pub def toCollection(t: ArrayList[a, r]): Collection[a, r] = 
-            let ArrayList(t1) = t;
-            Collection(unsafe_cast t1 as ##java.util.Collection)
+        pub def toCollection(rc: Region[r1], t: ArrayList[a, r]): Collection[a, r1] = 
+            let ArrayList(_, t1) = t;
+            Collection(rc, unsafe_cast t1 as ##java.util.Collection)
 
-        pub def fromCollection(t: Collection[a, r]): ArrayList[a, r] = 
-            let Collection(t1) = t;
-            ArrayList(unsafe_cast t1 as ##java.util.ArrayList) 
+        pub def fromCollection(rc: Region[r1], t: Collection[a, r]): ArrayList[a, r1] = 
+            let Collection(_, t1) = t;
+            ArrayList(rc, unsafe_cast t1 as ##java.util.ArrayList) 
     }
 
 
     instance Interop/Util.ImpListZ[ArrayList] {
-        pub def toListZ(t: ArrayList[a, r]): ListZ[a, r] = 
-            let ArrayList(t1) = t;
-            ListZ(unsafe_cast t1 as ##java.util.List)
+        pub def toListZ(rc: Region[r1], t: ArrayList[a, r]): ListZ[a, r1] = 
+            let ArrayList(_, t1) = t;
+            ListZ(rc, unsafe_cast t1 as ##java.util.List)
 
-        pub def fromListZ(t: ListZ[a, r]): ArrayList[a, r] = 
-            let ListZ(t1) = t;
-            ArrayList(unsafe_cast t1 as ##java.util.ArrayList) 
+        pub def fromListZ(rc: Region[r1], t: ListZ[a, r]): ArrayList[a, r1] = 
+            let ListZ(_, t1) = t;
+            ArrayList(rc: Region[r1], unsafe_cast t1 as ##java.util.ArrayList) 
     }
 
 }
@@ -72,26 +74,26 @@ namespace Interop/Util/ArrayList {
 
     
     pub def getHH(l: ArrayList[a, r]): ##java.util.ArrayList = 
-        let ArrayList(l1) = l;
+        let ArrayList(_, l1) = l;
         l1
 
-    pub def wrapHH(_: Region[r], prim: ##java.util.ArrayList): ArrayList[a, r] =
-        ArrayList(prim)
+    pub def wrapHH(rc: Region[r], prim: ##java.util.ArrayList): ArrayList[a, r] =
+        ArrayList(rc, prim)
 
     ///
     /// Returns a new mutable ArrayList.
     ///
-    pub def new(_: Region[r]): ArrayList[a, r] \ Write(r) =
+    pub def new(rc: Region[r]): ArrayList[a, r] \ Write(r) =
         import new java.util.ArrayList(): ##java.util.ArrayList \ r as newArrayList;
-        ArrayList(newArrayList())
+        ArrayList(rc, newArrayList())
 
     ///
     /// Returns a new mutable ArrayList.
     ///
-    pub def newWithCapacity(_: Region[r], initialCapacity: Int32): Result[String, ArrayList[a, r]] \ Write(r) =
+    pub def newWithCapacity(rc: Region[r], initialCapacity: Int32): Result[String, ArrayList[a, r]] \ Write(r) =
         try {
             import new java.util.ArrayList(Int32): ##java.util.ArrayList \ r as newArrayList;
-            newArrayList(initialCapacity) |> ArrayList |> Ok
+            ArrayList(rc, newArrayList(initialCapacity)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
@@ -101,11 +103,11 @@ namespace Interop/Util/ArrayList {
     ///
     /// Returns a new mutable ArrayList.
     ///
-    pub def newWithCollection(_: Region[r], c: Collection[a, r2]): Result[String, ArrayList[a, r]] \ Write(r) =
+    pub def newWithCollection(rc: Region[r1], c: Collection[a, r]): Result[String, ArrayList[a, r1]] \ {Read(r), Write(r1) } =
         try {
-            import new java.util.ArrayList(##java.util.Collection): ##java.util.ArrayList \ r as newArrayList;
-            let Collection(c1) = c;
-            newArrayList(c1) |> ArrayList |> Ok
+            import new java.util.ArrayList(##java.util.Collection): ##java.util.ArrayList \ {r, r1} as newArrayList;
+            let Collection(_, c1) = c;
+            ArrayList(rc, newArrayList(c1))  |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
@@ -115,45 +117,45 @@ namespace Interop/Util/ArrayList {
 
     pub def toString(l: ArrayList[a, r]): String \ Read(r) = 
         import java.util.ArrayList.toString(): String \ r;
-        let ArrayList(l1) = l;
+        let ArrayList(_, l1) = l;
         toString(l1)
 
     pub def hashCode(l: ArrayList[a, r]): Int32 \ Read(r) = 
         import java.util.ArrayList.hashCode(): Int32 \ r;
-        let ArrayList(l1) = l;
+        let ArrayList(_, l1) = l;
         hashCode(l1)
 
     pub def equals(l1: ArrayList[a, r], l2: ArrayList[a, r]): Bool \  Read(r) with Marshal[a] =
         import java.util.ArrayList.equals(##java.lang.Object): Bool \ r; 
-        let ArrayList(jl1) = l1;
-        let ArrayList(jl2) = l2;
-        equals(jl1, unsafe_cast jl2 as ##java.lang.Object)
+        let ArrayList(_, ll1) = l1;
+        let ArrayList(_, ll2) = l2;
+        equals(ll1, unsafe_cast ll2 as ##java.lang.Object)
 
     pub def isEmpty(l: ArrayList[a, r]): Bool \ Read(r) = 
         import java.util.ArrayList.isEmpty(): Bool \ r;
-        let ArrayList(l1) = l;
+        let ArrayList(_, l1) = l;
         isEmpty(l1)
 
     pub def size(l: ArrayList[a, r]): Int32 \ Read(r) = 
         import java.util.ArrayList.size(): Int32 \ r;
-        let ArrayList(l1) = l;
+        let ArrayList(_, l1) = l;
         size(l1)
 
 
     pub def get(ix: Int32, l: ArrayList[a, r]): a \ Read(r) with Marshal[a] = 
         import java.util.ArrayList.get(Int32): ##java.lang.Object \ r;
-        let ArrayList(l1) = l;
+        let ArrayList(_, l1) = l;
         get(l1, ix) |> Interop/Flix/Marshal.fromJavaObject
 
     pub def add!(x: a, l: ArrayList[a, r]): Bool \ { Write(r) } with Marshal[a] = 
         import java.util.ArrayList.add(##java.lang.Object): Bool \ r;
-        let ArrayList(l1) = l;
+        let ArrayList(_, l1) = l;
         add(l1, Interop/Flix/Marshal.toJavaObject(x))
 
     pub def addAt!(ix: Int32, x: a, l: ArrayList[a, r]): Result[String, Unit] \ { Write(r) } with Marshal[a] = 
         try {
             import java.util.ArrayList.add(Int32, ##java.lang.Object): Unit \ r;
-            let ArrayList(l1) = l;
+            let ArrayList(_, l1) = l;
             add(l1, ix, Interop/Flix/Marshal.toJavaObject(x)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -163,14 +165,14 @@ namespace Interop/Util/ArrayList {
 
     pub def addWith!(x: a, ocast: a -> ##java.lang.Object, l: ArrayList[a, r]): Bool \ Write(r) = 
         import java.util.ArrayList.add(##java.lang.Object): Bool \ r;
-        let ArrayList(l1) = l;
+        let ArrayList(_, l1) = l;
         add(l1, ocast(x))
 
-    pub def addAll!(c: Collection[a, r], l: ArrayList[a, r]): Result[String, Bool] \ Write(r) = 
+    pub def addAll!(c: Collection[a, r1], l: ArrayList[a, r]): Result[String, Bool] \ { Read(r1), Write(r) }= 
         try { 
-            import java.util.ArrayList.addAll(##java.util.Collection): Bool \ r;
-            let ArrayList(l1) = l;
-            let Collection(c1) = c;
+            import java.util.ArrayList.addAll(##java.util.Collection): Bool \ {r, r1};
+            let ArrayList(_, l1) = l;
+            let Collection(_, c1) = c;
             addAll(l1, c1) |> Ok 
         } catch {
             case ex: ##java.lang.Exception =>
@@ -183,7 +185,7 @@ namespace Interop/Util/ArrayList {
     pub def remove!(x: a, l: ArrayList[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
         try {
             import java.util.ArrayList.remove(##java.lang.Object): Bool \ r; 
-            let ArrayList(l1) = l;
+            let ArrayList(_, l1) = l;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
             remove(l1, x1) |> Ok
         } catch {
@@ -192,11 +194,11 @@ namespace Interop/Util/ArrayList {
                 Err(getMessage(ex))
         }
 
-    pub def removeAll!(c: Collection[a, r], l: ArrayList[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
+    pub def removeAll!(c: Collection[a, r1], l: ArrayList[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
         try {
-            import java.util.ArrayList.removeAll(##java.util.Collection): Bool \ r; 
-            let ArrayList(l1) = l;
-            let Collection(c1) = c;
+            import java.util.ArrayList.removeAll(##java.util.Collection): Bool \ {r, r1}; 
+            let ArrayList(_, l1) = l;
+            let Collection(_, c1) = c;
             removeAll(l1, c1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -207,7 +209,7 @@ namespace Interop/Util/ArrayList {
     pub def removeIf!(f: a -> Bool \ ef, l: ArrayList[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
         try {
             import java.util.ArrayList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
-            let ArrayList(l1) = l;            
+            let ArrayList(_, l1) = l;            
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
             (unsafe_cast removeIf(l1, f1) as _ \ {ef, Write(r)}) |> Ok
         } catch {
@@ -218,11 +220,11 @@ namespace Interop/Util/ArrayList {
 
 
 
-    pub def retainAll!(c: Collection[a, r], l: ArrayList[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
+    pub def retainAll!(c: Collection[a, r1], l: ArrayList[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
         try {
-            import java.util.ArrayList.retainAll(##java.util.Collection): Bool \ r; 
-            let ArrayList(l1) = l;
-            let Collection(c1) = c;
+            import java.util.ArrayList.retainAll(##java.util.Collection): Bool \ {r, r1}; 
+            let ArrayList(_, l1) = l;
+            let Collection(_, c1) = c;
             retainAll(l1, c1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -235,7 +237,7 @@ namespace Interop/Util/ArrayList {
     pub def forEach(f: a -> Unit \ ef, l: ArrayList[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
         try {
             import java.util.ArrayList.forEach(##java.util.function.Consumer): Unit \ r; 
-            let ArrayList(l1) = l;
+            let ArrayList(_, l1) = l;
             let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
             forEach(l1, f1) |> Ok
         } catch {
@@ -253,7 +255,7 @@ namespace Interop/Util/ArrayList {
     pub def sortWithComparator!(c: Comparator[a], l: ArrayList[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
         try {
             import java.util.ArrayList.sort(##java.util.Comparator): Unit \ r; 
-            let ArrayList(l1) = l;
+            let ArrayList(_, l1) = l;
             sort(l1, c) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -293,7 +295,7 @@ namespace Interop/Util/ArrayList {
                             ocast: ##java.lang.Object -> a, 
                             l: ArrayList[a, r]): Iterator[a, r1, r1] \ { Read(r) } =
         import java.util.ArrayList.iterator(): ##java.util.Iterator \ { Read(r) } as iterator;
-        let ArrayList(l1) = l;
+        let ArrayList(_, l1) = l;
         if (Object.isNull(l1))
             Iterator.empty(rc)
         else 
@@ -310,11 +312,11 @@ namespace Interop/Util/ArrayList {
         iterator(rc, l) |> Iterator.enumerator
 
 
-    pub def unfoldArrayList(_: Region[r], f: s -> Option[(a, s)] \ ef, st: s): ArrayList[a, r] \ { Write(r),  ef } with Marshal[a] =
+    pub def unfoldArrayList(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): ArrayList[a, r] \ { Write(r),  ef } with Marshal[a] =
         import new java.util.ArrayList(): ##java.util.ArrayList \ r as new1;
         import java.util.ArrayList.add(##java.lang.Object): Bool \ r as add1;
         def loop(st1, acc) = match f(st1) {
-            case None         => ArrayList(acc)
+            case None         => ArrayList(rc, acc)
             case Some(o, st2) => {discard add1(acc, Interop/Flix/Marshal.toJavaObject(o)); loop(st2, acc)}
         };
         loop(st, new1())

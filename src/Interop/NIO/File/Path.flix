@@ -96,11 +96,11 @@ namespace Interop/NIO/File/Path {
     ///
     /// Returns a new FilePath.
     ///
-    pub def of(s: String, l: List[String]): Result[String, Path] = region r {
+    pub def of(s: String, l: List[String]): Result[String, Path] = region rc {
         try {
             // Currently we have to use a wrapper due to java.nio.file.Path.of using varargs 
-            import static flixinterop.nio.file.Pathz.ofList(String, ##java.util.List): ##java.nio.file.Path \ {Read(r)} as of1;
-            let ls1 = Interop/Util/ArrayList.fromFoldable(r, l) |> Interop/Util/ListZ.toListHH;
+            import static flixinterop.nio.file.Pathz.ofList(String, ##java.util.List): ##java.nio.file.Path \ {Read(rc)} as of1;
+            let ls1 = Interop/Util/ArrayList.fromFoldable(rc, l) |> Interop/Util/ListZ.toListHH(rc);
             Path(of1(s, ls1)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>

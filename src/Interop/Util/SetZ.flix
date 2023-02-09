@@ -25,19 +25,19 @@ namespace Interop/Util {
     }
 
     pub class ImpSetZ[t: Type -> Region -> Type] {
-        pub def toSetZ[a: Type, r: Region](s: t[a, r]): SetZ[a, r]
-        pub def fromSetZ[a: Type, r: Region](s: SetZ[a, r]): t[a, r]
+        pub def toSetZ[a: Type, r: Region, r1: Region](rc: Region[r1], s: t[a, r]): SetZ[a, r1]
+        pub def fromSetZ[a: Type, r: Region, r1: Region](rc: Region[r1], s: SetZ[a, r]): t[a, r1]
     }
 
-    // instance Interop/Util.ImpCollection[SetZ] {
-    //     pub def toCollection(t: SetZ[a, r]): Collection[a, r] = 
-    //         let SetZ(t1) = t;
-    //         Collection(unsafe_cast t1 as ##java.util.Collection)
+    instance Interop/Util.ImpCollection[SetZ] {
+        pub def toCollection(rc: Region[r1], t: SetZ[a, r]): Collection[a, r1] = 
+            let SetZ(_, t1) = t;
+            Collection(rc, unsafe_cast t1 as ##java.util.Collection)
 
-    //     pub def fromCollection(t: Collection[a, r]): SetZ[a, r] = 
-    //         let Collection(t1) = t;
-    //         SetZ(unsafe_cast t1 as ##java.util.Set) 
-    // }
+        pub def fromCollection(rc: Region[r1], t: Collection[a, r]): SetZ[a, r1] = 
+            let Collection(_, t1) = t;
+            SetZ(rc, unsafe_cast t1 as ##java.util.Set) 
+    }
 
 
 }
@@ -60,8 +60,10 @@ namespace Interop/Util/SetZ {
         SetZ(rc, prim)
 
 
-    pub def toSetHH[t: Type -> Region -> Type, a: Type, r: Region](s: t[a, r]): ##java.util.Set with ImpSetZ[t] = 
-        Interop/Util/ImpSetZ.toSetZ(s) |> getHH
+    pub def toSetHH[t: Type -> Region -> Type, a: Type, r: Region, r1: Region](rc: Region[r1], s: t[a, r]): ##java.util.Set with ImpSetZ[t] = 
+        Interop/Util/ImpSetZ.toSetZ(rc, s) |> getHH
+
+
 
     pub def of0(rc: Region[r]): SetZ[a, r] \ Write(r) with Marshal[a] =
         import static java.util.Set.of(): ##java.util.Set \ r;
@@ -141,7 +143,7 @@ namespace Interop/Util/SetZ {
         try {
             import java.util.Set.addAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;
-            let Collection(c1) = c;
+            let Collection(_, c1) = c;
             addAll(s1, c1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -165,7 +167,7 @@ namespace Interop/Util/SetZ {
         try {
             import java.util.Set.containsAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;
-            let Collection(c1) = c;
+            let Collection(_, c1) = c;
             containsAll(s1, c1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -200,7 +202,7 @@ namespace Interop/Util/SetZ {
         try {
             import java.util.Set.removeAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;
-            let Collection(c1) = c;
+            let Collection(_, c1) = c;
             removeAll(s1, c1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -225,7 +227,7 @@ namespace Interop/Util/SetZ {
         try {
             import java.util.Set.retainAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;
-            let Collection(c1) = c;
+            let Collection(_, c1) = c;
             retainAll(s1, c1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>

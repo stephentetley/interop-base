@@ -55,6 +55,10 @@ namespace Interop/Util/MapZ {
     pub def wrapHH(rc: Region[r], prim: ##java.util.Map): MapZ[k, v, r] =
         MapZ(rc, prim)
 
+    pub def toMapHH[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region, r1: Region]
+                    (rc: Region[r1], m: t[k, v, r]): ##java.util.Map with ImpMapZ[t] = 
+        Interop/Util/ImpMapZ.toMapZ(rc, m) |> getHH
+
 
     pub def of0(rc: Region[r]): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
         import static java.util.Map.of(): ##java.util.Map \ r;
@@ -190,17 +194,17 @@ namespace Interop/Util/MapZ {
         }
 
     /// Can't guarantee `Ord[k]` at this point...
-    pub def entrySet(rc: Region[r1], m: MapZ[k, v, r]): SetZ[Entry[k, v, r], r1] \ {Write(r)}= 
-        import java.util.Map.entrySet(): ##java.util.Set \ Write(r);
+    pub def entrySet(rc: Region[r1], m: MapZ[k, v, r]): SetZ[Entry[k, v, r], r1] \ { Read(r), Write(r1) }= 
+        import java.util.Map.entrySet(): ##java.util.Set \ { r, r1 };
         let MapZ(_, m1) = m;
         let sz = entrySet(m1);
         SetZ(rc, sz)
 
 
-    pub def values(_rc: Region[r1], m: MapZ[k, v, r]): Collection[k, r] \ {Write(r)}= 
-        import java.util.Map.values(): ##java.util.Collection \ Write(r);
+    pub def values(rc: Region[r1], m: MapZ[k, v, r]): Collection[k, r1] \ { Read(r), Write(r1) } = 
+        import java.util.Map.values(): ##java.util.Collection \ { r, r1 };
         let MapZ(_, m1) = m;
-        values(m1) |> Collection
+        Collection(rc, values(m1))
 
     pub def remove!(k: k, m: MapZ[k, v, r]): Result[String, Option[v]] \  Write(r) with Marshal[k], Marshal[v] =
         try {

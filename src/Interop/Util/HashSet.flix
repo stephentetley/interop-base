@@ -134,11 +134,11 @@ namespace Interop/Util/HashSet {
         }
         
 
-    pub def removeAll!(c: Collection[a, r], s: HashSet[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
+    pub def removeAll!(c: Collection[a, r1], s: HashSet[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
         try {
-            import java.util.HashSet.removeAll(##java.util.Collection): Bool \ r; 
+            import java.util.HashSet.removeAll(##java.util.Collection): Bool \ {r, r1}; 
             let HashSet(_, s1) = s;
-            let Collection(c1) = c;
+            let Collection(_, c1) = c;
             removeAll(s1, c1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -159,11 +159,11 @@ namespace Interop/Util/HashSet {
                 Err(getMessage(ex))
         }
 
-    pub def retainAll!(c: Collection[a, r], s: HashSet[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
+    pub def retainAll!(c: Collection[a, r1], s: HashSet[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
         try {
-            import java.util.HashSet.retainAll(##java.util.Collection): Bool \ r; 
+            import java.util.HashSet.retainAll(##java.util.Collection): Bool \ {r, r1}; 
             let HashSet(_, s1) = s;
-            let Collection(c1) = c;
+            let Collection(_, c1) = c;
             retainAll(s1, c1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
