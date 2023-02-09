@@ -20,12 +20,14 @@ namespace Interop/Util {
     /// Represents a Java Map.
     /// Iterface / Mutable (some implementations may not be mutable)
     ///
-    pub enum MapZ[_k: Type, _v: Type, _r: Region](##java.util.Map)
+    pub enum MapZ[_k: Type, _v: Type, r: Region]{ 
+        case MapZ(Region[r], ##java.util.Map)
+    }
 
 
     pub class ImpMapZ[t: Type -> Type -> Region -> Type] {
-        pub def toMapZ[k: Type, v: Type, r: Region](m: t[k, v, r]): MapZ[k, v, r]
-        pub def fromMapZ[k: Type, v: Type, r: Region](m: MapZ[k, v, r]): t[k, v, r]
+        pub def toMapZ[k: Type, v: Type, r: Region, r1: Region](rc: Region[r1], m: t[k, v, r]): MapZ[k, v, r1]
+        pub def fromMapZ[k: Type, v: Type, r: Region, r1: Region](rc: Region[r1], m: MapZ[k, v, r]): t[k, v, r1]
     }
 
 
@@ -46,37 +48,34 @@ namespace Interop/Util/MapZ {
     use Interop/Flix.Marshal
 
     pub def getHH(m: MapZ[k, v, r]): ##java.util.Map = 
-        let MapZ(m1) = m;
+        let MapZ(_, m1) = m;
         m1
 
 
-    pub def wrapHH(_: Region[r], prim: ##java.util.Map): MapZ[k, v, r] =
-        MapZ(prim)
+    pub def wrapHH(rc: Region[r], prim: ##java.util.Map): MapZ[k, v, r] =
+        MapZ(rc, prim)
 
 
-    pub def toMapHH[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region](s: t[k, v, r]): ##java.util.Map with ImpMapZ[t] = 
-        Interop/Util/ImpMapZ.toMapZ(s) |> getHH
-
-    pub def of0(_: Region[r]): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
+    pub def of0(rc: Region[r]): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
         import static java.util.Map.of(): ##java.util.Map \ r;
-        of() |> MapZ
+        MapZ(rc, of())
 
-    pub def of1(_: Region[r], k1: k, v1: v): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
+    pub def of1(rc: Region[r], k1: k, v1: v): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
         import static java.util.Map.of(##java.lang.Object, ##java.lang.Object): ##java.util.Map \ r;
         let ko1 = Interop/Flix/Marshal.toJavaObject(k1);
         let vo1 = Interop/Flix/Marshal.toJavaObject(v1);
-        of(ko1, vo1) |> MapZ
+        MapZ(rc, of(ko1, vo1))
 
-    pub def of2(_: Region[r], k1: k, v1: v, k2: k, v2: v): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
+    pub def of2(rc: Region[r], k1: k, v1: v, k2: k, v2: v): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
         import static java.util.Map.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Map \ r;
         let ko1 = Interop/Flix/Marshal.toJavaObject(k1);
         let vo1 = Interop/Flix/Marshal.toJavaObject(v1);
         let ko2 = Interop/Flix/Marshal.toJavaObject(k2);
         let vo2 = Interop/Flix/Marshal.toJavaObject(v2);
-        of(ko1, vo1, ko2, vo2) |> MapZ
+        MapZ(rc, of(ko1, vo1, ko2, vo2))
 
 
-    pub def of3(_: Region[r], k1: k, v1: v, k2: k, v2: v, k3: k, v3: v): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
+    pub def of3(rc: Region[r], k1: k, v1: v, k2: k, v2: v, k3: k, v3: v): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
         import static java.util.Map.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Map \ r;
         let ko1 = Interop/Flix/Marshal.toJavaObject(k1);
         let vo1 = Interop/Flix/Marshal.toJavaObject(v1);
@@ -84,9 +83,9 @@ namespace Interop/Util/MapZ {
         let vo2 = Interop/Flix/Marshal.toJavaObject(v2);
         let ko3 = Interop/Flix/Marshal.toJavaObject(k3);
         let vo3 = Interop/Flix/Marshal.toJavaObject(v3);
-        of(ko1, vo1, ko2, vo2, ko3, vo3) |> MapZ
+        MapZ(rc, of(ko1, vo1, ko2, vo2, ko3, vo3))
 
-    pub def of4(_: Region[r], k1: k, v1: v, k2: k, v2: v, k3: k, v3: v, k4: k, v4: v): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
+    pub def of4(rc: Region[r], k1: k, v1: v, k2: k, v2: v, k3: k, v3: v, k4: k, v4: v): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
         import static java.util.Map.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, 
                                         ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Map \ r;
         let ko1 = Interop/Flix/Marshal.toJavaObject(k1);
@@ -97,9 +96,9 @@ namespace Interop/Util/MapZ {
         let vo3 = Interop/Flix/Marshal.toJavaObject(v3);
         let ko4 = Interop/Flix/Marshal.toJavaObject(k4);
         let vo4 = Interop/Flix/Marshal.toJavaObject(v4);
-        of(ko1, vo1, ko2, vo2, ko3, vo3, ko4, vo4) |> MapZ
+        MapZ(rc, of(ko1, vo1, ko2, vo2, ko3, vo3, ko4, vo4))
 
-    pub def of5(_: Region[r], k1: k, v1: v, k2: k, v2: v, k3: k, v3: v, k4: k, v4: v, k5: k, v5: v): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
+    pub def of5(rc: Region[r], k1: k, v1: v, k2: k, v2: v, k3: k, v3: v, k4: k, v4: v, k5: k, v5: v): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
         import static java.util.Map.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, 
                                         ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Map \ r;
         let ko1 = Interop/Flix/Marshal.toJavaObject(k1);
@@ -112,39 +111,39 @@ namespace Interop/Util/MapZ {
         let vo4 = Interop/Flix/Marshal.toJavaObject(v4);
         let ko5 = Interop/Flix/Marshal.toJavaObject(k5);
         let vo5 = Interop/Flix/Marshal.toJavaObject(v5);
-        of(ko1, vo1, ko2, vo2, ko3, vo3, ko4, vo4, ko5, vo5) |> MapZ
+        MapZ(rc, of(ko1, vo1, ko2, vo2, ko3, vo3, ko4, vo4, ko5, vo5))
 
 
     pub def equals(m1: MapZ[k, v, r], m2: MapZ[k, v, r]): Bool \ Read(r) =
         import java.util.Map.equals(##java.lang.Object): Bool \ r; 
-        let MapZ(jm1) = m1;
-        let MapZ(jm2) = m2;
-        equals(jm1, unsafe_cast jm2 as ##java.lang.Object)
+        let MapZ(_, mm1) = m1;
+        let MapZ(_, mm2) = m2;
+        equals(mm1, unsafe_cast mm2 as ##java.lang.Object)
 
     pub def size(m: MapZ[k, v, r]): Int32 \ Read(r) =
         import java.util.Map.size(): Int32 \ r;
-        let MapZ(m1) = m;
+        let MapZ(_, m1) = m;
         size(m1)
 
     pub def isEmpty(m: MapZ[k, v, r]): Bool \ Read(r) =
         import java.util.Map.isEmpty(): Bool \ r;
-        let MapZ(m1) = m;
+        let MapZ(_, m1) = m;
         isEmpty(m1)
 
     pub def hashCode(m: MapZ[k, v, r]): Int32 \ Read(r) =
         import java.util.Map.hashCode(): Int32 \ r;
-        let MapZ(m1) = m;
+        let MapZ(_, m1) = m;
         hashCode(m1)
 
     pub def clear!(m: MapZ[k, v, r]): Unit \ Write(r) =
         import java.util.Map.clear(): Unit \ r; 
-        let MapZ(m1) = m;
+        let MapZ(_, m1) = m;
         clear(m1)
 
     pub def get(k: k, m: MapZ[k, v, r]): Result[String, Option[v]] \ Write(r) with Marshal[k], Marshal[v] =
         try {
             import java.util.Map.get(##java.lang.Object): ##java.lang.Object \ r; 
-            let MapZ(m1) = m;
+            let MapZ(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);
             get(m1, k1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject) |> Ok
         } catch {
@@ -156,7 +155,7 @@ namespace Interop/Util/MapZ {
     pub def put!(k: k, v: v, m: MapZ[k, v, r]): Result[String, Option[v]] \ Write(r) with Marshal[k], Marshal[v] =
         try {
             import java.util.Map.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
-            let MapZ(m1) = m;
+            let MapZ(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);
             let v1 = Interop/Flix/Marshal.toJavaObject(v);
             put(m1, k1, v1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject) |> Ok
@@ -169,7 +168,7 @@ namespace Interop/Util/MapZ {
     pub def containsKey(k: k, m: MapZ[k, v, r]): Result[String, Bool] \ Read(r) with Marshal[k] =
         try {
             import java.util.Map.containsKey(##java.lang.Object): Bool \ r; 
-            let MapZ(m1) = m;
+            let MapZ(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);
             containsKey(m1, k1) |> Ok
         } catch {
@@ -181,7 +180,7 @@ namespace Interop/Util/MapZ {
     pub def containsValue(v: v, m: MapZ[k, v, r]): Result[String, Bool] \ Read(r) with Marshal[v] =
         try {
             import java.util.Map.containsValue(##java.lang.Object): Bool \ r; 
-            let MapZ(m1) = m;
+            let MapZ(_, m1) = m;
             let v1 = Interop/Flix/Marshal.toJavaObject(v);
             containsValue(m1, v1) |> Ok
         } catch {
@@ -191,22 +190,22 @@ namespace Interop/Util/MapZ {
         }
 
     /// Can't guarantee `Ord[k]` at this point...
-    pub def entrySet(m: MapZ[k, v, r]): SetZ[Entry[k, v, r], r] \ {Write(r)}= 
+    pub def entrySet(rc: Region[r1], m: MapZ[k, v, r]): SetZ[Entry[k, v, r], r1] \ {Write(r)}= 
         import java.util.Map.entrySet(): ##java.util.Set \ Write(r);
-        let MapZ(m1) = m;
+        let MapZ(_, m1) = m;
         let sz = entrySet(m1);
-        SetZ(sz)
+        SetZ(rc, sz)
 
 
-    pub def values(m: MapZ[k, v, r]): Collection[k, r] \ {Write(r)}= 
+    pub def values(_rc: Region[r1], m: MapZ[k, v, r]): Collection[k, r] \ {Write(r)}= 
         import java.util.Map.values(): ##java.util.Collection \ Write(r);
-        let MapZ(m1) = m;
+        let MapZ(_, m1) = m;
         values(m1) |> Collection
 
     pub def remove!(k: k, m: MapZ[k, v, r]): Result[String, Option[v]] \  Write(r) with Marshal[k], Marshal[v] =
         try {
             import java.util.Map.remove(##java.lang.Object): ##java.lang.Object \ r; 
-            let MapZ(m1) = m;
+            let MapZ(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);        
             remove(m1, k1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject) |> Ok
         } catch {
@@ -218,7 +217,7 @@ namespace Interop/Util/MapZ {
     pub def forEach(f: (k, v) -> Unit \ ef, m: MapZ[k, v, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[k], Marshal[v] =
         try {
             import java.util.Map.forEach(##java.util.function.BiConsumer): Unit \ r; 
-            let MapZ(m1) = m;
+            let MapZ(_, m1) = m;
             let f1 = Interop/Util/Function/BiConsumer.makeBiConsumer(f);
             forEach(m1, f1) |> Ok
         } catch {

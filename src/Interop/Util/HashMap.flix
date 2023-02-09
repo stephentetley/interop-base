@@ -20,7 +20,9 @@ namespace Interop/Util {
     /// Represents a Java HashMap.
     /// Mutable / Class
     ///
-    pub enum HashMap[_k: Type, _v: Type, _r: Region](##java.util.HashMap)
+    pub enum HashMap[_k: Type, _v: Type, r: Region] {
+        case HashMap(Region[r], ##java.util.HashMap)
+    }
 
     instance Newable[HashMap[k, v]] {
         pub def new(r: Region[r]): HashMap[k, v, r] \ Write(r) = Interop/Util/HashMap.new(r)
@@ -28,13 +30,13 @@ namespace Interop/Util {
 
 
     instance Interop/Util.ImpMapZ[HashMap] {
-        pub def toMapZ(t: HashMap[k, v, r]): MapZ[k, v, r] = 
-            let HashMap(t1) = t;
-            MapZ(unsafe_cast t1 as ##java.util.Map)
+        pub def toMapZ(rc: Region[r1], t: HashMap[k, v, r]): MapZ[k, v, r1] = 
+            let HashMap(_, t1) = t;
+            MapZ(rc, unsafe_cast t1 as ##java.util.Map)
 
-        pub def fromMapZ(t: MapZ[k, v, r]): HashMap[k, v, r] = 
-            let MapZ(t1) = t;
-            HashMap(unsafe_cast t1 as ##java.util.HashMap) 
+        pub def fromMapZ(rc: Region[r1], t: MapZ[k, v, r]): HashMap[k, v, r1] = 
+            let MapZ(_, t1) = t;
+            HashMap(rc, unsafe_cast t1 as ##java.util.HashMap) 
     }
 
 }
@@ -53,45 +55,45 @@ namespace Interop/Util/HashMap {
 
 
     pub def getHH(m: HashMap[k, v, r]): ##java.util.HashMap = 
-        let HashMap(m1) = m;
+        let HashMap(_, m1) = m;
         m1
 
-    pub def wrapHH(_: Region[r], prim: ##java.util.HashMap): HashMap[k, v, r] =
-        HashMap(prim)
+    pub def wrapHH(rc: Region[r], prim: ##java.util.HashMap): HashMap[k, v, r] =
+        HashMap(rc, prim)
 
     ///
     /// Returns a new mutable HashMap.
     ///
-    pub def new(_: Region[r]): HashMap[k, v, r] \ Write(r) =
+    pub def new(rc: Region[r]): HashMap[k, v, r] \ Write(r) =
         import new java.util.HashMap(): ##java.util.HashMap & r as newHashMap;
-        newHashMap() |> HashMap
+        HashMap(rc, newHashMap())
 
 
     pub def equals(m1: HashMap[k, v, r], m2: HashMap[k, v, r]): Bool \ Read(r) =
         import java.util.HashMap.equals(##java.lang.Object): Bool \ r; 
-        let HashMap(jm1) = m1;
-        let HashMap(jm2) = m2;
-        equals(jm1, unsafe_cast jm2 as ##java.lang.Object)
+        let HashMap(_, mm1) = m1;
+        let HashMap(_, mm2) = m2;
+        equals(mm1, unsafe_cast mm2 as ##java.lang.Object)
 
     pub def size(m: HashMap[k, v, r]): Int32 \ Read(r) =
         import java.util.HashMap.size(): Int32 \ r;
-        let HashMap(m1) = m;
+        let HashMap(_, m1) = m;
         size(m1)
 
     pub def isEmpty(m: HashMap[k, v, r]): Bool \ Write(r) =
         import java.util.HashMap.isEmpty(): Bool \ r; 
-        let HashMap(m1) = m;
+        let HashMap(_, m1) = m;
         isEmpty(m1)
 
     pub def hashCode(m: HashMap[k, v, r]): Int32 \ Read(r) =
         import java.util.HashMap.hashCode(): Int32 \ r;
-        let HashMap(m1) = m;
+        let HashMap(_, m1) = m;
         hashCode(m1)
 
     pub def get(k: k, m: HashMap[k, v, r]): Result[String, Option[v]] \ Write(r) with Marshal[k], Marshal[v] =
         try {
             import java.util.HashMap.get(##java.lang.Object): ##java.lang.Object \ r; 
-            let HashMap(m1) = m;
+            let HashMap(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);
             get(m1, k1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject) |> Ok
         } catch {
@@ -102,7 +104,7 @@ namespace Interop/Util/HashMap {
 
     pub def put!(k: k, v: v, m: HashMap[k, v, r]): v \ Write(r) with Marshal[k], Marshal[v] =
         import java.util.HashMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
-        let HashMap(m1) = m;
+        let HashMap(_, m1) = m;
         let k1 = Interop/Flix/Marshal.toJavaObject(k);
         let v1 = Interop/Flix/Marshal.toJavaObject(v);
         put(m1, k1, v1) |> Interop/Flix/Marshal.fromJavaObject
@@ -112,7 +114,7 @@ namespace Interop/Util/HashMap {
                         vcast: v -> ##java.lang.Object, 
                         m: HashMap[k, v, r]): Unit \  Write(r) =
         import java.util.HashMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
-        let HashMap(m1) = m;
+        let HashMap(_, m1) = m;
         let k1 = kcast(k);
         let v1 = vcast(v);
         discard put(m1, k1, v1)
@@ -120,29 +122,29 @@ namespace Interop/Util/HashMap {
 
     pub def clear!(m: HashMap[k, v, r]): Unit \ Write(r) =
         import java.util.HashMap.clear(): Unit \ r; 
-        let HashMap(m1) = m;
+        let HashMap(_, m1) = m;
         clear(m1)
 
-    pub def entrySet(m: HashMap[k, v, r]): SetZ[Entry[k, v, r], r] \ {Write(r)}= 
+    pub def entrySet(rc: Region[r1], m: HashMap[k, v, r]): SetZ[Entry[k, v, r], r1] \ {Write(r)}= 
         import java.util.HashMap.entrySet(): ##java.util.Set \ Write(r);
-        let HashMap(m1) = m;
-        entrySet(m1) |> SetZ
+        let HashMap(_, m1) = m;
+        SetZ(rc, entrySet(m1))
 
 
-    pub def keySet(m: HashMap[k, v, r]): SetZ[k, r] \ {Write(r)}= 
+    pub def keySet(rc: Region[r1], m: HashMap[k, v, r]): SetZ[k, r1] \ {Write(r)}= 
         import java.util.HashMap.keySet(): ##java.util.Set \ Write(r);
-        let HashMap(m1) = m;
-        keySet(m1) |> SetZ
+        let HashMap(_, m1) = m;
+        SetZ(rc, keySet(m1))
 
-    pub def values(m: HashMap[k, v, r]): Collection[k, r] \ {Write(r)}= 
+    pub def values(_: Region[r1], m: HashMap[k, v, r]): Collection[k, r] \ {Write(r)}= 
         import java.util.HashMap.values(): ##java.util.Collection \ Write(r);
-        let HashMap(m1) = m;
+        let HashMap(_, m1) = m;
         values(m1) |> Collection
 
 
     pub def remove!(k: k, m: HashMap[k, v, r]): Option[v] \  Write(r) with Marshal[k], Marshal[v] =
         import java.util.HashMap.remove(##java.lang.Object): ##java.lang.Object \ r; 
-        let HashMap(m1) = m;
+        let HashMap(_, m1) = m;
         let k1 = Interop/Flix/Marshal.toJavaObject(k);        
         remove(m1, k1) |> Object.toOption |>  Option.map(Interop/Flix/Marshal.fromJavaObject)
 

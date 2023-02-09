@@ -20,18 +20,20 @@ namespace Interop/Util {
     /// Represents a Java SortedMap.
     /// Interface
     ///
-    pub enum SortedMap[_k: Type, _v: Type, _r: Region](##java.util.SortedMap)
-
-
-    instance Interop/Util.ImpMapZ[SortedMap] {
-        pub def toMapZ(t: SortedMap[k, v, r]): MapZ[k, v, r] = 
-            let SortedMap(t1) = t;
-            MapZ(unsafe_cast t1 as ##java.util.Map)
-
-        pub def fromMapZ(t: MapZ[k, v, r]): SortedMap[k, v, r] = 
-            let MapZ(t1) = t;
-            SortedMap(unsafe_cast t1 as ##java.util.SortedMap) 
+    pub enum SortedMap[_k: Type, _v: Type, r: Region] { 
+        case SortedMap(Region[r], ##java.util.SortedMap)
     }
+
+
+    // instance Interop/Util.ImpMapZ[SortedMap] {
+    //     pub def toMapZ(t: SortedMap[k, v, r]): MapZ[k, v, r] = 
+    //         let SortedMap(t1) = t;
+    //         MapZ(unsafe_cast t1 as ##java.util.Map)
+
+    //     pub def fromMapZ(t: MapZ[k, v, r]): SortedMap[k, v, r] = 
+    //         let MapZ(t1) = t;
+    //         SortedMap(unsafe_cast t1 as ##java.util.SortedMap) 
+    // }
 
 
 }
@@ -50,38 +52,38 @@ namespace Interop/Util/SortedMap {
 
 
     pub def getHH(m: SortedMap[k, v, r]): ##java.util.SortedMap = 
-        let SortedMap(m1) = m;
+        let SortedMap(_, m1) = m;
         m1
 
-    pub def wrapHH(_: Region[r], prim: ##java.util.SortedMap): SortedMap[k, v, r] =
-        SortedMap(prim)
+    pub def wrapHH(rc: Region[r], prim: ##java.util.SortedMap): SortedMap[k, v, r] =
+        SortedMap(rc, prim)
         
 
     pub def equals(m1: SortedMap[k, v, r], m2: SortedMap[k, v, r]): Bool \ Read(r) =
         import java.util.SortedMap.equals(##java.lang.Object): Bool \ r; 
-        let SortedMap(jm1) = m1;
-        let SortedMap(jm2) = m2;
-        equals(jm1, unsafe_cast jm2 as ##java.lang.Object)
+        let SortedMap(_, mm1) = m1;
+        let SortedMap(_, mm2) = m2;
+        equals(mm1, unsafe_cast mm2 as ##java.lang.Object)
 
     pub def size(m: SortedMap[k, v, r]): Int32 \ Read(r) =
         import java.util.SortedMap.size(): Int32 \ r;
-        let SortedMap(m1) = m;
+        let SortedMap(_, m1) = m;
         size(m1)
 
     pub def isEmpty(m: SortedMap[k, v, r]): Bool \ Read(r) =
         import java.util.SortedMap.isEmpty(): Bool \ r;
-        let SortedMap(m1) = m;
+        let SortedMap(_, m1) = m;
         isEmpty(m1)
 
     pub def hashCode(m: SortedMap[k, v, r]): Int32 \ Read(r) =
         import java.util.SortedMap.hashCode(): Int32 \ r;
-        let SortedMap(m1) = m;
+        let SortedMap(_, m1) = m;
         hashCode(m1)
 
     pub def get(k: k, m: SortedMap[k, v, r]): Result[String, Option[v]] \ Write(r) with Marshal[k], Marshal[v] =
         try {
             import java.util.SortedMap.get(##java.lang.Object): ##java.lang.Object \ r; 
-            let SortedMap(m1) = m;
+            let SortedMap(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);
             get(m1, k1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject) |> Ok
         } catch {
@@ -92,22 +94,22 @@ namespace Interop/Util/SortedMap {
 
     pub def put!(k: k, v: v, m: SortedMap[k, v, r]): v \ Write(r) with Marshal[k], Marshal[v] =
         import java.util.SortedMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
-        let SortedMap(m1) = m;
+        let SortedMap(_, m1) = m;
         let k1 = Interop/Flix/Marshal.toJavaObject(k);
         let v1 = Interop/Flix/Marshal.toJavaObject(v);
         put(m1, k1, v1) |> Interop/Flix/Marshal.fromJavaObject
 
     /// Can't guarantee `Ord[k]` at this point...
-    pub def entrySet(_: Region[rh], m: SortedMap[k, v, r]): SetZ[Entry[k, v, rh], rh] \ { Read(r), Write(rh) } = 
+    pub def entrySet(rc: Region[rh], m: SortedMap[k, v, r]): SetZ[Entry[k, v, rh], rh] \ { Read(r), Write(rh) } = 
         import java.util.SortedMap.entrySet(): ##java.util.Set \ { Read(r), Write(rh) };
-        let SortedMap(m1) = m;
+        let SortedMap(_, m1) = m;
         let sz = entrySet(m1);
-        SetZ(sz)
+        SetZ(rc, sz)
 
 
     pub def values(_: Region[rh], m: SortedMap[k, v, r]): Collection[k, rh] \ { Read(r), Write(rh) } = 
         import java.util.SortedMap.values(): ##java.util.Collection \ { Read(r), Write(rh) };
-        let SortedMap(m1) = m;
+        let SortedMap(_, m1) = m;
         values(m1) |> Collection
 
 
@@ -117,11 +119,11 @@ namespace Interop/Util/SortedMap {
         
 
 
-    pub def unfoldViaTreeMap(_: Region[r], f: s -> Option[(k, v, s)] & ef, st: s): SortedMap[k, v, r] \ { Write(r), ef } with Marshal[k], Marshal[v] =
+    pub def unfoldViaTreeMap(rc: Region[r], f: s -> Option[(k, v, s)] & ef, st: s): SortedMap[k, v, r] \ { Write(r), ef } with Marshal[k], Marshal[v] =
         import new java.util.TreeMap(): ##java.util.TreeMap & r as newTreeMap;
         import java.util.TreeMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object & r as put; 
         def loop(st1, ac) = match f(st1) {
-            case None            => SortedMap(unsafe_cast ac as ##java.util.SortedMap)
+            case None            => SortedMap(rc, unsafe_cast ac as ##java.util.SortedMap)
             case Some(k, v, st2) => { discard put(ac, Interop/Flix/Marshal.toJavaObject(k), Interop/Flix/Marshal.toJavaObject(v)); loop(st2, ac) }
         };
         loop(st, newTreeMap())
