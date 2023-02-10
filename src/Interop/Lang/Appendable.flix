@@ -18,20 +18,23 @@ namespace Interop/Lang {
 
     /// Interface...
 
-    pub enum Appendable[_: Region](##java.lang.Appendable)
+    pub enum Appendable[r: Region] { 
+        case Appendable(Region[r], ##java.lang.Appendable)
+    }
+
 
     pub class ImpAppendable[t: Region -> Type] {
-        pub def toAppendable[r: Region](s: t[r]): Appendable[r]
-        pub def fromAppendable[r: Region](s: Appendable[r]): t[r]
+        pub def toAppendable[r: Region, r1: Region](rc: Region[r1], s: t[r]): Appendable[r1]
+        pub def fromAppendable[r: Region, r1: Region](rc: Region[r1], s: Appendable[r]): t[r1]
     }
 
     instance Interop/Lang.ImpAppendable[StringBuilder] {
-        pub def toAppendable(s: StringBuilder[r]): Appendable[r] = 
+        pub def toAppendable(rc: Region[r1], s: StringBuilder[r]): Appendable[r1] = 
             let StringBuilder(s1) = s;
-            Appendable(unsafe_cast s1 as ##java.lang.Appendable)
+            Appendable(rc, unsafe_cast s1 as ##java.lang.Appendable)
 
-        pub def fromAppendable(s: Appendable[r]): StringBuilder[r] = 
-            let Appendable(s1) = s;
+        pub def fromAppendable(_: Region[r1], s: Appendable[r]): StringBuilder[r1] = 
+            let Appendable(_, s1) = s;
             StringBuilder(unsafe_cast s1 as ##java.lang.StringBuilder) 
     }
 
@@ -47,47 +50,51 @@ namespace Interop/Lang/Appendable {
     use Interop/Lang.ImpCharSequence
 
     pub def getHH(ap: Appendable[r]): ##java.lang.Appendable = 
-        let Appendable(ap1) = ap;
+        let Appendable(_, ap1) = ap;
         ap1
 
-    pub def appendChar!(c: Char, ss: Appendable[r]): Result[String, Unit] \ Write(r) = 
+    pub def wrapHH(rc: Region[r], prim: ##java.lang.Appendable): Appendable[r] = 
+        Appendable(rc, prim)
+
+
+    pub def appendChar!(c: Char, ap: Appendable[r]): Result[String, Unit] \ Write(r) = 
         try {
             import java.lang.Appendable.append(Char): ##java.lang.Appendable \ Write(r);
-            let Appendable(ss1) = ss;
-            discard append(ss1, c);
+            let Appendable(_, ap1) = ap;
+            discard append(ap1, c);
             Ok()
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & r;
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
-    pub def appendCharSequence!(cs: CharSequence[r1], ss: Appendable[r2]): Result[String, Unit] \ { Read(r1), Write(r2) } = 
+    pub def appendCharSequence!(cs: CharSequence[r1], ap: Appendable[r]): Result[String, Unit] \ { Read(r1), Write(r) } = 
         try {
-            import java.lang.Appendable.append(##java.lang.CharSequence): ##java.lang.Appendable \ { Read(r1), Write(r2) };
+            import java.lang.Appendable.append(##java.lang.CharSequence): ##java.lang.Appendable \ { Read(r1), Write(r) };
             let cs1 = Interop/Lang/CharSequence.getHH(cs);
-            let Appendable(ss1) = ss;
-            discard append(ss1, cs1);
-            unsafe_cast Ok() as _ \ {Read(r1), Write(r2)} 
+            let Appendable(_, ap1) = ap;
+            discard append(ap1, cs1);
+            Ok()
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & r2;
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
     pub def appendCharSubSequence!(cs: CharSequence[r1], 
                                     start: {start = Int32},
                                     end: {end = Int32},
-                                    ss: Appendable[r2]): Result[String, Unit] \ { Read(r1), Write(r2) } = 
+                                    ap: Appendable[r2]): Result[String, Unit] \ { Read(r1), Write(r2) } = 
         try {
             import java.lang.Appendable.append(##java.lang.CharSequence, Int32, Int32): ##java.lang.Appendable \ { Read(r1), Write(r2) };
             let cs1 = Interop/Lang/CharSequence.getHH(cs);
-            let Appendable(ss1) = ss;
-            discard append(ss1, cs1, start.start, end.end);
+            let Appendable(_, ap1) = ap;
+            discard append(ap1, cs1, start.start, end.end);
             unsafe_cast Ok() as _ \ {Read(r1), Write(r2)} 
         } catch {
             case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & r2;
+                import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 

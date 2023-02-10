@@ -21,27 +21,29 @@ namespace Interop/IO {
     
     /// Abstract class...
 
-    pub enum StringWriter[_: Region](##java.io.StringWriter)
+    pub enum StringWriter[r: Region] { 
+        case StringWriter(Region[r], ##java.io.StringWriter)
+    }
 
     instance SubWriter[StringWriter] {
-        pub def toWriter(s: StringWriter[r]): Writer[r] = 
+        pub def toWriter(rc: Region[r1], s: StringWriter[r]): Writer[r1] = 
             let StringWriter(s1) = s;
-            Writer(unsafe_cast s1 as ##java.io.Writer)
+            Writer(rc, unsafe_cast s1 as ##java.io.Writer)
 
-        pub def fromWriter(s: Writer[r]): StringWriter[r] = 
-            let Writer(s1) = s;
-            StringWriter(unsafe_cast s1 as ##java.io.StringWriter) 
+        pub def fromWriter(rc: Region[r1], s: Writer[r]): StringWriter[r1] = 
+            let Writer(_, s1) = s;
+            StringWriter(rc, unsafe_cast s1 as ##java.io.StringWriter) 
     }
 
 
     instance Interop/Lang.ImpAppendable[StringWriter] {
-        pub def toAppendable(s: StringWriter[r]): Appendable[r] = 
-            let StringWriter(s1) = s;
-            Appendable(unsafe_cast s1 as ##java.lang.Appendable)
+        pub def toAppendable(rc: Region[r1], s: StringWriter[r]): Appendable[r1] = 
+            let StringWriter(_, s1) = s;
+            Appendable(rc, unsafe_cast s1 as ##java.lang.Appendable)
 
-        pub def fromAppendable(s: Appendable[r]): StringWriter[r] = 
-            let Appendable(s1) = s;
-            StringWriter(unsafe_cast s1 as ##java.io.StringWriter) 
+        pub def fromAppendable(rc: Region[r1], s: Appendable[r]): StringWriter[r1] = 
+            let Appendable(_, s1) = s;
+            StringWriter(rc, unsafe_cast s1 as ##java.io.StringWriter) 
     }
 
 }
@@ -55,50 +57,50 @@ namespace Interop/IO/StringWriter {
     use Interop/Lang.CharSequence;
 
 
-    pub def getHH(sr: StringWriter[r]): ##java.io.StringWriter = 
-        let StringWriter(sr1) = sr;
-        sr1
+    pub def getHH(w: StringWriter[r]): ##java.io.StringWriter = 
+        let StringWriter(_, w1) = w;
+        w1
 
 
-    pub def wrapHH(_: Region[r], prim: ##java.io.StringWriter): StringWriter[r] =
-        StringWriter(prim)
+    pub def wrapHH(rc: Region[r], prim: ##java.io.StringWriter): StringWriter[r] =
+        StringWriter(rc, prim)
 
-    pub def new(_: Region[r]): StringWriter[r] \ Write(r) =
+    pub def new(rc: Region[r]): StringWriter[r] \ Write(r) =
         import new java.io.StringWriter(): ##java.io.StringWriter \ r as newStringWriter;
-        newStringWriter() |> StringWriter
+        StringWriter(rc, newStringWriter())
 
-    pub def newWithSize(_: Region[r], initSize: Int32): StringWriter[r] \ Write(r) =
+    pub def newWithSize(rc: Region[r], initSize: Int32): StringWriter[r] \ Write(r) =
         import new java.io.StringWriter(Int32): ##java.io.StringWriter \ r as newStringWriter;
-        newStringWriter(initSize) |> StringWriter
+        StringWriter(rc, newStringWriter(initSize))
 
-    pub def toString(sr: StringWriter[r]): String \ Read(r)=
+    pub def toString(w: StringWriter[r]): String \ Read(r)=
         import java.io.StringWriter.toString(): String \ r;
-        let StringWriter(sr1) = sr;
-        toString(sr1)
+        let StringWriter(_, w1) = w;
+        toString(w1)
 
     /// TODO - getBuffer
 
-    pub def appendChar!(c: Char, sr: StringWriter[r]): StringWriter[r] \ Write(r)=
+    pub def appendChar!(c: Char, w: StringWriter[r]): StringWriter[r] \ Write(r)=
         import java.io.StringWriter.append(Char): ##java.io.StringWriter \ r;
-        let StringWriter(sr1) = sr;
-        append(sr1, c) |> StringWriter 
+        let StringWriter(rc, w1) = w;
+        StringWriter(rc, append(w1, c))
 
 
-    pub def appendCharSequence!(cs: CharSequence[r2], sr: StringWriter[r]): StringWriter[r] \ {Write(r), Read(r2)} =
+    pub def appendCharSequence!(cs: CharSequence[r2], w: StringWriter[r]): StringWriter[r] \ {Write(r), Read(r2)} =
         import java.io.StringWriter.append(##java.lang.CharSequence): ##java.io.StringWriter \ {r, r2};
-        let StringWriter(sr1) = sr;
+        let StringWriter(rc, w1) = w;
         let cs1 = Interop/Lang/CharSequence.getHH(cs);
-        append(sr1, cs1) |> StringWriter
+        StringWriter(rc, append(w1, cs1))
 
 
     pub def appendSubCharSequence!(cs: CharSequence[r2], 
                                     sub: {start = Int32, end = Int32}, 
-                                    sr: StringWriter[r]): Result[String, StringWriter[r]] \ Write(r) =
+                                    w: StringWriter[r]): Result[String, StringWriter[r]] \ Write(r) =
         try {
             import java.io.StringWriter.append(##java.lang.CharSequence, Int32, Int32): ##java.io.StringWriter \ r;
-            let StringWriter(sr1) = sr;
+            let StringWriter(rc, w1) = w;
             let cs1 = Interop/Lang/CharSequence.getHH(cs);
-            append(sr1, cs1, sub.start, sub.end) |> StringWriter |> Ok
+            StringWriter(rc, append(w1, cs1, sub.start, sub.end)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
@@ -106,17 +108,17 @@ namespace Interop/IO/StringWriter {
         }
 
 
-    pub def flush!(sr: StringWriter[r]): Unit \ Write(r)  =
+    pub def flush!(w: StringWriter[r]): Unit \ Write(r)  =
         import java.io.StringWriter.flush(): Unit \ r;
-        let StringWriter(sr1) = sr;
-        flush(sr1) 
+        let StringWriter(_, w1) = w;
+        flush(w1) 
 
 
-    pub def close!(sr: StringWriter[r]): Result[String, Unit] \ Write(r) =
+    pub def close!(w: StringWriter[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.io.StringWriter.close(): Unit \ r;
-            let StringWriter(sr1) = sr;
-            close(sr1) |> Ok
+            let StringWriter(_, w1) = w;
+            close(w1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
@@ -126,11 +128,11 @@ namespace Interop/IO/StringWriter {
 
     pub def writeSubCharArray!(arr: Array[Char, r2], 
                                 sub: {offset = Int32, len = Int32}, 
-                                sr: StringWriter[r]): Result[String, Unit] \ {Read(r2), Write(r)} =
+                                w: StringWriter[r]): Result[String, Unit] \ {Read(r2), Write(r)} =
         try {
             import java.io.StringWriter.write(Array[Char, r2], Int32, Int32): Unit \ {r, r2};
-            let StringWriter(sr1) = sr;
-            write(sr1, arr, sub.offset, sub.len) |> Ok
+            let StringWriter(_, w1) = w;
+            write(w1, arr, sub.offset, sub.len) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
@@ -138,26 +140,26 @@ namespace Interop/IO/StringWriter {
         }
 
 
-    pub def writeCharacter!(i: Int32, sr: StringWriter[r]): Unit \ Write(r) =
+    pub def writeCharacter!(i: Int32, w: StringWriter[r]): Unit \ Write(r) =
         import java.io.StringWriter.write(Int32): Unit \ r;
-        let StringWriter(sr1) = sr;
-        write(sr1, i)
+        let StringWriter(_, w1) = w;
+        write(w1, i)
 
 
-    pub def writeString!(s: String, sr: StringWriter[r]): Unit \ Write(r)=
+    pub def writeString!(s: String, w: StringWriter[r]): Unit \ Write(r)=
         import java.io.StringWriter.write(String): Unit \ r;
-        let StringWriter(sr1) = sr;
-        write(sr1, s)
+        let StringWriter(_, w1) = w;
+        write(w1, s)
             
 
     pub def writeSubstring!(s: String, 
                             offset: {offset = Int32}, 
                             len: {len = Int32}, 
-                            sr: StringWriter[r]): Result[String, Unit] \ Write(r) =
+                            w: StringWriter[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.io.StringWriter.write(String, Int32, Int32): Unit \ r;
-            let StringWriter(sr1) = sr;
-            write(sr1, s, offset.offset, len.len) |> Ok
+            let StringWriter(_, w1) = w;
+            write(w1, s, offset.offset, len.len) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};

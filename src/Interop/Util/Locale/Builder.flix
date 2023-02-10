@@ -16,8 +16,9 @@
 
 namespace Interop/Util/Locale {
 
-    pub enum Builder[_: Region](##java.util.Locale$Builder)
-
+    pub enum Builder[r: Region] { 
+        case Builder(Region[r], ##java.util.Locale$Builder)
+    }
     
 }
 
@@ -29,63 +30,72 @@ namespace Interop/Util/Locale/Builder {
     use Interop/Util.Locale;
     use Interop/Util.Locale.{Locale};
 
+
+    pub def getHH(c: Builder[r]): ##java.util.Locale$Builder = 
+        let Builder(_, c1) = c;
+        c1
+
+
+    pub def wrapHH(rc: Region[r], prim: ##java.util.Locale$Builder): Builder[r] = 
+        Builder(rc, prim)
+
     ///
     /// Returns a new LanguageRange for the supplied `range`.
     ///
-    pub def new(_: Region[r]): Builder[r] \ Write(r) =
-        import new java.util.Locale$Builder(): ##java.util.Locale$Builder \ r as new1;
-        new1() |> Builder
+    pub def new(rc: Region[r]): Builder[r] \ Write(r) =
+        import new java.util.Locale$Builder(): ##java.util.Locale$Builder \ r as newBuilder;
+        Builder(rc, newBuilder())
 
-    pub def setLocale!(loc: Locale, lb: Builder[r]): Result[String, Builder[r]] \ Write(r) =
+    pub def setLocale!(loc: Locale, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
         try {
             import java.util.Locale$Builder.setLocale(##java.util.Locale): ##java.util.Locale$Builder \ r;
-            let Builder(lb1) = lb;
+            let Builder(rc, b1) = b;
             let Locale(loc1) = loc;
-            setLocale(lb1, loc1) |> Builder |> Ok
+            Builder(rc, setLocale(b1, loc1)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
-    pub def setLanguageTag!(tag: String, lb: Builder[r]): Result[String, Builder[r]] \ Write(r) =
+    pub def setLanguageTag!(tag: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
         try {
             import java.util.Locale$Builder.setLanguageTag(String): ##java.util.Locale$Builder \ r;
-            let Builder(lb1) = lb;
-            setLanguageTag(lb1, tag) |> Builder |> Ok
+            let Builder(rc, b1) = b;
+            Builder(rc, setLanguageTag(b1, tag)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
-    pub def setLanguage!(lang: String, lb: Builder[r]): Result[String, Builder[r]] \ Write(r) =
+    pub def setLanguage!(lang: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
         try {
             import java.util.Locale$Builder.setLanguage(String): ##java.util.Locale$Builder \ r;
-            let Builder(lb1) = lb;
-            setLanguage(lb1, lang) |> Builder |> Ok
+            let Builder(rc, b1) = b;
+            Builder(rc, setLanguage(b1, lang)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
-    pub def setScript!(scr: String, lb: Builder[r]): Result[String, Builder[r]] \ Write(r) =
+    pub def setScript!(scr: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
         try {
             import java.util.Locale$Builder.setScript(String): ##java.util.Locale$Builder \ r;
-            let Builder(lb1) = lb;
-            setScript(lb1, scr) |> Builder |> Ok
+            let Builder(rc, b1) = b;
+            Builder(rc, setScript(b1, scr)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
-    pub def setRegion!(rgn: String, lb: Builder[r]): Result[String, Builder[r]] \ Write(r) =
+    pub def setRegion!(rgn: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
         try {
             import java.util.Locale$Builder.setRegion(String): ##java.util.Locale$Builder \ r;
-            let Builder(lb1) = lb;
-            setRegion(lb1, rgn) |> Builder |> Ok
+            let Builder(rc, b1) = b;
+            Builder(rc, setRegion(b1, rgn)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
@@ -93,11 +103,11 @@ namespace Interop/Util/Locale/Builder {
         }
 
 
-    pub def setVariant!(vnt: String, lb: Builder[r]): Result[String, Builder[r]] \ Write(r) =
+    pub def setVariant!(vnt: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
         try {
             import java.util.Locale$Builder.setVariant(String): ##java.util.Locale$Builder \ r;
-            let Builder(lb1) = lb;
-            setVariant(lb1, vnt) |> Builder |> Ok
+            let Builder(rc, b1) = b;
+            Builder(rc, setVariant(b1, vnt)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
@@ -105,22 +115,22 @@ namespace Interop/Util/Locale/Builder {
         }
 
 
-    pub def setExtension!(k: Char, v: String, lb: Builder[r]): Result[String, Builder[r]] \ Write(r) =
+    pub def setExtension!(k: Char, v: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
         try {
             import java.util.Locale$Builder.setExtension(Char, String): ##java.util.Locale$Builder \ r;
-            let Builder(lb1) = lb;
-            setExtension(lb1, k, v) |> Builder |> Ok
+            let Builder(rc, b1) = b;
+            Builder(rc, setExtension(b1, k, v)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
 
-pub def setUnicodeLocaleKeyword!(k: String, ty: String, lb: Builder[r]): Result[String, Builder[r]] \ Write(r) =
+pub def setUnicodeLocaleKeyword!(k: String, ty: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
         try {
             import java.util.Locale$Builder.setUnicodeLocaleKeyword(String, String): ##java.util.Locale$Builder \ r;
-            let Builder(lb1) = lb;
-            setUnicodeLocaleKeyword(lb1, k, ty) |> Builder |> Ok
+            let Builder(rc, b1) = b;
+            Builder(rc, setUnicodeLocaleKeyword(b1, k, ty)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
@@ -128,11 +138,11 @@ pub def setUnicodeLocaleKeyword!(k: String, ty: String, lb: Builder[r]): Result[
         }
 
 
-    pub def addUnicodeLocaleAttribute!(attrib: String, lb: Builder[r]): Result[String, Builder[r]] \ Write(r) =
+    pub def addUnicodeLocaleAttribute!(attrib: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
         try {
             import java.util.Locale$Builder.addUnicodeLocaleAttribute(String): ##java.util.Locale$Builder \ r;
-            let Builder(lb1) = lb;
-            addUnicodeLocaleAttribute(lb1, attrib) |> Builder |> Ok
+            let Builder(rc, b1) = b;
+            Builder(rc, addUnicodeLocaleAttribute(b1, attrib)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
@@ -140,11 +150,11 @@ pub def setUnicodeLocaleKeyword!(k: String, ty: String, lb: Builder[r]): Result[
         }
 
 
-    pub def removeUnicodeLocaleAttribute!(attrib: String, lb: Builder[r]): Result[String, Builder[r]] \ Write(r) =
+    pub def removeUnicodeLocaleAttribute!(attrib: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
         try {
             import java.util.Locale$Builder.removeUnicodeLocaleAttribute(String): ##java.util.Locale$Builder \ r;
-            let Builder(lb1) = lb;
-            removeUnicodeLocaleAttribute(lb1, attrib) |> Builder |> Ok
+            let Builder(rc, b1) = b;
+            Builder(rc, removeUnicodeLocaleAttribute(b1, attrib)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
@@ -152,19 +162,19 @@ pub def setUnicodeLocaleKeyword!(k: String, ty: String, lb: Builder[r]): Result[
         }
 
 
-    pub def clear!(lb: Builder[r]): Builder[r] \ Write(r) =
-        import java.util.Locale$Builder.clear(  ): ##java.util.Locale$Builder \ r;
-        let Builder(lb1) = lb;
-        clear(lb1) |> Builder
+    pub def clear!(b: Builder[r]): Builder[r] \ Write(r) =
+        import java.util.Locale$Builder.clear( ): ##java.util.Locale$Builder \ r;
+        let Builder(rc, b1) = b;
+        Builder(rc, clear(b1))
 
-    pub def clearExtensions!(lb: Builder[r]): Builder[r] \ Write(r) =
+    pub def clearExtensions!(b: Builder[r]): Builder[r] \ Write(r) =
         import java.util.Locale$Builder.clearExtensions(  ): ##java.util.Locale$Builder \ r;
-        let Builder(lb1) = lb;
-        clearExtensions(lb1) |> Builder
+        let Builder(rc, b1) = b;
+        Builder(rc, clearExtensions(b1))
 
-    pub def build(lb: Builder[r]): Locale \ Write(r) =
+    pub def build(b: Builder[r]): Locale \ Write(r) =
         import java.util.Locale$Builder.build(): ##java.util.Locale \ r;
-        let Builder(lb1) = lb;
-        build(lb1) |> Locale
+        let Builder(_, b1) = b;
+        Locale(build(b1))
 
 }   
