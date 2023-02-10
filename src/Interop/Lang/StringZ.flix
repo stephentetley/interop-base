@@ -27,46 +27,30 @@ namespace Interop/Lang/StringZ {
         newString(arr)
 
     pub def fromSubarray(offset: {offset = Int32}, len: {len = Int32}, arr: Array[Int8, r]): Result[String, String] \ Read(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import new java.lang.String(Array[Int8, r], Int32, Int32): String \ r as newString;
-            newString(arr, offset.offset, len.len) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            newString(arr, offset.offset, len.len)
+        })
 
     pub def fromSubarrayWithCharsetName(offset: {offset = Int32}, len: {len = Int32}, charsetName: String, arr: Array[Int8, r]): Result[String, String] \ Read(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import new java.lang.String(Array[Int8, r], Int32, Int32, String): String \ r as newString;
-            newString(arr, offset.offset, len.len, charsetName) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            newString(arr, offset.offset, len.len, charsetName)
+        })
 
     pub def fromSubarrayWithCharset(offset: {offset = Int32}, len: {len = Int32}, cs: Charset, arr: Array[Int8, r]): Result[String, String] \ Read(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import new java.lang.String(Array[Int8, r], Int32, Int32, ##java.nio.charset.Charset): String \ r as newString;
             let Charset(cs1) = cs;
-            newString(arr, offset.offset, len.len, cs1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            newString(arr, offset.offset, len.len, cs1)
+        })
 
 
     pub def fromArrayWithCharsetName(charsetName: String, arr: Array[Int8, r]): Result[String, String] \ Read(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import new java.lang.String(Array[Int8, r], String): String \ r as newString;
-            newString(arr, charsetName) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            newString(arr, charsetName)
+        })
 
     pub def fromArrayWithCharset(cs: Charset, arr: Array[Int8, r]): String \ Read(r) = 
         import new java.lang.String(Array[Int8, r], ##java.nio.charset.Charset): String \ r as newString;
@@ -78,24 +62,16 @@ namespace Interop/Lang/StringZ {
         newString(arr)
 
     pub def fromCharSubarray(offset: {offset = Int32}, len: {len = Int32}, arr: Array[Char, r]): Result[String, String] \ Read(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import new java.lang.String(Array[Char, r], Int32, Int32): String \ r as newString;
-            newString(arr, offset.offset, len.len) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            newString(arr, offset.offset, len.len)
+        })
 
     pub def fromCodePointSubarray(offset: {offset = Int32}, len: {len = Int32}, arr: Array[Int32, r]): Result[String, String] \ Read(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import new java.lang.String(Array[Int32, r], Int32, Int32): String \ r as newString;
-            newString(arr, offset.offset, len.len) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            newString(arr, offset.offset, len.len)
+        })
 
     pub def chars(rc: Region[r], s: String): IntStream[r] \ Write(r) = 
         import java.lang.String.chars(): ##java.util.stream.IntStream \ r ;

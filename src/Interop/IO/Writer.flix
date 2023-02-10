@@ -30,12 +30,12 @@ namespace Interop/IO {
 
 
     instance Interop/Lang.ImpAppendable[Writer] {
-        pub def toAppendable(rc: Region[r1], s: Writer[r]): Appendable[r1] = 
+        pub def toAppendable(_: Region[r1], s: Writer[r]): Appendable[r1] = 
             let Writer(s1) = s;
-            Appendable(rc, unsafe_cast s1 as ##java.lang.Appendable)
+            Appendable(unsafe_cast s1 as ##java.lang.Appendable)
 
         pub def fromAppendable(_: Region[r1], s: Appendable[r]): Writer[r1] = 
-            let Appendable(_, s1) = s;
+            let Appendable(s1) = s;
             Writer(unsafe_cast s1 as ##java.io.Writer) 
     }
 
