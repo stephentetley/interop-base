@@ -19,7 +19,9 @@ namespace Interop/Util {
     ///
     /// Represents a Java LongSummaryStatistics.
     /// Mutable - see combine
-    pub enum LongSummaryStatistics[_: Region](##java.util.LongSummaryStatistics)
+    pub enum LongSummaryStatistics[r: Region] { 
+        case LongSummaryStatistics(Region[r], ##java.util.LongSummaryStatistics)
+    }
 
 
 }
@@ -32,19 +34,22 @@ namespace Interop/Util/LongSummaryStatistics {
     use Interop/Flix.Marshal
 
     pub def getHH(ss: LongSummaryStatistics[r]): ##java.util.LongSummaryStatistics = 
-        let LongSummaryStatistics(ss1) = ss;
+        let LongSummaryStatistics(_, ss1) = ss;
         ss1
-    
+
+    pub def wrapHH(rc: Region[r], prim: ##java.util.LongSummaryStatistics): LongSummaryStatistics[r] = 
+        LongSummaryStatistics(rc, prim)
+
     pub def toString(ss: LongSummaryStatistics[r]): String \ { Read(r) } =
         import java.util.LongSummaryStatistics.toString(): String \ r;
-        let LongSummaryStatistics(ss1) = ss;
+        let LongSummaryStatistics(_, ss1) = ss;
         ss1 |> toString
 
     pub def combine!(i: LongSummaryStatistics[r], j: LongSummaryStatistics[r]): Result[String, Unit] \ { Read(r), Write(r) } =
         try {
             import java.util.LongSummaryStatistics.combine(##java.util.LongSummaryStatistics): Unit \ r;
-            let LongSummaryStatistics(i1) = i;
-            let LongSummaryStatistics(j1) = j;
+            let LongSummaryStatistics(_, i1) = i;
+            let LongSummaryStatistics(_, j1) = j;
             combine(i1, j1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -54,27 +59,27 @@ namespace Interop/Util/LongSummaryStatistics {
 
     pub def getCount(ss: LongSummaryStatistics[r]): Int64 \ { Read(r) } =
         import java.util.LongSummaryStatistics.getCount(): Int64 \ r;
-        let LongSummaryStatistics(ss1) = ss;
+        let LongSummaryStatistics(_, ss1) = ss;
         ss1 |> getCount
     
     pub def getSum(ss: LongSummaryStatistics[r]): Int64 \ { Read(r) } =
         import java.util.LongSummaryStatistics.getSum(): Int64 \ r;
-        let LongSummaryStatistics(ss1) = ss;
+        let LongSummaryStatistics(_, ss1) = ss;
         ss1 |> getSum    
 
     pub def getMin(ss: LongSummaryStatistics[r]): Int64 \ { Read(r) } =
         import java.util.LongSummaryStatistics.getMin(): Int64 \ r;
-        let LongSummaryStatistics(ss1) = ss;
+        let LongSummaryStatistics(_, ss1) = ss;
         ss1 |> getMin
 
     pub def getMax(ss: LongSummaryStatistics[r]): Int64 \ { Read(r) } =
         import java.util.LongSummaryStatistics.getMax(): Int64 \ r;
-        let LongSummaryStatistics(ss1) = ss;
+        let LongSummaryStatistics(_, ss1) = ss;
         ss1 |> getMax
 
     pub def getAverage(ss: LongSummaryStatistics[r]): Float64 \ { Read(r) } =
         import java.util.LongSummaryStatistics.getAverage(): Float64 \ r;
-        let LongSummaryStatistics(ss1) = ss;
+        let LongSummaryStatistics(_, ss1) = ss;
         ss1 |> getAverage
 
 }

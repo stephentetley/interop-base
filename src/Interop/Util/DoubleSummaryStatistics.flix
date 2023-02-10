@@ -19,8 +19,9 @@ namespace Interop/Util {
     ///
     /// Represents a Java DoubleSummaryStatistics.
     /// Mutable - see combine
-    pub enum DoubleSummaryStatistics[_: Region](##java.util.DoubleSummaryStatistics)
-
+    pub enum DoubleSummaryStatistics[r: Region] { 
+        case DoubleSummaryStatistics(Region[r], ##java.util.DoubleSummaryStatistics)
+    }
 
 }
 
@@ -31,21 +32,23 @@ namespace Interop/Util/DoubleSummaryStatistics {
     use Interop/Util.DoubleSummaryStatistics.{DoubleSummaryStatistics}
     use Interop/Flix.Marshal
 
-    pub def getHH(o: DoubleSummaryStatistics[r]): ##java.util.DoubleSummaryStatistics = 
-        let DoubleSummaryStatistics(o1) = o;
-        o1
+    pub def getHH(ss: DoubleSummaryStatistics[r]): ##java.util.DoubleSummaryStatistics = 
+        let DoubleSummaryStatistics(_, ss1) = ss;
+        ss1
     
+    pub def wrapHH(rc: Region[r], prim: ##java.util.DoubleSummaryStatistics): DoubleSummaryStatistics[r] = 
+        DoubleSummaryStatistics(rc, prim)
 
     pub def toString(ss: DoubleSummaryStatistics[r]): String \ { Read(r) } =
         import java.util.DoubleSummaryStatistics.toString(): String \ r;
-        let DoubleSummaryStatistics(ss1) = ss;
+        let DoubleSummaryStatistics(_, ss1) = ss;
         ss1 |> toString
 
     pub def combine!(i: DoubleSummaryStatistics[r], j: DoubleSummaryStatistics[r]): Result[String, Unit] \ {Read(r), Write(r)} =
         try {
             import java.util.DoubleSummaryStatistics.combine(##java.util.DoubleSummaryStatistics): Unit \ r;
-            let DoubleSummaryStatistics(i1) = i;
-            let DoubleSummaryStatistics(j1) = j;
+            let DoubleSummaryStatistics(_, i1) = i;
+            let DoubleSummaryStatistics(_, j1) = j;
             combine(i1, j1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -55,27 +58,27 @@ namespace Interop/Util/DoubleSummaryStatistics {
 
     pub def getCount(ss: DoubleSummaryStatistics[r]): Int64 \ { Read(r) } =
         import java.util.DoubleSummaryStatistics.getCount(): Int64 \ r;
-        let DoubleSummaryStatistics(ss1) = ss;
+        let DoubleSummaryStatistics(_, ss1) = ss;
         ss1 |> getCount
     
     pub def getSum(ss: DoubleSummaryStatistics[r]): Float64 \ { Read(r) } =
         import java.util.DoubleSummaryStatistics.getSum(): Float64 \ r;
-        let DoubleSummaryStatistics(ss1) = ss;
+        let DoubleSummaryStatistics(_, ss1) = ss;
         ss1 |> getSum    
 
     pub def getMin(ss: DoubleSummaryStatistics[r]): Float64 \ { Read(r) } =
         import java.util.DoubleSummaryStatistics.getMin(): Float64 \ r;
-        let DoubleSummaryStatistics(ss1) = ss;
+        let DoubleSummaryStatistics(_, ss1) = ss;
         ss1 |> getMin
 
     pub def getMax(ss: DoubleSummaryStatistics[r]): Float64 \ { Read(r) } =
         import java.util.DoubleSummaryStatistics.getMax(): Float64 \ r;
-        let DoubleSummaryStatistics(ss1) = ss;
+        let DoubleSummaryStatistics(_, ss1) = ss;
         ss1 |> getMax
 
     pub def getAverage(ss: DoubleSummaryStatistics[r]): Float64 \ { Read(r) } =
         import java.util.DoubleSummaryStatistics.getAverage(): Float64 \ r;
-        let DoubleSummaryStatistics(ss1) = ss;
+        let DoubleSummaryStatistics(_, ss1) = ss;
         ss1 |> getAverage
 
 }

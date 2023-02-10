@@ -54,7 +54,8 @@ namespace Interop/Util/Stream/IntStream {
         let IntStream(_, x1) = x;
         x1
 
-    pub def wrapHH(rc: Region[r], prim: ##java.util.stream.IntStream): IntStream[r] = IntStream(rc, prim)
+    pub def wrapHH(rc: Region[r], prim: ##java.util.stream.IntStream): IntStream[r] = 
+        IntStream(rc, prim)
 
     pub def intStreamIterator(rc: Region[r1], s: IntStream[r]): Iterator[Int32, r1, r1] \ Read(r) =
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ r;
@@ -154,10 +155,10 @@ namespace Interop/Util/Stream/IntStream {
         let IntStream(_, s1) = s;
         average(s1) |> OptionalDouble
 
-    pub def summaryStatistics(_: Region[r1], s: IntStream[r]): IntSummaryStatistics[r1] \ { Read(r), Write(r1) } = 
+    pub def summaryStatistics(rc: Region[r1], s: IntStream[r]): IntSummaryStatistics[r1] \ { Read(r), Write(r1) } = 
         import java.util.stream.IntStream.summaryStatistics(): ##java.util.IntSummaryStatistics \ { Read(r), Write(r1) };
         let IntStream(_, s1) = s;
-        summaryStatistics(s1) |> IntSummaryStatistics
+        IntSummaryStatistics(rc, summaryStatistics(s1))
 
     pub def anyMatch(f: Int32 -> Bool \ ef, s: IntStream[r]): Bool \ {Read(r), ef} = 
         import java.util.stream.IntStream.anyMatch(IntPredicate): Bool \ {r, ef};
