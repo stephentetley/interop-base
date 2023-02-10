@@ -97,16 +97,12 @@ namespace Interop/NIO/File/Path {
     /// Returns a new FilePath.
     ///
     pub def of(s: String, l: List[String]): Result[String, Path] = region rc {
-        try {
+        Interop/Flix/Util.try(_ -> {
             // Currently we have to use a wrapper due to java.nio.file.Path.of using varargs 
             import static flixinterop.nio.file.Pathz.ofList(String, ##java.util.List): ##java.nio.file.Path \ {Read(rc)} as of1;
             let ls1 = Interop/Util/ArrayList.fromFoldable(rc, l) |> Interop/Util/ListZ.toListHH(rc);
-            Path(of1(s, ls1)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Path(of1(s, ls1))
+        })
     }
 
 
@@ -119,15 +115,11 @@ namespace Interop/NIO/File/Path {
     /// If `path` is a relative path `toAbsolutePath` resolves the path in a system specific manner.
     /// Should this be Impure?
     pub def toAbsolutePath(path: Path): Result[String, Path] =        
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.nio.file.Path.toAbsolutePath(): ##java.nio.file.Path \ {};
             let Path(p1) = path;
-            toAbsolutePath(p1) |> Path |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            toAbsolutePath(p1) |> Path
+        })
 
 
     pub def isAbsolute(path: Path): Bool =
@@ -195,25 +187,17 @@ namespace Interop/NIO/File/Path {
 
 
     pub def getNameAt(ix: Int32, path: Path): Result[String, Path] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.nio.file.Path.getName(Int32): ##java.nio.file.Path \ {};
             let Path(path1) = path;
-            getName(path1, ix) |> Path |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            getName(path1, ix) |> Path
+        })
 
-    pub def toFile(rc: Region[r], path: Path): Result[String, File[r]] \ Write(r) =
-        try {
+    pub def toFile(_: Region[r], path: Path): Result[String, File[r]] \ Write(r) =
+        Interop/Flix/Util.try(_ -> {
             import java.nio.file.Path.toFile(): ##java.io.File \ r;
             let Path(path1) = path;
-            File(rc, toFile(path1)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            File(toFile(path1))
+        })
 
 }

@@ -159,15 +159,11 @@ namespace Interop/Text/CompactNumberFormat {
         getRoundingMode(nf1) |> RoundingMode
 
     pub def setRoundingMode!(mode: RoundingMode, nf: CompactNumberFormat[r]): Result[String, Unit] \ Write(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.text.CompactNumberFormat.setRoundingMode(##java.math.RoundingMode): Unit \ r;
             let CompactNumberFormat(nf1) = nf;
             let RoundingMode(mode1) = mode;
-            setRoundingMode(nf1, mode1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            setRoundingMode(nf1, mode1)
+        })
 
 }

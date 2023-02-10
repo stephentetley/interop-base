@@ -20,18 +20,17 @@ namespace Interop/IO {
     use Interop/IO.Reader.{Reader}
 
     // StringReader has a read pointer so it is mutable
-    pub enum StringReader[r: Region] { 
-        case StringReader(Region[r], ##java.io.StringReader)
-    }
+    pub enum StringReader[_: Region](##java.io.StringReader)
+
 
     instance SubReader[StringReader] {
-        pub def toReader(rc: Region[r1], s: StringReader[r]): Reader[r1] = 
-            let StringReader(_, s1) = s;
-            Reader(rc, unsafe_cast s1 as ##java.io.Reader)
+        pub def toReader(_: Region[r1], s: StringReader[r]): Reader[r1] = 
+            let StringReader(s1) = s;
+            Reader(unsafe_cast s1 as ##java.io.Reader)
 
-        pub def fromReader(rc: Region[r1], s: Reader[r]): StringReader[r1] = 
-            let Reader(_, s1) = s;
-            StringReader(rc, unsafe_cast s1 as ##java.io.StringReader) 
+        pub def fromReader(_: Region[r1], s: Reader[r]): StringReader[r1] = 
+            let Reader(s1) = s;
+            StringReader(unsafe_cast s1 as ##java.io.StringReader) 
     }
 
 
@@ -46,62 +45,50 @@ namespace Interop/IO/StringReader {
 
 
     pub def getHH(rd: StringReader[r]): ##java.io.StringReader = 
-        let StringReader(_, rd1) = rd;
+        let StringReader(rd1) = rd;
         rd1
 
 
-    pub def wrapHH(rc: Region[r], prim: ##java.io.StringReader): StringReader[r] =
-        StringReader(rc, prim)
+    pub def wrapHH(_: Region[r], prim: ##java.io.StringReader): StringReader[r] =
+        StringReader(prim)
 
-    pub def newStringReader(rc: Region[r], s: String): StringReader[r] \ Write(r) =
+    pub def newStringReader(_: Region[r], s: String): StringReader[r] \ Write(r) =
         import new java.io.StringReader(String): ##java.io.StringReader \ r as newStringReader;
-        StringReader(rc, newStringReader(s))
+        StringReader(newStringReader(s))
 
 
     pub def close!(rd: StringReader[r]): Result[String, Unit] \ Write(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.io.StringReader.close(): Unit \ r;
-            let StringReader(_, rd1) = rd;
-            close(rd1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            let StringReader(rd1) = rd;
+            close(rd1)
+        })
 
 
     pub def mark!(limit: Int32, rd: StringReader[r]): Result[String, Unit] \ Write(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.io.StringReader.mark(Int32): Unit \ r;
-            let StringReader(_, rd1) = rd;
-            mark(rd1, limit) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            let StringReader(rd1) = rd;
+            mark(rd1, limit)
+        })
 
     pub def markSupported(rd: StringReader[r]): Bool \ Read(r) = 
         import java.io.StringReader.markSupported(): Bool \ r;
-        let StringReader(_, rd1) = rd;
+        let StringReader(rd1) = rd;
         markSupported(rd1)
 
 
 
     /// None indicates end-of-stream.
     pub def read!(rd: StringReader[r]): Result[String, Option[Int32]] \ Read(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.io.StringReader.read(): Int32 \ r;
-            let StringReader(_, rd1) = rd;
+            let StringReader(rd1) = rd;
             match read(rd1) { 
-                case i if i < 0 => Ok(None)
-                case i          => Ok(Some(i))
+                case i if i < 0 => None
+                case i          => Some(i)
             }
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+        })
 
 
 
