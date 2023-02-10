@@ -18,10 +18,9 @@ namespace Interop/Text {
     
     /// Abstract Class
     /// Represents a NumberFormat.
-    /// Mutable
-    pub enum NumberFormat[r: Region] {
-        case NumberFormat(Region[r], ##java.text.NumberFormat)
-    }
+    /// Mutable, no alloc
+    pub enum NumberFormat[_: Region](##java.text.NumberFormat)
+
     
     pub class SubNumberFormat[t: Region -> Type] {
         pub def toNumberFormat[r: Region, r1: Region](rc: Region[r1], s: t[r]): NumberFormat[r1]
@@ -47,25 +46,25 @@ namespace Interop/Text/NumberFormat {
     use Interop/Util.Locale.{Locale};
 
     pub def getHH(nf: NumberFormat[r]): ##java.text.NumberFormat = 
-        let NumberFormat(_, nf1) = nf;
+        let NumberFormat(nf1) = nf;
         nf1
 
-    pub def wrapHH(rc: Region[r], prim: ##java.text.NumberFormat): NumberFormat[r] = 
-        NumberFormat(rc, prim)
+    pub def wrapHH(_: Region[r], prim: ##java.text.NumberFormat): NumberFormat[r] = 
+        NumberFormat(prim)
 
 
     // No constructor as we will not be creating subclasses
 
     pub def equals(x: NumberFormat[r], y: NumberFormat[r]): Bool =
         import java.text.NumberFormat.equals(##java.lang.Object): Bool \ {};
-        let NumberFormat(_, x1) = x;
-        let NumberFormat(_, y1) = y;
+        let NumberFormat(x1) = x;
+        let NumberFormat(y1) = y;
         equals(x1, unsafe_cast y1 as ##java.lang.Object)
 
 
     pub def hashCode(nf: NumberFormat[r]): Int32 =
         import java.text.NumberFormat.hashCode(): Int32 \ {};
-        let NumberFormat(_, nf1) = nf;
+        let NumberFormat(nf1) = nf;
         hashCode(nf1)
 
 
@@ -75,42 +74,30 @@ namespace Interop/Text/NumberFormat {
     //     (clone(nf1) as ##java.text.NumberFormat) |> NumberFormat
 
 
-    pub def getInstance(rc: Region[r]): NumberFormat[r] \ {IO, Write(r)} = 
+    pub def getInstance(_: Region[r]): NumberFormat[r] \ {IO, Write(r)} = 
         import static java.text.NumberFormat.getInstance(): ##java.text.NumberFormat \ {IO, r};
-        NumberFormat(rc, getInstance()) 
+        NumberFormat(getInstance()) 
 
     pub def parse(s: String, nf: NumberFormat[r]): Result[String, Number] \ Read(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.text.NumberFormat.parse(String): ##java.lang.Number \ r;
-            let NumberFormat(_, nf1) = nf;
-            Number(parse(nf1, s)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            let NumberFormat(nf1) = nf;
+            Number(parse(nf1, s))
+        })
 
     pub def formatInt64(n: Int64, nf: NumberFormat[r]): Result[String, String] \ Read(r)= 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.text.NumberFormat.format(Int64): String \ r;
-            let NumberFormat(_, nf1) = nf;
-            format(nf1, n) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            let NumberFormat(nf1) = nf;
+            format(nf1, n)
+        })
 
     pub def formatFloat64(d: Float64, nf: NumberFormat[r]): Result[String, String] \ Read(r) =  
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.text.NumberFormat.format(Float64): String \ r;
-            let NumberFormat(_, nf1) = nf;
-            format(nf1, d) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            let NumberFormat(nf1) = nf;
+            format(nf1, d)
+        })
 
 
     pub def getAvailableLocales(): List[Locale] \ IO = region r {
@@ -120,97 +107,85 @@ namespace Interop/Text/NumberFormat {
     }
    
     pub def getCurrency(nf: NumberFormat[r]): Result[String, Currency] \ Write(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.text.NumberFormat.getCurrency(): ##java.util.Currency \ r;
-            let NumberFormat(_, nf1) = nf;
-            getCurrency(nf1) |> Currency |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            let NumberFormat(nf1) = nf;
+            getCurrency(nf1) |> Currency
+        })
    
     pub def setCurrency!(c: Currency, nf: NumberFormat[r]): Result[String, Unit] \ Write(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.text.NumberFormat.setCurrency(##java.util.Currency): Unit \ r;
-            let NumberFormat(_, nf1) = nf;
+            let NumberFormat(nf1) = nf;
             let Currency(c1) = c;
-            setCurrency(nf1, c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            setCurrency(nf1, c1)
+        })
 
 
     pub def isGroupingUsed(nf: NumberFormat[r]): Bool \ Read(r) = 
         import java.text.NumberFormat.isGroupingUsed(): Bool \ r;
-        let NumberFormat(_, nf1) = nf;
+        let NumberFormat(nf1) = nf;
         isGroupingUsed(nf1)
 
     pub def setGroupingUsed!(used: Bool, nf: NumberFormat[r]): Unit \ Write(r) = 
         import java.text.NumberFormat.setGroupingUsed(Bool): Unit \ r;
-        let NumberFormat(_, nf1) = nf;
+        let NumberFormat(nf1) = nf;
         setGroupingUsed(nf1, used)
 
 
     pub def getMaximumIntegerDigits(nf: NumberFormat[r]): Int32 \ Read(r) = 
         import java.text.NumberFormat.getMaximumIntegerDigits(): Int32 \ r;
-        let NumberFormat(_, nf1) = nf;
+        let NumberFormat(nf1) = nf;
         getMaximumIntegerDigits(nf1)
 
     pub def setMaximumIntegerDigits!(n: Int32, nf: NumberFormat[r]): Unit \ Write(r) = 
         import java.text.NumberFormat.setMaximumIntegerDigits(Int32): Unit \ r;
-        let NumberFormat(_, nf1) = nf;
+        let NumberFormat(nf1) = nf;
         setMaximumIntegerDigits(nf1, n)
 
     pub def getMinimumIntegerDigits(nf: NumberFormat[r]): Int32 \ Read(r) = 
         import java.text.NumberFormat.getMinimumIntegerDigits(): Int32 \ r;
-        let NumberFormat(_, nf1) = nf;
+        let NumberFormat(nf1) = nf;
         getMinimumIntegerDigits(nf1)
 
     pub def setMinimumIntegerDigits!(n: Int32, nf: NumberFormat[r]): Unit \ Write(r) = 
         import java.text.NumberFormat.setMinimumIntegerDigits(Int32): Unit \ r;
-        let NumberFormat(_, nf1) = nf;
+        let NumberFormat(nf1) = nf;
         setMinimumIntegerDigits(nf1, n)
 
 
     pub def getMaximumFractionDigits(nf: NumberFormat[r]): Int32 \ Read(r) = 
         import java.text.NumberFormat.getMaximumFractionDigits(): Int32 \ r;
-        let NumberFormat(_, nf1) = nf;
+        let NumberFormat(nf1) = nf;
         getMaximumFractionDigits(nf1)
 
     pub def setMaximumFractionDigits!(n: Int32, nf: NumberFormat[r]): Unit \ Write(r) = 
         import java.text.NumberFormat.setMaximumFractionDigits(Int32): Unit \ r;
-        let NumberFormat(_, nf1) = nf;
+        let NumberFormat(nf1) = nf;
         setMaximumFractionDigits(nf1, n)
 
     pub def getMinimumFractionDigits(nf: NumberFormat[r]): Int32 \ Read(r) = 
         import java.text.NumberFormat.getMinimumFractionDigits(): Int32 \ r;
-        let NumberFormat(_, nf1) = nf;
+        let NumberFormat(nf1) = nf;
         getMinimumFractionDigits(nf1)
 
     pub def setMinimumFractionDigits!(n: Int32, nf: NumberFormat[r]): Unit \ Write(r) = 
         import java.text.NumberFormat.setMinimumFractionDigits(Int32): Unit \ r;
-        let NumberFormat(_, nf1) = nf;
+        let NumberFormat(nf1) = nf;
         setMinimumFractionDigits(nf1, n)
 
 
     pub def getRoundingMode(nf: NumberFormat[r]): RoundingMode \ Read(r) = 
         import java.text.NumberFormat.getRoundingMode(): ##java.math.RoundingMode \ r;
-        let NumberFormat(_, nf1) = nf;
+        let NumberFormat(nf1) = nf;
         getRoundingMode(nf1) |> RoundingMode 
    
     pub def setRoundingMode!(mode: RoundingMode, nf: NumberFormat[r]): Result[String, Unit] \ Write(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.text.NumberFormat.setRoundingMode(##java.math.RoundingMode): Unit \ r;
-            let NumberFormat(_, nf1) = nf;
+            let NumberFormat(nf1) = nf;
             let RoundingMode(mode1) = mode;
-            setRoundingMode(nf1, mode1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            setRoundingMode(nf1, mode1)
+        })
 
 }
