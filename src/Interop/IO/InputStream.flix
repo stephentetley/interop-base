@@ -18,9 +18,9 @@ namespace Interop/IO {
 
 
     /// Abstract class...
-    pub enum InputStream[r: Region] { 
-        case InputStream(Region[r], ##java.io.InputStream)
-    }
+    /// Mutable, no alloc
+    pub enum InputStream[_: Region](##java.io.InputStream)
+
 
     pub class SubInputStream[t: Region -> Type] {
         pub def toInputStream[r: Region, r1: Region](rc: Region[r1], s: t[r]): InputStream[r1]
@@ -36,25 +36,21 @@ namespace Interop/IO/InputStream {
     use Interop/IO.InputStream.{InputStream};
 
     pub def getHH(s: InputStream[r]): ##java.io.InputStream = 
-        let InputStream(_, s1) = s;
+        let InputStream(s1) = s;
         s1
 
-    pub def wrapHH(rc: Region[r], prim: ##java.io.InputStream): InputStream[r] = 
-        InputStream(rc, prim)
+    pub def wrapHH(_: Region[r], prim: ##java.io.InputStream): InputStream[r] = 
+        InputStream(prim)
 
 
 
 
     pub def readAllBytes(rc: Region[r1], s: InputStream[r]): Result[String, Array[Int8, r1]] \ { Read(r), Write(r1) } = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.io.InputStream.readAllBytes(): Array[Int8, r1] \ {r, r1};
-            let InputStream(_, s1) = s;
+            let InputStream(s1) = s;
             let _ = Array.new(rc);
-            readAllBytes(s1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            readAllBytes(s1)
+        })
 
 }
