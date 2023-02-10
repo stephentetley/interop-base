@@ -205,11 +205,11 @@ namespace Interop/NIO/File/Path {
                 Err(getMessage(ex))
         }
 
-    pub def toFile(_: Region[r], path: Path): Result[String, File[r]] \ Write(r) =
+    pub def toFile(rc: Region[r], path: Path): Result[String, File[r]] \ Write(r) =
         try {
             import java.nio.file.Path.toFile(): ##java.io.File \ r;
             let Path(path1) = path;
-            toFile(path1) |> File |> Ok
+            File(rc, toFile(path1)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};

@@ -16,19 +16,21 @@
 
 namespace Interop/IO {
 
-    use Interop/IO.OutputStream;
-    use Interop/IO.OutputStream.{OutputStream};
+    use Interop/IO.OutputStream
+    use Interop/IO.OutputStream.{OutputStream}
 
-    pub enum FileOutputStream[_: Region](##java.io.FileOutputStream)
+    pub enum FileOutputStream[r: Region] { 
+        case FileOutputStream(Region[r], ##java.io.FileOutputStream)
+    }
 
     instance Interop/IO.SubOutputStream[FileOutputStream] {
-        pub def toOutputStream(s: FileOutputStream[r]): OutputStream[r] = 
-            let FileOutputStream(s1) = s;
-            OutputStream(unsafe_cast s1 as ##java.io.OutputStream)
+        pub def toOutputStream(rc: Region[r1], s: FileOutputStream[r]): OutputStream[r1] = 
+            let FileOutputStream(_, s1) = s;
+            OutputStream(rc, unsafe_cast s1 as ##java.io.OutputStream)
 
-        pub def fromOutputStream(s: OutputStream[r]): FileOutputStream[r] = 
-            let OutputStream(s1) = s;
-            FileOutputStream(unsafe_cast s1 as ##java.io.FileOutputStream) 
+        pub def fromOutputStream(rc: Region[r1], s: OutputStream[r]): FileOutputStream[r1] = 
+            let OutputStream(_, s1) = s;
+            FileOutputStream(rc, unsafe_cast s1 as ##java.io.FileOutputStream) 
     }
 
 
@@ -36,34 +38,34 @@ namespace Interop/IO {
 
 namespace Interop/IO/FileOutputStream {
 
-    use Interop/IO.FileOutputStream;
-    use Interop/IO.FileOutputStream.{FileOutputStream};
-    use Interop/IO.File;
-    use Interop/IO.File.{File};
+    use Interop/IO.FileOutputStream
+    use Interop/IO.FileOutputStream.{FileOutputStream}
+    use Interop/IO.File
+    use Interop/IO.File.{File}
 
-    pub def getHH(ous: FileOutputStream[r]): ##java.io.FileOutputStream = 
-        let FileOutputStream(ous1) = ous;
-        ous1
+    pub def getHH(s: FileOutputStream[r]): ##java.io.FileOutputStream = 
+        let FileOutputStream(_, s1) = s;
+        s1
 
-    pub def wrapHH(_: Region[r], prim: ##java.io.FileOutputStream): FileOutputStream[r] =
-        FileOutputStream(prim)
+    pub def wrapHH(rc: Region[r], prim: ##java.io.FileOutputStream): FileOutputStream[r] =
+        FileOutputStream(rc, prim)
 
 
-    pub def newWithFile(file: File[r]): Result[String, FileOutputStream[r]] \ {Write(r), IO} = 
+    pub def newWithFile(rc: Region[r1], file: File[r]): Result[String, FileOutputStream[r1]] \ {Read(r), Write(r1), IO} = 
         try {
-            import new java.io.FileOutputStream(##java.io.File): ##java.io.FileOutputStream \ IO as newOutputStream;
+            import new java.io.FileOutputStream(##java.io.File): ##java.io.FileOutputStream \ {Read(r), Write(r1), IO} as newOutputStream;
             let file1 = Interop/IO/File.getHH(file);
-            newOutputStream(file1) |> FileOutputStream |> Ok
+            FileOutputStream(rc, newOutputStream(file1)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ r;
                 Err(getMessage(ex))
         }
 
-    pub def newWithPath(path: String): Result[String, FileOutputStream[r]] \ {Write(r), IO} = 
+    pub def newWithPath(rc: Region[r], path: String): Result[String, FileOutputStream[r]] \ { Write(r), IO } = 
         try {
-            import new java.io.FileOutputStream(String): ##java.io.FileOutputStream \ IO as newOutputStream;
-            newOutputStream(path) |> FileOutputStream |> Ok
+            import new java.io.FileOutputStream(String): ##java.io.FileOutputStream \ {r, IO} as newOutputStream;
+            FileOutputStream(rc, newOutputStream(path)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String & r;
@@ -72,11 +74,11 @@ namespace Interop/IO/FileOutputStream {
 
 
 
-    pub def write!(b: Int32, fos: FileOutputStream[r]): Result[String, Unit] \ IO = 
+    pub def write!(b: Int32, s: FileOutputStream[r]): Result[String, Unit] \ { Write(r), IO } = 
         try {
-            import java.io.FileOutputStream.write(Int32): Unit \ { IO };
-            let FileOutputStream(fos1) = fos;
-            write(fos1, b) |> Ok
+            import java.io.FileOutputStream.write(Int32): Unit \ { r, IO };
+            let FileOutputStream(_, s1) = s;
+            write(s1, b) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
@@ -84,11 +86,11 @@ namespace Interop/IO/FileOutputStream {
         }
 
 
-    pub def close!(fos: FileOutputStream[r]): Result[String, Unit] \ IO = 
+    pub def close!(s: FileOutputStream[r]): Result[String, Unit] \ { Write(r), IO } = 
         try {
-            import java.io.FileOutputStream.close(): Unit \ { IO };
-            let FileOutputStream(fos1) = fos;
-            close(fos1) |> Ok
+            import java.io.FileOutputStream.close(): Unit \ { r, IO };
+            let FileOutputStream(_, s1) = s;
+            close(s1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};

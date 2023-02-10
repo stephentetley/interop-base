@@ -30,31 +30,29 @@ namespace Interop/NIO/File/Files {
     use Interop/IO.OutputStream;
     use Interop/IO.OutputStream.{OutputStream};
 
-    pub def newInputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, InputStream[r]] \ IO = region rc {
+    pub def newInputStream(rc: Region[r], path: Path, opts: List[OpenOption]): Result[String, InputStream[r]] \ IO =
         try {
             import static flixinterop.nio.file.Filesz.newInputStream(##java.nio.file.Path, ##java.util.List): ##java.io.InputStream \ {IO, r};
             let Path(path1) = path;
-            let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ListZ.toListHH(rc);
-            newInputStream(path1, opts1)|> InputStream |> Ok
+            let opts1 = region r1 { Interop/Util/ArrayList.fromFoldable(r1, opts) |> Interop/Util/ListZ.toListHH(r1)};
+            InputStream(rc, newInputStream(path1, opts1)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
-    }
 
-    pub def newOutputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, OutputStream[r]] \ {IO, Write(r)} = region rc {
+    pub def newOutputStream(rc: Region[r], path: Path, opts: List[OpenOption]): Result[String, OutputStream[r]] \ {IO, Write(r)} =
         try {
             import static flixinterop.nio.file.Filesz.newOutputStream(##java.nio.file.Path, ##java.util.List): ##java.io.OutputStream \ {IO, r};
             let Path(path1) = path;
-            let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ListZ.toListHH(rc);
-            newOutputStream(path1, opts1)|> OutputStream |> Ok
+            let opts1 = region r1 { Interop/Util/ArrayList.fromFoldable(r1, opts) |> Interop/Util/ListZ.toListHH(r1)};
+            OutputStream(rc, newOutputStream(path1, opts1)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};
                 Err(getMessage(ex))
         }
-    }
 
     /// UTF_8
     pub def exists(path: Path, opts: List[LinkOption]): Result[String, Bool] \ IO = region rc {

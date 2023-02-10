@@ -19,8 +19,9 @@ namespace Interop/IO {
     
     /// Mutable
 
-    pub enum File[_: Region](##java.io.File)
-
+    pub enum File[r: Region] { 
+        case File(Region[r], ##java.io.File)
+    }
 
 }
 
@@ -32,24 +33,24 @@ namespace Interop/IO/File {
     use Interop/NIO/File.Path;
     use Interop/NIO/File.Path.{Path};
 
-    pub def getHH(wr: File[r]): ##java.io.File = 
-        let File(wr1) = wr;
-        wr1
+    pub def getHH(f: File[r]): ##java.io.File = 
+        let File(_, f1) = f;
+        f1
 
-    pub def wrapHH(_: Region[r], prim: ##java.io.File): File[r] = 
-        File(prim)
+    pub def wrapHH(rc: Region[r], prim: ##java.io.File): File[r] = 
+        File(rc, prim)
 
 
-    pub def newFile[r: Region](_: Region[r], path: String): File[r] \ { Write(r), IO } = 
+    pub def newFile(rc: Region[r], path: String): File[r] \ { Write(r), IO } = 
         import new java.io.File(String): ##java.io.File \ { Write(r), IO } as newFile;
-        File(newFile(path))
+        File(rc, newFile(path))
 
 
-    pub def toPath(file: File[r]): Result[String, Path] \ Read(r) =
+    pub def toPath(f: File[r]): Result[String, Path] \ Read(r) =
         try {
             import java.io.File.toPath(): ##java.nio.file.Path \ r;
-            let File(file1) = file;
-            toPath(file1) |> Path |> Ok
+            let File(_, f1) = f;
+            toPath(f1) |> Path |> Ok
        } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};

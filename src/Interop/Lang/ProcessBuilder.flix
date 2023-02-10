@@ -66,13 +66,13 @@ namespace Interop/Lang/ProcessBuilder {
     pub def directory!(f: File[r1], pb: ProcessBuilder[r]): ProcessBuilder[r] \ { Write(r), Read(r1) } = 
         import java.lang.ProcessBuilder.directory(##java.io.File): ##java.lang.ProcessBuilder \ {r, r1} ;
         let ProcessBuilder(rc, pb1) = pb;
-        let File(f1) = f;
+        let File(_, f1) = f;
         ProcessBuilder(rc, directory(pb1, f1))
 
-    pub def getDirectory(_rc: Region[r1], pb: ProcessBuilder[r]): File[r] \ { Read(r), Write(r1) } = 
+    pub def getDirectory(rc: Region[r1], pb: ProcessBuilder[r]): File[r1] \ { Read(r), Write(r1) } = 
         import java.lang.ProcessBuilder.directory(): ##java.io.File \ {r, r1};
         let ProcessBuilder(_, pb1) = pb;
-        File(directory(pb1))
+        File(rc, directory(pb1))
 
     pub def environment(pb: ProcessBuilder[r]): Result[String, Map[String, String]] \ Read(r) = region rc {
         try {
@@ -105,7 +105,7 @@ namespace Interop/Lang/ProcessBuilder {
     pub def redirectErrorTo!(file: File[r1], pb: ProcessBuilder[r]): ProcessBuilder[r] \ {Read(r1), Write(r)} = 
         import java.lang.ProcessBuilder.redirectError(##java.io.File): ##java.lang.ProcessBuilder \ {r1, r};
         let ProcessBuilder(rc, pb1) = pb;
-        let File(file1) = file;
+        let File(_, file1) = file;
         ProcessBuilder(rc, redirectError(pb1, file1))
 
     pub def redirectInput!(red: Redirect, pb: ProcessBuilder[r]): ProcessBuilder[r] \ {Read(r1), Write(r)} = 
@@ -117,7 +117,7 @@ namespace Interop/Lang/ProcessBuilder {
     pub def redirectInputTo!(file: File[r1], pb: ProcessBuilder[r]): ProcessBuilder[r] \ {Read(r1), Write(r)} = 
         import java.lang.ProcessBuilder.redirectInput(##java.io.File): ##java.lang.ProcessBuilder \ {r1, r};
         let ProcessBuilder(rc, pb1) = pb;
-        let File(file1) = file;
+        let File(_, file1) = file;
         ProcessBuilder(rc, redirectInput(pb1, file1))
 
     pub def redirectOutput!(red: Redirect, pb: ProcessBuilder[r]): ProcessBuilder[r] \ {Read(r1), Write(r)} = 
@@ -129,7 +129,7 @@ namespace Interop/Lang/ProcessBuilder {
     pub def redirectOutputTo!(file: File[r1], pb: ProcessBuilder[r]): ProcessBuilder[r] \ {Read(r1), Write(r)} = 
         import java.lang.ProcessBuilder.redirectOutput(##java.io.File): ##java.lang.ProcessBuilder \ {r1, r};
         let ProcessBuilder(rc, pb1) = pb;
-        let File(file1) = file;
+        let File(_, file1) = file;
         ProcessBuilder(rc, redirectOutput(pb1, file1))
 
 

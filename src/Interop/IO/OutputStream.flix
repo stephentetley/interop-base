@@ -18,11 +18,13 @@ namespace Interop/IO {
 
 
     /// Abstract class...
-    pub enum OutputStream[_: Region](##java.io.OutputStream)
+    pub enum OutputStream[r: Region] { 
+        case OutputStream(Region[r], ##java.io.OutputStream)
+    }
 
     pub class SubOutputStream[t: Region -> Type] {
-        pub def toOutputStream[r: Region](s: t[r]): OutputStream[r]
-        pub def fromOutputStream[r: Region](s: OutputStream[r]): t[r]
+        pub def toOutputStream[r: Region, r1: Region](rc: Region[r1], s: t[r]): OutputStream[r1]
+        pub def fromOutputStream[r: Region, r1: Region](rc: Region[r1], s: OutputStream[r]): t[r1]
     }
 
 
@@ -33,12 +35,12 @@ namespace Interop/IO/OutputStream {
     use Interop/IO.OutputStream;
     use Interop/IO.OutputStream.{OutputStream};
 
-    pub def getHH(ous: OutputStream[r]): ##java.io.OutputStream = 
-        let OutputStream(ous1) = ous;
-        ous1
+    pub def getHH(s: OutputStream[r]): ##java.io.OutputStream = 
+        let OutputStream(_, s1) = s;
+        s1
 
-    pub def wrapHH(_: Region[r], prim: ##java.io.OutputStream): OutputStream[r] = 
-        OutputStream(prim)
+    pub def wrapHH(rc: Region[r], prim: ##java.io.OutputStream): OutputStream[r] = 
+        OutputStream(rc, prim)
 
 
 }
