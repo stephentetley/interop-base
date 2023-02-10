@@ -18,11 +18,13 @@ namespace Interop/IO {
 
     /// Abstract class...
 
-    pub enum Reader[_: Region](##java.io.Reader)
+    pub enum Reader[r: Region] { 
+        case Reader(Region[r], ##java.io.Reader)
+    }
 
     pub class SubReader[t: Region -> Type] {
-        pub def toReader[r: Region](s: t[r]): Reader[r]
-        pub def fromReader[r: Region](s: Reader[r]): t[r]
+        pub def toReader[r: Region, r1: Region](rc: Region[r1], s: t[r]): Reader[r1]
+        pub def fromReader[r: Region, r1: Region](rc: Region[r1], s: Reader[r]): t[r1]
     }
 
 
@@ -40,17 +42,17 @@ namespace Interop/IO/Reader {
 
 
     pub def getHH(rd: Reader[r]): ##java.io.Reader = 
-        let Reader(rd1) = rd;
+        let Reader(_, rd1) = rd;
         rd1
 
-    pub def wrapHH(_: Region[r], prim: ##java.io.Reader): Reader[r] =
-        Reader(prim)
+    pub def wrapHH(rc: Region[r], prim: ##java.io.Reader): Reader[r] =
+        Reader(rc, prim)
 
 
     pub def close!(rd: Reader[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.io.Reader.close(): Unit \ r;
-            let Reader(rd1) = rd;
+            let Reader(_, rd1) = rd;
             close(rd1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -61,7 +63,7 @@ namespace Interop/IO/Reader {
     pub def mark!(limit: Int32, rd: Reader[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.io.Reader.mark(Int32): Unit \ r;
-            let Reader(rd1) = rd;
+            let Reader(_, rd1) = rd;
             mark(rd1, limit) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -75,7 +77,7 @@ namespace Interop/IO/Reader {
     pub def readArray(buf: Array[Char, r2], rd: Reader[r]): Result[String, Int32] \ { Write(r2), Read(r) } = 
         try {
             import java.io.Reader.read(Array[Char, r2]): Int32 \ {r, r2};
-            let Reader(rd1) = rd;
+            let Reader(_, rd1) = rd;
             read(rd1, buf) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -90,7 +92,7 @@ namespace Interop/IO/Reader {
                             rd: Reader[r]): Result[String, Int32] \ { Write(r2), Read(r) } = 
         try {
             import java.io.Reader.read(Array[Char, r2], Int32, Int32): Int32 \ {r, r2};
-            let Reader(rd1) = rd;
+            let Reader(_, rd1) = rd;
             read(rd1, buf, offset.offset, len.len) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -102,7 +104,7 @@ namespace Interop/IO/Reader {
     pub def readCharBuffer(buf: CharBuffer[r2], rd: Reader[r]): Result[String, Int32] \ { Write(r2), Read(r) } = 
         try {
             import java.io.Reader.read(##java.nio.CharBuffer): Int32 \ {r, r2};
-            let Reader(rd1) = rd;
+            let Reader(_, rd1) = rd;
             let buf1 = Interop/NIO/CharBuffer.getHH(buf);
             read(rd1, buf1) |> Ok
         } catch {
@@ -114,7 +116,7 @@ namespace Interop/IO/Reader {
     pub def reset!(rd: Reader[r]): Result[String, Unit] \ Write(r) =
         try {
             import java.io.Reader.reset(): Unit \ r;
-            let Reader(rd1) = rd;
+            let Reader(_, rd1) = rd;
             reset(rd1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -125,7 +127,7 @@ namespace Interop/IO/Reader {
     pub def skip!(n: Int64, rd: Reader[r]): Result[String, Int64] \ Read(r) =
         try {
             import java.io.Reader.skip(Int64): Int64 \ r;
-            let Reader(rd1) = rd;
+            let Reader(_, rd1) = rd;
             skip(rd1, n) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -136,7 +138,7 @@ namespace Interop/IO/Reader {
     pub def transferTo!(outw: Writer[r2], rd: Reader[r]): Result[String, Int64] \ {Read(r), Write(r2)} =
         try {
             import java.io.Reader.transferTo(##java.io.Writer): Int64 \ {r, r2};
-            let Reader(rd1) = rd;
+            let Reader(_, rd1) = rd;
             let outw1 = Interop/IO/Writer.getHH(outw);
             transferTo(rd1, outw1) |> Ok
         } catch {

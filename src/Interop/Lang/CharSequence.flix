@@ -17,37 +17,30 @@
 namespace Interop/Lang {
 
     /// Interface...
-    /// Must be able to handle both String and StringBuilder[r]
+    /// Read-only (not pure) - in Java handles both String and StringBuilder[r]
 
 
-    pub enum CharSequence[_: Region](##java.lang.CharSequence)
+    pub enum CharSequence[r: Region] { 
+        case CharSequence(Region[r], ##java.lang.CharSequence)
+    }
 
     pub class ImpCharSequence[t: Region -> Type] {
-        pub def toCharSequence[r: Region](s: t[r]): CharSequence[r]
-        pub def fromCharSequence[r: Region](s: CharSequence[r]): t[r]
+        pub def toCharSequence[r: Region, r1: Region](rc: Region[r1], s: t[r]): CharSequence[r1]
+        pub def fromCharSequence[r: Region, r1: Region](rc: Region[r1], s: CharSequence[r]): t[r1]
     }
 
     instance Interop/Lang.ImpCharSequence[StringBuilder] {
-        pub def toCharSequence(s: StringBuilder[r]): CharSequence[r] = 
+        pub def toCharSequence(rc: Region[r1], s: StringBuilder[r]): CharSequence[r1] = 
             let StringBuilder(s1) = s;
-            CharSequence(unsafe_cast s1 as ##java.lang.CharSequence)
+            CharSequence(rc, unsafe_cast s1 as ##java.lang.CharSequence)
 
-        pub def fromCharSequence(s: CharSequence[r]): StringBuilder[r] = 
-            let CharSequence(s1) = s;
+        pub def fromCharSequence(_: Region[r1], s: CharSequence[r]): StringBuilder[r1] = 
+            let CharSequence(_, s1) = s;
             StringBuilder(unsafe_cast s1 as ##java.lang.StringBuilder) 
     }
 
-    /// Appendable?
 }
 
-namespace Interop/Lang/ImpCharSequence {
-    
-    use Interop/Lang.ImpCharSequence;
-
-    pub def getHH[r: Region, cseq: Region -> Type](cs: cseq[r]): ##java.lang.CharSequence with ImpCharSequence[cseq] = 
-        Interop/Lang/ImpCharSequence.toCharSequence(cs) |> Interop/Lang/CharSequence.getHH
-
-}
 
 
 namespace Interop/Lang/CharSequence {
@@ -58,32 +51,35 @@ namespace Interop/Lang/CharSequence {
     use Interop/Lang.ImpCharSequence
 
     pub def getHH(cs: CharSequence[r]): ##java.lang.CharSequence = 
-        let CharSequence(cs1) = cs;
+        let CharSequence(_, cs1) = cs;
         cs1
 
-    pub def toCharSequenceHH[t: Region -> Type, r: Region](cseq: t[r]): ##java.lang.CharSequence with ImpCharSequence[t] = 
-        Interop/Lang/ImpCharSequence.toCharSequence(cseq) |> getHH
+    pub def wrapHH(rc: Region[r], prim: ##java.lang.CharSequence): CharSequence[r] = 
+        CharSequence(rc, prim)
+
+    pub def toCharSequenceHH[t: Region -> Type, r: Region, r1: Region](rc: Region[r1], s: t[r]): ##java.lang.CharSequence with ImpCharSequence[t] = 
+        Interop/Lang/ImpCharSequence.toCharSequence(rc, s) |> getHH
 
 
     pub def toString(cs: CharSequence[r]): String \ Read(r) = 
         import java.lang.CharSequence.toString(): String \ r;
-        let CharSequence(cs1) = cs;
+        let CharSequence(_, cs1) = cs;
         toString(cs1)
 
     pub def isEmpty(cs: CharSequence[r]): Bool \ Read(r) = 
         import java.lang.CharSequence.isEmpty(): Bool \ r;
-        let CharSequence(cs1) = cs;
+        let CharSequence(_, cs1) = cs;
         isEmpty(cs1)
 
     pub def length(cs: CharSequence[r]): Int32 \ Read(r) = 
         import java.lang.CharSequence.length(): Int32 \ r;
-        let CharSequence(cs1) = cs;
+        let CharSequence(_, cs1) = cs;
         length(cs1)
 
     pub def charAt(ix: Int32, cs: CharSequence[r]): Result[String, Char] \ Read(r) = 
         try {
             import java.lang.CharSequence.charAt(Int32): Char \ r;
-            let CharSequence(cs1) = cs;
+            let CharSequence(_, cs1) = cs;
             charAt(cs1, ix) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -94,8 +90,8 @@ namespace Interop/Lang/CharSequence {
     pub def subSequence(start: {start = Int32}, end: {end = Int32}, cs: CharSequence[r]): Result[String, CharSequence[r]] \ {Read(r), Write(r)} = 
         try {
             import java.lang.CharSequence.subSequence(Int32, Int32): ##java.lang.CharSequence \ r;
-            let CharSequence(cs1) = cs;
-            subSequence(cs1, start.start, end.end) |> CharSequence |> Ok
+            let CharSequence(rc, cs1) = cs;
+            CharSequence(rc, subSequence(cs1, start.start, end.end)) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
                 import java.lang.Throwable.getMessage(): String \ {};

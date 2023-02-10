@@ -17,7 +17,9 @@
 
 namespace Interop/Lang {
 
-    pub enum Process[_: Region](##java.lang.Process)
+    pub enum Process[r: Region] { 
+        case Process(Region[r], ##java.lang.Process)
+    }
 
 }
 
@@ -37,14 +39,17 @@ namespace Interop/Lang/Process {
     use Interop/Lang.ProcessBuilder.{ProcessBuilder};
 
 
-    pub def getHH(x: Process[r]): ##java.lang.Process = 
-        let Process(x1) = x;
-        x1
+    pub def getHH(p: Process[r]): ##java.lang.Process = 
+        let Process(_ , p1) = p;
+        p1
+
+    pub def wrapHH(rc: Region[r], prim: ##java.lang.Process): Process[r] = 
+        Process(rc, prim)
 
     pub def waitFor!(p: Process[r]): Result[String, Int32] \ { Write(r), IO } =
         try {
             import java.lang.Process.waitFor(): Int32 \ { Write(r), IO };
-            let Process(p1) = p;
+            let Process(_, p1) = p;
             waitFor(p1) |> Ok
         } catch {
             case ex: ##java.lang.Exception =>
@@ -54,17 +59,17 @@ namespace Interop/Lang/Process {
 
     pub def getOutputStream(rh: Region[rh], p: Process[r]): OutputStream[rh] \ { Read(r), Write(rh), IO } =
         import java.lang.Process.getOutputStream(): ##java.io.OutputStream \ { Read(r), Write(rh), IO };
-        let Process(p1) = p;
+        let Process(_, p1) = p;
         getOutputStream(p1) |> Interop/IO/OutputStream.wrapHH(rh)
 
     pub def getInputStream(rh: Region[rh], p: Process[r]): InputStream[rh] \ { Read(r), Write(rh), IO } = 
         import java.lang.Process.getInputStream(): ##java.io.InputStream \ { Read(r), Write(rh), IO };
-        let Process(p1) = p;
+        let Process(_, p1) = p;
         getInputStream(p1) |> Interop/IO/InputStream.wrapHH(rh)
     
     pub def getErrorStream(rh: Region[rh], p: Process[r]): InputStream[rh] \ { Read(r), Write(rh), IO } =
         import java.lang.Process.getErrorStream(): ##java.io.InputStream \ { Read(r), Write(rh), IO };
-        let Process(p1) = p;
+        let Process(_, p1) = p;
         getErrorStream(p1) |> Interop/IO/InputStream.wrapHH(rh)
 
 
