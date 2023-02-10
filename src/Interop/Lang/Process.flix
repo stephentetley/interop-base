@@ -17,9 +17,8 @@
 
 namespace Interop/Lang {
 
-    pub enum Process[r: Region] { 
-        case Process(Region[r], ##java.lang.Process)
-    }
+    pub enum Process[_: Region](##java.lang.Process)
+
 
 }
 
@@ -40,37 +39,33 @@ namespace Interop/Lang/Process {
 
 
     pub def getHH(p: Process[r]): ##java.lang.Process = 
-        let Process(_ , p1) = p;
+        let Process(p1) = p;
         p1
 
-    pub def wrapHH(rc: Region[r], prim: ##java.lang.Process): Process[r] = 
-        Process(rc, prim)
+    pub def wrapHH(_: Region[r], prim: ##java.lang.Process): Process[r] = 
+        Process(prim)
 
-    pub def waitFor!(p: Process[r]): Result[String, Int32] \ { Write(r), IO } =
-        try {
-            import java.lang.Process.waitFor(): Int32 \ { Write(r), IO };
-            let Process(_, p1) = p;
-            waitFor(p1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \{};
-                Err(getMessage(ex))
-        }
+    pub def waitFor!(p: Process[r]): Result[String, Int32] \ { IO } =
+        Interop/Flix/Util.try(_ -> {
+            import java.lang.Process.waitFor(): Int32 \ { IO };
+            let Process(p1) = p;
+            waitFor(p1)
+        })
 
-    pub def getOutputStream(rh: Region[rh], p: Process[r]): OutputStream[rh] \ { Read(r), Write(rh), IO } =
-        import java.lang.Process.getOutputStream(): ##java.io.OutputStream \ { Read(r), Write(rh), IO };
-        let Process(_, p1) = p;
-        getOutputStream(p1) |> Interop/IO/OutputStream.wrapHH(rh)
+    pub def getOutputStream(rc: Region[r1], p: Process[r]): OutputStream[r1] \ { Read(r), Write(r1), IO } =
+        import java.lang.Process.getOutputStream(): ##java.io.OutputStream \ { Read(r), Write(r1), IO };
+        let Process(p1) = p;
+        getOutputStream(p1) |> Interop/IO/OutputStream.wrapHH(rc)
 
-    pub def getInputStream(rh: Region[rh], p: Process[r]): InputStream[rh] \ { Read(r), Write(rh), IO } = 
-        import java.lang.Process.getInputStream(): ##java.io.InputStream \ { Read(r), Write(rh), IO };
-        let Process(_, p1) = p;
-        getInputStream(p1) |> Interop/IO/InputStream.wrapHH(rh)
+    pub def getInputStream(rc: Region[r1], p: Process[r]): InputStream[r1] \ { Read(r), Write(r1), IO } = 
+        import java.lang.Process.getInputStream(): ##java.io.InputStream \ { Read(r), Write(r1), IO };
+        let Process(p1) = p;
+        getInputStream(p1) |> Interop/IO/InputStream.wrapHH(rc)
     
-    pub def getErrorStream(rh: Region[rh], p: Process[r]): InputStream[rh] \ { Read(r), Write(rh), IO } =
-        import java.lang.Process.getErrorStream(): ##java.io.InputStream \ { Read(r), Write(rh), IO };
-        let Process(_, p1) = p;
-        getErrorStream(p1) |> Interop/IO/InputStream.wrapHH(rh)
+    pub def getErrorStream(rc: Region[r1], p: Process[r]): InputStream[r1] \ { Read(r), Write(r1), IO } =
+        import java.lang.Process.getErrorStream(): ##java.io.InputStream \ { Read(r), Write(r1), IO };
+        let Process(p1) = p;
+        getErrorStream(p1) |> Interop/IO/InputStream.wrapHH(rc)
 
 
 }

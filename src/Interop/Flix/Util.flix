@@ -22,7 +22,20 @@ namespace Interop/Flix/Util {
         else
             s
 
-    /// Object.toOption in stdlib
+    ///
+    /// Returns `Ok(x)` if `f` was invoked without throwing an exception.
+    ///
+    /// If `f` throws a Java `Exception`, `Err(e)` is returned
+    /// where `e` is the error message.
+    ///
+    pub def try(f: Unit -> a \ ef): Result[String, a] \ ef =
+        try {
+            Ok(f())
+        } catch {
+            case e: ##java.lang.Exception =>
+                import java.lang.Throwable.getMessage(): String \ {};
+                Err(getMessage(e))
+        }
 
 
 }

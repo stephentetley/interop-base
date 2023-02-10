@@ -19,6 +19,8 @@ namespace Interop/IO {
     use Interop/IO.InputStream;
     use Interop/IO.InputStream.{InputStream};
 
+
+    // "read pointer"
     pub enum FileInputStream[r: Region] { 
         case FileInputStream(Region[r], ##java.io.FileInputStream)
     }
