@@ -157,10 +157,10 @@ namespace Interop/Util/Stream/LongStream {
         let LongStream(_, s1) = s;
         average(s1) |> OptionalDouble
 
-    pub def summaryStatistics(rc: Region[r1], s: LongStream[r]): LongSummaryStatistics[r1] \ { Read(r), Write(r1) } = 
+    pub def summaryStatistics(_: Region[r1], s: LongStream[r]): LongSummaryStatistics[r1] \ { Read(r), Write(r1) } = 
         import java.util.stream.LongStream.summaryStatistics(): ##java.util.LongSummaryStatistics \ { Read(r), Write(r1) };
         let LongStream(_, s1) = s;
-        LongSummaryStatistics(rc, summaryStatistics(s1))
+        LongSummaryStatistics(summaryStatistics(s1))
 
     pub def anyMatch(f: Int64 -> Bool \ ef, s: LongStream[r]): Bool \ {Read(r), ef} = 
         import java.util.stream.LongStream.anyMatch(LongPredicate): Bool \ {r, ef};

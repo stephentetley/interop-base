@@ -39,53 +39,37 @@ namespace Interop/NIO/CharBuffer {
 
 
     pub def allocate(_: Region[r], capacity: Int32): Result[String, CharBuffer[r]] \ Write(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import static java.nio.CharBuffer.allocate(Int32): ##java.nio.CharBuffer \ r;
-            allocate(capacity) |> CharBuffer |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            allocate(capacity) |> CharBuffer
+        })
 
     pub def append!(c: Char, cb: CharBuffer[r]): Result[String, CharBuffer[r]] \ Write(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.nio.CharBuffer.append(Char): ##java.nio.CharBuffer \ r;
             let CharBuffer(cb1) = cb;
-            append(cb1, c) |> CharBuffer |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            append(cb1, c) |> CharBuffer
+        })
 
     pub def appendCharSequence!(cs: CharSequence[r2], cb: CharBuffer[r]): Result[String, CharBuffer[r]] \ {Write(r), Read(r2)} = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.nio.CharBuffer.append(##java.lang.CharSequence): ##java.nio.CharBuffer \ {r, r2};
             let CharBuffer(cb1) = cb;
             let cs1 = Interop/Lang/CharSequence.getHH(cs);
-            append(cb1, cs1) |> CharBuffer |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            append(cb1, cs1) |> CharBuffer
+        })
 
 
     pub def appendSubCharSequence!(cs: CharSequence[r2], 
                                     offset: {offset = Int32}, 
                                     len: {len = Int32}, 
                                     cb: CharBuffer[r]): Result[String, CharBuffer[r]] \ {Write(r), Read(r2)} = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.nio.CharBuffer.append(##java.lang.CharSequence, Int32, Int32): ##java.nio.CharBuffer \ {r, r2};
             let CharBuffer(cb1) = cb;
             let cs1 = Interop/Lang/CharSequence.getHH(cs);
-            append(cb1, cs1, offset.offset, len.len) |> CharBuffer |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            append(cb1, cs1, offset.offset, len.len) |> CharBuffer
+        })
 
     /// returns `this` not a copy
     pub def clear!(cb: CharBuffer[r]): CharBuffer[r] \ Write(r) = 

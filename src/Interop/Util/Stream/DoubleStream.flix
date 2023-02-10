@@ -140,10 +140,10 @@ namespace Interop/Util/Stream/DoubleStream {
         let DoubleStream(_, s1) = s;
         average(s1) |> OptionalDouble
 
-    pub def summaryStatistics(rc: Region[r1], s: DoubleStream[r]): DoubleSummaryStatistics[r1] \ { Read(r), Write(r1) } = 
+    pub def summaryStatistics(_: Region[r1], s: DoubleStream[r]): DoubleSummaryStatistics[r1] \ { Read(r), Write(r1) } = 
         import java.util.stream.DoubleStream.summaryStatistics(): ##java.util.DoubleSummaryStatistics \ { Read(r), Write(r1) };
         let DoubleStream(_, s1) = s;
-        DoubleSummaryStatistics(rc, summaryStatistics(s1))
+        DoubleSummaryStatistics(summaryStatistics(s1))
 
     pub def anyMatch(f: Float64 -> Bool \ ef, s: DoubleStream[r]): Bool \ {Read(r), ef} = 
         import java.util.stream.DoubleStream.anyMatch(DoublePredicate): Bool \ {r, ef};

@@ -155,10 +155,10 @@ namespace Interop/Util/Stream/IntStream {
         let IntStream(_, s1) = s;
         average(s1) |> OptionalDouble
 
-    pub def summaryStatistics(rc: Region[r1], s: IntStream[r]): IntSummaryStatistics[r1] \ { Read(r), Write(r1) } = 
+    pub def summaryStatistics(_: Region[r1], s: IntStream[r]): IntSummaryStatistics[r1] \ { Read(r), Write(r1) } = 
         import java.util.stream.IntStream.summaryStatistics(): ##java.util.IntSummaryStatistics \ { Read(r), Write(r1) };
         let IntStream(_, s1) = s;
-        IntSummaryStatistics(rc, summaryStatistics(s1))
+        IntSummaryStatistics(summaryStatistics(s1))
 
     pub def anyMatch(f: Int32 -> Bool \ ef, s: IntStream[r]): Bool \ {Read(r), ef} = 
         import java.util.stream.IntStream.anyMatch(IntPredicate): Bool \ {r, ef};

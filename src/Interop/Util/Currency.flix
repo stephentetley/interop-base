@@ -94,26 +94,18 @@ namespace Interop/Util/Currency {
 
 
     pub def getInstance(code: String): Result[String, Currency] \ IO = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import static java.util.Currency.getInstance(String): ##java.util.Currency \ IO;
-            getInstance(code) |> Currency |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            getInstance(code) |> Currency
+        })
 
     /// In IO because we get an "instance"...
     pub def getInstanceWithLocale(loc: Locale): Result[String, Currency] \ IO =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import static java.util.Currency.getInstance(##java.util.Locale): ##java.util.Currency \ IO;
             let Locale(loc1) = loc;
-            getInstance(loc1) |> Currency |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            getInstance(loc1) |> Currency
+        })
 
 
 }
