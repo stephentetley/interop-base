@@ -72,9 +72,9 @@ namespace Interop/Lang/ProcessBuilder {
         let ProcessBuilder(pb1) = pb;
         File(directory(pb1))
 
-    pub def environment(pb: ProcessBuilder[r]): Result[String, Map[String, String]] \ Read(r) = region rc {
+    pub def environment(pb: ProcessBuilder[r]): Result[String, Map[String, String]] \ {Read(r), IO} = region rc {
         Interop/Flix/Util.try(_ -> {
-            import java.lang.ProcessBuilder.environment(): ##java.util.Map \ r;
+            import java.lang.ProcessBuilder.environment(): ##java.util.Map \ {r, IO};
             let ProcessBuilder(pb1) = pb;
             environment(pb1) 
                 |> Interop/Util/MapZ.wrapHH(rc)
