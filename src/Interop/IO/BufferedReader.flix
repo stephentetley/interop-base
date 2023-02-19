@@ -126,9 +126,9 @@ namespace Interop/IO/BufferedReader {
             close(rd1)
         })
 
-    pub def lines!(rc: Region[r1], rd: BufferedReader[r]): Result[String, Stream[String, r1]] \ Read(r) = 
+    pub def lines!(rc: Region[r1], rd: BufferedReader[r]): Result[String, Stream[String, r1]] \ { Read(r), Write(r1) } = 
         Interop/Flix/Util.try(_ -> {
-            import java.io.BufferedReader.lines(): ##java.util.stream.Stream \ r;
+            import java.io.BufferedReader.lines(): ##java.util.stream.Stream \ {r, r1};
             let BufferedReader(rd1) = rd;
             Stream(rc, lines(rd1))
         })
