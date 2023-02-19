@@ -25,11 +25,11 @@ namespace Interop/Text {
     
 
     instance SubNumberFormat[DecimalFormat] {
-        pub def toNumberFormat(_: Region[r1], fmt: DecimalFormat[r]): NumberFormat[r1] = 
+        pub def toNumberFormat(fmt: DecimalFormat[r]): NumberFormat[r] = 
             let DecimalFormat(fmt1) = fmt;
             NumberFormat(unsafe_cast fmt1 as ##java.text.NumberFormat)
 
-        pub def fromNumberFormat(_: Region[r1], fmt: NumberFormat[r]): DecimalFormat[r1] = 
+        pub def fromNumberFormat(fmt: NumberFormat[r]): DecimalFormat[r] = 
             let NumberFormat(fmt1) = fmt;
             DecimalFormat(unsafe_cast fmt1 as ##java.text.DecimalFormat) 
     }

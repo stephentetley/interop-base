@@ -40,24 +40,24 @@ namespace Interop/Util {
 
 
     instance Interop/Util.ImpCollection[ArrayList] {
-        pub def toCollection(rc: Region[r1], t: ArrayList[a, r]): Collection[a, r1] = 
-            let ArrayList(_, t1) = t;
+        pub def toCollection(t: ArrayList[a, r]): Collection[a, r] = 
+            let ArrayList(rc, t1) = t;
             Collection(rc, unsafe_cast t1 as ##java.util.Collection)
 
-        pub def fromCollection(rc: Region[r1], t: Collection[a, r]): ArrayList[a, r1] = 
-            let Collection(_, t1) = t;
+        pub def fromCollection(t: Collection[a, r]): ArrayList[a, r] = 
+            let Collection(rc, t1) = t;
             ArrayList(rc, unsafe_cast t1 as ##java.util.ArrayList) 
     }
 
 
     instance Interop/Util.ImpListZ[ArrayList] {
-        pub def toListZ(rc: Region[r1], t: ArrayList[a, r]): ListZ[a, r1] = 
-            let ArrayList(_, t1) = t;
+        pub def toListZ(t: ArrayList[a, r]): ListZ[a, r] = 
+            let ArrayList(rc, t1) = t;
             ListZ(rc, unsafe_cast t1 as ##java.util.List)
 
-        pub def fromListZ(rc: Region[r1], t: ListZ[a, r]): ArrayList[a, r1] = 
-            let ListZ(_, t1) = t;
-            ArrayList(rc: Region[r1], unsafe_cast t1 as ##java.util.ArrayList) 
+        pub def fromListZ(t: ListZ[a, r]): ArrayList[a, r] = 
+            let ListZ(rc, t1) = t;
+            ArrayList(rc, unsafe_cast t1 as ##java.util.ArrayList) 
     }
 
 }

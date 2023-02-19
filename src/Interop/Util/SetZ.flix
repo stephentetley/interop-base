@@ -25,17 +25,17 @@ namespace Interop/Util {
     }
 
     pub class ImpSetZ[t: Type -> Region -> Type] {
-        pub def toSetZ[a: Type, r: Region, r1: Region](rc: Region[r1], s: t[a, r]): SetZ[a, r1]
-        pub def fromSetZ[a: Type, r: Region, r1: Region](rc: Region[r1], s: SetZ[a, r]): t[a, r1]
+        pub def toSetZ(s: t[a, r]): SetZ[a, r]
+        pub def fromSetZ(s: SetZ[a, r]): t[a, r]
     }
 
     instance Interop/Util.ImpCollection[SetZ] {
-        pub def toCollection(rc: Region[r1], t: SetZ[a, r]): Collection[a, r1] = 
-            let SetZ(_, t1) = t;
+        pub def toCollection(t: SetZ[a, r]): Collection[a, r] = 
+            let SetZ(rc, t1) = t;
             Collection(rc, unsafe_cast t1 as ##java.util.Collection)
 
-        pub def fromCollection(rc: Region[r1], t: Collection[a, r]): SetZ[a, r1] = 
-            let Collection(_, t1) = t;
+        pub def fromCollection(t: Collection[a, r]): SetZ[a, r] = 
+            let Collection(rc, t1) = t;
             SetZ(rc, unsafe_cast t1 as ##java.util.Set) 
     }
 
@@ -60,8 +60,8 @@ namespace Interop/Util/SetZ {
         SetZ(rc, prim)
 
 
-    pub def toSetHH[t: Type -> Region -> Type, a: Type, r: Region, r1: Region](rc: Region[r1], s: t[a, r]): ##java.util.Set with ImpSetZ[t] = 
-        Interop/Util/ImpSetZ.toSetZ(rc, s) |> getHH
+    pub def toSetHH[t: Type -> Region -> Type, a: Type, r: Region](s: t[a, r]): ##java.util.Set with ImpSetZ[t] = 
+        Interop/Util/ImpSetZ.toSetZ(s) |> getHH
 
 
 

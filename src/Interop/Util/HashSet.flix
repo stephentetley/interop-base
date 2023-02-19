@@ -30,22 +30,22 @@ namespace Interop/Util {
     }
 
     instance Interop/Util.ImpCollection[HashSet] {
-        pub def toCollection(rc: Region[r1], t: HashSet[a, r]): Collection[a, r1] = 
-            let HashSet(_, t1) = t;
+        pub def toCollection(t: HashSet[a, r]): Collection[a, r] = 
+            let HashSet(rc, t1) = t;
             Collection(rc, unsafe_cast t1 as ##java.util.Collection)
 
-        pub def fromCollection(rc: Region[r1], t: Collection[a, r]): HashSet[a, r1] = 
-            let Collection(_, t1) = t;
+        pub def fromCollection(t: Collection[a, r]): HashSet[a, r] = 
+            let Collection(rc, t1) = t;
             HashSet(rc, unsafe_cast t1 as ##java.util.HashSet) 
     }
 
     instance Interop/Util.ImpSetZ[HashSet] {
-        pub def toSetZ(rc: Region[r1], t: HashSet[a, r]): SetZ[a, r1] = 
-            let HashSet(_, t1) = t;
+        pub def toSetZ(t: HashSet[a, r]): SetZ[a, r] = 
+            let HashSet(rc, t1) = t;
             SetZ(rc, unsafe_cast t1 as ##java.util.Set)
 
-        pub def fromSetZ(rc: Region[r1], t: SetZ[a, r]): HashSet[a, r1] = 
-            let SetZ(_, t1) = t;
+        pub def fromSetZ(t: SetZ[a, r]): HashSet[a, r] = 
+            let SetZ(rc, t1) = t;
             HashSet(rc, unsafe_cast t1 as ##java.util.HashSet) 
     }
 

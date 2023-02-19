@@ -31,23 +31,23 @@ namespace Interop/Util {
 
 
     instance Interop/Util.ImpCollection[LinkedList] {
-        pub def toCollection(rc: Region[r1], t: LinkedList[a, r]): Collection[a, r1] = 
-            let LinkedList(_, t1) = t;
+        pub def toCollection(t: LinkedList[a, r]): Collection[a, r] = 
+            let LinkedList(rc, t1) = t;
             Collection(rc, unsafe_cast t1 as ##java.util.Collection)
 
-        pub def fromCollection(rc: Region[r1], t: Collection[a, r]): LinkedList[a, r1] = 
-            let Collection(_, t1) = t;
+        pub def fromCollection(t: Collection[a, r]): LinkedList[a, r] = 
+            let Collection(rc, t1) = t;
             LinkedList(rc, unsafe_cast t1 as ##java.util.LinkedList) 
     }
 
 
     instance Interop/Util.ImpListZ[LinkedList] {
-        pub def toListZ(rc: Region[r1], t: LinkedList[a, r]): ListZ[a, r1] = 
-            let LinkedList(_, t1) = t;
+        pub def toListZ(t: LinkedList[a, r]): ListZ[a, r] = 
+            let LinkedList(rc, t1) = t;
             ListZ(rc, unsafe_cast t1 as ##java.util.List)
 
-        pub def fromListZ(rc: Region[r1], t: ListZ[a, r]): LinkedList[a, r1] = 
-            let ListZ(_, t1) = t;
+        pub def fromListZ(t: ListZ[a, r]): LinkedList[a, r] = 
+            let ListZ(rc, t1) = t;
             LinkedList(rc, unsafe_cast t1 as ##java.util.LinkedList) 
     }
 

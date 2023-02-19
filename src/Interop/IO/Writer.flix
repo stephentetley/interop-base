@@ -24,17 +24,17 @@ namespace Interop/IO {
     pub enum Writer[_: Region](##java.io.Writer)
 
     pub class SubWriter[t: Region -> Type] {
-        pub def toWriter[r: Region, r1: Region](rc: Region[r1], s: t[r]): Writer[r1]
-        pub def fromWriter[r: Region, r1: Region](rc: Region[r1], s: Writer[r]): t[r1]
+        pub def toWriter(s: t[r]): Writer[r]
+        pub def fromWriter(s: Writer[r]): t[r]
     }
 
 
     instance Interop/Lang.ImpAppendable[Writer] {
-        pub def toAppendable(_: Region[r1], s: Writer[r]): Appendable[r1] = 
+        pub def toAppendable(s: Writer[r]): Appendable[r] = 
             let Writer(s1) = s;
             Appendable(unsafe_cast s1 as ##java.lang.Appendable)
 
-        pub def fromAppendable(_: Region[r1], s: Appendable[r]): Writer[r1] = 
+        pub def fromAppendable(s: Appendable[r]): Writer[r] = 
             let Appendable(s1) = s;
             Writer(unsafe_cast s1 as ##java.io.Writer) 
     }

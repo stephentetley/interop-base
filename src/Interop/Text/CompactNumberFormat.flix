@@ -27,11 +27,11 @@ namespace Interop/Text {
     pub enum CompactNumberFormat[_: Region](##java.text.CompactNumberFormat)
 
     instance SubNumberFormat[CompactNumberFormat] {
-        pub def toNumberFormat(_: Region[r1], fmt: CompactNumberFormat[r]): NumberFormat[r1] = 
+        pub def toNumberFormat(fmt: CompactNumberFormat[r]): NumberFormat[r] = 
             let CompactNumberFormat(fmt1) = fmt;
             NumberFormat(unsafe_cast fmt1 as ##java.text.NumberFormat)
 
-        pub def fromNumberFormat(_: Region[r1], fmt: NumberFormat[r]): CompactNumberFormat[r1] = 
+        pub def fromNumberFormat(fmt: NumberFormat[r]): CompactNumberFormat[r] = 
             let NumberFormat(fmt1) = fmt;
             CompactNumberFormat(unsafe_cast fmt1 as ##java.text.CompactNumberFormat) 
     }
@@ -92,13 +92,13 @@ namespace Interop/Text/CompactNumberFormat {
         hashCode(nf1)
 
 
-    pub def formatInt64(rc: Region[r], n: Int64, nf: CompactNumberFormat[r]): Result[String, String] \ Read(r) =
-        Interop/Text/SubNumberFormat.toNumberFormat(rc, nf)
+    pub def formatInt64(n: Int64, nf: CompactNumberFormat[r]): Result[String, String] \ Read(r) =
+        Interop/Text/SubNumberFormat.toNumberFormat(nf)
             |> Interop/Text/NumberFormat.formatInt64(n)
 
     
-    pub def formatFloat64(rc: Region[r], d: Float64, nf: CompactNumberFormat[r]): Result[String, String] \ Read(r) = 
-        Interop/Text/SubNumberFormat.toNumberFormat(rc, nf)
+    pub def formatFloat64(d: Float64, nf: CompactNumberFormat[r]): Result[String, String] \ Read(r) = 
+        Interop/Text/SubNumberFormat.toNumberFormat(nf)
             |> Interop/Text/NumberFormat.formatFloat64(d)
 
 

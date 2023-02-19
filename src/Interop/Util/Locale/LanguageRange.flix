@@ -110,7 +110,7 @@ namespace Interop/Util/Locale/LanguageRange {
                                     customizations: Map[String, List[String]]): Result[String, List[LanguageRange]] = region rc {
         try {
             import static java.util.Locale$LanguageRange.parse(String, ##java.util.Map): ##java.util.List \ {};
-            let cs1 = Interop/Util/HashMap.fromFlixMap(rc, customizations) |> Interop/Util/MapZ.toMapHH(rc);
+            let cs1 = Interop/Util/HashMap.fromFlixMap(rc, customizations) |> Interop/Util/MapZ.toMapHH;
             let prim = parse(ranges, cs1);
             Interop/Util/ListZ.wrapHH(rc, prim) 
                 |> Interop/Util/ListZ.toFlixList
@@ -126,8 +126,8 @@ namespace Interop/Util/Locale/LanguageRange {
                             customizations: Map[String, List[String]]): Result[String, List[LanguageRange]] = region rc {
         try {
             import static java.util.Locale$LanguageRange.mapEquivalents(##java.util.List, ##java.util.Map): ##java.util.List \ {};
-            let ps1 = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH(rc);
-            let cs1 = Interop/Util/HashMap.fromFlixMap(rc, customizations) |> Interop/Util/MapZ.toMapHH(rc);
+            let ps1 = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH;
+            let cs1 = Interop/Util/HashMap.fromFlixMap(rc, customizations) |> Interop/Util/MapZ.toMapHH;
             let prim = mapEquivalents(ps1, cs1);
             Interop/Util/ListZ.wrapHH(rc, prim) 
                 |> Interop/Util/ListZ.toFlixList

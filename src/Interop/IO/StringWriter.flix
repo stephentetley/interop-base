@@ -25,22 +25,22 @@ namespace Interop/IO {
 
 
     instance SubWriter[StringWriter] {
-        pub def toWriter(_: Region[r1], s: StringWriter[r]): Writer[r1] = 
+        pub def toWriter(s: StringWriter[r]): Writer[r] = 
             let StringWriter(s1) = s;
             Writer(unsafe_cast s1 as ##java.io.Writer)
 
-        pub def fromWriter(_: Region[r1], s: Writer[r]): StringWriter[r1] = 
+        pub def fromWriter(s: Writer[r]): StringWriter[r] = 
             let Writer(s1) = s;
             StringWriter(unsafe_cast s1 as ##java.io.StringWriter) 
     }
 
 
     instance Interop/Lang.ImpAppendable[StringWriter] {
-        pub def toAppendable(_: Region[r1], s: StringWriter[r]): Appendable[r1] = 
+        pub def toAppendable(s: StringWriter[r]): Appendable[r] = 
             let StringWriter(s1) = s;
             Appendable(unsafe_cast s1 as ##java.lang.Appendable)
 
-        pub def fromAppendable(_: Region[r1], s: Appendable[r]): StringWriter[r1] = 
+        pub def fromAppendable(s: Appendable[r]): StringWriter[r] = 
             let Appendable(s1) = s;
             StringWriter(unsafe_cast s1 as ##java.io.StringWriter) 
     }

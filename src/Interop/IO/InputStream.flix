@@ -23,8 +23,8 @@ namespace Interop/IO {
 
 
     pub class SubInputStream[t: Region -> Type] {
-        pub def toInputStream[r: Region, r1: Region](rc: Region[r1], s: t[r]): InputStream[r1]
-        pub def fromInputStream[r: Region, r1: Region](rc: Region[r1], s: InputStream[r]): t[r1]
+        pub def toInputStream(s: t[r]): InputStream[r]
+        pub def fromInputStream(s: InputStream[r]): t[r]
     }
 
 }

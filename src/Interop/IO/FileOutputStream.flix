@@ -23,11 +23,11 @@ namespace Interop/IO {
 
 
     instance Interop/IO.SubOutputStream[FileOutputStream] {
-        pub def toOutputStream(_: Region[r1], s: FileOutputStream[r]): OutputStream[r1] = 
+        pub def toOutputStream(s: FileOutputStream[r]): OutputStream[r] = 
             let FileOutputStream(s1) = s;
             OutputStream(unsafe_cast s1 as ##java.io.OutputStream)
 
-        pub def fromOutputStream(_: Region[r1], s: OutputStream[r]): FileOutputStream[r1] = 
+        pub def fromOutputStream(s: OutputStream[r]): FileOutputStream[r] = 
             let OutputStream(s1) = s;
             FileOutputStream(unsafe_cast s1 as ##java.io.FileOutputStream) 
     }

@@ -84,10 +84,11 @@ namespace Interop/Flix {
         pub def fromJavaObject(o: ##java.lang.Object): Float64 = Interop/Flix/Marshal.unmarshalFloat64(unsafe_cast o as ##java.lang.Double)
     }
 
+    /// Warning - uses ArrayList as an intermediate, is this acceptable in all cases?
     instance Marshal[List[a]] with Marshal[a] {
         pub def toJavaObject(l: List[a]): ##java.lang.Object = region rc {
             let l1 = Interop/Util/ArrayList.fromFoldable(rc, l);
-            unsafe_cast Interop/Util/ListZ.toListHH(rc, l1) as ##java.lang.Object
+            unsafe_cast Interop/Util/ListZ.toListHH(l1) as ##java.lang.Object
         } 
         
         pub def fromJavaObject(o: ##java.lang.Object): List[a] = region rc {

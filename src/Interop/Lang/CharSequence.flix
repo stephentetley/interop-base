@@ -24,16 +24,16 @@ namespace Interop/Lang {
 
 
     pub class ImpCharSequence[t: Region -> Type] {
-        pub def toCharSequence[r: Region, r1: Region](rc: Region[r1], s: t[r]): CharSequence[r1]
-        pub def fromCharSequence[r: Region, r1: Region](rc: Region[r1], s: CharSequence[r]): t[r1]
+        pub def toCharSequence(s: t[r]): CharSequence[r]
+        pub def fromCharSequence(s: CharSequence[r]): t[r]
     }
 
     instance Interop/Lang.ImpCharSequence[StringBuilder] {
-        pub def toCharSequence(_: Region[r1], s: StringBuilder[r]): CharSequence[r1] = 
+        pub def toCharSequence(s: StringBuilder[r]): CharSequence[r] = 
             let StringBuilder(s1) = s;
             CharSequence(unsafe_cast s1 as ##java.lang.CharSequence)
 
-        pub def fromCharSequence(_: Region[r1], s: CharSequence[r]): StringBuilder[r1] = 
+        pub def fromCharSequence(s: CharSequence[r]): StringBuilder[r] = 
             let CharSequence(s1) = s;
             StringBuilder(unsafe_cast s1 as ##java.lang.StringBuilder) 
     }
@@ -56,8 +56,8 @@ namespace Interop/Lang/CharSequence {
     pub def wrapHH(_: Region[r], prim: ##java.lang.CharSequence): CharSequence[r] = 
         CharSequence(prim)
 
-    pub def toCharSequenceHH[t: Region -> Type, r: Region, r1: Region](rc: Region[r1], s: t[r]): ##java.lang.CharSequence with ImpCharSequence[t] = 
-        Interop/Lang/ImpCharSequence.toCharSequence(rc, s) |> getHH
+    pub def toCharSequenceHH[t: Region -> Type, r: Region](s: t[r]): ##java.lang.CharSequence with ImpCharSequence[t] = 
+        Interop/Lang/ImpCharSequence.toCharSequence(s) |> getHH
 
 
     pub def toString(cs: CharSequence[r]): String \ Read(r) = 

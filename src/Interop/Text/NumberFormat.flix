@@ -23,8 +23,8 @@ namespace Interop/Text {
 
     
     pub class SubNumberFormat[t: Region -> Type] {
-        pub def toNumberFormat[r: Region, r1: Region](rc: Region[r1], s: t[r]): NumberFormat[r1]
-        pub def fromNumberFormat[r: Region, r1: Region](rc: Region[r1], s: NumberFormat[r]): t[r1]
+        pub def toNumberFormat(s: t[r]): NumberFormat[r]
+        pub def fromNumberFormat(s: NumberFormat[r]): t[r]
     }
 
 }

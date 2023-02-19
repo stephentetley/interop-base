@@ -26,8 +26,8 @@ namespace Interop/Util {
 
 
     pub class ImpMapZ[t: Type -> Type -> Region -> Type] {
-        pub def toMapZ[k: Type, v: Type, r: Region, r1: Region](rc: Region[r1], m: t[k, v, r]): MapZ[k, v, r1]
-        pub def fromMapZ[k: Type, v: Type, r: Region, r1: Region](rc: Region[r1], m: MapZ[k, v, r]): t[k, v, r1]
+        pub def toMapZ(m: t[k, v, r]): MapZ[k, v, r]
+        pub def fromMapZ(m: MapZ[k, v, r]): t[k, v, r]
     }
 
 
@@ -55,9 +55,9 @@ namespace Interop/Util/MapZ {
     pub def wrapHH(rc: Region[r], prim: ##java.util.Map): MapZ[k, v, r] =
         MapZ(rc, prim)
 
-    pub def toMapHH[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region, r1: Region]
-                    (rc: Region[r1], m: t[k, v, r]): ##java.util.Map with ImpMapZ[t] = 
-        Interop/Util/ImpMapZ.toMapZ(rc, m) |> getHH
+    pub def toMapHH[t: Type -> Type -> Region -> Type, k: Type, v: Type, r: Region]
+                    (m: t[k, v, r]): ##java.util.Map with ImpMapZ[t] = 
+        Interop/Util/ImpMapZ.toMapZ(m) |> getHH
 
 
     pub def of0(rc: Region[r]): MapZ[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =

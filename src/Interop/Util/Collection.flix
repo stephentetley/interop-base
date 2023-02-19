@@ -26,8 +26,8 @@ namespace Interop/Util {
 
 
     pub class ImpCollection[t: Type -> Region -> Type] {
-        pub def toCollection[a: Type, r: Region, r1: Region](rc: Region[r1], s: t[a, r]): Collection[a, r1]
-        pub def fromCollection[a: Type, r: Region, r1: Region](rc: Region[r1], s: Collection[a, r]): t[a, r1]
+        pub def toCollection[a: Type, r: Region](s: t[a, r]): Collection[a, r]
+        pub def fromCollection[a: Type, r: Region](s: Collection[a, r]): t[a, r]
     }
 
 
@@ -53,9 +53,9 @@ namespace Interop/Util/Collection {
         Collection(rc, col)
 
 
-    pub def toCollectionHH[t: Type -> Region -> Type, a: Type, r: Region, r1: Region]
-                            (rc: Region[r1], col: t[a, r]): ##java.util.Collection with ImpCollection[t] = 
-        Interop/Util/ImpCollection.toCollection(rc, col) |> getHH
+    pub def toCollectionHH[t: Type -> Region -> Type, a: Type, r: Region]
+                            (col: t[a, r]): ##java.util.Collection with ImpCollection[t] = 
+        Interop/Util/ImpCollection.toCollection(col) |> getHH
 
 
 
@@ -98,16 +98,12 @@ namespace Interop/Util/Collection {
         }
 
     pub def remove!(x: a, c: Collection[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Collection.remove(##java.lang.Object): Bool \ r; 
             let Collection(_, c1) = c;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
-            remove(c1, x1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            remove(c1, x1)
+        })
 
 
     pub def removeIf!(f: a -> Bool \ ef, c: Collection[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =

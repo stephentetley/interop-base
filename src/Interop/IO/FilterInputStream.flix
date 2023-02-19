@@ -23,11 +23,11 @@ namespace Interop/IO {
 
 
     instance Interop/IO.SubInputStream[FilterInputStream] {
-        pub def toInputStream(_: Region[r1], s: FilterInputStream[r]): InputStream[r1] = 
+        pub def toInputStream(s: FilterInputStream[r]): InputStream[r] = 
             let FilterInputStream(s1) = s;
             InputStream(unsafe_cast s1 as ##java.io.InputStream)
 
-        pub def fromInputStream(_: Region[r1], s: InputStream[r]): FilterInputStream[r1] = 
+        pub def fromInputStream(s: InputStream[r]): FilterInputStream[r] = 
             let InputStream(s1) = s;
             FilterInputStream(unsafe_cast s1 as ##java.io.FilterInputStream) 
     }

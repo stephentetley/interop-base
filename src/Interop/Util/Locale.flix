@@ -455,17 +455,14 @@ namespace Interop/Util/Locale {
         }
     }
 
-    pub def getIsoLanguages(): Result[String, List[String]] = region rc {
-        try {
-            import static java.util.Locale.getISOLanguages(): Array[String, rc] \ Write(rc);
-            let _ = Array#{} @ rc;            
-            getISOLanguages() |> Array.toList |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
-    }
+    pub def getIsoLanguages(): Result[String, List[String]] =
+        Interop/Flix/Util.try(_ -> {
+            region rc {
+                import static java.util.Locale.getISOLanguages(): Array[String, rc] \ Write(rc);
+                let _ = Array#{} @ rc;            
+                getISOLanguages() |> Array.toList
+            }
+        })
 
     pub def getExtension(key: Char, x: Locale): Result[String, String] =
         try {
@@ -506,8 +503,8 @@ namespace Interop/Util/Locale {
     pub def lookup(priorityList: List[LanguageRange], locales: List[Locale]): Result[String, Option[Locale]] = region rc {
         try {
             import static java.util.Locale.lookup(##java.util.List, ##java.util.Collection): ##java.util.Locale \ {};
-            let ls  = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH(rc);
-            let col = Interop/Util/ArrayList.fromFoldable(rc, locales)      |> Interop/Util/Collection.toCollectionHH(rc);
+            let ls  = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH;
+            let col = Interop/Util/ArrayList.fromFoldable(rc, locales)      |> Interop/Util/Collection.toCollectionHH;
             let ans = lookup(ls, col);
             Object.toOption(ans) |> Option.map(Locale) |> Ok
         } catch {
@@ -521,8 +518,8 @@ namespace Interop/Util/Locale {
         region rc {
             try { 
                 import static java.util.Locale.lookupTag(##java.util.List, ##java.util.Collection): String \ {};
-                let ls      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH(rc);
-                let col     = Interop/Util/ArrayList.fromFoldable(rc, tags)         |> Interop/Util/Collection.toCollectionHH(rc);
+                let ls      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH;
+                let col     = Interop/Util/ArrayList.fromFoldable(rc, tags)         |> Interop/Util/Collection.toCollectionHH;
                 let ans     = lookupTag(ls, col);
                 Object.toOption(ans) |> Ok
             } catch {
@@ -536,8 +533,8 @@ namespace Interop/Util/Locale {
         import static java.util.Locale.filter(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
         region rc {
             try {
-                let ls      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH(rc);
-                let col     = Interop/Util/ArrayList.fromFoldable(rc, locales)      |> Interop/Util/Collection.toCollectionHH(rc);
+                let ls      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH;
+                let col     = Interop/Util/ArrayList.fromFoldable(rc, locales)      |> Interop/Util/Collection.toCollectionHH;
                 let prim    = filter(ls, col);
                 Interop/Util/ListZ.wrapHH(rc, prim) 
                     |> Interop/Util/ListZ.toFlixList
@@ -555,8 +552,8 @@ namespace Interop/Util/Locale {
         region rc {
             try {
                 import static java.util.Locale.filter(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};
-                let ps      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH(rc);
-                let col     = Interop/Util/ArrayList.fromFoldable(rc, locales)      |> Interop/Util/Collection.toCollectionHH(rc);
+                let ps      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH;
+                let col     = Interop/Util/ArrayList.fromFoldable(rc, locales)      |> Interop/Util/Collection.toCollectionHH;
                 let mode1   = marshalFilteringMode(mode);
                 let prim    = filter(ps, col, mode1);
                 Interop/Util/ListZ.wrapHH(rc, prim) 
@@ -573,8 +570,8 @@ namespace Interop/Util/Locale {
         region rc {
             try {
                 import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
-                let ls      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH(rc);
-                let col     = Interop/Util/ArrayList.fromFoldable(rc, tags)         |> Interop/Util/Collection.toCollectionHH(rc);
+                let ls      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH;
+                let col     = Interop/Util/ArrayList.fromFoldable(rc, tags)         |> Interop/Util/Collection.toCollectionHH;
                 let prim    = filterTags(ls, col);
                 Interop/Util/ListZ.wrapHH(rc, prim) 
                     |> Interop/Util/ListZ.toFlixList
@@ -592,8 +589,8 @@ namespace Interop/Util/Locale {
         region rc {
             try {
                 import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};
-                let ls      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH(rc);
-                let col     = Interop/Util/ArrayList.fromFoldable(rc, tags)         |> Interop/Util/Collection.toCollectionHH(rc);
+                let ls      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH;
+                let col     = Interop/Util/ArrayList.fromFoldable(rc, tags)         |> Interop/Util/Collection.toCollectionHH;
                 let mode1   = marshalFilteringMode(mode);
                 let prim    = filterTags(ls, col, mode1);
                 Interop/Util/ListZ.wrapHH(rc, prim) 

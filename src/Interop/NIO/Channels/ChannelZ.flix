@@ -21,8 +21,8 @@ namespace Interop/NIO/Channels {
     pub enum ChannelZ[_: Region](##java.nio.channels.Channel)
 
     pub class SubChannel[t: Region -> Type] {
-        pub def toChannel[r: Region](c: t[r]): ChannelZ[r]
-        pub def fromChannel[r: Region](c: ChannelZ[r]): t[r]
+        pub def toChannel(c: t[r]): ChannelZ[r]
+        pub def fromChannel(c: ChannelZ[r]): t[r]
     }
 
 

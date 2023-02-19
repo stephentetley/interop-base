@@ -28,18 +28,18 @@ namespace Interop/Util {
     }
 
     pub class ImpListZ[t: Type -> Region -> Type] {
-        pub def toListZ[a: Type, r: Region, r1: Region](rc: Region[r1], s: t[a, r]): ListZ[a, r1]
-        pub def fromListZ[a: Type, r: Region, r1: Region](rc: Region[r1], s: ListZ[a, r]): t[a, r1]
+        pub def toListZ(s: t[a, r]): ListZ[a, r]
+        pub def fromListZ(s: ListZ[a, r]): t[a, r]
     }
 
 
     instance Interop/Util.ImpCollection[ListZ] {
-        pub def toCollection(rc: Region[r1], t: ListZ[a, r]): Collection[a, r1] = 
-            let ListZ(_, t1) = t;
+        pub def toCollection(t: ListZ[a, r]): Collection[a, r] = 
+            let ListZ(rc, t1) = t;
             Collection(rc, unsafe_cast t1 as ##java.util.Collection)
 
-        pub def fromCollection(rc: Region[r1], t: Collection[a, r]): ListZ[a, r1] = 
-            let Collection(_, t1) = t;
+        pub def fromCollection(t: Collection[a, r]): ListZ[a, r] = 
+            let Collection(rc, t1) = t;
             ListZ(rc, unsafe_cast t1 as ##java.util.List) 
     }
 
@@ -64,8 +64,8 @@ namespace Interop/Util/ListZ {
         ListZ(rc, prim)
 
 
-    pub def toListHH[t: Type -> Region -> Type, a: Type, r: Region, r1: Region](rc: Region[r1], l: t[a, r]): ##java.util.List with ImpListZ[t] = 
-        Interop/Util/ImpListZ.toListZ(rc, l) |> getHH
+    pub def toListHH[t: Type -> Region -> Type, a: Type, r: Region](l: t[a, r]): ##java.util.List with ImpListZ[t] = 
+        Interop/Util/ImpListZ.toListZ(l) |> getHH
 
 
     pub def of0(rc: Region[r]): ListZ[a, r] \ Write(r) with Marshal[a] =

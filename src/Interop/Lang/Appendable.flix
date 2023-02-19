@@ -23,16 +23,16 @@ namespace Interop/Lang {
 
 
     pub class ImpAppendable[t: Region -> Type] {
-        pub def toAppendable[r: Region, r1: Region](rc: Region[r1], s: t[r]): Appendable[r1]
-        pub def fromAppendable[r: Region, r1: Region](rc: Region[r1], s: Appendable[r]): t[r1]
+        pub def toAppendable[r: Region](s: t[r]): Appendable[r]
+        pub def fromAppendable[r: Region](s: Appendable[r]): t[r]
     }
 
     instance Interop/Lang.ImpAppendable[StringBuilder] {
-        pub def toAppendable(_: Region[r1], s: StringBuilder[r]): Appendable[r1] = 
+        pub def toAppendable(s: StringBuilder[r]): Appendable[r] = 
             let StringBuilder(s1) = s;
             Appendable(unsafe_cast s1 as ##java.lang.Appendable)
 
-        pub def fromAppendable(_: Region[r1], s: Appendable[r]): StringBuilder[r1] = 
+        pub def fromAppendable(s: Appendable[r]): StringBuilder[r] = 
             let Appendable(s1) = s;
             StringBuilder(unsafe_cast s1 as ##java.lang.StringBuilder) 
     }

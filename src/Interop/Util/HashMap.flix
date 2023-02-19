@@ -30,12 +30,12 @@ namespace Interop/Util {
 
 
     instance Interop/Util.ImpMapZ[HashMap] {
-        pub def toMapZ(rc: Region[r1], t: HashMap[k, v, r]): MapZ[k, v, r1] = 
-            let HashMap(_, t1) = t;
+        pub def toMapZ(t: HashMap[k, v, r]): MapZ[k, v, r] = 
+            let HashMap(rc, t1) = t;
             MapZ(rc, unsafe_cast t1 as ##java.util.Map)
 
-        pub def fromMapZ(rc: Region[r1], t: MapZ[k, v, r]): HashMap[k, v, r1] = 
-            let MapZ(_, t1) = t;
+        pub def fromMapZ(t: MapZ[k, v, r]): HashMap[k, v, r] = 
+            let MapZ(rc, t1) = t;
             HashMap(rc, unsafe_cast t1 as ##java.util.HashMap) 
     }
 
