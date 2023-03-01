@@ -18,26 +18,28 @@ namespace Interop/Text {
     
     ///
     /// Represents a Collator.
-    /// Mutable, no alloc.
+    /// "Immutable with Setter"
     ///
-    pub enum Collator[_: Region](##java.text.Collator)
+    pub enum Collator(##java.text.Collator)
 
 
 }
 
 namespace Interop/Text/Collator {
 
-    use Interop/Text.Collator;
-    use Interop/Text.Collator.{Collator};
-    use Interop/Util.Locale;
-    use Interop/Util.Locale.{Locale};
+    use Interop/Text.Collator
+    use Interop/Text.Collator.{Collator}
+    use Interop/Util.Locale
+    use Interop/Util.Locale.{Locale}
+    use Interop/Flix.Setter
+    use Interop/Flix.Setter.Setter
 
-    pub def getHH(c: Collator[r]): ##java.text.Collator = 
+    pub def getHH(c: Collator): ##java.text.Collator = 
         let Collator(c1) = c;
         c1
 
 
-    pub def wrapHH(_: Region[r], prim: ##java.text.Collator): Collator[r] = 
+    pub def wrapHH(prim: ##java.text.Collator): Collator = 
         Collator(prim)
 
 
@@ -72,17 +74,33 @@ namespace Interop/Text/Collator {
         get_TERTIARY()
 
     ///
-    /// Uses a Collator to be accurate with the locale of the JVM.
+    /// Get a Collator with the locale of the JVM.
     ///
-    pub def getInstance(_: Region[r]): Collator[r] \ {Write(r), IO} =
-        import static java.text.Collator.getInstance(): ##java.text.Collator \ {r, IO};
+    pub def getInstance(): Collator \ IO =
+        import static java.text.Collator.getInstance(): ##java.text.Collator \ IO;
         Collator(getInstance())
 
 
-    pub def getInstanceWithLocale(_: Region[r], loc: Locale): Collator[r] \ Write(r) =
-        import static java.text.Collator.getInstance(##java.util.Locale): ##java.text.Collator \ r;
+    pub def getInstanceWithLocale(loc: Locale): Collator =
+        import static java.text.Collator.getInstance(##java.util.Locale): ##java.text.Collator \ {};
         let Locale(loc1) = loc;
         Collator(getInstance(loc1))
+
+    ///
+    /// Get a Collator with the locale of the JVM.
+    /// Apply the setter `f` to further configure the Collator.
+    ///
+    pub def getInstanceWithSetter(rc: Region[r], f: Setter[Collator, r]): Collator \ {Write(r), IO} =
+        import static java.text.Collator.getInstance(): ##java.text.Collator \ IO;
+        let c1 = Collator(getInstance());
+        Interop/Flix/Setter.apply(rc, f, c1)
+        
+    pub def getInstanceWithLocaleWithSetter(rc: Region[r], loc: Locale, f: Setter[Collator, r]): Collator \ Write(r) =
+        import static java.text.Collator.getInstance(##java.util.Locale): ##java.text.Collator \ {};
+        let Locale(loc1) = loc;
+        let c1 = Collator(getInstance(loc1));
+        Interop/Flix/Setter.apply(rc, f, c1)
+
 
     /// TODO - instance with decomposition and strength?
 
@@ -90,46 +108,51 @@ namespace Interop/Text/Collator {
     ///
     /// Test equality of strings `s1` and `s2` with the collator `x``.
     ///
-    pub def equals(s1: String, s2: String, c: Collator[r]): Bool \ Read(r) =
-        import java.text.Collator.equals(String, String): Bool \ r;
+    pub def equals(s1: String, s2: String, c: Collator): Bool =
+        import java.text.Collator.equals(String, String): Bool \ {};
         let Collator(c1) = c;
         equals(c1, s1, s2)
 
     ///
     /// Compare strings `s1` and `s2` with the collator `x``.
     ///
-    pub def compare(s1: String, s2: String, c: Collator[r]): Comparison \ Read(r) =
-        import java.text.Collator.compare(String, String): Int32 \ r;
+    pub def compare(s1: String, s2: String, c: Collator): Comparison =
+        import java.text.Collator.compare(String, String): Int32 \ {};
         let Collator(c1) = c;
         compare(c1, s1, s2) |> Comparison.fromInt32
 
 
     /// Maybe `clone` not so useful...
 
-    pub def clone(_: Region[r1], c: Collator[r]): Collator[r1] \ { Read(r), Write(r1) } =
-        import java.text.Collator.clone(): ##java.lang.Object \ {r, r1};
+    pub def clone(c: Collator): Collator =
+        import java.text.Collator.clone(): ##java.lang.Object \ {};
         let Collator(c1) = c;
         Collator(unsafe_cast clone(c1) as ##java.text.Collator)
 
-    pub def getDecomposition(c: Collator[r]): Int32 \ Read(r) =
-        import java.text.Collator.getDecomposition(): Int32 & r;
+    pub def getDecomposition(c: Collator): Int32 =
+        import java.text.Collator.getDecomposition(): Int32 \ {};
         let Collator(c1) = c;
         getDecomposition(c1)
 
-    pub def setDecomposition!(mode: Int32, c: Collator[r]): Unit \ Write(r) =
-        import java.text.Collator.setDecomposition(Int32): Unit & r;
-        let Collator(c1) = c;
-        setDecomposition(c1, mode)
 
-    pub def getStrength(c: Collator[r]): Int32 \ Read(r) =
-        import java.text.Collator.getStrength(): Int32 & r;
+    pub def getStrength(c: Collator): Int32 =
+        import java.text.Collator.getStrength(): Int32 \ {};
         let Collator(c1) = c;
         getStrength(c1)
 
-    pub def setStrength!(strength: Int32, c: Collator[r]): Unit \ Write(r) =
-        import java.text.Collator.setStrength(Int32): Unit & r;
-        let Collator(c1) = c;
-        setStrength(c1, strength)
-        
+
+    pub def setDecomposition!(mode: Int32): Setter[Collator, r] =
+        Setter(c -> 
+            import java.text.Collator.setDecomposition(Int32): Unit \ Write(r);
+            let Collator(c1) = c;
+            setDecomposition(c1, mode)
+        )
+
+    pub def setStrength!(strength: Int32): Setter[Collator, r] =
+        Setter(c ->
+            import java.text.Collator.setStrength(Int32): Unit \ Write(r);
+            let Collator(c1) = c;
+            setStrength(c1, strength)
+        )
 
 }
