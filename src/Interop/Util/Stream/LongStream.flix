@@ -136,7 +136,7 @@ namespace Interop/Util/Stream/LongStream {
     pub def flatMap(f: Int64 -> LongStream[r] \ ef, s: LongStream[r]): LongStream[r] \ {Write(r), ef} = 
         import java.util.stream.LongStream.flatMap(LongFunction[##java.util.stream.LongStream]): ##java.util.stream.LongStream \ {r, ef};
         let LongStream(rc, s1) = s;
-        let f1 = Interop/Util/Function/LongFunction.makeLongFunctionWith(f, t -> {let LongStream(t1) = t; unsafe_cast t1 as ##java.lang.Object});
+        let f1 = Interop/Util/Function/LongFunction.makeLongFunctionWith(f, t -> {let LongStream(_, t1) = t; unsafe_cast t1 as ##java.lang.Object});
         LongStream(rc, unsafe_cast (flatMap(s1, f1)) as _ \ {Write(r), ef})
 
 

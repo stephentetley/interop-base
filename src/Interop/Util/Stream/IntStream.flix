@@ -130,11 +130,11 @@ namespace Interop/Util/Stream/IntStream {
         let f1 = Interop/Util/Function/IntUnaryOperator.makeIntUnaryOperator(f);
         IntStream(rc, map(s1, f1))
 
-    /// This is a bit wild - tests suggest it works...
+    /// This is a bit wild - should we encapsulate `ef` in the IntStream type? ...
     pub def flatMap(f: Int32 -> IntStream[r] \ ef, s: IntStream[r]): IntStream[r] \ {Write(r), ef} = 
         import java.util.stream.IntStream.flatMap(IntFunction[##java.util.stream.IntStream]): ##java.util.stream.IntStream \ {r, ef};
         let IntStream(rc, s1) = s;
-        let f1 = Interop/Util/Function/IntFunction.makeIntFunctionWith(f, t -> {let IntStream(t1) = t; unsafe_cast t1 as ##java.lang.Object});
+        let f1 = Interop/Util/Function/IntFunction.makeIntFunctionWith(f, t -> {let IntStream(_, t1) = t; unsafe_cast t1 as ##java.lang.Object});
         IntStream(rc, unsafe_cast (flatMap(s1, f1)) as _ \ { Write(r), ef })
 
 

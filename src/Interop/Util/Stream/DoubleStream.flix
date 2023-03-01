@@ -119,7 +119,7 @@ namespace Interop/Util/Stream/DoubleStream {
     pub def flatMap(f: Float64 -> DoubleStream[r] \ ef, s: DoubleStream[r]): DoubleStream[r] \ {Write(r), ef} = 
         import java.util.stream.DoubleStream.flatMap(DoubleFunction[##java.util.stream.DoubleStream]): ##java.util.stream.DoubleStream \ {r, ef};
         let DoubleStream(rc, s1) = s;
-        let f1 = Interop/Util/Function/DoubleFunction.makeDoubleFunctionWith(f, t -> {let DoubleStream(t1) = t; unsafe_cast t1 as ##java.lang.Object});
+        let f1 = Interop/Util/Function/DoubleFunction.makeDoubleFunctionWith(f, t -> {let DoubleStream(_, t1) = t; unsafe_cast t1 as ##java.lang.Object});
         DoubleStream(rc, unsafe_cast (flatMap(s1, f1)) as _ \ {Write(r), ef})
 
 

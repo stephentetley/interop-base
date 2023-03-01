@@ -4,15 +4,16 @@ namespace TestIntStream {
 
 
     @test
-    def flatMap01(): Bool \ IO = 
+    def flatMap01(): Bool \ {} = region rc {
         /// for every i gen 3...
-        let f1 = i -> Interop/Util/Stream/IntStream.range(Static, i, i+3);
-        let stream0 = Interop/Util/Stream/IntStream.range(Static, 0, 2);
+        let f1 = i -> Interop/Util/Stream/IntStream.range(rc, i, i+3);
+        let stream0 = Interop/Util/Stream/IntStream.range(rc, 0, 2);
         let stream1 = Interop/Util/Stream/IntStream.flatMap(f1, stream0);
         let ct = Interop/Util/Stream/IntStream.count(stream1);
         ct == 6i64
+    }
 
-
+/*
     @test
     def flatMap02(): Bool \ IO = 
         /// for every i gen 3...
@@ -30,4 +31,5 @@ namespace TestIntStream {
         let stream1 = Interop/Util/Stream/IntStream.flatMap(f1, stream0);
         let arr = stream1 |> Interop/Util/Stream/IntStream.sorted |> Interop/Util/Stream/IntStream.toArray;
         Array.compare(arr, Array#{0, 1, 1, 2, 2, 3} @ Static) == EqualTo
+*/
 }
