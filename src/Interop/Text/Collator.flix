@@ -80,14 +80,12 @@ namespace Interop/Text/Collator {
     ///
     pub def getInstance(rc: Region[r], fs: List[Setter[Collator, r]]): Collator \ {Write(r), IO} =
         import static java.text.Collator.getInstance(): ##java.text.Collator \ IO;
-        let c1 = Collator(getInstance());
-        Interop/Flix/Setter.apply(rc, fs, c1)
+        Collator(getInstance()) |> Interop/Flix/Setter.apply(rc, fs)
         
     pub def getInstanceWithLocale(rc: Region[r], loc: Locale, fs: List[Setter[Collator, r]]): Collator \ Write(r) =
         import static java.text.Collator.getInstance(##java.util.Locale): ##java.text.Collator \ {};
         let Locale(loc1) = loc;
-        let c1 = Collator(getInstance(loc1));
-        Interop/Flix/Setter.apply(rc, fs, c1)
+        Collator(getInstance(loc1)) |> Interop/Flix/Setter.apply(rc, fs)
 
 
     /// TODO - instance with decomposition and strength?

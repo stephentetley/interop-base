@@ -16,6 +16,12 @@
 
 namespace Interop/Flix {
 
+    /// Should Setter include `ef` type param? - (ideally) no.
+    /// Can we mange if the only effect is mutation? (ideally) yes.
+    /// If we need other effects we won't be able to store Setters
+    /// in a list as we will need something like Graded.flatMap to
+    /// sequence and lift effect types to the same thing.`
+
     pub enum Setter[t: Type, r: Region](t -> Unit \ Write(r))
 
 }
