@@ -73,33 +73,21 @@ namespace Interop/Text/Collator {
         import static get java.text.Collator.TERTIARY: Int32 \ {} as get_TERTIARY;
         get_TERTIARY()
 
-    ///
-    /// Get a Collator with the locale of the JVM.
-    ///
-    pub def getInstance(): Collator \ IO =
-        import static java.text.Collator.getInstance(): ##java.text.Collator \ IO;
-        Collator(getInstance())
-
-
-    pub def getInstanceWithLocale(loc: Locale): Collator =
-        import static java.text.Collator.getInstance(##java.util.Locale): ##java.text.Collator \ {};
-        let Locale(loc1) = loc;
-        Collator(getInstance(loc1))
 
     ///
     /// Get a Collator with the locale of the JVM.
-    /// Apply the setter `f` to further configure the Collator.
+    /// Apply the setters in `fs` to further configure the Collator.
     ///
-    pub def getInstanceWithSetter(rc: Region[r], f: Setter[Collator, r]): Collator \ {Write(r), IO} =
+    pub def getInstance(rc: Region[r], fs: List[Setter[Collator, r]]): Collator \ {Write(r), IO} =
         import static java.text.Collator.getInstance(): ##java.text.Collator \ IO;
         let c1 = Collator(getInstance());
-        Interop/Flix/Setter.apply(rc, f, c1)
+        Interop/Flix/Setter.apply(rc, fs, c1)
         
-    pub def getInstanceWithLocaleWithSetter(rc: Region[r], loc: Locale, f: Setter[Collator, r]): Collator \ Write(r) =
+    pub def getInstanceWithLocale(rc: Region[r], loc: Locale, fs: List[Setter[Collator, r]]): Collator \ Write(r) =
         import static java.text.Collator.getInstance(##java.util.Locale): ##java.text.Collator \ {};
         let Locale(loc1) = loc;
         let c1 = Collator(getInstance(loc1));
-        Interop/Flix/Setter.apply(rc, f, c1)
+        Interop/Flix/Setter.apply(rc, fs, c1)
 
 
     /// TODO - instance with decomposition and strength?

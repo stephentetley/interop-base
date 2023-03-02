@@ -25,17 +25,12 @@ namespace Interop/Flix/Setter {
     use Interop/Flix.Setter
     use Interop/Flix.Setter.Setter
 
-    pub def andThen(f: Setter[t, r], g: Setter[t, r]): Setter[t, r] = 
-        Setter(o -> 
-            let Setter(f1) = f;
-            let Setter(g1) = g;
-            f1(o);
-            g1(o)
-        )
 
-    pub def apply[r: Region, t:Type](_: Region[r], f: Setter[t, r], o: t): t \ Write(r) = 
-        let Setter(f1) = f;
-        f1(o);
+    pub def apply[r: Region, t:Type](_: Region[r], fs: List[Setter[t, r]], o: t): t \ Write(r) = 
+        List.forEach(f -> {
+            let Setter(f1) = f;
+            f1(o)
+        }, fs);
         o
     
 }
