@@ -79,11 +79,11 @@ namespace Interop/Text/DecimalFormat {
     ///
     pub def newWithDecimalFormatSymbols(rc: Region[r], 
                                         patt: String, 
-                                        dfs: DecimalFormatSymbols[r], 
+                                        syms: DecimalFormatSymbols, 
                                         fs: List[ResultSetter[DecimalFormat, r]]): Result[String, DecimalFormat] \ Write(r) =
         import new java.text.DecimalFormat(String, ##java.text.DecimalFormatSymbols): ##java.text.DecimalFormat \ {} as new1;
-        let dfs1 = Interop/Text/DecimalFormatSymbols.getHH(dfs);
-        DecimalFormat(new1(patt, dfs1)) |> Interop/Flix/ResultSetter.apply(rc, fs)
+        let syms1 = Interop/Text/DecimalFormatSymbols.getHH(syms);
+        DecimalFormat(new1(patt, syms1)) |> Interop/Flix/ResultSetter.apply(rc, fs)
 
 
     pub def hashCode(df: DecimalFormat): Int32 =
@@ -96,7 +96,7 @@ namespace Interop/Text/DecimalFormat {
         Interop/Flix/Util.try(_ -> {
             import java.text.DecimalFormat.getCurrency(): ##java.util.Currency \ {};
             let DecimalFormat(df1) = df;
-            getCurrency(df1) |> Currency |> Ok
+            getCurrency(df1) |> Currency
         })
 
 
@@ -109,15 +109,15 @@ namespace Interop/Text/DecimalFormat {
         )
 
 
-    pub def getDecimalFormatSymbols(_: Region[r1], df: DecimalFormat): Result[String, DecimalFormatSymbols[r1]] \ { Read(r), Write(r1) } =
+    pub def getDecimalFormatSymbols(df: DecimalFormat): Result[String, DecimalFormatSymbols] =
         Interop/Flix/Util.try(_ -> {
-            import java.text.DecimalFormat.getDecimalFormatSymbols(): ##java.text.DecimalFormatSymbols \ {r, r1};
+            import java.text.DecimalFormat.getDecimalFormatSymbols(): ##java.text.DecimalFormatSymbols \ {};
             let DecimalFormat(df1) = df;
             DecimalFormatSymbols(getDecimalFormatSymbols(df1))
         })
 
     /// TODO - remove region from DecimalFormatSymbols and make "immutable with Setter"
-    pub def setDecimalFormatSymbols!(syms: DecimalFormatSymbols[r]): ResultSetter[DecimalFormat, r] =
+    pub def setDecimalFormatSymbols!(syms: DecimalFormatSymbols): ResultSetter[DecimalFormat, r] =
         Interop/Flix/ResultSetter.try(df ->
             import java.text.DecimalFormat.setDecimalFormatSymbols(##java.text.DecimalFormatSymbols): Unit \ r ;
             let DecimalFormat(df1) = df;
