@@ -24,15 +24,15 @@ namespace Interop/Text {
 
     
 
-    // instance SubNumberFormat[DecimalFormat] {
-    //     pub def toNumberFormat(fmt: DecimalFormat): NumberFormat[r] = 
-    //         let DecimalFormat(fmt1) = fmt;
-    //         NumberFormat(unsafe_cast fmt1 as ##java.text.NumberFormat)
+    instance SubNumberFormat[DecimalFormat] {
+        pub def toNumberFormat(fmt: DecimalFormat): NumberFormat = 
+            let DecimalFormat(fmt1) = fmt;
+            NumberFormat(unsafe_cast fmt1 as ##java.text.NumberFormat)
 
-    //     pub def fromNumberFormat(fmt: NumberFormat[r]): DecimalFormat = 
-    //         let NumberFormat(fmt1) = fmt;
-    //         DecimalFormat(unsafe_cast fmt1 as ##java.text.DecimalFormat) 
-    // }
+        pub def fromNumberFormat(fmt: NumberFormat): DecimalFormat = 
+            let NumberFormat(fmt1) = fmt;
+            DecimalFormat(unsafe_cast fmt1 as ##java.text.DecimalFormat) 
+    }
 
 }
 
@@ -86,22 +86,18 @@ namespace Interop/Text/DecimalFormat {
         DecimalFormat(new1(patt, dfs1)) |> Interop/Flix/ResultSetter.apply(rc, fs)
 
 
-    pub def hashCode(df: DecimalFormat): Int32 \ Read(r) =
-        import java.text.DecimalFormat.hashCode(): Int32 \ r;
+    pub def hashCode(df: DecimalFormat): Int32 =
+        import java.text.DecimalFormat.hashCode(): Int32 \ {};
         let DecimalFormat(df1) = df;
         hashCode(df1)
 
 
-    pub def getCurrency(df: DecimalFormat): Result[String, Currency] \ Write(r) =
-        try {
-            import java.text.DecimalFormat.getCurrency(): ##java.util.Currency \ r;
+    pub def getCurrency(df: DecimalFormat): Result[String, Currency] =
+        Interop/Flix/Util.try(_ -> {
+            import java.text.DecimalFormat.getCurrency(): ##java.util.Currency \ {};
             let DecimalFormat(df1) = df;
             getCurrency(df1) |> Currency |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+        })
 
 
     pub def setCurrency!(cur: Currency): ResultSetter[DecimalFormat, r] =

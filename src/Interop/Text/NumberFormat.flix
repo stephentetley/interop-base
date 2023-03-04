@@ -18,13 +18,13 @@ namespace Interop/Text {
     
     /// Abstract Class
     /// Represents a NumberFormat.
-    /// Mutable, no alloc
-    pub enum NumberFormat[_: Region](##java.text.NumberFormat)
+    /// "Immutable with Setter"
+    pub enum NumberFormat(##java.text.NumberFormat)
 
     
-    pub class SubNumberFormat[t: Region -> Type] {
-        pub def toNumberFormat(s: t[r]): NumberFormat[r]
-        pub def fromNumberFormat(s: NumberFormat[r]): t[r]
+    pub class SubNumberFormat[t: Type] {
+        pub def toNumberFormat(s: t): NumberFormat
+        pub def fromNumberFormat(s: NumberFormat): t
     }
 
 }
@@ -32,160 +32,169 @@ namespace Interop/Text {
 
 namespace Interop/Text/NumberFormat {
 
-    use Interop/Text.NumberFormat;
-    use Interop/Text.NumberFormat.{NumberFormat};
-    use Interop/Text.SubNumberFormat;
+    use Interop/Text.NumberFormat
+    use Interop/Text.NumberFormat.{NumberFormat}
+    use Interop/Text.SubNumberFormat
 
-    use Interop/Lang.Number;
-    use Interop/Lang.Number.{Number};
-    use Interop/Math.RoundingMode;
-    use Interop/Math.RoundingMode.{RoundingMode};
-    use Interop/Util.Currency;
-    use Interop/Util.Currency.{Currency};
-    use Interop/Util.Locale;
-    use Interop/Util.Locale.{Locale};
+    use Interop/Lang.Number
+    use Interop/Lang.Number.{Number}
+    use Interop/Math.RoundingMode
+    use Interop/Math.RoundingMode.{RoundingMode}
+    use Interop/Util.Currency
+    use Interop/Util.Currency.{Currency}
+    use Interop/Util.Locale
+    use Interop/Util.Locale.{Locale}
+    use Interop/Flix.ResultSetter
+    use Interop/Flix.ResultSetter.ResultSetter
 
-    pub def getHH(nf: NumberFormat[r]): ##java.text.NumberFormat = 
+    pub def getHH(nf: NumberFormat): ##java.text.NumberFormat = 
         let NumberFormat(nf1) = nf;
         nf1
 
-    pub def wrapHH(_: Region[r], prim: ##java.text.NumberFormat): NumberFormat[r] = 
+    pub def wrapHH(prim: ##java.text.NumberFormat): NumberFormat = 
         NumberFormat(prim)
 
 
     // No constructor as we will not be creating subclasses
 
-    pub def equals(x: NumberFormat[r], y: NumberFormat[r]): Bool =
+    pub def equals(x: NumberFormat, y: NumberFormat): Bool =
         import java.text.NumberFormat.equals(##java.lang.Object): Bool \ {};
         let NumberFormat(x1) = x;
         let NumberFormat(y1) = y;
         equals(x1, unsafe_cast y1 as ##java.lang.Object)
 
 
-    pub def hashCode(nf: NumberFormat[r]): Int32 =
+    pub def hashCode(nf: NumberFormat): Int32 =
         import java.text.NumberFormat.hashCode(): Int32 \ {};
         let NumberFormat(nf1) = nf;
         hashCode(nf1)
 
 
-    // pub def clone(nf: NumberFormat[r]): Int32 =
+    // pub def clone(nf: NumberFormat): Int32 =
     //     import java.text.NumberFormat.clone(): ##java.lang.Object \ {};
     //     let NumberFormat(nf1) = nf;
     //     (clone(nf1) as ##java.text.NumberFormat) |> NumberFormat
 
 
-    pub def getInstance(_: Region[r]): NumberFormat[r] \ {IO, Write(r)} = 
-        import static java.text.NumberFormat.getInstance(): ##java.text.NumberFormat \ {IO, r};
-        NumberFormat(getInstance()) 
+    pub def getInstance(rc: Region[r], fs: List[ResultSetter[NumberFormat, r]]): Result[String, NumberFormat] \ {IO, Write(r)} = 
+        import static java.text.NumberFormat.getInstance(): ##java.text.NumberFormat \ IO;
+        NumberFormat(getInstance()) |> Interop/Flix/ResultSetter.apply(rc, fs)
 
-    pub def parse(s: String, nf: NumberFormat[r]): Result[String, Number] \ Read(r) = 
+    pub def parse(s: String, nf: NumberFormat): Result[String, Number] = 
         Interop/Flix/Util.try(_ -> {
-            import java.text.NumberFormat.parse(String): ##java.lang.Number \ r;
+            import java.text.NumberFormat.parse(String): ##java.lang.Number \ {};
             let NumberFormat(nf1) = nf;
             Number(parse(nf1, s))
         })
 
-    pub def formatInt64(n: Int64, nf: NumberFormat[r]): Result[String, String] \ Read(r)= 
+    pub def formatInt64(n: Int64, nf: NumberFormat): Result[String, String] = 
         Interop/Flix/Util.try(_ -> {
-            import java.text.NumberFormat.format(Int64): String \ r;
+            import java.text.NumberFormat.format(Int64): String \ {};
             let NumberFormat(nf1) = nf;
             format(nf1, n)
         })
 
-    pub def formatFloat64(d: Float64, nf: NumberFormat[r]): Result[String, String] \ Read(r) =  
+    pub def formatFloat64(d: Float64, nf: NumberFormat): Result[String, String] =  
         Interop/Flix/Util.try(_ -> {
-            import java.text.NumberFormat.format(Float64): String \ r;
+            import java.text.NumberFormat.format(Float64): String \ {};
             let NumberFormat(nf1) = nf;
             format(nf1, d)
         })
 
 
-    pub def getAvailableLocales(): List[Locale] \ IO = region r {
-        import static java.text.NumberFormat.getAvailableLocales(): Array[##java.util.Locale, r] \ { Write(r), IO } ;
-        let _ = Array#{} @ r;
+    pub def getAvailableLocales(): List[Locale] \ IO = region rc {
+        import static java.text.NumberFormat.getAvailableLocales(): Array[##java.util.Locale, rc] \ { Write(rc), IO } ;
+        let _ = Array#{} @ rc;
         getAvailableLocales() |> Array.toList |> List.map(Locale)
     }
    
-    pub def getCurrency(nf: NumberFormat[r]): Result[String, Currency] \ Write(r) = 
+    pub def getCurrency(nf: NumberFormat): Result[String, Currency] \ Write(r) = 
         Interop/Flix/Util.try(_ -> {
             import java.text.NumberFormat.getCurrency(): ##java.util.Currency \ r;
             let NumberFormat(nf1) = nf;
             getCurrency(nf1) |> Currency
         })
    
-    pub def setCurrency!(c: Currency, nf: NumberFormat[r]): Result[String, Unit] \ Write(r) = 
-        Interop/Flix/Util.try(_ -> {
+    pub def setCurrency!(c: Currency): ResultSetter[NumberFormat, r] =
+        Interop/Flix/ResultSetter.try(nf ->
             import java.text.NumberFormat.setCurrency(##java.util.Currency): Unit \ r;
             let NumberFormat(nf1) = nf;
             let Currency(c1) = c;
             setCurrency(nf1, c1)
-        })
+        )
 
 
-    pub def isGroupingUsed(nf: NumberFormat[r]): Bool \ Read(r) = 
-        import java.text.NumberFormat.isGroupingUsed(): Bool \ r;
+    pub def isGroupingUsed(nf: NumberFormat): Bool = 
+        import java.text.NumberFormat.isGroupingUsed(): Bool \ {};
         let NumberFormat(nf1) = nf;
         isGroupingUsed(nf1)
 
-    pub def setGroupingUsed!(used: Bool, nf: NumberFormat[r]): Unit \ Write(r) = 
-        import java.text.NumberFormat.setGroupingUsed(Bool): Unit \ r;
-        let NumberFormat(nf1) = nf;
-        setGroupingUsed(nf1, used)
+    pub def setGroupingUsed!(used: Bool): ResultSetter[NumberFormat, r] =
+        Interop/Flix/ResultSetter.try(nf ->
+            import java.text.NumberFormat.setGroupingUsed(Bool): Unit \ r;
+            let NumberFormat(nf1) = nf;
+            setGroupingUsed(nf1, used)
+        )
 
-
-    pub def getMaximumIntegerDigits(nf: NumberFormat[r]): Int32 \ Read(r) = 
-        import java.text.NumberFormat.getMaximumIntegerDigits(): Int32 \ r;
+    pub def getMaximumIntegerDigits(nf: NumberFormat): Int32 = 
+        import java.text.NumberFormat.getMaximumIntegerDigits(): Int32 \ {};
         let NumberFormat(nf1) = nf;
         getMaximumIntegerDigits(nf1)
 
-    pub def setMaximumIntegerDigits!(n: Int32, nf: NumberFormat[r]): Unit \ Write(r) = 
-        import java.text.NumberFormat.setMaximumIntegerDigits(Int32): Unit \ r;
-        let NumberFormat(nf1) = nf;
-        setMaximumIntegerDigits(nf1, n)
+    pub def setMaximumIntegerDigits!(n: Int32): ResultSetter[NumberFormat, r] =
+        Interop/Flix/ResultSetter.try(nf ->
+            import java.text.NumberFormat.setMaximumIntegerDigits(Int32): Unit \ r;
+            let NumberFormat(nf1) = nf;
+            setMaximumIntegerDigits(nf1, n)
+        )
 
-    pub def getMinimumIntegerDigits(nf: NumberFormat[r]): Int32 \ Read(r) = 
-        import java.text.NumberFormat.getMinimumIntegerDigits(): Int32 \ r;
+    pub def getMinimumIntegerDigits(nf: NumberFormat): Int32 = 
+        import java.text.NumberFormat.getMinimumIntegerDigits(): Int32 \ {};
         let NumberFormat(nf1) = nf;
         getMinimumIntegerDigits(nf1)
 
-    pub def setMinimumIntegerDigits!(n: Int32, nf: NumberFormat[r]): Unit \ Write(r) = 
-        import java.text.NumberFormat.setMinimumIntegerDigits(Int32): Unit \ r;
-        let NumberFormat(nf1) = nf;
-        setMinimumIntegerDigits(nf1, n)
+    pub def setMinimumIntegerDigits!(n: Int32): ResultSetter[NumberFormat, r] =
+        Interop/Flix/ResultSetter.try(nf ->
+            import java.text.NumberFormat.setMinimumIntegerDigits(Int32): Unit \ r;
+            let NumberFormat(nf1) = nf;
+            setMinimumIntegerDigits(nf1, n)
+        )
 
-
-    pub def getMaximumFractionDigits(nf: NumberFormat[r]): Int32 \ Read(r) = 
-        import java.text.NumberFormat.getMaximumFractionDigits(): Int32 \ r;
+    pub def getMaximumFractionDigits(nf: NumberFormat): Int32 = 
+        import java.text.NumberFormat.getMaximumFractionDigits(): Int32 \ {};
         let NumberFormat(nf1) = nf;
         getMaximumFractionDigits(nf1)
 
-    pub def setMaximumFractionDigits!(n: Int32, nf: NumberFormat[r]): Unit \ Write(r) = 
-        import java.text.NumberFormat.setMaximumFractionDigits(Int32): Unit \ r;
-        let NumberFormat(nf1) = nf;
-        setMaximumFractionDigits(nf1, n)
+    pub def setMaximumFractionDigits!(n: Int32): ResultSetter[NumberFormat, r] =
+        Interop/Flix/ResultSetter.try(nf ->
+            import java.text.NumberFormat.setMaximumFractionDigits(Int32): Unit \ r;
+            let NumberFormat(nf1) = nf;
+            setMaximumFractionDigits(nf1, n)
+        )
 
-    pub def getMinimumFractionDigits(nf: NumberFormat[r]): Int32 \ Read(r) = 
-        import java.text.NumberFormat.getMinimumFractionDigits(): Int32 \ r;
+    pub def getMinimumFractionDigits(nf: NumberFormat): Int32 = 
+        import java.text.NumberFormat.getMinimumFractionDigits(): Int32 \ {};
         let NumberFormat(nf1) = nf;
         getMinimumFractionDigits(nf1)
 
-    pub def setMinimumFractionDigits!(n: Int32, nf: NumberFormat[r]): Unit \ Write(r) = 
-        import java.text.NumberFormat.setMinimumFractionDigits(Int32): Unit \ r;
-        let NumberFormat(nf1) = nf;
-        setMinimumFractionDigits(nf1, n)
+    pub def setMinimumFractionDigits!(n: Int32): ResultSetter[NumberFormat, r] =
+        Interop/Flix/ResultSetter.try(nf ->
+            import java.text.NumberFormat.setMinimumFractionDigits(Int32): Unit \ r;
+            let NumberFormat(nf1) = nf;
+            setMinimumFractionDigits(nf1, n)
+        )
 
-
-    pub def getRoundingMode(nf: NumberFormat[r]): RoundingMode \ Read(r) = 
-        import java.text.NumberFormat.getRoundingMode(): ##java.math.RoundingMode \ r;
+    pub def getRoundingMode(nf: NumberFormat): RoundingMode = 
+        import java.text.NumberFormat.getRoundingMode(): ##java.math.RoundingMode \ {};
         let NumberFormat(nf1) = nf;
         getRoundingMode(nf1) |> RoundingMode 
    
-    pub def setRoundingMode!(mode: RoundingMode, nf: NumberFormat[r]): Result[String, Unit] \ Write(r) = 
-        Interop/Flix/Util.try(_ -> {
+    pub def setRoundingMode!(mode: RoundingMode): ResultSetter[NumberFormat, r] =
+        Interop/Flix/ResultSetter.try(nf ->
             import java.text.NumberFormat.setRoundingMode(##java.math.RoundingMode): Unit \ r;
             let NumberFormat(nf1) = nf;
             let RoundingMode(mode1) = mode;
             setRoundingMode(nf1, mode1)
-        })
+        )
 
 }

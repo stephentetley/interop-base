@@ -26,15 +26,15 @@ namespace Interop/Text {
     ///
     pub enum CompactNumberFormat(##java.text.CompactNumberFormat)
 
-    // instance SubNumberFormat[CompactNumberFormat] {
-    //     pub def toNumberFormat(fmt: CompactNumberFormat): NumberFormat[r] = 
-    //         let CompactNumberFormat(fmt1) = fmt;
-    //         NumberFormat(unsafe_cast fmt1 as ##java.text.NumberFormat)
+    instance SubNumberFormat[CompactNumberFormat] {
+        pub def toNumberFormat(fmt: CompactNumberFormat): NumberFormat = 
+            let CompactNumberFormat(fmt1) = fmt;
+            NumberFormat(unsafe_cast fmt1 as ##java.text.NumberFormat)
 
-    //     pub def fromNumberFormat(fmt: NumberFormat[r]): CompactNumberFormat = 
-    //         let NumberFormat(fmt1) = fmt;
-    //         CompactNumberFormat(unsafe_cast fmt1 as ##java.text.CompactNumberFormat) 
-    // }
+        pub def fromNumberFormat(fmt: NumberFormat): CompactNumberFormat = 
+            let NumberFormat(fmt1) = fmt;
+            CompactNumberFormat(unsafe_cast fmt1 as ##java.text.CompactNumberFormat) 
+    }
 
 }
 
@@ -88,24 +88,24 @@ namespace Interop/Text/CompactNumberFormat {
         let CompactNumberFormat(y1) = y;
         equals(x1, unsafe_cast y1 as ##java.lang.Object)
 
-    pub def hashCode(nf: CompactNumberFormat): Int32 \ Read(r) =
-        import java.text.CompactNumberFormat.hashCode(): Int32 \ r;
+    pub def hashCode(nf: CompactNumberFormat): Int32 =
+        import java.text.CompactNumberFormat.hashCode(): Int32 \ {};
         let CompactNumberFormat(nf1) = nf;
         hashCode(nf1)
 
 
-    // pub def formatInt64(n: Int64, nf: CompactNumberFormat): Result[String, String] \ Read(r) =
-    //     Interop/Text/SubNumberFormat.toNumberFormat(nf)
-    //         |> Interop/Text/NumberFormat.formatInt64(n)
+    pub def formatInt64(n: Int64, nf: CompactNumberFormat): Result[String, String] =
+        Interop/Text/SubNumberFormat.toNumberFormat(nf)
+            |> Interop/Text/NumberFormat.formatInt64(n)
 
     
-    // pub def formatFloat64(d: Float64, nf: CompactNumberFormat): Result[String, String] \ Read(r) = 
-    //     Interop/Text/SubNumberFormat.toNumberFormat(nf)
-    //         |> Interop/Text/NumberFormat.formatFloat64(d)
+    pub def formatFloat64(d: Float64, nf: CompactNumberFormat): Result[String, String] = 
+        Interop/Text/SubNumberFormat.toNumberFormat(nf)
+            |> Interop/Text/NumberFormat.formatFloat64(d)
 
 
-    pub def getGroupingSize(nf: CompactNumberFormat): Int32 \ Read(r) =
-        import java.text.CompactNumberFormat.getGroupingSize(): Int32 \ Read(r);
+    pub def getGroupingSize(nf: CompactNumberFormat): Int32 =
+        import java.text.CompactNumberFormat.getGroupingSize(): Int32 \ {};
         let CompactNumberFormat(nf1) = nf;
         getGroupingSize(nf1)
 
@@ -170,8 +170,8 @@ namespace Interop/Text/CompactNumberFormat {
         )
 
 
-    pub def getRoundingMode(nf: CompactNumberFormat): RoundingMode \ Read(r) = 
-        import java.text.CompactNumberFormat.getRoundingMode(): ##java.math.RoundingMode \ Read(r);
+    pub def getRoundingMode(nf: CompactNumberFormat): RoundingMode = 
+        import java.text.CompactNumberFormat.getRoundingMode(): ##java.math.RoundingMode \ {};
         let CompactNumberFormat(nf1) = nf;
         getRoundingMode(nf1) |> RoundingMode
 
