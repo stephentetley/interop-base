@@ -24,10 +24,6 @@ namespace Interop/Util {
         case HashMap(Region[r], ##java.util.HashMap)
     }
 
-    instance Newable[HashMap[k, v]] {
-        pub def new(r: Region[r]): HashMap[k, v, r] \ Write(r) = Interop/Util/HashMap.new(r)
-    }
-
 
     instance Interop/Util.ImpMapZ[HashMap] {
         pub def toMapZ(t: HashMap[k, v, r]): MapZ[k, v, r] = 

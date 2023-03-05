@@ -24,11 +24,6 @@ namespace Interop/Util {
         case HashSet(Region[r], ##java.util.HashSet)
     }
 
-
-    instance Newable[HashSet[a]] {
-        pub def new(r: Region[r]): HashSet[a, r] \ Write(r) = Interop/Util/HashSet.new(r)
-    }
-
     instance Interop/Util.ImpCollection[HashSet] {
         pub def toCollection(t: HashSet[a, r]): Collection[a, r] = 
             let HashSet(rc, t1) = t;

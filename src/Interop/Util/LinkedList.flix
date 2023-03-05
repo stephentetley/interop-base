@@ -303,7 +303,7 @@ namespace Interop/Util/LinkedList {
         else {
             ///let head = get(0, l);
             let aout = Array.new(r1, len);
-            let step = (ix, a) -> {aout[ix] = a; ix+1};
+            let step = (ix, a) -> {Array.put(a, ix, aout); ix+1};
             discard foldLinkedList(step, 0, l);
             aout
         }
