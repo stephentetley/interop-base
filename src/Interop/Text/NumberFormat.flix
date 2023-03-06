@@ -44,8 +44,8 @@ namespace Interop/Text/NumberFormat {
     use Interop/Util.Currency.{Currency}
     use Interop/Util.Locale
     use Interop/Util.Locale.{Locale}
-    use Interop/Flix.ResultSetter
-    use Interop/Flix.ResultSetter.ResultSetter
+    use Interop/Flix.Setter
+    use Interop/Flix.Setter.Setter
 
     pub def getHH(nf: NumberFormat): ##java.text.NumberFormat = 
         let NumberFormat(nf1) = nf;
@@ -76,9 +76,9 @@ namespace Interop/Text/NumberFormat {
     //     (clone(nf1) as ##java.text.NumberFormat) |> NumberFormat
 
 
-    pub def getInstance(rc: Region[r], fs: ResultSetter[NumberFormat, r]): Result[String, NumberFormat] \ {IO, Write(r)} = 
+    pub def getInstance(rc: Region[r], fs: Setter[NumberFormat, r]): Result[String, NumberFormat] \ {IO, Write(r)} = 
         import static java.text.NumberFormat.getInstance(): ##java.text.NumberFormat \ IO;
-        NumberFormat(getInstance()) |> Interop/Flix/ResultSetter.apply(rc, fs)
+        NumberFormat(getInstance()) |> Interop/Flix/Setter.apply(rc, fs)
 
     pub def parse(s: String, nf: NumberFormat): Result[String, Number] = 
         Interop/Flix/Util.try(_ -> {
@@ -115,8 +115,8 @@ namespace Interop/Text/NumberFormat {
             getCurrency(nf1) |> Currency
         })
    
-    pub def setCurrency!(c: Currency): ResultSetter[NumberFormat, r] =
-        Interop/Flix/ResultSetter.lift(nf ->
+    pub def setCurrency!(c: Currency): Setter[NumberFormat, r] =
+        Interop/Flix/Setter.lift(nf ->
             import java.text.NumberFormat.setCurrency(##java.util.Currency): Unit \ r;
             let NumberFormat(nf1) = nf;
             let Currency(c1) = c;
@@ -129,8 +129,8 @@ namespace Interop/Text/NumberFormat {
         let NumberFormat(nf1) = nf;
         isGroupingUsed(nf1)
 
-    pub def setGroupingUsed!(used: Bool): ResultSetter[NumberFormat, r] =
-        Interop/Flix/ResultSetter.lift(nf ->
+    pub def setGroupingUsed!(used: Bool): Setter[NumberFormat, r] =
+        Interop/Flix/Setter.lift(nf ->
             import java.text.NumberFormat.setGroupingUsed(Bool): Unit \ r;
             let NumberFormat(nf1) = nf;
             setGroupingUsed(nf1, used)
@@ -141,8 +141,8 @@ namespace Interop/Text/NumberFormat {
         let NumberFormat(nf1) = nf;
         getMaximumIntegerDigits(nf1)
 
-    pub def setMaximumIntegerDigits!(n: Int32): ResultSetter[NumberFormat, r] =
-        Interop/Flix/ResultSetter.lift(nf ->
+    pub def setMaximumIntegerDigits!(n: Int32): Setter[NumberFormat, r] =
+        Interop/Flix/Setter.lift(nf ->
             import java.text.NumberFormat.setMaximumIntegerDigits(Int32): Unit \ r;
             let NumberFormat(nf1) = nf;
             setMaximumIntegerDigits(nf1, n)
@@ -153,8 +153,8 @@ namespace Interop/Text/NumberFormat {
         let NumberFormat(nf1) = nf;
         getMinimumIntegerDigits(nf1)
 
-    pub def setMinimumIntegerDigits!(n: Int32): ResultSetter[NumberFormat, r] =
-        Interop/Flix/ResultSetter.lift(nf ->
+    pub def setMinimumIntegerDigits!(n: Int32): Setter[NumberFormat, r] =
+        Interop/Flix/Setter.lift(nf ->
             import java.text.NumberFormat.setMinimumIntegerDigits(Int32): Unit \ r;
             let NumberFormat(nf1) = nf;
             setMinimumIntegerDigits(nf1, n)
@@ -165,8 +165,8 @@ namespace Interop/Text/NumberFormat {
         let NumberFormat(nf1) = nf;
         getMaximumFractionDigits(nf1)
 
-    pub def setMaximumFractionDigits!(n: Int32): ResultSetter[NumberFormat, r] =
-        Interop/Flix/ResultSetter.lift(nf ->
+    pub def setMaximumFractionDigits!(n: Int32): Setter[NumberFormat, r] =
+        Interop/Flix/Setter.lift(nf ->
             import java.text.NumberFormat.setMaximumFractionDigits(Int32): Unit \ r;
             let NumberFormat(nf1) = nf;
             setMaximumFractionDigits(nf1, n)
@@ -177,8 +177,8 @@ namespace Interop/Text/NumberFormat {
         let NumberFormat(nf1) = nf;
         getMinimumFractionDigits(nf1)
 
-    pub def setMinimumFractionDigits!(n: Int32): ResultSetter[NumberFormat, r] =
-        Interop/Flix/ResultSetter.lift(nf ->
+    pub def setMinimumFractionDigits!(n: Int32): Setter[NumberFormat, r] =
+        Interop/Flix/Setter.lift(nf ->
             import java.text.NumberFormat.setMinimumFractionDigits(Int32): Unit \ r;
             let NumberFormat(nf1) = nf;
             setMinimumFractionDigits(nf1, n)
@@ -189,8 +189,8 @@ namespace Interop/Text/NumberFormat {
         let NumberFormat(nf1) = nf;
         getRoundingMode(nf1) |> RoundingMode 
    
-    pub def setRoundingMode!(mode: RoundingMode): ResultSetter[NumberFormat, r] =
-        Interop/Flix/ResultSetter.lift(nf ->
+    pub def setRoundingMode!(mode: RoundingMode): Setter[NumberFormat, r] =
+        Interop/Flix/Setter.lift(nf ->
             import java.text.NumberFormat.setRoundingMode(##java.math.RoundingMode): Unit \ r;
             let NumberFormat(nf1) = nf;
             let RoundingMode(mode1) = mode;

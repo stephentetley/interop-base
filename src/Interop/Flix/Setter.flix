@@ -16,13 +16,9 @@
 
 namespace Interop/Flix {
 
-    /// Should Setter include `ef` type param? - (ideally) no.
-    /// Can we mange if the only effect is mutation? (ideally) yes.
-    /// If we need other effects we won't be able to store Setters
-    /// in a list as we will need something like Graded.flatMap to
-    /// sequence and lift effect types to the same thing.`
 
-    pub enum Setter[t: Type, r: Region](t -> Unit \ Write(r))
+    /// A `Setter` with error reporting.
+    pub enum Setter[t: Type, r: Region](t -> Result[String, Unit] \ Write(r))
 
 }
 
@@ -32,21 +28,38 @@ namespace Interop/Flix/Setter {
     use Interop/Flix.Setter.Setter
 
 
-    pub def apply[r: Region, t:Type](_: Region[r], setter: Setter[t, r], o: t): t \ Write(r) = 
-        let Setter(f1) = setter;
-        f1(o);
-        o
+    pub def apply[r: Region, t:Type](_: Region[r], f: Setter[t, r], o: t): Result[String, t] \ Write(r) = 
+        let Setter(f1) = f;
+        match f1(o) { 
+            case Ok()   => Ok(o)
+            case Err(s) => Err(s)
+        }
+
+    /// 
+    pub def lift(f: t -> Unit \ Write(r)): Setter[t, r] =
+        Setter(o -> 
+            try {
+                Ok(f(o))
+            } catch {
+                case e: ##java.lang.Exception =>
+                    import java.lang.Throwable.getMessage(): String \ {};
+                    Err(getMessage(e))
+            }
+        )
 
     pub def empty(): Setter[t, r] =
-        Setter(_ -> unsafe_cast () as _ \ r)
+        Setter(_ -> unsafe_cast Ok() as _ \ r)
 
 
     pub def combine(a: Setter[t, r], b: Setter[t, r]): Setter[t, r] =
         Setter(o -> 
             let Setter(f1) = a;
             let Setter(f2) = b;
-            f1(o);
-            f2(o)
+            match f1(o) { 
+                case Ok()     => f2(o)
+                case Err(msg) => Err(msg)
+            }
+            
         )
 
     pub def makeSetter(_: Region[r], f: prop -> Setter[t, r], xs: List[prop]): Setter[t, r] = 

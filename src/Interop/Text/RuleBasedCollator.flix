@@ -63,10 +63,8 @@ namespace Interop/Text/RuleBasedCollator {
     /// New RuleBasedCollator.
     ///
     pub def new(rules: String, props: List[CollatorProperty]): Result[String, RuleBasedCollator] = region rc {
-        Interop/Flix/Util.try(_ -> {
-            import new java.text.RuleBasedCollator(String): ##java.text.RuleBasedCollator \ {} as new1;
-            RuleBasedCollator(new1(rules)) |> Interop/Flix/Setter.apply(rc, makeSetter(rc, props))
-        })
+        import new java.text.RuleBasedCollator(String): ##java.text.RuleBasedCollator \ {} as new1;
+        RuleBasedCollator(new1(rules)) |> Interop/Flix/Setter.apply(rc, makeSetter(rc, props))
     }
 
     pub def hashCode(c: RuleBasedCollator): Int32 = 
