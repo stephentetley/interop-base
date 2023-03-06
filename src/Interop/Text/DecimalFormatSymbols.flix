@@ -31,7 +31,6 @@ namespace Interop/Text/DecimalFormatSymbols {
     use Interop/Text.DecimalFormatSymbols
     use Interop/Text.DecimalFormatSymbols.{DecimalFormatSymbols}
     use Interop/Util.Currency
-    use Interop/Util.Currency.{Currency}
     use Interop/Util.Locale
     use Interop/Util.Locale.{Locale}
     use Interop/Flix.ResultSetter
@@ -43,6 +42,24 @@ namespace Interop/Text/DecimalFormatSymbols {
 
     pub def wrapHH(prim: ##java.text.DecimalFormatSymbols): DecimalFormatSymbols = 
         DecimalFormatSymbols(prim)
+
+
+    pub enum DecimalFormatSymbolsProperty {
+        case CurrencyP(Currency)
+        case CurrencySymbol(String)
+        case DecimalSeparator(Char)
+    }
+    
+
+    pub def makeSetter(rc: Region[r], xs: List[DecimalFormatSymbolsProperty]): ResultSetter[DecimalFormatSymbols, r] = 
+        def f(x) = match x {
+            case CurrencyP(x1)          => setCurrency!(rc, x1)
+            case CurrencySymbol(x1)     => setCurrencySymbol!(rc, x1)
+            case DecimalSeparator(x1)   => setDecimalSeparator!(rc, x1)
+            // more...
+        };
+        Interop/Flix/ResultSetter.makeResultSetter(rc, f, xs)
+
 
     ///
     /// Returns a new mutable DecimalFormatSymbols object.
@@ -82,12 +99,12 @@ namespace Interop/Text/DecimalFormatSymbols {
     }
 
 
-    pub def getInstance(rc: Region[r], fs: List[ResultSetter[DecimalFormatSymbols, r]]): Result[String, DecimalFormatSymbols] \ {IO, Write(r)} = 
+    pub def getInstance(rc: Region[r], fs: ResultSetter[DecimalFormatSymbols, r]): Result[String, DecimalFormatSymbols] \ {IO, Write(r)} = 
         import static java.text.DecimalFormatSymbols.getInstance(): ##java.text.DecimalFormatSymbols \ IO;
         DecimalFormatSymbols(getInstance()) |> Interop/Flix/ResultSetter.apply(rc, fs)
 
 
-    pub def getInstanceWithLocale(rc: Region[r], loc: Locale, fs: List[ResultSetter[DecimalFormatSymbols, r]]): Result[String, DecimalFormatSymbols] \ {IO, Write(r)} = 
+    pub def getInstanceWithLocale(rc: Region[r], loc: Locale, fs: ResultSetter[DecimalFormatSymbols, r]): Result[String, DecimalFormatSymbols] \ {IO, Write(r)} = 
         import static java.text.DecimalFormatSymbols.getInstance(##java.util.Locale): ##java.text.DecimalFormatSymbols \ {IO, r};
         let Locale(loc1) = loc;
         DecimalFormatSymbols(getInstance(loc1))  |> Interop/Flix/ResultSetter.apply(rc, fs)
@@ -96,13 +113,13 @@ namespace Interop/Text/DecimalFormatSymbols {
     pub def getCurrency(dfs: DecimalFormatSymbols): Option[Currency] =
         import java.text.DecimalFormatSymbols.getCurrency(): ##java.util.Currency \ {};
         let DecimalFormatSymbols(dfs1) = dfs;
-        getCurrency(dfs1) |> Object.toOption |> Option.map(Currency)
+        getCurrency(dfs1) |> Object.toOption |> Option.map(Interop/Util/Currency.wrapHH)
         
-    pub def setCurrency!(cur: Currency): ResultSetter[DecimalFormatSymbols, r] =
-        Interop/Flix/ResultSetter.try(dfs ->
+    pub def setCurrency!(_: Region[r], cur: Currency): ResultSetter[DecimalFormatSymbols, r] =
+        Interop/Flix/ResultSetter.lift(dfs ->
             import java.text.DecimalFormatSymbols.setCurrency(##java.util.Currency): Unit \ r;
             let DecimalFormatSymbols(dfs1) = dfs;
-            let Currency(cur1) = cur;
+            let cur1 = Interop/Util/Currency.getHH(cur);
             setCurrency(dfs1, cur1)
         )
 
@@ -111,8 +128,8 @@ namespace Interop/Text/DecimalFormatSymbols {
         let DecimalFormatSymbols(dfs1) = dfs;
         getCurrencySymbol(dfs1)
 
-    pub def setCurrencySymbol!(s: String): ResultSetter[DecimalFormatSymbols, r] =
-        Interop/Flix/ResultSetter.try(dfs ->
+    pub def setCurrencySymbol!(_: Region[r], s: String): ResultSetter[DecimalFormatSymbols, r] =
+        Interop/Flix/ResultSetter.lift(dfs ->
             import java.text.DecimalFormatSymbols.setCurrencySymbol(String): Unit \ r;
             let DecimalFormatSymbols(dfs1) = dfs;
             setCurrencySymbol(dfs1, s)
@@ -123,8 +140,8 @@ namespace Interop/Text/DecimalFormatSymbols {
         let DecimalFormatSymbols(dfs1) = dfs;
         getDecimalSeparator(dfs1)
 
-    pub def setDecimalSeparator!(c: Char): ResultSetter[DecimalFormatSymbols, r] =
-        Interop/Flix/ResultSetter.try(dfs ->
+    pub def setDecimalSeparator!(_ Region[r], c: Char): ResultSetter[DecimalFormatSymbols, r] =
+        Interop/Flix/ResultSetter.lift(dfs ->
             import java.text.DecimalFormatSymbols.setDecimalSeparator(Char): Unit \ r;
             let DecimalFormatSymbols(dfs1) = dfs;
             setDecimalSeparator(dfs1, c)
@@ -137,7 +154,7 @@ namespace Interop/Text/DecimalFormatSymbols {
         getDigit(dfs1)
 
     pub def setDigit!(c: Char): ResultSetter[DecimalFormatSymbols, r] =
-        Interop/Flix/ResultSetter.try(dfs ->
+        Interop/Flix/ResultSetter.lift(dfs ->
             import java.text.DecimalFormatSymbols.setDigit(Char): Unit \ r;
             let DecimalFormatSymbols(dfs1) = dfs;
             setDigit(dfs1, c)
@@ -149,7 +166,7 @@ namespace Interop/Text/DecimalFormatSymbols {
         getExponentSeparator(dfs1)
 
     pub def setExponentSeparator!(s: String): ResultSetter[DecimalFormatSymbols, r] =
-        Interop/Flix/ResultSetter.try(dfs ->
+        Interop/Flix/ResultSetter.lift(dfs ->
             import java.text.DecimalFormatSymbols.setExponentSeparator(String): Unit \ r;
             let DecimalFormatSymbols(dfs1) = dfs;
             setExponentSeparator(dfs1, s)
@@ -168,7 +185,7 @@ namespace Interop/Text/DecimalFormatSymbols {
         getInfinity(dfs1)
 
     pub def setInfinity!(s: String): ResultSetter[DecimalFormatSymbols, r] =
-        Interop/Flix/ResultSetter.try(dfs ->
+        Interop/Flix/ResultSetter.lift(dfs ->
             import java.text.DecimalFormatSymbols.setInfinity(String): Unit \ r;
             let DecimalFormatSymbols(dfs1) = dfs;
             setInfinity(dfs1, s)
@@ -181,7 +198,7 @@ namespace Interop/Text/DecimalFormatSymbols {
         getInternationalCurrencySymbol(dfs1)
 
     pub def setInternationalCurrencySymbol!(s: String): ResultSetter[DecimalFormatSymbols, r] =
-        Interop/Flix/ResultSetter.try(dfs ->
+        Interop/Flix/ResultSetter.lift(dfs ->
             import java.text.DecimalFormatSymbols.setInternationalCurrencySymbol(String): Unit \ r;
             let DecimalFormatSymbols(dfs1) = dfs;
             setInternationalCurrencySymbol(dfs1, s)
@@ -193,7 +210,7 @@ namespace Interop/Text/DecimalFormatSymbols {
         getMinusSign(dfs1)
 
     pub def setMinusSign!(c: Char): ResultSetter[DecimalFormatSymbols, r] =
-        Interop/Flix/ResultSetter.try(dfs ->
+        Interop/Flix/ResultSetter.lift(dfs ->
             import java.text.DecimalFormatSymbols.setMinusSign(Char): Unit \ r;
             let DecimalFormatSymbols(dfs1) = dfs;
             setMinusSign(dfs1, c)
@@ -205,7 +222,7 @@ namespace Interop/Text/DecimalFormatSymbols {
         getMonetaryDecimalSeparator(dfs1)   
 
     pub def setMonetaryDecimalSeparator!(c: Char): ResultSetter[DecimalFormatSymbols, r] =
-        Interop/Flix/ResultSetter.try(dfs ->
+        Interop/Flix/ResultSetter.lift(dfs ->
             import java.text.DecimalFormatSymbols.setMonetaryDecimalSeparator(Char): Unit \ r;
             let DecimalFormatSymbols(dfs1) = dfs;
             setMonetaryDecimalSeparator(dfs1, c)
@@ -223,7 +240,7 @@ namespace Interop/Text/DecimalFormatSymbols {
         getNaN(dfs1)
 
     pub def setNaN!(s: String): ResultSetter[DecimalFormatSymbols, r] =
-        Interop/Flix/ResultSetter.try(dfs ->
+        Interop/Flix/ResultSetter.lift(dfs ->
             import java.text.DecimalFormatSymbols.setNaN(String): Unit \ r;
             let DecimalFormatSymbols(dfs1) = dfs;
             setNaN(dfs1, s)
@@ -235,7 +252,7 @@ namespace Interop/Text/DecimalFormatSymbols {
         getPatternSeparator(dfs1)
 
     pub def setPatternSeparator!(c: Char): ResultSetter[DecimalFormatSymbols, r] =
-        Interop/Flix/ResultSetter.try(dfs ->
+        Interop/Flix/ResultSetter.lift(dfs ->
             import java.text.DecimalFormatSymbols.setPatternSeparator(Char): Unit \ r;
             let DecimalFormatSymbols(dfs1) = dfs;
             setPatternSeparator(dfs1, c)
@@ -247,7 +264,7 @@ namespace Interop/Text/DecimalFormatSymbols {
         getPercent(dfs1)
 
     pub def setPercent!(c: Char): ResultSetter[DecimalFormatSymbols, r] =
-        Interop/Flix/ResultSetter.try(dfs ->
+        Interop/Flix/ResultSetter.lift(dfs ->
             import java.text.DecimalFormatSymbols.setPercent(Char): Unit \ r;
             let DecimalFormatSymbols(dfs1) = dfs;
             setPercent(dfs1, c)

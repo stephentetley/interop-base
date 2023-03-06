@@ -17,10 +17,15 @@
 namespace Interop/Text {
     
     ///
-    /// Represents a Collator.
+    /// Class / Represents a Collator.
     /// "Immutable with Setter"
     ///
     pub enum Collator(##java.text.Collator)
+
+    pub class SubCollator[t: Type] {
+        pub def toCollator(o: t): Collator
+        pub def fromCollator(c: Collator): t
+    }
 
 
 }
@@ -28,7 +33,7 @@ namespace Interop/Text {
 namespace Interop/Text/Collator {
 
     use Interop/Text.Collator
-    use Interop/Text.Collator.{Collator}
+    use Interop/Text.Collator.{Collator}    
     use Interop/Util.Locale
     use Interop/Util.Locale.{Locale}
     use Interop/Flix.Setter
@@ -41,6 +46,20 @@ namespace Interop/Text/Collator {
 
     pub def wrapHH(prim: ##java.text.Collator): Collator = 
         Collator(prim)
+
+
+    pub enum CollatorProperty with Eq, ToString {
+        case Decomposition(Int32)
+        case Strength(Int32)
+    }
+    
+
+    pub def makeSetter(rc: Region[r], xs: List[CollatorProperty]): Setter[Collator, r] = 
+        def f(x) = match x {
+            case Decomposition(x1) => setDecomposition!(rc, x1)
+            case Strength(x1)      => setStrength!(rc, x1)
+        };
+        Interop/Flix/Setter.makeSetter(rc, f, xs)
 
 
     pub def no_decomposition(): Int32 = 
@@ -78,15 +97,16 @@ namespace Interop/Text/Collator {
     /// Get a Collator with the locale of the JVM.
     /// Apply the setters in `fs` to further configure the Collator.
     ///
-    pub def getInstance(rc: Region[r], fs: List[Setter[Collator, r]]): Collator \ {Write(r), IO} =
+    pub def getInstance(props: List[CollatorProperty]): Collator \ IO = region rc {
         import static java.text.Collator.getInstance(): ##java.text.Collator \ IO;
-        Collator(getInstance()) |> Interop/Flix/Setter.apply(rc, fs)
-        
-    pub def getInstanceWithLocale(rc: Region[r], loc: Locale, fs: List[Setter[Collator, r]]): Collator \ Write(r) =
+        Collator(getInstance()) |> Interop/Flix/Setter.apply(rc, makeSetter(rc, props))
+    }
+
+    pub def getInstanceWithLocale(loc: Locale, props: List[CollatorProperty]): Collator = region rc {
         import static java.text.Collator.getInstance(##java.util.Locale): ##java.text.Collator \ {};
         let Locale(loc1) = loc;
-        Collator(getInstance(loc1)) |> Interop/Flix/Setter.apply(rc, fs)
-
+        Collator(getInstance(loc1)) |> Interop/Flix/Setter.apply(rc, makeSetter(rc, props))
+    }
 
     /// TODO - instance with decomposition and strength?
 
@@ -127,14 +147,14 @@ namespace Interop/Text/Collator {
         getStrength(c1)
 
 
-    pub def setDecomposition!(mode: Int32): Setter[Collator, r] =
+    pub def setDecomposition!(_: Region[r], mode: Int32): Setter[Collator, r] =
         Setter(c -> 
             import java.text.Collator.setDecomposition(Int32): Unit \ Write(r);
             let Collator(c1) = c;
             setDecomposition(c1, mode)
         )
 
-    pub def setStrength!(strength: Int32): Setter[Collator, r] =
+    pub def setStrength!(_: Region[r], strength: Int32): Setter[Collator, r] =
         Setter(c ->
             import java.text.Collator.setStrength(Int32): Unit \ Write(r);
             let Collator(c1) = c;

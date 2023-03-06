@@ -28,18 +28,15 @@ namespace Interop/Flix/ResultSetter {
     use Interop/Flix.ResultSetter.ResultSetter
 
 
-    pub def apply[r: Region, t:Type](_: Region[r], fs: List[ResultSetter[t, r]], o: t): Result[String, t] \ Write(r) = 
-        def loop(ll) = match ll {
-            case Nil     => Ok(o)
-            case ResultSetter(f) :: rs => match f(o) { 
-                case Ok()   => loop(rs)
-                case Err(s) => Err(s)
-            }
-        };
-        loop(fs)
+    pub def apply[r: Region, t:Type](_: Region[r], f: ResultSetter[t, r], o: t): Result[String, t] \ Write(r) = 
+        let ResultSetter(f1) = f;
+        match f1(o) { 
+            case Ok()   => Ok(o)
+            case Err(s) => Err(s)
+        }
 
-    /// Are we happy is the only effect is mutation? 
-    pub def try(f: t -> Unit \ Write(r)): ResultSetter[t, r] =
+    /// 
+    pub def lift(f: t -> Unit \ Write(r)): ResultSetter[t, r] =
         ResultSetter(o -> 
             try {
                 Ok(f(o))
@@ -48,6 +45,30 @@ namespace Interop/Flix/ResultSetter {
                     import java.lang.Throwable.getMessage(): String \ {};
                     Err(getMessage(e))
             }
+        )
+
+    pub def empty(): ResultSetter[t, r] =
+        ResultSetter(_ -> unsafe_cast Ok() as _ \ r)
+
+
+    pub def combine(a: ResultSetter[t, r], b: ResultSetter[t, r]): ResultSetter[t, r] =
+        ResultSetter(o -> 
+            let ResultSetter(f1) = a;
+            let ResultSetter(f2) = b;
+            match f1(o) { 
+                case Ok()     => f2(o)
+                case Err(msg) => Err(msg)
+            }
+            
+        )
+
+    pub def makeResultSetter(_: Region[r], f: prop -> ResultSetter[t, r], xs: List[prop]): ResultSetter[t, r] = 
+        List.foldLeft((ac, prop) -> combine(ac, f(prop)), empty(), xs)
+
+    pub def castSetter[r: Region, t:Type, t1: Type](f: t1 -> t, setter: ResultSetter[t, r]): ResultSetter[t1, r] = 
+        ResultSetter(o -> 
+            let ResultSetter(f1) = setter;
+            f1(f(o))
         )
 
 }

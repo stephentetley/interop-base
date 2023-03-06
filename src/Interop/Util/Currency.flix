@@ -48,9 +48,13 @@ namespace Interop/Util/Currency {
     use Interop/Util.SetZ
     use Interop/Flix.Marshal
 
-    pub def getHH(o: Currency): ##java.util.Currency = 
-        let Currency(o1) = o;
-        o1
+    pub def getHH(c: Currency): ##java.util.Currency = 
+        let Currency(c1) = c;
+        c1
+
+    pub def wrapHH(prim: ##java.util.Currency): Currency = 
+        Currency(prim)
+
 
     /// equals and hashCode not overriden from Object...
 

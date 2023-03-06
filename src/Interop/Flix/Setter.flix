@@ -32,11 +32,30 @@ namespace Interop/Flix/Setter {
     use Interop/Flix.Setter.Setter
 
 
-    pub def apply[r: Region, t:Type](_: Region[r], fs: List[Setter[t, r]], o: t): t \ Write(r) = 
-        List.forEach(f -> {
-            let Setter(f1) = f;
-            f1(o)
-        }, fs);
+    pub def apply[r: Region, t:Type](_: Region[r], setter: Setter[t, r], o: t): t \ Write(r) = 
+        let Setter(f1) = setter;
+        f1(o);
         o
-    
+
+    pub def empty(): Setter[t, r] =
+        Setter(_ -> unsafe_cast () as _ \ r)
+
+
+    pub def combine(a: Setter[t, r], b: Setter[t, r]): Setter[t, r] =
+        Setter(o -> 
+            let Setter(f1) = a;
+            let Setter(f2) = b;
+            f1(o);
+            f2(o)
+        )
+
+    pub def makeSetter(_: Region[r], f: prop -> Setter[t, r], xs: List[prop]): Setter[t, r] = 
+        List.foldLeft((ac, prop) -> combine(ac, f(prop)), empty(), xs)
+
+    pub def castSetter[r: Region, t:Type, t1: Type](f: t1 -> t, setter: Setter[t, r]): Setter[t1, r] = 
+        Setter(o -> 
+            let Setter(f1) = setter;
+            f1(f(o))
+        )
+
 }
