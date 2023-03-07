@@ -17,7 +17,7 @@
 namespace Interop/Util/Locale {
 
 
-    /// Immutable
+    /// Class / Immutable
     pub enum LanguageRange(##java.util.Locale$LanguageRange)
 
     instance Interop/Flix.Marshal[LanguageRange] {
@@ -47,7 +47,7 @@ namespace Interop/Util/Locale/LanguageRange {
     ///
     /// Returns a new LanguageRange for the supplied `range`.
     ///
-    pub def newLanguageRange(range: String): Result[String, LanguageRange] =
+    pub def new(range: String): Result[String, LanguageRange] =
         try {
             import new java.util.Locale$LanguageRange(String): ##java.util.Locale$LanguageRange \ {} as new1;
             LanguageRange(new1(range)) |> Ok

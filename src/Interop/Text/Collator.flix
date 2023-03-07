@@ -48,7 +48,7 @@ namespace Interop/Text/Collator {
         Collator(prim)
 
 
-    pub enum CollatorProperty with Eq, ToString {
+    pub enum CollatorProperty {
         case Decomposition(Int32)
         case Strength(Int32)
     }

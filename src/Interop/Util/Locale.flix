@@ -18,7 +18,7 @@ namespace Interop/Util {
 
     /// 
     /// Locale is a wrapper over the Java class `java.util.Locale`.
-    /// Immutable
+    /// Class / Immutable
     pub enum Locale(##java.util.Locale)
 
     instance ToString[Locale] {
@@ -51,11 +51,11 @@ namespace Interop/Util {
 
 namespace Interop/Util/Locale {
 
-    use Interop/Util.Locale;
-    use Interop/Util.Locale.{Locale};
+    use Interop/Util.Locale
+    use Interop/Util.Locale.{Locale}
 
-    use Interop/Util/Locale.LanguageRange;
-    use Interop/Util/Locale.LanguageRange.{LanguageRange};
+    use Interop/Util/Locale.LanguageRange
+    use Interop/Util/Locale.LanguageRange.{LanguageRange}
 
     /// 
     /// `Category` is an enum for Locale categories.
@@ -409,6 +409,7 @@ namespace Interop/Util/Locale {
         let Locale(x1) = x;
         hasExtensions(x1)
 
+    /// Produces a new Locale...
     pub def stripExtensions(x: Locale): Locale =
         import java.util.Locale.stripExtensions(): ##java.util.Locale \ {};
         let Locale(x1) = x;
