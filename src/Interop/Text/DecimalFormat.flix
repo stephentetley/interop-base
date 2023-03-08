@@ -59,6 +59,8 @@ namespace Interop/Text/DecimalFormat {
 
 
     pub enum DecimalFormatProperty {
+        case ApplyPattern(String)
+        case ApplyLocalizedPattern(String)
         case CurrencyP(Currency)
         case DecimalFormatSymbolsP(DecimalFormatSymbols)
         case DecimalSeparatorAlwaysShown(Bool)
@@ -81,6 +83,8 @@ namespace Interop/Text/DecimalFormat {
     pub def makeSetter(rc: Region[r], xs: List[DecimalFormatProperty]): Setter[DecimalFormat, r] = 
         use Interop/Flix/Setter.{castSetter};
         def f(x) = match x {
+            case ApplyPattern(x1)                   => applyPattern!(rc, x1)
+            case ApplyLocalizedPattern(x1)          => applyLocalizedPattern!(rc, x1)
             case CurrencyP(x1)                      => setCurrency!(rc, x1)
             case DecimalFormatSymbolsP(x1)          => setDecimalFormatSymbols!(rc, x1)
             case DecimalSeparatorAlwaysShown(x1)    => setDecimalSeparatorAlwaysShown!(rc, x1)
@@ -266,6 +270,24 @@ namespace Interop/Text/DecimalFormat {
 
 
     ///
+    pub def applyPattern!(_: Region[r], patt: String): Setter[DecimalFormat, r] =
+        Interop/Flix/Setter.lift(df ->
+            import java.text.DecimalFormat.applyPattern(String): Unit \ r;
+            let DecimalFormat(df1) = df;
+            applyPattern(df1, patt)
+        )
+
+    ///
+    pub def applyLocalizedPattern!(_: Region[r], patt: String): Setter[DecimalFormat, r] =
+        Interop/Flix/Setter.lift(df ->
+            import java.text.DecimalFormat.applyLocalizedPattern(String): Unit \ r;
+            let DecimalFormat(df1) = df;
+            applyLocalizedPattern(df1, patt)
+        )
+
+
+
+    ///
     pub def toPattern(df: DecimalFormat): String \ Read(r) =
         import java.text.DecimalFormat.toPattern(): String \ r;
         let DecimalFormat(df1) = df;
@@ -277,30 +299,4 @@ namespace Interop/Text/DecimalFormat {
         import java.text.DecimalFormat.toLocalizedPattern(): String \ r;
         let DecimalFormat(df1) = df;
         toLocalizedPattern(df1)
-
-    ///
-    pub def applyPattern!(patt: String, df: DecimalFormat): Result[String, Unit] \ Write(r) =
-        try {
-            import java.text.DecimalFormat.applyPattern(String): Unit \ r;
-            let DecimalFormat(df1) = df;
-            applyPattern(df1, patt) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
-
-    ///
-    pub def applyLocalizedPattern!(patt: String, df: DecimalFormat): Result[String, Unit] \ Write(r) =
-        try {
-            import java.text.DecimalFormat.applyLocalizedPattern(String): Unit \ r;
-            let DecimalFormat(df1) = df;
-            applyLocalizedPattern(df1, patt) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
-
-
 }
