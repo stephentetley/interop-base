@@ -288,15 +288,15 @@ namespace Interop/Text/DecimalFormat {
 
 
     ///
-    pub def toPattern(df: DecimalFormat): String \ Read(r) =
-        import java.text.DecimalFormat.toPattern(): String \ r;
+    pub def toPattern(df: DecimalFormat): String =
+        import java.text.DecimalFormat.toPattern(): String \ {};
         let DecimalFormat(df1) = df;
         toPattern(df1)
 
 
     ///
-    pub def toLocalizedPattern(df: DecimalFormat): String \ Read(r) =
-        import java.text.DecimalFormat.toLocalizedPattern(): String \ r;
+    pub def toLocalizedPattern(df: DecimalFormat): String =
+        import java.text.DecimalFormat.toLocalizedPattern(): String \ {};
         let DecimalFormat(df1) = df;
         toLocalizedPattern(df1)
 }

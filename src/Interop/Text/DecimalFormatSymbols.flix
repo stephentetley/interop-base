@@ -81,21 +81,22 @@ namespace Interop/Text/DecimalFormatSymbols {
 
 
     ///
-    /// Returns a new mutable DecimalFormatSymbols object.
+    /// Returns a new DecimalFormatSymbols object.
     /// Uses the (implicit) default locale, hence in IO
     ///
-    pub def new(_: Region[r]): DecimalFormatSymbols \ {IO, Write(r)} =
-        import new java.text.DecimalFormatSymbols(): ##java.text.DecimalFormatSymbols \ {IO, r} as newDecimalFormatSymbols;
-        DecimalFormatSymbols(newDecimalFormatSymbols())
+    pub def new(props: List[DecimalFormatSymbolsProperty]): Result[String, DecimalFormatSymbols] \ IO = region rc {
+        import new java.text.DecimalFormatSymbols(): ##java.text.DecimalFormatSymbols \ IO as new1;
+        DecimalFormatSymbols(new1()) |> Interop/Flix/Setter.apply(rc, makeSetter(rc, props))
+    }
 
     ///
-    /// Returns a new mutable DecimalFormatSymbols object derived from the locale.
+    /// Returns a new DecimalFormatSymbols object derived from the locale.
     ///
-    pub def newWithLocale(_: Region[r], loc: Locale): DecimalFormatSymbols \ Write(r) =
-        import new java.text.DecimalFormatSymbols(##java.util.Locale): ##java.text.DecimalFormatSymbols \ r as newDecimalFormatSymbols;
+    pub def newWithLocale(loc: Locale, props: List[DecimalFormatSymbolsProperty]): Result[String, DecimalFormatSymbols] = region rc {
+        import new java.text.DecimalFormatSymbols(##java.util.Locale): ##java.text.DecimalFormatSymbols \ {} as new1;
         let Locale(loc1) = loc;
-        DecimalFormatSymbols(newDecimalFormatSymbols(loc1))
-
+        DecimalFormatSymbols(new1(loc1)) |> Interop/Flix/Setter.apply(rc, makeSetter(rc, props))
+    }
 
     pub def equals(x: DecimalFormatSymbols, y: DecimalFormatSymbols): Bool =
         import java.text.DecimalFormatSymbols.equals(##java.lang.Object): Bool \ {};

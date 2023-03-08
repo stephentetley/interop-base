@@ -86,32 +86,7 @@ namespace Interop/Text/CompactNumberFormat {
         };
         Interop/Flix/Setter.makeSetter(rc, f, xs)
 
-/*
-    ///
-    /// Returns a new mutable CompactNumberFormat.
-    /// Uses the (implicit) default locale, hence in IO
-    ///
-    pub def new(_: Region[r]): CompactNumberFormat \ {IO, Write(r)} =
-        import new java.text.CompactNumberFormat(): ##java.text.CompactNumberFormat \ {IO, r} as newDecimalFormat;
-        newDecimalFormat() |> CompactNumberFormat
 
-    ///
-    /// Returns a new mutable CompactNumberFormat.
-    /// Uses the (implicit) default locale, hence in IO
-    ///
-    pub def newWithPattern(_: Region[r], patt: String): CompactNumberFormat \ {IO, Write(r)} =
-        import new java.text.CompactNumberFormat(String): ##java.text.CompactNumberFormat \ {IO, r} as newDecimalFormat;
-        newDecimalFormat(patt) |> CompactNumberFormat
-
-    ///
-    /// Returns a new mutable CompactNumberFormat.
-    /// Uses DecimalFormatSymbols so not in IO
-    ///
-    pub def newWithDecimalFormatSymbols(_: Region[r], patt: String, dfs: DecimalFormatSymbols[r]): CompactNumberFormat \ Write(r) =
-        import new java.text.CompactNumberFormat(String, ##java.text.DecimalFormatSymbols): ##java.text.CompactNumberFormat \ r as newDecimalFormat;
-        let dfs1 = Interop/Text/DecimalFormatSymbols.getHH(dfs);
-        newDecimalFormat(patt, dfs1) |> CompactNumberFormat
-*/
 
     pub def equals(x: CompactNumberFormat, y: CompactNumberFormat): Bool =
         import java.text.CompactNumberFormat.equals(##java.lang.Object): Bool \ {};
