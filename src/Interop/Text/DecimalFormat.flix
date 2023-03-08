@@ -57,34 +57,80 @@ namespace Interop/Text/DecimalFormat {
     pub def wrapHH(prim: ##java.text.DecimalFormat): DecimalFormat = 
         DecimalFormat(prim)
 
-    ///
-    /// Returns a new DecimalFormat.
-    /// Uses the (implicit) default locale, hence in IO
-    ///
-    pub def new(rc: Region[r], fs: Setter[DecimalFormat, r]): Result[String, DecimalFormat] \ {IO, Write(r)} =
-        import new java.text.DecimalFormat(): ##java.text.DecimalFormat \ IO as new1;
-        DecimalFormat(new1()) |> Interop/Flix/Setter.apply(rc, fs)
+
+    pub enum DecimalFormatProperty {
+        case CurrencyP(Currency)
+        case DecimalFormatSymbolsP(DecimalFormatSymbols)
+        case DecimalSeparatorAlwaysShown(Bool)
+        case GroupingSize(Int32)
+        case GroupingUsed(Bool)
+        case MaximumFractionDigits(Int32)
+        case MaximumIntegerDigits(Int32)
+        case MinimumFractionDigits(Int32)
+        case MinimumIntegerDigits(Int32)
+        case Multiplier(Int32)
+        case NegativePrefix(String)
+        case NegativeSuffix(String)
+        case ParseBigDecimal(Bool)
+        case ParseIntegerOnly(Bool)
+        case PositivePrefix(String)
+        case PositiveSuffix(String)
+        case RoundingModeP(RoundingMode)
+    }
+
+    pub def makeSetter(rc: Region[r], xs: List[DecimalFormatProperty]): Setter[DecimalFormat, r] = 
+        use Interop/Flix/Setter.{castSetter};
+        def f(x) = match x {
+            case CurrencyP(x1)                      => setCurrency!(rc, x1)
+            case DecimalFormatSymbolsP(x1)          => setDecimalFormatSymbols!(rc, x1)
+            case DecimalSeparatorAlwaysShown(x1)    => setDecimalSeparatorAlwaysShown!(rc, x1)
+            case GroupingSize(x1)                   => setGroupingSize!(rc, x1)
+            case GroupingUsed(x1)                   => castSetter(Interop/Text/SubNumberFormat.toNumberFormat, Interop/Text/NumberFormat.setGroupingUsed!(rc, x1))
+            case MaximumFractionDigits(x1)          => setMaximumFractionDigits!(rc, x1)
+            case MaximumIntegerDigits(x1)           => setMaximumIntegerDigits!(rc, x1)
+            case MinimumFractionDigits(x1)          => setMinimumFractionDigits!(rc, x1)
+            case MinimumIntegerDigits(x1)           => setMinimumIntegerDigits!(rc, x1)
+            case Multiplier(x1)                     => setMultiplier!(rc, x1)
+            case NegativePrefix(x1)                 => setNegativePrefix!(rc, x1)
+            case NegativeSuffix(x1)                 => setNegativeSuffix!(rc, x1)
+            case ParseBigDecimal(x1)                => setParseBigDecimal!(rc, x1)
+            case ParseIntegerOnly(x1)               => castSetter(Interop/Text/SubNumberFormat.toNumberFormat, Interop/Text/NumberFormat.setParseIntegerOnly!(rc, x1))
+            case PositivePrefix(x1)                 => setPositivePrefix!(rc, x1)
+            case PositiveSuffix(x1)                 => setPositiveSuffix!(rc, x1)
+            case RoundingModeP(x1)                  => setRoundingMode!(rc, x1)
+        };
+        Interop/Flix/Setter.makeSetter(rc, f, xs)
 
     ///
     /// Returns a new DecimalFormat.
     /// Uses the (implicit) default locale, hence in IO
     ///
-    pub def newWithPattern(rc: Region[r], patt: String, fs: Setter[DecimalFormat, r]): Result[String, DecimalFormat] \ {IO, Write(r)} =
+    pub def new(props: List[DecimalFormatProperty]): Result[String, DecimalFormat] \ IO = region rc {
+        import new java.text.DecimalFormat(): ##java.text.DecimalFormat \ IO as new1;
+        DecimalFormat(new1()) |> Interop/Flix/Setter.apply(rc, makeSetter(rc, props))
+    }
+
+    ///
+    /// Returns a new DecimalFormat.
+    /// Uses the (implicit) default locale, hence in IO
+    ///
+    pub def newWithPattern(patt: String, props: List[DecimalFormatProperty]): Result[String, DecimalFormat] \ IO = region rc {
         import new java.text.DecimalFormat(String): ##java.text.DecimalFormat \ IO as new1;
-        DecimalFormat(new1(patt)) |> Interop/Flix/Setter.apply(rc, fs)
+        DecimalFormat(new1(patt)) |> Interop/Flix/Setter.apply(rc, makeSetter(rc, props))
+    }
+
 
     ///
     /// Returns a new mutable DecimalFormat.
     /// Uses DecimalFormatSymbols so not in IO
     ///
-    pub def newWithDecimalFormatSymbols(rc: Region[r], 
-                                        patt: String, 
+    pub def newWithDecimalFormatSymbols(patt: String, 
                                         syms: DecimalFormatSymbols, 
-                                        fs: Setter[DecimalFormat, r]): Result[String, DecimalFormat] \ Write(r) =
+                                        props: List[DecimalFormatProperty]): Result[String, DecimalFormat] = region rc {
         import new java.text.DecimalFormat(String, ##java.text.DecimalFormatSymbols): ##java.text.DecimalFormat \ {} as new1;
         let syms1 = Interop/Text/DecimalFormatSymbols.getHH(syms);
-        DecimalFormat(new1(patt, syms1)) |> Interop/Flix/Setter.apply(rc, fs)
-
+        DecimalFormat(new1(patt, syms1)) |> Interop/Flix/Setter.apply(rc, makeSetter(rc, props))
+    }
 
     pub def hashCode(df: DecimalFormat): Int32 =
         import java.text.DecimalFormat.hashCode(): Int32 \ {};
@@ -100,7 +146,7 @@ namespace Interop/Text/DecimalFormat {
         })
 
 
-    pub def setCurrency!(cur: Currency): Setter[DecimalFormat, r] =
+    pub def setCurrency!(_: Region[r], cur: Currency): Setter[DecimalFormat, r] =
         Interop/Flix/Setter.lift(df ->
             import java.text.DecimalFormat.setCurrency(##java.util.Currency): Unit  \ r;
             let DecimalFormat(df1) = df;
@@ -117,7 +163,7 @@ namespace Interop/Text/DecimalFormat {
         })
 
     /// TODO - remove region from DecimalFormatSymbols and make "immutable with Setter"
-    pub def setDecimalFormatSymbols!(syms: DecimalFormatSymbols): Setter[DecimalFormat, r] =
+    pub def setDecimalFormatSymbols!(_: Region[r], syms: DecimalFormatSymbols): Setter[DecimalFormat, r] =
         Interop/Flix/Setter.lift(df ->
             import java.text.DecimalFormat.setDecimalFormatSymbols(##java.text.DecimalFormatSymbols): Unit \ r ;
             let DecimalFormat(df1) = df;
@@ -125,28 +171,35 @@ namespace Interop/Text/DecimalFormat {
             setDecimalFormatSymbols(df1, syms1)
         )
 
-    pub def setGroupingSize!(sz: Int32): Setter[DecimalFormat, r] =
+    pub def setDecimalSeparatorAlwaysShown!(_: Region[r], shown: Bool): Setter[DecimalFormat, r] =
+        Interop/Flix/Setter.lift(df ->
+            import java.text.DecimalFormat.setDecimalSeparatorAlwaysShown(Bool): Unit \ r;
+            let DecimalFormat(df1) = df;
+            setDecimalSeparatorAlwaysShown(df1, shown)
+        )
+
+    pub def setGroupingSize!(_: Region[r], sz: Int32): Setter[DecimalFormat, r] =
         Interop/Flix/Setter.lift(df ->
             import java.text.DecimalFormat.setGroupingSize(Int32): Unit \ r;
             let DecimalFormat(df1) = df;
             setGroupingSize(df1, sz)
         )
 
-    pub def setMaximumIntegerDigits!(n: Int32): Setter[DecimalFormat, r] =
+    pub def setMaximumIntegerDigits!(_: Region[r], n: Int32): Setter[DecimalFormat, r] =
         Interop/Flix/Setter.lift(df ->
             import java.text.DecimalFormat.setMaximumIntegerDigits(Int32): Unit \ r;
             let DecimalFormat(df1) = df;
             setMaximumIntegerDigits(df1, n)
         )
 
-    pub def setMinimumIntegerDigits!(n: Int32): Setter[DecimalFormat, r] =
+    pub def setMinimumIntegerDigits!(_: Region[r], n: Int32): Setter[DecimalFormat, r] =
         Interop/Flix/Setter.lift(df ->
             import java.text.DecimalFormat.setMinimumIntegerDigits(Int32): Unit \ r;
             let DecimalFormat(df1) = df;
             setMinimumIntegerDigits(df1, n)
         )
 
-    pub def setMaximumFractionDigits!(n: Int32): Setter[DecimalFormat, r] =
+    pub def setMaximumFractionDigits!(_: Region[r], n: Int32): Setter[DecimalFormat, r] =
         Interop/Flix/Setter.lift(df ->
             import java.text.DecimalFormat.setMaximumFractionDigits(Int32): Unit \ r;
             let DecimalFormat(df1) = df;
@@ -154,43 +207,56 @@ namespace Interop/Text/DecimalFormat {
         )
 
 
-    pub def setMinimumFractionDigits!(n: Int32): Setter[DecimalFormat, r] =
+    pub def setMinimumFractionDigits!(_: Region[r], n: Int32): Setter[DecimalFormat, r] =
         Interop/Flix/Setter.lift(df ->
             import java.text.DecimalFormat.setMinimumFractionDigits(Int32): Unit \ r;
             let DecimalFormat(df1) = df;
             setMinimumFractionDigits(df1, n)
         )
 
+    pub def setMultiplier!(_: Region[r], n: Int32): Setter[DecimalFormat, r] =
+        Interop/Flix/Setter.lift(df ->
+            import java.text.DecimalFormat.setMultiplier(Int32): Unit \ r;
+            let DecimalFormat(df1) = df;
+            setMultiplier(df1, n)
+        )
 
-    pub def setNegativePrefix!(s: String): Setter[DecimalFormat, r] =
+    pub def setNegativePrefix!(_: Region[r], s: String): Setter[DecimalFormat, r] =
         Interop/Flix/Setter.lift(df ->
             import java.text.DecimalFormat.setNegativePrefix(String): Unit \ r;
             let DecimalFormat(df1) = df;
             setNegativePrefix(df1, s)
         )
 
-    pub def setNegativeSuffix!(s: String): Setter[DecimalFormat, r] =
+    pub def setNegativeSuffix!(_: Region[r], s: String): Setter[DecimalFormat, r] =
         Interop/Flix/Setter.lift(df ->
             import java.text.DecimalFormat.setNegativeSuffix(String): Unit \ r;
             let DecimalFormat(df1) = df;
             setNegativeSuffix(df1, s)
         )
 
-    pub def setPositivePrefix!(s: String): Setter[DecimalFormat, r] =
+    pub def setParseBigDecimal!(_: Region[r], pbd: Bool): Setter[DecimalFormat, r] =
+        Interop/Flix/Setter.lift(df ->
+            import java.text.DecimalFormat.setParseBigDecimal(Bool): Unit \ r;
+            let DecimalFormat(df1) = df;
+            setParseBigDecimal(df1, pbd)
+        )
+
+    pub def setPositivePrefix!(_: Region[r], s: String): Setter[DecimalFormat, r] =
         Interop/Flix/Setter.lift(df ->
             import java.text.DecimalFormat.setPositivePrefix(String): Unit \ r;
             let DecimalFormat(df1) = df;
             setPositivePrefix(df1, s)
         )
 
-    pub def setPositiveSuffix!(s: String): Setter[DecimalFormat, r] =
+    pub def setPositiveSuffix!(_: Region[r], s: String): Setter[DecimalFormat, r] =
         Interop/Flix/Setter.lift(df ->
             import java.text.DecimalFormat.setPositiveSuffix(String): Unit \ r;
             let DecimalFormat(df1) = df;
             setPositiveSuffix(df1, s)
         )
    
-    pub def setRoundingMode!(mode: RoundingMode): Setter[DecimalFormat, r] =
+    pub def setRoundingMode!(_: Region[r], mode: RoundingMode): Setter[DecimalFormat, r] =
         Interop/Flix/Setter.lift(df ->
             import java.text.DecimalFormat.setRoundingMode(##java.math.RoundingMode): Unit \ r;
             let DecimalFormat(df1) = df;
