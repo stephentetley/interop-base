@@ -17,7 +17,7 @@
 namespace Interop/Lang {
 
     ///
-    /// Represents a Java Boolean.
+    /// Represents a Java Double class.
     ///
     pub enum Double(##java.lang.Double)
 
@@ -54,6 +54,12 @@ namespace Interop/Lang/Double {
     pub def compare(x: Float64, y: Float64): Int32 =
         import static java.lang.Double.compare(Float64, Float64): Int32 \ {};
         compare(x, y)
+
+    pub def compareTo(x: Double, y: Double): Int32 =
+        import java.lang.Double.compareTo(##java.lang.Double): Int32 \ {};
+        let Double(x1) = x;
+        let Double(y1) = y;
+        compareTo(x1, y1)
 
     pub def parseDouble(s: String): Float64 = 
         import static java.lang.Double.parseDouble(String): Float64 \ {};
