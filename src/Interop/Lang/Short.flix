@@ -39,6 +39,12 @@ namespace Interop/Lang/Short {
     use Interop/Lang.Short
     use Interop/Lang.Short.{Short}
 
+    pub def getHH(i: Short): ##java.lang.Short = 
+        let Short(i1) = i;
+        i1
+
+    pub def wrapHH(prim: ##java.lang.Short): Short = 
+        Short(prim)
 
     pub def toString(x: Short): String =
         import java.lang.Short.toString(): String \ {};

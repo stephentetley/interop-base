@@ -42,6 +42,10 @@ namespace Interop/Lang/ProcessBuilder {
         let ProcessBuilder(pb1) = pb;
         pb1
 
+    pub def wrapHH(_: Region[r], prim: ##java.lang.ProcessBuilder): ProcessBuilder[r] = 
+        ProcessBuilder(prim)
+
+
     pub def new(rc: Region[r], l: List[String]): ProcessBuilder[r] \ Write(r) = 
         import new java.lang.ProcessBuilder(##java.util.List): ##java.lang.ProcessBuilder \ r as newProcessBuilder;
         let ls1 = Interop/Util/ArrayList.fromFoldable(rc, l) |> Interop/Util/ListZ.toListHH;

@@ -40,6 +40,14 @@ namespace Interop/Lang/Byte {
     use Interop/Lang.Byte.{Byte}
 
 
+    pub def getHH(i: Byte): ##java.lang.Byte = 
+        let Byte(i1) = i;
+        i1
+
+    pub def wrapHH(prim: ##java.lang.Byte): Byte = 
+        Byte(prim)
+
+
     pub def toString(x: Byte): String =
         import java.lang.Byte.toString(): String \ {};
         let Byte(x1) = x;

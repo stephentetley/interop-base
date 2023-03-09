@@ -39,6 +39,12 @@ namespace Interop/Lang/Integer {
     use Interop/Lang.Integer
     use Interop/Lang.Integer.{Integer}
 
+    pub def getHH(i: Integer): ##java.lang.Integer = 
+        let Integer(i1) = i;
+        i1
+
+    pub def wrapHH(prim: ##java.lang.Integer): Integer = 
+        Integer(prim)
 
     pub def toString(x: Integer): String =
         import java.lang.Integer.toString(): String \ {};

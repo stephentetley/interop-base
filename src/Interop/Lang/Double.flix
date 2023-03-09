@@ -40,6 +40,13 @@ namespace Interop/Lang/Double {
     use Interop/Lang.Double.{Double}
 
 
+    pub def getHH(d: Double): ##java.lang.Double = 
+        let Double(d1) = d;
+        d1
+
+    pub def wrapHH(prim: ##java.lang.Double): Double = 
+        Double(prim)
+
     pub def toString(x: Double): String =
         import java.lang.Double.toString(): String \ {};
         let Double(x1) = x;

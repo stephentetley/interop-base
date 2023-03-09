@@ -40,6 +40,13 @@ namespace Interop/Lang/Float {
     use Interop/Lang.Float.{Float}
 
 
+    pub def getHH(d: Float): ##java.lang.Float = 
+        let Float(d1) = d;
+        d1
+
+    pub def wrapHH(prim: ##java.lang.Float): Float = 
+        Float(prim)
+
     pub def toString(x: Float): String =
         import java.lang.Float.toString(): String \ {};
         let Float(x1) = x;

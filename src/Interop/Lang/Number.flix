@@ -48,6 +48,9 @@ namespace Interop/Lang/Number {
         let Number(x1) = x;
         x1
 
+    pub def wrapHH(prim: ##java.lang.Number): Number = 
+        Number(prim)
+
     ///
     ///
     ///

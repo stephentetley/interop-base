@@ -39,6 +39,13 @@ namespace Interop/Lang/Boolean {
     use Interop/Lang.Boolean
     use Interop/Lang.Boolean.{Boolean}
 
+    pub def getHH(b: Boolean): ##java.lang.Boolean = 
+        let Boolean(b1) = b;
+        b1
+
+    pub def wrapHH(prim: ##java.lang.Boolean): Boolean = 
+        Boolean(prim)
+
 
     pub def toString(x: Boolean): String =
         import java.lang.Boolean.toString(): String \ {};

@@ -55,11 +55,11 @@ namespace Interop/NIO/Charset {
 
 namespace Interop/NIO/Charset/Charset {
 
-    use Interop/NIO/Charset.Charset;
-    use Interop/NIO/Charset.Charset.{Charset};
+    use Interop/NIO/Charset.Charset
+    use Interop/NIO/Charset.Charset.{Charset}
 
-    use Interop/Util.Locale;
-    use Interop/Util.Locale.{Locale};
+    use Interop/Util.Locale
+    use Interop/Util.Locale.{Locale}
 
     pub def getHH(cs: Charset): ##java.nio.charset.Charset = 
         let Charset(cs1) = cs;

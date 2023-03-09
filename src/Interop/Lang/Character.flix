@@ -41,6 +41,13 @@ namespace Interop/Lang/Character {
     use Interop/Lang.Character.{Character}
 
 
+    pub def getHH(c: Character): ##java.lang.Character = 
+        let Character(c1) = c;
+        c1
+
+    pub def wrapHH(prim: ##java.lang.Character): Character = 
+        Character(prim)
+
     pub def toString(x: Character): String =
         import java.lang.Character.toString(): String \ {};
         let Character(x1) = x;

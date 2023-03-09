@@ -40,6 +40,13 @@ namespace Interop/Lang/Long {
     use Interop/Lang.Long.{Long}
 
 
+    pub def getHH(i: Long): ##java.lang.Long = 
+        let Long(i1) = i;
+        i1
+
+    pub def wrapHH(prim: ##java.lang.Long): Long = 
+        Long(prim)
+
     pub def toString(x: Long): String =
         import java.lang.Long.toString(): String \ {};
         let Long(x1) = x;
