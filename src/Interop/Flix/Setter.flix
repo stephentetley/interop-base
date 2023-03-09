@@ -38,13 +38,7 @@ namespace Interop/Flix/Setter {
     /// 
     pub def lift(f: t -> Unit \ Write(r)): Setter[t, r] =
         Setter(o -> 
-            try {
-                Ok(f(o))
-            } catch {
-                case e: ##java.lang.Exception =>
-                    import java.lang.Throwable.getMessage(): String \ {};
-                    Err(getMessage(e))
-            }
+            Interop/Flix/Util.try(_ -> f(o))            
         )
 
     pub def empty(): Setter[t, r] =

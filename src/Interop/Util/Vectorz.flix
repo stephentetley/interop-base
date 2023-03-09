@@ -97,15 +97,11 @@ namespace Interop/Util/VectorZ {
 
 
     pub def sortWithComparator!(c: Comparator[a], v: VectorZ[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Vector.sort(##java.util.Comparator): Unit \ r; 
             let VectorZ(_, v1) = v;
-            sort(v1, c) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            sort(v1, c)
+        })
 
 
     ///

@@ -75,27 +75,19 @@ namespace Interop/Util/Collection {
         hashCode(c1)
 
     pub def clear!(c: Collection[a, r]): Result[String, Unit] \ Write(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Collection.clear(): Unit \ r;
             let Collection(_, c1) = c;
-            clear(c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            clear(c1)
+        })
 
     pub def add!(x: a, c: Collection[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Collection.add(##java.lang.Object): Bool \ r; 
             let Collection(_, c1) = c;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
-            add(c1, x1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            add(c1, x1)
+        })
 
     pub def remove!(x: a, c: Collection[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
         Interop/Flix/Util.try(_ -> {
@@ -107,42 +99,30 @@ namespace Interop/Util/Collection {
 
 
     pub def removeIf!(f: a -> Bool \ ef, c: Collection[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Collection.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let Collection(_, c1) = c;            
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            (unsafe_cast removeIf(c1, f1) as _ \ {ef, Write(r)}) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            unsafe_cast removeIf(c1, f1) as _ \ {ef, Write(r)}
+        })
 
     pub def forEach(f: a -> Unit \ ef, c: Collection[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Collection.forEach(##java.util.function.Consumer): Unit \ r; 
             let Collection(_, c1) = c;
             let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
-            forEach(c1, f1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            forEach(c1, f1)
+        })
 
 
     // Uses `Object.equals` for comparing.
     pub def contains(x: a, c: Collection[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Collection.contains(##java.lang.Object): Bool \ r; 
             let Collection(_, c1) = c;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
-            contains(c1, x1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            contains(c1, x1)
+        })
 
     pub def stream(rc: Region[r1], c: Collection[a, r]): Stream[a, r1] \ { Read(r) }  with Marshal[a] =
         import java.util.Collection.stream(): ##java.util.stream.Stream \ r; 

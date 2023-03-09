@@ -117,54 +117,37 @@ namespace Interop/Util/HashSet {
 
     /// Use Result - `s` could be null...
     pub def remove!(x: a, s: HashSet[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.HashSet.remove(##java.lang.Object): Bool \ r; 
             let HashSet(_, s1) = s;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
-            remove(s1, x1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
-        
+            remove(s1, x1)
+        })
 
     pub def removeAll!(c: Collection[a, r1], s: HashSet[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.HashSet.removeAll(##java.util.Collection): Bool \ {r, r1}; 
             let HashSet(_, s1) = s;
             let Collection(_, c1) = c;
-            removeAll(s1, c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            removeAll(s1, c1)
+        })
 
     
     pub def removeIf!(f: a -> Bool \ ef, s: HashSet[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.HashSet.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let HashSet(_, s1) = s;        
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            (unsafe_cast removeIf(s1, f1) as _ \ {ef, Write(r)}) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            unsafe_cast removeIf(s1, f1) as _ \ {ef, Write(r)}
+        })
 
     pub def retainAll!(c: Collection[a, r1], s: HashSet[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.HashSet.retainAll(##java.util.Collection): Bool \ {r, r1}; 
             let HashSet(_, s1) = s;
             let Collection(_, c1) = c;
-            retainAll(s1, c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            retainAll(s1, c1)
+        })
 
     pub def fromFoldable(r: Region[r], t: t[a]): HashSet[a, r] \ Write(r) with Foldable[t], Marshal[a] =
         let set1 = new(r);

@@ -91,28 +91,20 @@ namespace Interop/Util/ArrayList {
     /// Returns a new mutable ArrayList.
     ///
     pub def newWithCapacity(rc: Region[r], initialCapacity: Int32): Result[String, ArrayList[a, r]] \ Write(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import new java.util.ArrayList(Int32): ##java.util.ArrayList \ r as newArrayList;
-            ArrayList(rc, newArrayList(initialCapacity)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            ArrayList(rc, newArrayList(initialCapacity))
+        })
 
     ///
     /// Returns a new mutable ArrayList.
     ///
     pub def newWithCollection(rc: Region[r1], c: Collection[a, r]): Result[String, ArrayList[a, r1]] \ {Read(r), Write(r1) } =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import new java.util.ArrayList(##java.util.Collection): ##java.util.ArrayList \ {r, r1} as newArrayList;
             let Collection(_, c1) = c;
-            ArrayList(rc, newArrayList(c1))  |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            ArrayList(rc, newArrayList(c1))
+        })
 
 
     pub def toString(l: ArrayList[a, r]): String \ Read(r) = 
@@ -153,15 +145,11 @@ namespace Interop/Util/ArrayList {
         add(l1, Interop/Flix/Marshal.toJavaObject(x))
 
     pub def addAt!(ix: Int32, x: a, l: ArrayList[a, r]): Result[String, Unit] \ { Write(r) } with Marshal[a] = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.ArrayList.add(Int32, ##java.lang.Object): Unit \ r;
             let ArrayList(_, l1) = l;
-            add(l1, ix, Interop/Flix/Marshal.toJavaObject(x)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            add(l1, ix, Interop/Flix/Marshal.toJavaObject(x))
+        })
 
     pub def addWith!(x: a, ocast: a -> ##java.lang.Object, l: ArrayList[a, r]): Bool \ Write(r) = 
         import java.util.ArrayList.add(##java.lang.Object): Bool \ r;
@@ -169,82 +157,57 @@ namespace Interop/Util/ArrayList {
         add(l1, ocast(x))
 
     pub def addAll!(c: Collection[a, r1], l: ArrayList[a, r]): Result[String, Bool] \ { Read(r1), Write(r) }= 
-        try { 
+        Interop/Flix/Util.try(_ -> {
             import java.util.ArrayList.addAll(##java.util.Collection): Bool \ {r, r1};
             let ArrayList(_, l1) = l;
             let Collection(_, c1) = c;
-            addAll(l1, c1) |> Ok 
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
-        
+            addAll(l1, c1)
+        })
 
 
     pub def remove!(x: a, l: ArrayList[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.ArrayList.remove(##java.lang.Object): Bool \ r; 
             let ArrayList(_, l1) = l;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
-            remove(l1, x1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            remove(l1, x1)
+        })
 
     pub def removeAll!(c: Collection[a, r1], l: ArrayList[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.ArrayList.removeAll(##java.util.Collection): Bool \ {r, r1}; 
             let ArrayList(_, l1) = l;
             let Collection(_, c1) = c;
-            removeAll(l1, c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            removeAll(l1, c1)
+        })
 
     pub def removeIf!(f: a -> Bool \ ef, l: ArrayList[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.ArrayList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let ArrayList(_, l1) = l;            
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            (unsafe_cast removeIf(l1, f1) as _ \ {ef, Write(r)}) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            unsafe_cast removeIf(l1, f1) as _ \ {ef, Write(r)}
+        })
 
 
 
     pub def retainAll!(c: Collection[a, r1], l: ArrayList[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.ArrayList.retainAll(##java.util.Collection): Bool \ {r, r1}; 
             let ArrayList(_, l1) = l;
             let Collection(_, c1) = c;
-            retainAll(l1, c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            retainAll(l1, c1)
+        })
 
 
 
     pub def forEach(f: a -> Unit \ ef, l: ArrayList[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.ArrayList.forEach(##java.util.function.Consumer): Unit \ r; 
             let ArrayList(_, l1) = l;
             let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
-            forEach(l1, f1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            forEach(l1, f1)
+        })
 
 
     pub def sort!(f: (a, a) -> Int32, l: ArrayList[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
@@ -253,15 +216,11 @@ namespace Interop/Util/ArrayList {
 
 
     pub def sortWithComparator!(c: Comparator[a], l: ArrayList[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.ArrayList.sort(##java.util.Comparator): Unit \ r; 
             let ArrayList(_, l1) = l;
-            sort(l1, c) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            sort(l1, c)
+        })
 
 
     // pub def fromIterable[a: Type, t: Type -> Region -> Type, r: Region, r2: Region]

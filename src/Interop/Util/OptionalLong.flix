@@ -54,15 +54,11 @@ namespace Interop/Util/OptionalLong {
         of(i) |> OptionalLong
 
     pub def getAsLong(o: OptionalLong): Result[String, Int64] = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.OptionalLong.getAsLong(): Int64 \ {};
             let OptionalLong(o1) = o;
-            getAsLong(o1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            getAsLong(o1)
+        })
 
 
     pub def isPresent(o: OptionalLong): Bool = 

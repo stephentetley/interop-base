@@ -54,15 +54,11 @@ namespace Interop/Util/OptionalDouble {
         of(d) |> OptionalDouble
 
     pub def getAsDouble(o: OptionalDouble): Result[String, Float64] = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.OptionalDouble.getAsDouble(): Float64 \ {};
             let OptionalDouble(o1) = o;
-            getAsDouble(o1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            getAsDouble(o1)
+        })
 
 
 

@@ -145,53 +145,37 @@ namespace Interop/Util/MapZ {
         clear(m1)
 
     pub def get(k: k, m: MapZ[k, v, r]): Result[String, Option[v]] \ Write(r) with Marshal[k], Marshal[v] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Map.get(##java.lang.Object): ##java.lang.Object \ r; 
             let MapZ(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);
-            get(m1, k1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            get(m1, k1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject)
+        })
 
     pub def put!(k: k, v: v, m: MapZ[k, v, r]): Result[String, Option[v]] \ Write(r) with Marshal[k], Marshal[v] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Map.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
             let MapZ(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);
             let v1 = Interop/Flix/Marshal.toJavaObject(v);
-            put(m1, k1, v1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            put(m1, k1, v1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject)
+        })
 
     pub def containsKey(k: k, m: MapZ[k, v, r]): Result[String, Bool] \ Read(r) with Marshal[k] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Map.containsKey(##java.lang.Object): Bool \ r; 
             let MapZ(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);
-            containsKey(m1, k1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            containsKey(m1, k1)
+        })
 
     pub def containsValue(v: v, m: MapZ[k, v, r]): Result[String, Bool] \ Read(r) with Marshal[v] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Map.containsValue(##java.lang.Object): Bool \ r; 
             let MapZ(_, m1) = m;
             let v1 = Interop/Flix/Marshal.toJavaObject(v);
-            containsValue(m1, v1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            containsValue(m1, v1)
+        })
 
     /// Can't guarantee `Ord[k]` at this point...
     pub def entrySet(rc: Region[r1], m: MapZ[k, v, r]): SetZ[Entry[k, v, r], r1] \ { Read(r), Write(r1) }= 
@@ -207,28 +191,20 @@ namespace Interop/Util/MapZ {
         Collection(rc, values(m1))
 
     pub def remove!(k: k, m: MapZ[k, v, r]): Result[String, Option[v]] \  Write(r) with Marshal[k], Marshal[v] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Map.remove(##java.lang.Object): ##java.lang.Object \ r; 
             let MapZ(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);        
-            remove(m1, k1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            remove(m1, k1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject)
+        })
 
     pub def forEach(f: (k, v) -> Unit \ ef, m: MapZ[k, v, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[k], Marshal[v] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Map.forEach(##java.util.function.BiConsumer): Unit \ r; 
             let MapZ(_, m1) = m;
             let f1 = Interop/Util/Function/BiConsumer.makeBiConsumer(f);
-            forEach(m1, f1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            forEach(m1, f1)
+        })
 
     ///
     /// Returns an iterator over all key-value pairs in `m`.

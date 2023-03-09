@@ -54,15 +54,11 @@ namespace Interop/Util/OptionalInt {
         of(i) |> OptionalInt
 
     pub def getAsInt(o: OptionalInt): Result[String, Int32] = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.OptionalInt.getAsInt(): Int32 \ {};
             let OptionalInt(o1) = o;
-            getAsInt(o1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            getAsInt(o1)
+        })
 
 
     pub def isPresent(o: OptionalInt): Bool = 

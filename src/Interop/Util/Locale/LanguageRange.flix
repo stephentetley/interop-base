@@ -48,14 +48,10 @@ namespace Interop/Util/Locale/LanguageRange {
     /// Returns a new LanguageRange for the supplied `range`.
     ///
     pub def new(range: String): Result[String, LanguageRange] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import new java.util.Locale$LanguageRange(String): ##java.util.Locale$LanguageRange \ {} as new1;
-            LanguageRange(new1(range)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            LanguageRange(new1(range))
+        })
 
     pub def equals(x: LanguageRange, y: LanguageRange): Bool =
         import java.util.Locale$LanguageRange.equals(##java.lang.Object): Bool \ {};
@@ -93,50 +89,32 @@ namespace Interop/Util/Locale/LanguageRange {
 
 
     pub def parse(ranges: String): Result[String, List[LanguageRange]] = region rc {
-        try {
+        Interop/Flix/Util.try(_ -> {
             import static java.util.Locale$LanguageRange.parse(String): ##java.util.List \ {};
             let prim = parse(ranges);
-            Interop/Util/ListZ.wrapHH(rc, prim) 
-                |> Interop/Util/ListZ.toFlixList
-                |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Interop/Util/ListZ.wrapHH(rc, prim) |> Interop/Util/ListZ.toFlixList
+        })
     }
 
     pub def parseWithCustomizations(ranges: String, 
                                     customizations: Map[String, List[String]]): Result[String, List[LanguageRange]] = region rc {
-        try {
+        Interop/Flix/Util.try(_ -> {
             import static java.util.Locale$LanguageRange.parse(String, ##java.util.Map): ##java.util.List \ {};
             let cs1 = Interop/Util/HashMap.fromFlixMap(rc, customizations) |> Interop/Util/MapZ.toMapHH;
             let prim = parse(ranges, cs1);
-            Interop/Util/ListZ.wrapHH(rc, prim) 
-                |> Interop/Util/ListZ.toFlixList
-                |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Interop/Util/ListZ.wrapHH(rc, prim) |> Interop/Util/ListZ.toFlixList
+        })
     }
 
     pub def mapEquivalents(priorityList: List[LanguageRange], 
                             customizations: Map[String, List[String]]): Result[String, List[LanguageRange]] = region rc {
-        try {
+        Interop/Flix/Util.try(_ -> {
             import static java.util.Locale$LanguageRange.mapEquivalents(##java.util.List, ##java.util.Map): ##java.util.List \ {};
             let ps1 = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH;
             let cs1 = Interop/Util/HashMap.fromFlixMap(rc, customizations) |> Interop/Util/MapZ.toMapHH;
             let prim = mapEquivalents(ps1, cs1);
-            Interop/Util/ListZ.wrapHH(rc, prim) 
-                |> Interop/Util/ListZ.toFlixList
-                |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Interop/Util/ListZ.wrapHH(rc, prim) |> Interop/Util/ListZ.toFlixList
+        })
     }
 
 

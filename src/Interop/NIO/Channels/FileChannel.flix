@@ -36,15 +36,11 @@ namespace Interop/NIO/Channels/FileChannel {
         FileChannel(prim)
 
     pub def forcez!(metaData: Bool, c: FileChannel[r]): Result[String, Unit] \ Write(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.nio.channels.FileChannel.force(Bool): Unit \ r as forcez;
             let FileChannel(c1) = c;
-            forcez(c1, metaData) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            forcez(c1, metaData)
+        })
 
 
     pub def isOpen(c: FileChannel[r]): Bool \ Read(r) =
@@ -53,25 +49,17 @@ namespace Interop/NIO/Channels/FileChannel {
         isOpen(c1)
         
     pub def position(c: FileChannel[r]): Result[String, Int64] \ Read(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.nio.channels.FileChannel.position(): Int64 \ r;
             let FileChannel(c1) = c;
-            position(c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            position(c1)
+        })
 
     pub def close!(c: FileChannel[r]): Result[String, Unit] \ Write(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.nio.channels.FileChannel.close(): Unit \ r;
             let FileChannel(c1) = c;
-            close(c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            close(c1)
+        })
 
 }

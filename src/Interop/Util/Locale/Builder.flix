@@ -47,119 +47,79 @@ namespace Interop/Util/Locale/Builder {
         Builder(rc, newBuilder())
 
     pub def setLocale!(loc: Locale, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Locale$Builder.setLocale(##java.util.Locale): ##java.util.Locale$Builder \ r;
             let Builder(rc, b1) = b;
             let Locale(loc1) = loc;
-            Builder(rc, setLocale(b1, loc1)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Builder(rc, setLocale(b1, loc1))
+        })
 
     pub def setLanguageTag!(tag: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Locale$Builder.setLanguageTag(String): ##java.util.Locale$Builder \ r;
             let Builder(rc, b1) = b;
-            Builder(rc, setLanguageTag(b1, tag)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Builder(rc, setLanguageTag(b1, tag))
+        })
 
     pub def setLanguage!(lang: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Locale$Builder.setLanguage(String): ##java.util.Locale$Builder \ r;
             let Builder(rc, b1) = b;
-            Builder(rc, setLanguage(b1, lang)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Builder(rc, setLanguage(b1, lang))
+        })
 
     pub def setScript!(scr: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Locale$Builder.setScript(String): ##java.util.Locale$Builder \ r;
             let Builder(rc, b1) = b;
-            Builder(rc, setScript(b1, scr)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Builder(rc, setScript(b1, scr))
+        })
 
     pub def setRegion!(rgn: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Locale$Builder.setRegion(String): ##java.util.Locale$Builder \ r;
             let Builder(rc, b1) = b;
-            Builder(rc, setRegion(b1, rgn)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Builder(rc, setRegion(b1, rgn))
+        })
 
 
     pub def setVariant!(vnt: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Locale$Builder.setVariant(String): ##java.util.Locale$Builder \ r;
             let Builder(rc, b1) = b;
-            Builder(rc, setVariant(b1, vnt)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Builder(rc, setVariant(b1, vnt))
+        })
 
 
     pub def setExtension!(k: Char, v: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Locale$Builder.setExtension(Char, String): ##java.util.Locale$Builder \ r;
             let Builder(rc, b1) = b;
-            Builder(rc, setExtension(b1, k, v)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Builder(rc, setExtension(b1, k, v))
+        })
 
-pub def setUnicodeLocaleKeyword!(k: String, ty: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
-        try {
+    pub def setUnicodeLocaleKeyword!(k: String, ty: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
+        Interop/Flix/Util.try(_ -> {
             import java.util.Locale$Builder.setUnicodeLocaleKeyword(String, String): ##java.util.Locale$Builder \ r;
             let Builder(rc, b1) = b;
-            Builder(rc, setUnicodeLocaleKeyword(b1, k, ty)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Builder(rc, setUnicodeLocaleKeyword(b1, k, ty))
+        })
 
 
     pub def addUnicodeLocaleAttribute!(attrib: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Locale$Builder.addUnicodeLocaleAttribute(String): ##java.util.Locale$Builder \ r;
             let Builder(rc, b1) = b;
-            Builder(rc, addUnicodeLocaleAttribute(b1, attrib)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Builder(rc, addUnicodeLocaleAttribute(b1, attrib))
+        })
 
 
     pub def removeUnicodeLocaleAttribute!(attrib: String, b: Builder[r]): Result[String, Builder[r]] \ Write(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Locale$Builder.removeUnicodeLocaleAttribute(String): ##java.util.Locale$Builder \ r;
             let Builder(rc, b1) = b;
-            Builder(rc, removeUnicodeLocaleAttribute(b1, attrib)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Builder(rc, removeUnicodeLocaleAttribute(b1, attrib))
+        })
 
 
     pub def clear!(b: Builder[r]): Builder[r] \ Write(r) =

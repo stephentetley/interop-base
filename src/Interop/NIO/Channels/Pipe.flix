@@ -40,14 +40,10 @@ namespace Interop/NIO/Channels/Pipe {
         Pipe(prim)
 
     pub def open(): Result[String, Pipe[r]] \ Write(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import static java.nio.channels.Pipe.open(): ##java.nio.channels.Pipe \ r;
-            open() |> Pipe |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            open() |> Pipe
+        })
 
     pub def sink(p: Pipe[r]): SinkChannel[r] \ Read(r) = 
         import java.nio.channels.Pipe.sink(): ##java.nio.channels.Pipe$SinkChannel \ r;

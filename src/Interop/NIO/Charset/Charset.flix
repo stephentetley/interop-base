@@ -66,15 +66,14 @@ namespace Interop/NIO/Charset/Charset {
         cs1
 
 
+    pub def wrapHH(prim: ##java.nio.charset.Charset): Charset = 
+        Charset(prim)
+
     pub def forName(name: String): Result[String, Charset] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import static java.nio.charset.Charset.forName(String): ##java.nio.charset.Charset \ {};
-            Charset(forName(name)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Charset(forName(name))
+        })
 
 
 
@@ -84,14 +83,10 @@ namespace Interop/NIO/Charset/Charset {
 
 
     pub def isSupported(name: String): Result[String, Bool] \ IO =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import static java.nio.charset.Charset.isSupported(String): Bool \ IO;
-            isSupported(name) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            isSupported(name)
+        })
 
     pub def toString(cs: Charset): String =
         import java.nio.charset.Charset.toString(): String \ {};

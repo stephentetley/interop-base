@@ -47,14 +47,10 @@ namespace Interop/NIO/Channels/ChannelZ {
         
         
     pub def close!(c: ChannelZ[r]): Result[String, Unit] \ Write(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.nio.channels.Channel.close(): Unit \ r;
             let ChannelZ(c1) = c;
-            close(c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            close(c1)
+        })
 
 }

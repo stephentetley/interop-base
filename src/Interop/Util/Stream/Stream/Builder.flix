@@ -44,38 +44,26 @@ namespace Interop/Util/Stream/Stream/Builder {
 
 
     pub def accept(t: a, b: Builder[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.stream.Stream$Builder.accept(##java.lang.Object): Unit \ r;
             let Builder(_, b1) = b;
             let t1 = Interop/Flix/Marshal.toJavaObject(t);
-            accept(b1, t1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            accept(b1, t1)
+        })
 
     pub def add(t: a, b: Builder[a, r]): Result[String, Builder[a, r]] \ Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.stream.Stream$Builder.add(##java.lang.Object): ##java.util.stream.Stream$Builder \ r;
             let Builder(rc, b1) = b;
             let t1 = Interop/Flix/Marshal.toJavaObject(t);
-            Builder(rc, add(b1, t1)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Builder(rc, add(b1, t1))
+        })
 
     pub def build(b: Builder[a, r]): Result[String, Stream[a, r]] \ Write(r) =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.stream.Stream$Builder.build(): ##java.util.stream.Stream \ r;
             let Builder(rc, b1) = b;
-            Stream(rc, build(b1)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Stream(rc, build(b1))
+        })
 
 }

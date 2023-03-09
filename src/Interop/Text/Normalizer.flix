@@ -23,24 +23,17 @@ namespace Interop/Text/Normalizer {
     use Interop/Text.NormalizerForm.{NormalizerForm};
 
     pub def normalize(nform: NormalizerForm, src: String): Result[String, String] =
-        import static java.text.Normalizer.normalize(##java.lang.CharSequence, ##java.text.Normalizer$Form): String & Pure;
-        try {
+        Interop/Flix/Util.try(_ -> {
+            import static java.text.Normalizer.normalize(##java.lang.CharSequence, ##java.text.Normalizer$Form): String \ {};
             let NormalizerForm(nform1) = nform;
-            normalize(unsafe_cast src as ##java.lang.CharSequence, nform1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & Pure;
-                Err(getMessage(ex))
-        }
+            normalize(unsafe_cast src as ##java.lang.CharSequence, nform1)
+        })
 
     pub def isNormalized(nform: NormalizerForm, src: String): Result[String, Bool] =
-        import static java.text.Normalizer.isNormalized(##java.lang.CharSequence, ##java.text.Normalizer$Form): Bool & Pure;
-        try {
+        Interop/Flix/Util.try(_ -> {
+            import static java.text.Normalizer.isNormalized(##java.lang.CharSequence, ##java.text.Normalizer$Form): Bool & Pure;            
             let NormalizerForm(nform1) = nform;
-            isNormalized(unsafe_cast src as ##java.lang.CharSequence, nform1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String & Pure;
-                Err(getMessage(ex))
-        }
+            isNormalized(unsafe_cast src as ##java.lang.CharSequence, nform1)
+        })
+
 }

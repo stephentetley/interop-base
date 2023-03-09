@@ -87,16 +87,12 @@ namespace Interop/Util/HashMap {
         hashCode(m1)
 
     pub def get(k: k, m: HashMap[k, v, r]): Result[String, Option[v]] \ Write(r) with Marshal[k], Marshal[v] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.HashMap.get(##java.lang.Object): ##java.lang.Object \ r; 
             let HashMap(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);
-            get(m1, k1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            get(m1, k1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject)
+        })
 
     pub def put!(k: k, v: v, m: HashMap[k, v, r]): v \ Write(r) with Marshal[k], Marshal[v] =
         import java.util.HashMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 

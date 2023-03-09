@@ -149,37 +149,27 @@ namespace Interop/Util/Locale {
 
 
     pub def setJvmDefaultLocale!(x: Locale): Result[String, Unit] \ IO =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import static java.util.Locale.setDefault(##java.util.Locale): Unit \ IO;
             let Locale(x1) = x;
-            setDefault(x1);
-            Ok()
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            setDefault(x1)
+        })
 
 
 
 
     pub def setJvmDefaultLocaleWithCategory!(category: Category, x: Locale): Result[String, Unit] \ IO =
-        import static java.util.Locale.setDefault(##java.util.Locale$Category, ##java.util.Locale): Unit \ IO;
-        import static get java.util.Locale$Category.DISPLAY: ##java.util.Locale$Category \ {} as getDisplay;
-        import static get java.util.Locale$Category.FORMAT: ##java.util.Locale$Category \ {} as getFormat;
-        try {
+        Interop/Flix/Util.try(_ -> {
+            import static java.util.Locale.setDefault(##java.util.Locale$Category, ##java.util.Locale): Unit \ IO;
+            import static get java.util.Locale$Category.DISPLAY: ##java.util.Locale$Category \ {} as getDisplay;
+            import static get java.util.Locale$Category.FORMAT: ##java.util.Locale$Category \ {} as getFormat;
             let Locale(x1) = x;
             let cat1 = match category {
                 case Display => getDisplay()
                 case Format  => getFormat()
             };
-            setDefault(cat1, x1);
-            Ok()
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            setDefault(cat1, x1)
+        })
 
     pub def equals(x: Locale, y: Locale): Bool =
         import java.util.Locale.equals(##java.lang.Object): Bool \ {};
@@ -327,26 +317,18 @@ namespace Interop/Util/Locale {
         getScript(x1)
 
     pub def getISO3Country(x: Locale): Result[String, String] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Locale.getISO3Country(): String \ {};
             let Locale(x1) = x;
-            getISO3Country(x1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            getISO3Country(x1)
+        })
 
     pub def getISO3Language(x: Locale): Result[String, String] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Locale.getISO3Language(): String \ {};
             let Locale(x1) = x;
-            getISO3Language(x1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            getISO3Language(x1)
+        })
 
     pub def getDisplayCountry(x: Locale): String =
         import java.util.Locale.getDisplayCountry(): String \ {};
@@ -441,19 +423,14 @@ namespace Interop/Util/Locale {
         getISOCountries() |> Array.toList
     }
 
-    pub def getIsoCountriesWithIsoCountryCode(icc: IsoCountryCode): Result[String, Set[String]] = region r {
-        try {
+    pub def getIsoCountriesWithIsoCountryCode(icc: IsoCountryCode): Result[String, Set[String]] = region rc {
+        Interop/Flix/Util.try(_ -> {
             import static java.util.Locale.getISOCountries(##java.util.Locale$IsoCountryCode): ##java.util.Set \ {};
             let icc1 = marshalIsoCountryCode(icc);
             getISOCountries(icc1)             
-                |> Interop/Util/SetZ.wrapHH(r)
-                |> Interop/Util/SetZ.toFlixSet
-                |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+                |> Interop/Util/SetZ.wrapHH(rc)
+                |> Interop/Util/SetZ.toFlixSet          
+        })
     }
 
     pub def getIsoLanguages(): Result[String, List[String]] =
@@ -466,16 +443,12 @@ namespace Interop/Util/Locale {
         })
 
     pub def getExtension(key: Char, x: Locale): Result[String, String] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Locale.getExtension(Char): String \ {};
             let Locale(x1) = x;
             let ext = getExtension(x1, key);
-            Interop/Flix/Util.getStringWithoutNull(default = "", ext) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Interop/Flix/Util.getStringWithoutNull(default = "", ext)
+        })
 
     pub def getExtensionKeys(x: Locale): Set[Char] = region rc {
         import java.util.Locale.getExtensionKeys(): ##java.util.Set \ {};
@@ -502,105 +475,75 @@ namespace Interop/Util/Locale {
     }
 
     pub def lookup(priorityList: List[LanguageRange], locales: List[Locale]): Result[String, Option[Locale]] = region rc {
-        try {
+        Interop/Flix/Util.try(_ -> {
             import static java.util.Locale.lookup(##java.util.List, ##java.util.Collection): ##java.util.Locale \ {};
             let ls  = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH;
             let col = Interop/Util/ArrayList.fromFoldable(rc, locales)      |> Interop/Util/Collection.toCollectionHH;
             let ans = lookup(ls, col);
-            Object.toOption(ans) |> Option.map(Locale) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            Object.toOption(ans) |> Option.map(Locale)
+        })
     }
 
     pub def lookupTag(priorityList: List[LanguageRange], tags: List[String]): Result[String, Option[String]] =
         region rc {
-            try { 
+            Interop/Flix/Util.try(_ -> {
                 import static java.util.Locale.lookupTag(##java.util.List, ##java.util.Collection): String \ {};
                 let ls      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH;
                 let col     = Interop/Util/ArrayList.fromFoldable(rc, tags)         |> Interop/Util/Collection.toCollectionHH;
                 let ans     = lookupTag(ls, col);
-                Object.toOption(ans) |> Ok
-            } catch {
-                case ex: ##java.lang.Exception =>
-                    import java.lang.Throwable.getMessage(): String \ {};
-                    Err(getMessage(ex))
-            }
+                Object.toOption(ans)
+            })
         }
 
-    pub def filter(priorityList: List[LanguageRange], locales: List[Locale]): Result[String, List[Locale]] = 
-        import static java.util.Locale.filter(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
+    pub def filter(priorityList: List[LanguageRange], locales: List[Locale]): Result[String, List[Locale]] =         
         region rc {
-            try {
+            Interop/Flix/Util.try(_ -> {
+                import static java.util.Locale.filter(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
                 let ls      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH;
                 let col     = Interop/Util/ArrayList.fromFoldable(rc, locales)      |> Interop/Util/Collection.toCollectionHH;
                 let prim    = filter(ls, col);
                 Interop/Util/ListZ.wrapHH(rc, prim) 
                     |> Interop/Util/ListZ.toFlixList
-                    |> Ok
-            } catch {
-                case ex: ##java.lang.Exception =>
-                    import java.lang.Throwable.getMessage(): String \ {};
-                    Err(getMessage(ex))
-            }
+             
+            })
         }
 
     pub def filterWithFilteringMode(priorityList: List[LanguageRange], 
                                     mode: FilteringMode, 
                                     locales: List[Locale]): Result[String, List[Locale]] = 
         region rc {
-            try {
+            Interop/Flix/Util.try(_ -> {
                 import static java.util.Locale.filter(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};
                 let ps      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH;
                 let col     = Interop/Util/ArrayList.fromFoldable(rc, locales)      |> Interop/Util/Collection.toCollectionHH;
                 let mode1   = marshalFilteringMode(mode);
                 let prim    = filter(ps, col, mode1);
-                Interop/Util/ListZ.wrapHH(rc, prim) 
-                    |> Interop/Util/ListZ.toFlixList
-                    |> Ok
-            } catch {
-                case ex: ##java.lang.Exception =>
-                    import java.lang.Throwable.getMessage(): String \ {};
-                    Err(getMessage(ex))
-            }
+                Interop/Util/ListZ.wrapHH(rc, prim) |> Interop/Util/ListZ.toFlixList
+            })
         }
 
     pub def filterTags(priorityList: List[LanguageRange], tags: List[String]): Result[String, List[String]] = 
         region rc {
-            try {
+            Interop/Flix/Util.try(_ -> {
                 import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
                 let ls      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH;
                 let col     = Interop/Util/ArrayList.fromFoldable(rc, tags)         |> Interop/Util/Collection.toCollectionHH;
                 let prim    = filterTags(ls, col);
-                Interop/Util/ListZ.wrapHH(rc, prim) 
-                    |> Interop/Util/ListZ.toFlixList
-                    |> Ok
-            } catch {
-                case ex: ##java.lang.Exception =>
-                    import java.lang.Throwable.getMessage(): String \ {};
-                    Err(getMessage(ex))
-            }
+                Interop/Util/ListZ.wrapHH(rc, prim) |> Interop/Util/ListZ.toFlixList
+            })
         }
 
     pub def filterTagsWithFilteringMode(priorityList: List[LanguageRange], 
                                         mode: FilteringMode, 
                                         tags: List[String]): Result[String, List[String]] = 
         region rc {
-            try {
+            Interop/Flix/Util.try(_ -> {
                 import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};
                 let ls      = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ListZ.toListHH;
                 let col     = Interop/Util/ArrayList.fromFoldable(rc, tags)         |> Interop/Util/Collection.toCollectionHH;
                 let mode1   = marshalFilteringMode(mode);
                 let prim    = filterTags(ls, col, mode1);
-                Interop/Util/ListZ.wrapHH(rc, prim) 
-                    |> Interop/Util/ListZ.toFlixList
-                    |> Ok
-            } catch {
-                case ex: ##java.lang.Exception =>
-                    import java.lang.Throwable.getMessage(): String \ {};
-                    Err(getMessage(ex))
-            }
+                Interop/Util/ListZ.wrapHH(rc, prim) |> Interop/Util/ListZ.toFlixList   
+            })
         }
 }

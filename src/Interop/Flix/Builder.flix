@@ -35,13 +35,7 @@ namespace Interop/Flix/Builder {
     /// 
     pub def lift(f: t -> t \ Write(r)): Builder[t, r] =
         Builder(o -> 
-            try {
-                Ok(f(o))
-            } catch {
-                case e: ##java.lang.Exception =>
-                    import java.lang.Throwable.getMessage(): String \ {};
-                    Err(getMessage(e))
-            }
+            Interop/Flix/Util.try(_ -> f(o))
         )
 
     pub def empty(): Builder[t, r] =

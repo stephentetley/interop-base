@@ -128,112 +128,76 @@ namespace Interop/Util/SetZ {
         size(s1)
 
     pub def add!(x: a, s: SetZ[a, r]): Result[String, Bool] \  Read(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Set.add(##java.lang.Object): Bool \ r; 
             let SetZ(_, s1) = s;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
-            add(s1, x1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            add(s1, x1)
+        })
 
     pub def addAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Set.addAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;
             let Collection(_, c1) = c;
-            addAll(s1, c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            addAll(s1, c1)
+        })
 
     pub def contains(x: a, s: SetZ[a, r]): Result[String, Bool] \  Read(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Set.contains(##java.lang.Object): Bool \ r; 
             let SetZ(_, s1) = s;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
-            contains(s1, x1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            contains(s1, x1)
+        })
 
     pub def containsAll(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Set.containsAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;
             let Collection(_, c1) = c;
-            containsAll(s1, c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            containsAll(s1, c1)
+        })
 
     pub def clear!(s: SetZ[a, r]): Result[String, Unit] \ Read(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Set.clear(): Unit \ r;
             let SetZ(_, s1) = s;
-            clear(s1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            clear(s1)
+        })
 
     pub def remove!(x: a, s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Set.remove(##java.lang.Object): Bool \ r; 
             let SetZ(_, s1) = s;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
-            remove(s1, x1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            remove(s1, x1)
+        })
 
     pub def removeAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Set.removeAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;
             let Collection(_, c1) = c;
-            removeAll(s1, c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            removeAll(s1, c1)
+        })
 
     
     pub def removeIf!(f: a -> Bool \ ef, s: SetZ[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Set.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let SetZ(_, s1) = s;        
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            (unsafe_cast (removeIf(s1, f1)) as _ \ {ef, Write(r)}) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            unsafe_cast (removeIf(s1, f1)) as _ \ {ef, Write(r)}
+        })
 
     pub def retainAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.Set.retainAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;
             let Collection(_, c1) = c;
-            retainAll(s1, c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            retainAll(s1, c1)
+        })
 
 
     ///

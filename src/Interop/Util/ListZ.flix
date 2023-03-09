@@ -130,124 +130,84 @@ namespace Interop/Util/ListZ {
         size(l1)
 
     pub def add!(x: a, l: ListZ[a, r]): Result[String, Bool] \ Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.List.add(##java.lang.Object): Bool \ r;
             let ListZ(_, l1) = l;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
-            add(l1, x1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            add(l1, x1)
+        })
 
     pub def addAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.List.addAll(##java.util.Collection): Bool \ {r1, r}; 
             let ListZ(_, l1) = l;
             let Collection(_, c1) = c;
-            addAll(l1, c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            addAll(l1, c1)
+        })
 
     pub def contains(x: a, l: ListZ[a, r]): Result[String, Bool] \  Read(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.List.contains(##java.lang.Object): Bool \ r; 
             let ListZ(_, l1) = l;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
-            contains(l1, x1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            contains(l1, x1)
+        })
 
     pub def containsAll(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ { Read(r1), Read(r) } with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.List.containsAll(##java.util.Collection): Bool \ {r1, r}; 
             let ListZ(_, l1) = l;
             let Collection(_, c1) = c;
-            containsAll(l1, c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            containsAll(l1, c1)
+        })
 
     pub def clear!(l: ListZ[a, r]): Result[String, Unit] \ Read(r) = 
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.List.clear(): Unit \ r;
             let ListZ(_, l1) = l;
-            clear(l1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            clear(l1)
+        })
 
 
     pub def remove!(x: a, l: ListZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.List.remove(##java.lang.Object): Bool \ r; 
             let ListZ(_, l1) = l;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
-            remove(l1, x1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            remove(l1, x1)
+        })
 
     pub def removeAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.List.removeAll(##java.util.Collection): Bool \ { Read(r1), Write(r) }; 
             let ListZ(_, l1) = l;
             let Collection(_, c1) = c;
-            removeAll(l1, c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            removeAll(l1, c1)
+        })
     
     pub def removeIf!(f: a -> Bool \ ef, l: ListZ[a, r]): Result[String, Bool] \ { ef, Write(r) } with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.List.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let ListZ(_, l1) = l;        
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            (unsafe_cast removeIf(l1, f1) as _ \ {ef, Write(r)}) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            unsafe_cast removeIf(l1, f1) as _ \ {ef, Write(r)}
+        })
 
     pub def retainAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.List.retainAll(##java.util.Collection): Bool \ { Read(r1), Write(r) }; 
             let ListZ(_, l1) = l;
             let Collection(_, c1) = c;
-            retainAll(l1, c1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            retainAll(l1, c1)
+        })
 
     pub def forEach(f: a -> Unit \ ef, l: ListZ[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.List.forEach(##java.util.function.Consumer): Unit \ r; 
             let ListZ(_, l1) = l;
             let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
-            forEach(l1, f1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            forEach(l1, f1)
+        })
 
 
     pub def sort!(f: (a, a) -> Int32, l: ListZ[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
@@ -256,15 +216,11 @@ namespace Interop/Util/ListZ {
 
 
     pub def sortWithComparator!(c: Comparator[a], l: ListZ[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.List.sort(##java.util.Comparator): Unit \ r; 
             let ListZ(_, l1) = l;
-            sort(l1, c) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            sort(l1, c)
+        })
 
 
     ///
@@ -300,26 +256,18 @@ namespace Interop/Util/ListZ {
     /// TEMP ...
 
     pub def fromArrayOfObject(rc: Region[r1], arr: Array[##java.lang.Object, r]): Result[String, ListZ[##java.lang.Object, r1]] \ { Read(r), Write(r1) } =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import static java.util.Arrays.asList(Array[##java.lang.Object, r]): ##java.util.List \ { Read(r), Write(r1) };
-            ListZ(rc, asList(arr)) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            ListZ(rc, asList(arr))
+        })
 
     pub def toArrayOfString(rc: Region[r1], l: ListZ[String, r]): Result[String, Array[String, r1]] \ { Read(r), Write(r1) } =
-        try {
+        Interop/Flix/Util.try(_ -> {
             import java.util.List.toArray(): Array[String, r1] \ { Read(r), Write(r1) };
             let _ = Array#{} @ rc;
             let ListZ(_, l1) = l;
-            toArray(l1) |> Ok
-        } catch {
-            case ex: ##java.lang.Exception =>
-                import java.lang.Throwable.getMessage(): String \ {};
-                Err(getMessage(ex))
-        }
+            toArray(l1)
+        })
 
 
 }
