@@ -30,6 +30,9 @@ namespace Interop/Util {
     pub class ImpListZ[t: Type -> Region -> Type] {
         pub def toListZ(s: t[a, r]): ListZ[a, r]
         pub def fromListZ(s: ListZ[a, r]): t[a, r]
+
+        pub def toListHH(s: t[a, r]): ##java.util.List = 
+           ImpListZ.toListZ(s) |> Interop/Util/ListZ.getHH        
     }
 
 
@@ -62,10 +65,6 @@ namespace Interop/Util/ListZ {
 
     pub def wrapHH(rc: Region[r], prim: ##java.util.List): ListZ[a, r] =
         ListZ(rc, prim)
-
-
-    pub def toListHH[t: Type -> Region -> Type, a: Type, r: Region](l: t[a, r]): ##java.util.List with ImpListZ[t] = 
-        Interop/Util/ImpListZ.toListZ(l) |> getHH
 
 
     pub def of0(rc: Region[r]): ListZ[a, r] \ Write(r) with Marshal[a] =

@@ -27,6 +27,9 @@ namespace Interop/Util {
     pub class ImpSetZ[t: Type -> Region -> Type] {
         pub def toSetZ(s: t[a, r]): SetZ[a, r]
         pub def fromSetZ(s: SetZ[a, r]): t[a, r]
+        
+        pub def toSetHH(s: t[a, r]): ##java.util.Set = 
+            ImpSetZ.toSetZ(s) |> Interop/Util/SetZ.getHH
     }
 
     instance Interop/Util.ImpCollection[SetZ] {
@@ -60,8 +63,6 @@ namespace Interop/Util/SetZ {
         SetZ(rc, prim)
 
 
-    pub def toSetHH[t: Type -> Region -> Type, a: Type, r: Region](s: t[a, r]): ##java.util.Set with ImpSetZ[t] = 
-        Interop/Util/ImpSetZ.toSetZ(s) |> getHH
 
 
 

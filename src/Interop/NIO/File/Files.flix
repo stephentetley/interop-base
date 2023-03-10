@@ -35,7 +35,7 @@ namespace Interop/NIO/File/Files {
             region rc { 
                 import static flixinterop.nio.file.Filesz.newInputStream(##java.nio.file.Path, ##java.util.List): ##java.io.InputStream \ {IO, r};
                 let Path(path1) = path;
-                let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ListZ.toListHH;
+                let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ImpListZ.toListHH;
                 InputStream(newInputStream(path1, opts1))
             }
         })
@@ -45,7 +45,7 @@ namespace Interop/NIO/File/Files {
             region rc { 
                 import static flixinterop.nio.file.Filesz.newOutputStream(##java.nio.file.Path, ##java.util.List): ##java.io.OutputStream \ {IO, r};
                 let Path(path1) = path;
-                let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ListZ.toListHH;
+                let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ImpListZ.toListHH;
                 OutputStream(newOutputStream(path1, opts1))
             }
         })
@@ -56,7 +56,7 @@ namespace Interop/NIO/File/Files {
             region rc {
                 import static flixinterop.nio.file.Filesz.exists(##java.nio.file.Path, ##java.util.List): Bool \ IO;
                 let Path(path1) = path;
-                let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ListZ.toListHH;
+                let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ImpListZ.toListHH;
                 exists(path1, opts1)
             }
         })
@@ -85,7 +85,7 @@ namespace Interop/NIO/File/Files {
                                 ##java.lang.CharSequence, ##java.util.List): ##java.nio.file.Path \ IO;
                 let Path(path1) = path;
                 let s1 = Interop/Lang/CharSequence.getHH(s);
-                let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ListZ.toListHH;
+                let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ImpListZ.toListHH;
                 writeString(path1, s1, opts1) |> Path
             }
         })
@@ -98,7 +98,7 @@ namespace Interop/NIO/File/Files {
                 let Path(path1) = path;
                 let s1 = Interop/Lang/CharSequence.getHH(s);
                 let Charset(cs1) = cs;
-                let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ListZ.toListHH;
+                let opts1 = Interop/Util/ArrayList.fromFoldable(rc, opts) |> Interop/Util/ImpListZ.toListHH;
                 writeString(path1, s1, cs1, opts1) |> Path
             }
         })

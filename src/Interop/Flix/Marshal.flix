@@ -84,17 +84,17 @@ namespace Interop/Flix {
         pub def fromJavaObject(o: ##java.lang.Object): Float64 = Interop/Flix/Marshal.unmarshalFloat64(unsafe_cast o as ##java.lang.Double)
     }
 
+    /// TODO - remove this and use a function that makes the transit (through ArrayList or whatever) explicit.
     /// Warning - uses ArrayList as an intermediate, is this acceptable in all cases?
     instance Marshal[List[a]] with Marshal[a] {
         pub def toJavaObject(l: List[a]): ##java.lang.Object = region rc {
             let l1 = Interop/Util/ArrayList.fromFoldable(rc, l);
-            unsafe_cast Interop/Util/ListZ.toListHH(l1) as ##java.lang.Object
+            unsafe_cast Interop/Util/ImpListZ.toListHH(l1) as ##java.lang.Object
         } 
         
         pub def fromJavaObject(o: ##java.lang.Object): List[a] = region rc {
             Interop/Util/ListZ.wrapHH(rc, unsafe_cast o as ##java.util.List) |> Interop/Util/ListZ.toFlixList
         }
-            
     }
 
     instance Marshal[Option[a]] with Marshal[a] {
@@ -113,69 +113,69 @@ namespace Interop/Flix/Marshal {
 
 
     pub def marshalBool(b: Bool): ##java.lang.Boolean = 
-        import static java.lang.Boolean.valueOf(Bool): ##java.lang.Boolean & Pure;
+        import static java.lang.Boolean.valueOf(Bool): ##java.lang.Boolean \ {};
         valueOf(b)
 
     pub def unmarshalBool(b: ##java.lang.Boolean): Bool = 
-        import java.lang.Boolean.booleanValue(): Bool & Pure;
+        import java.lang.Boolean.booleanValue(): Bool \ {};
         booleanValue(b)
 
     pub def marshalChar(c: Char): ##java.lang.Character = 
-        import static java.lang.Character.valueOf(Char): ##java.lang.Character & Pure;
+        import static java.lang.Character.valueOf(Char): ##java.lang.Character \ {};
         valueOf(c)
 
     pub def unmarshalChar(c: ##java.lang.Character): Char = 
-        import java.lang.Character.charValue(): Char & Pure;
+        import java.lang.Character.charValue(): Char \ {};
         charValue(c)
 
 
     pub def marshalInt8(i: Int8): ##java.lang.Byte = 
-        import static java.lang.Byte.valueOf(Int8): ##java.lang.Byte & Pure;
+        import static java.lang.Byte.valueOf(Int8): ##java.lang.Byte \ {};
         valueOf(i)
 
     pub def unmarshalInt8(i: ##java.lang.Byte): Int8 = 
-        import java.lang.Byte.byteValue(): Int8 & Pure;
+        import java.lang.Byte.byteValue(): Int8 \ {};
         byteValue(i)
 
     pub def marshalInt16(i: Int16): ##java.lang.Short = 
-        import static java.lang.Short.valueOf(Int16): ##java.lang.Short & Pure;
+        import static java.lang.Short.valueOf(Int16): ##java.lang.Short \ {};
         valueOf(i)
 
     pub def unmarshalInt16(i: ##java.lang.Short): Int16 = 
-        import java.lang.Short.shortValue(): Int16 & Pure;
+        import java.lang.Short.shortValue(): Int16 \ {};
         shortValue(i)
 
     pub def marshalInt32(i: Int32): ##java.lang.Integer = 
-        import static java.lang.Integer.valueOf(Int32): ##java.lang.Integer & Pure;
+        import static java.lang.Integer.valueOf(Int32): ##java.lang.Integer \ {};
         valueOf(i)
 
     pub def unmarshalInt32(i: ##java.lang.Integer): Int32 = 
-        import java.lang.Integer.intValue(): Int32 & Pure;
+        import java.lang.Integer.intValue(): Int32 \ {};
         intValue(i)
 
     pub def marshalInt64(i: Int64): ##java.lang.Long = 
-        import static java.lang.Long.valueOf(Int64): ##java.lang.Long & Pure;
+        import static java.lang.Long.valueOf(Int64): ##java.lang.Long \ {};
         valueOf(i)
 
     pub def unmarshalInt64(i: ##java.lang.Long): Int64 = 
-        import java.lang.Long.longValue(): Int64 & Pure;
+        import java.lang.Long.longValue(): Int64 \ {};
         longValue(i)
 
 
     pub def marshalFloat32(d: Float32): ##java.lang.Float = 
-        import static java.lang.Float.valueOf(Float32): ##java.lang.Float & Pure;
+        import static java.lang.Float.valueOf(Float32): ##java.lang.Float \ {};
         valueOf(d)
 
     pub def unmarshalFloat32(d: ##java.lang.Float): Float32 = 
-        import java.lang.Float.floatValue(): Float32 & Pure;
+        import java.lang.Float.floatValue(): Float32 \ {};
         floatValue(d)
 
     pub def marshalFloat64(d: Float64): ##java.lang.Double = 
-        import static java.lang.Double.valueOf(Float64): ##java.lang.Double & Pure;
+        import static java.lang.Double.valueOf(Float64): ##java.lang.Double \ {};
         valueOf(d)
 
     pub def unmarshalFloat64(d: ##java.lang.Double): Float64 = 
-        import java.lang.Double.doubleValue(): Float64 & Pure;
+        import java.lang.Double.doubleValue(): Float64 \ {};
         doubleValue(d)
 
 }

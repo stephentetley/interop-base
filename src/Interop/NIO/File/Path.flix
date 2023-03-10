@@ -100,7 +100,7 @@ namespace Interop/NIO/File/Path {
         Interop/Flix/Util.try(_ -> {
             // Currently we have to use a wrapper due to java.nio.file.Path.of using varargs 
             import static flixinterop.nio.file.Pathz.ofList(String, ##java.util.List): ##java.nio.file.Path \ {Read(rc)} as of1;
-            let ls1 = Interop/Util/ArrayList.fromFoldable(rc, l) |> Interop/Util/ListZ.toListHH;
+            let ls1 = Interop/Util/ArrayList.fromFoldable(rc, l) |> Interop/Util/ImpListZ.toListHH;
             Path(of1(s, ls1))
         })
     }

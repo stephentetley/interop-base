@@ -26,8 +26,12 @@ namespace Interop/Util {
 
 
     pub class ImpCollection[t: Type -> Region -> Type] {
-        pub def toCollection[a: Type, r: Region](s: t[a, r]): Collection[a, r]
-        pub def fromCollection[a: Type, r: Region](s: Collection[a, r]): t[a, r]
+        pub def toCollection(s: t[a, r]): Collection[a, r]
+        pub def fromCollection(s: Collection[a, r]): t[a, r]
+
+        pub def toCollectionHH(s: t[a, r]): ##java.util.Collection = 
+           ImpCollection.toCollection(s) |> Interop/Util/Collection.getHH
+
     }
 
 
@@ -51,11 +55,6 @@ namespace Interop/Util/Collection {
 
     pub def wrapHH(rc: Region[r], col: ##java.util.Collection): Collection[a, r] = 
         Collection(rc, col)
-
-
-    pub def toCollectionHH[t: Type -> Region -> Type, a: Type, r: Region]
-                            (col: t[a, r]): ##java.util.Collection with ImpCollection[t] = 
-        Interop/Util/ImpCollection.toCollection(col) |> getHH
 
 
 
