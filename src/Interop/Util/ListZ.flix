@@ -221,6 +221,23 @@ namespace Interop/Util/ListZ {
             sort(l1, c)
         })
 
+    pub def fromFoldableViaArrayList(rc: Region[r], t: t[a]): ListZ[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
+        Interop/Util/ArrayList.fromFoldable(rc, t) |> Interop/Util/ImpListZ.toListZ
+
+    pub def fromFoldableViaArrayListHH(t: t[a]): ##java.util.List with Foldable[t], Marshal[a] = region rc {
+        Interop/Util/ArrayList.fromFoldable(rc, t) |> Interop/Util/ImpListZ.toListHH
+    }
+
+    pub def fromFoldableViaLinkedList(rc: Region[r], t: t[a]): ListZ[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
+        Interop/Util/LinkedList.fromFoldable(rc, t) |> Interop/Util/ImpListZ.toListZ
+
+    pub def fromFoldableViaLinkedListHH(t: t[a]): ##java.util.List with Foldable[t], Marshal[a] = region rc {
+        Interop/Util/LinkedList.fromFoldable(rc, t) |> Interop/Util/ImpListZ.toListHH
+    }
+
+    pub def primListToFlixList(prim: ##java.util.List): List[a] with Marshal[a] = region rc {
+        wrapHH(rc, prim) |> toFlixList   
+    }
 
     ///
     /// Returns an iterator over `l`.

@@ -128,6 +128,21 @@ namespace Interop/Util/Collection {
         let Collection(_, c1) = c;
         Stream(rc, stream(c1))
 
+
+    pub def fromFoldableViaArrayList(rc: Region[r], t: t[a]): Collection[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
+        Interop/Util/ArrayList.fromFoldable(rc, t) |> Interop/Util/ImpCollection.toCollection
+
+    pub def fromFoldableViaArrayListHH(t: t[a]): ##java.util.Collection with Foldable[t], Marshal[a] = region rc {
+        Interop/Util/ArrayList.fromFoldable(rc, t) |> Interop/Util/ImpCollection.toCollectionHH
+    }
+
+    pub def fromFoldableViaLinkedList(rc: Region[r], t: t[a]): Collection[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
+        Interop/Util/LinkedList.fromFoldable(rc, t) |> Interop/Util/ImpCollection.toCollection
+
+    pub def fromFoldableViaLinkedListHH(t: t[a]): ##java.util.Collection with Foldable[t], Marshal[a] = region rc {
+        Interop/Util/LinkedList.fromFoldable(rc, t) |> Interop/Util/ImpCollection.toCollectionHH
+    }
+
     pub def iterator(rc: Region[r1], c: Collection[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
         toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, c)
         
@@ -147,6 +162,7 @@ namespace Interop/Util/Collection {
     /// pub def enumerator(r: Region[r1], c: Collection[a, r2]): Iterator[(a, Int32), r] \ { Read(r2), Write(r1) }  with Marshal[a] =
     ///     iterator(r, c) |> Iterator.enumerator
 
+    /// remove...
     pub def unfoldCollection(rc: Region[r], f: s -> Option[(a, s)] & ef, st: s): Collection[a, r] \ { Write(r),  ef } with Marshal[a] =
         import new java.util.LinkedList(): ##java.util.LinkedList & r as new1;
         import java.util.LinkedList.add(##java.lang.Object): Bool & r as add1;
@@ -157,11 +173,5 @@ namespace Interop/Util/Collection {
         loop(st, new1())
 
 
-    pub def fromList(r: Region[r], l: List[a]): Collection[a, r] \ { Write(r) } with Marshal[a] =
-        let step = xs -> match xs {
-            case Nil     => None
-            case x :: rs => Some((x, rs))
-        };
-        unfoldCollection(r, step, l)
 
 }
