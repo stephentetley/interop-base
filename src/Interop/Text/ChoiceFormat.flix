@@ -58,19 +58,14 @@ namespace Interop/Text/ChoiceFormat {
     ///
     /// Returns a new ChoiceFormat.
     ///
-    pub def newWithChoices(limits: List[Float64], formats: List[String]): Result[String, ChoiceFormat] = region rc {
-        Interop/Flix/Util.try(_ ->
+    pub def newWithChoices(limits: List[Float64], formats: List[String]): Result[String, ChoiceFormat] =
+        Interop/Flix/Util.try(_ -> {
             import static flixinterop.text.ChoiceFormatz.newChoiceFormat(##java.util.List, ##java.util.List): ##java.text.ChoiceFormat \ {};
-            let limits1 = List.map(Interop/Lang/Double.valueOf, limits) 
-                            |> Interop/Util/ArrayList.fromFoldable(rc) 
-                            |> Interop/Util/ImpListZ.toListZ 
-                            |> Interop/Util/ListZ.getHH;
-            let formats1 = Interop/Util/ArrayList.fromFoldable(rc, formats) 
-                            |> Interop/Util/ImpListZ.toListZ 
-                            |> Interop/Util/ListZ.getHH;
+            let limits1 = List.map(Interop/Lang/Double.valueOf, limits) |> Interop/Util/ListZ.fromFoldableViaArrayListHH;
+            let formats1 = Interop/Util/ListZ.fromFoldableViaArrayListHH(formats);
             ChoiceFormat(newChoiceFormat(limits1, formats1))
-        )
-    }
+        })
+
 
     ///
     pub def toPattern(cf: ChoiceFormat): String =
