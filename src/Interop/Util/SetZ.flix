@@ -200,6 +200,15 @@ namespace Interop/Util/SetZ {
             retainAll(s1, c1)
         })
 
+    pub def primSetToFlixSet(prim: ##java.util.Set): Set[a] with Marshal[a], Order[a] = region rc {
+        wrapHH(rc, prim) |> toFlixSet
+    }
+
+    /// No Order constraint on `a`
+    pub def primSetToFlixList(prim: ##java.util.Set): List[a] with Marshal[a] = region rc {
+        wrapHH(rc, prim) |> toFlixList
+    }
+
 
     ///
     /// Returns an iterator over `s`.
@@ -223,14 +232,12 @@ namespace Interop/Util/SetZ {
                 |> Interop/Util/IteratorZ.wrapHH(rc)
                 |> Interop/Util/IteratorZ.toFlixIterator(rc, ocast)
 
-    pub def toFlixSet(s: SetZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
-        region r2 {
-            toFlixIterator(r2, Interop/Flix/Marshal.fromJavaObject, s) |> Iterator.toSet
-        }
+    pub def toFlixSet(s: SetZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] = region rc {
+        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, s) |> Iterator.toSet
+    }
 
-    pub def toFlixList(s: SetZ[a, r]): List[a] \ { Read(r) } with Marshal[a] =
-        region r2 {
-            toFlixIterator(r2, Interop/Flix/Marshal.fromJavaObject, s) |> Iterator.toList
-        }
+    pub def toFlixList(s: SetZ[a, r]): List[a] \ { Read(r) } with Marshal[a] = region rc {
+        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, s) |> Iterator.toList
+    }
 
 }
