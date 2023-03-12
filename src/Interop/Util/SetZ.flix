@@ -228,9 +228,7 @@ namespace Interop/Util/SetZ {
         if (Object.isNull(s1))
             Iterator.empty(rc)
         else 
-            iterator(s1) 
-                |> Interop/Util/IteratorZ.wrapHH(rc)
-                |> Interop/Util/IteratorZ.toFlixIterator(rc, ocast)
+            iterator(s1) |> Interop/Util/IteratorZ.primIteratorToFlixIterator(rc, ocast)
 
     pub def toFlixSet(s: SetZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] = region rc {
         toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, s) |> Iterator.toSet

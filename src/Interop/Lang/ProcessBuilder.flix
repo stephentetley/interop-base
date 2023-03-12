@@ -46,26 +46,23 @@ namespace Interop/Lang/ProcessBuilder {
         ProcessBuilder(prim)
 
 
-    pub def new(rc: Region[r], l: List[String]): ProcessBuilder[r] \ Write(r) = 
+    pub def new(_: Region[r], l: List[String]): ProcessBuilder[r] \ Write(r) = 
         import new java.lang.ProcessBuilder(##java.util.List): ##java.lang.ProcessBuilder \ r as newProcessBuilder;
-        let ls1 = Interop/Util/ArrayList.fromFoldable(rc, l) |> Interop/Util/ImpListZ.toListHH;
+        let ls1 = Interop/Util/ListZ.fromFoldableViaArrayListHH(l);
         ProcessBuilder(newProcessBuilder(ls1))
 
     pub def command!(l: List[String], pb: ProcessBuilder[r]): ProcessBuilder[r] \ Write(r) = 
-        region rc { 
-            import java.lang.ProcessBuilder.command(##java.util.List): ##java.lang.ProcessBuilder \ Write(r);
-            let ProcessBuilder(pb1) = pb;
-            let ls1 = Interop/Util/ArrayList.fromFoldable(rc, l) |> Interop/Util/ImpListZ.toListHH;
-            ProcessBuilder(command(pb1, ls1))
-        }
+        import java.lang.ProcessBuilder.command(##java.util.List): ##java.lang.ProcessBuilder \ Write(r);
+        let ProcessBuilder(pb1) = pb;
+        let ls1 = Interop/Util/ListZ.fromFoldableViaArrayListHH(l);
+        ProcessBuilder(command(pb1, ls1))
 
-    pub def getCommand(pb: ProcessBuilder[r]): List[String] \ Read(r) = region rc {
+
+    pub def getCommand(pb: ProcessBuilder[r]): List[String] \ Read(r) =
         import java.lang.ProcessBuilder.command(): ##java.util.List \ r;
         let ProcessBuilder(pb1) = pb;
-        command(pb1) 
-            |> Interop/Util/ListZ.wrapHH(rc)
-            |> Interop/Util/ListZ.toFlixList
-    }
+        command(pb1) |> Interop/Util/ListZ.primListToFlixList
+
 
     pub def directory!(f: File[r1], pb: ProcessBuilder[r]): ProcessBuilder[r] \ { Write(r), Read(r1) } = 
         import java.lang.ProcessBuilder.directory(##java.io.File): ##java.lang.ProcessBuilder \ {r, r1} ;
@@ -78,15 +75,13 @@ namespace Interop/Lang/ProcessBuilder {
         let ProcessBuilder(pb1) = pb;
         File(directory(pb1))
 
-    pub def environment(pb: ProcessBuilder[r]): Result[String, Map[String, String]] \ {Read(r), IO} = region rc {
+    pub def environment(pb: ProcessBuilder[r]): Result[String, Map[String, String]] \ {Read(r), IO} =
         Interop/Flix/Util.try(_ -> {
             import java.lang.ProcessBuilder.environment(): ##java.util.Map \ {r, IO};
             let ProcessBuilder(pb1) = pb;
-            environment(pb1) 
-                |> Interop/Util/MapZ.wrapHH(rc)
-                |> Interop/Util/MapZ.toFlixMap
+            environment(pb1) |> Interop/Util/MapZ.primMapToFlixMap
         })
-    }
+
 
     pub def inheritIO!(pb: ProcessBuilder[r]): ProcessBuilder[r] \ Write(r) = 
         import java.lang.ProcessBuilder.inheritIO(): ##java.lang.ProcessBuilder \ r;

@@ -161,4 +161,27 @@ namespace Interop/Util/HashMap {
         map1
 
 
+    pub def primHashMapToFlixMap(prim: ##java.util.HashMap): Map[k, v] with Order[k], Marshal[k], Marshal[v] = region rc {
+        wrapHH(rc, prim) |> toFlixMap
+    }
+
+
+    ///
+    /// Returns an iterator over all key-value pairs in `m`.
+    ///
+    pub def iterator(rc: Region[r1], m: HashMap[k, v, r]): Iterator[(k, v), r1, r1] \ { Read(r) } with Marshal[k], Marshal[v] =
+        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)
+
+    pub def toFlixIterator(rc: Region[r1], 
+                            kcast: ##java.lang.Object -> k, 
+                            vcast: ##java.lang.Object -> v, 
+                            m: HashMap[k, v, r]): Iterator[(k, v), r1, r1] \ { Read(r)} with Marshal[k], Marshal[v] =
+        Interop/Util/MapZ.toFlixIterator(rc, kcast, vcast, ImpMapZ.toMapZ(m))
+
+    pub def toFlixMap(m: HashMap[k, v, r]): Map[k, v] \ { Read(r) } with Order[k], Marshal[k], Marshal[v] =
+        Interop/Util/MapZ.toFlixMap(ImpMapZ.toMapZ(m))
+
+    pub def toFlixList(m: HashMap[k, v, r]): List[(k, v)] \ { Read(r) } with Marshal[k], Marshal[v] =
+        Interop/Util/MapZ.toFlixList(ImpMapZ.toMapZ(m))
+
 }

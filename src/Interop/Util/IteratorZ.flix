@@ -42,10 +42,12 @@ namespace Interop/Util/IteratorZ {
     pub def wrapHH(rc: Region[r], iter: ##java.util.Iterator): IteratorZ[a, r] = 
         IteratorZ(rc, iter)
 
-    /// Mutable (raw) to mutable (Flix iterator) so Read/Write
+    /// Mutable (raw) to mutable (Flix iterator) 
     pub def iterator(rc: Region[r1], iter: IteratorZ[a, r]): Iterator[a, r, r1] with Marshal[a]  =
         toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, iter)
-        
+
+    pub def enumerator(rc: Region[r1], iter: IteratorZ[a, r]): Iterator[(Int32, a), r and r1, r1] \ Write(r1) with Marshal[a] =
+        iterator(rc, iter) |> Iterator.enumerator        
 
     /// Cast must be Pure!
     pub def toFlixIterator(rc: Region[r1], ocast: ##java.lang.Object -> a, iter: IteratorZ[a, r]): Iterator[a, r, r1] =
@@ -60,9 +62,12 @@ namespace Interop/Util/IteratorZ {
         };
         Iterator.iterate(rc, step)
 
+    pub def primIteratorToFlixIterator(rc: Region[r], 
+                                        ocast: ##java.lang.Object -> a, 
+                                        prim: ##java.util.Iterator): Iterator[a, r, r] =
+        wrapHH(rc, prim) |> toFlixIterator(rc, ocast)
 
-    pub def enumerator(rc: Region[r1], iter: IteratorZ[a, r]): Iterator[(Int32, a), r and r1, r1] \ Write(r1) with Marshal[a] =
-        iterator(rc, iter) |> Iterator.enumerator
+
 
     ///
     /// Apply the effectful function `f` to all the elements in the array `a`.

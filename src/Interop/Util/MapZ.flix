@@ -208,6 +208,26 @@ namespace Interop/Util/MapZ {
             forEach(m1, f1)
         })
 
+    pub def fromFlixMapViaHashMap(rc: Region[r], t: Map[k, v]): MapZ[k, v, r] \ { Write(r) } with Marshal[k], Marshal[v] =
+        Interop/Util/HashMap.fromFlixMap(rc, t) |> Interop/Util/ImpMapZ.toMapZ
+
+    pub def fromFlixMapViaHashMapHH(t: Map[k, v]): ##java.util.Map with Marshal[k], Marshal[v] = region rc {
+        Interop/Util/HashMap.fromFlixMap(rc, t) |> Interop/Util/ImpMapZ.toMapHH
+    }
+
+
+    pub def fromFoldableViaHashMap(rc: Region[r], t: t[(k, v)]): MapZ[k, v, r] \ { Write(r) } with Foldable[t], Marshal[k], Marshal[v] =
+        Interop/Util/HashMap.fromFoldable(rc, t) |> Interop/Util/ImpMapZ.toMapZ
+
+    pub def fromFoldableViaHashMapHH(t: t[(k, v)]): ##java.util.Map with Foldable[t], Marshal[k], Marshal[v] = region rc {
+        Interop/Util/HashMap.fromFoldable(rc, t) |> Interop/Util/ImpMapZ.toMapHH
+    }
+
+
+    pub def primMapToFlixMap(prim: ##java.util.Map): Map[k, v] with Order[k], Marshal[k], Marshal[v] = region rc {
+        wrapHH(rc, prim) |> toFlixMap
+    }
+
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     ///

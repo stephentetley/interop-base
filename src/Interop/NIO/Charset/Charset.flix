@@ -158,17 +158,13 @@ namespace Interop/NIO/Charset/Charset {
         contains(x1, y1)
 
     pub def aliases(x: Charset): Set[String] =
-        region r {
-            import java.nio.charset.Charset.aliases(): ##java.util.Set \ {};
-            let Charset(x1) = x;
-            let prim = aliases(x1); 
-            Interop/Util/SetZ.wrapHH(r, prim) |> Interop/Util/SetZ.toFlixSet
-        }
+        import java.nio.charset.Charset.aliases(): ##java.util.Set \ {};
+        let Charset(x1) = x;
+        aliases(x1) |> Interop/Util/SetZ.primSetToFlixSet
 
     pub def availableCharsets(): Map[String, Charset] \ IO =
         import static java.nio.charset.Charset.availableCharsets(): ##java.util.SortedMap \ IO;
-        let prim = availableCharsets();
-        Interop/Util/SortedMap.wrapHH(Static, prim) |> Interop/Util/SortedMap.toFlixMap
+        availableCharsets() |> Interop/Util/SortedMap.primSortedMapToFlixMap
 
     /// TODO wrap ByteBuffer and CharBuffer
 

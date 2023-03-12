@@ -124,6 +124,8 @@ namespace Interop/Util/SortedMap {
         };
         loop(st, newTreeMap())
 
+
+    /// TODO - remove and add TreeMap module...
     pub def fromMapViaTreeMap(r: Region[r], m: Map[k, v]): SortedMap[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
         let step = iter -> match Iterator.next(iter) {
             case Some(k, v)   => Some((k, v, iter))
@@ -131,6 +133,10 @@ namespace Interop/Util/SortedMap {
         };
         unfoldViaTreeMap(r, step, Map.iterator(r, m))
 
+
+    pub def primSortedMapToFlixMap(prim: ##java.util.SortedMap): Map[k, v] with Order[k], Marshal[k], Marshal[v] = region rc {
+        wrapHH(rc, prim) |> toFlixMap
+    }
 
     ///
     /// Returns an iterator over all key-value pairs in `m`.

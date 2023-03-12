@@ -88,34 +88,30 @@ namespace Interop/Util/Locale/LanguageRange {
         getWeight(x1)
 
 
-    pub def parse(ranges: String): Result[String, List[LanguageRange]] = region rc {
+    pub def parse(ranges: String): Result[String, List[LanguageRange]] = 
         Interop/Flix/Util.try(_ -> {
             import static java.util.Locale$LanguageRange.parse(String): ##java.util.List \ {};
-            let prim = parse(ranges);
-            Interop/Util/ListZ.wrapHH(rc, prim) |> Interop/Util/ListZ.toFlixList
+            parse(ranges) |> Interop/Util/ListZ.primListToFlixList
         })
-    }
+
 
     pub def parseWithCustomizations(ranges: String, 
-                                    customizations: Map[String, List[String]]): Result[String, List[LanguageRange]] = region rc {
+                                    customizations: Map[String, List[String]]): Result[String, List[LanguageRange]] =
         Interop/Flix/Util.try(_ -> {
             import static java.util.Locale$LanguageRange.parse(String, ##java.util.Map): ##java.util.List \ {};
-            let cs1 = Interop/Util/HashMap.fromFlixMap(rc, customizations) |> Interop/Util/ImpMapZ.toMapHH;
-            let prim = parse(ranges, cs1);
-            Interop/Util/ListZ.wrapHH(rc, prim) |> Interop/Util/ListZ.toFlixList
+            let cs1 = Interop/Util/MapZ.fromFlixMapViaHashMapHH(customizations);
+            parse(ranges, cs1) |> Interop/Util/ListZ.primListToFlixList
         })
-    }
+
 
     pub def mapEquivalents(priorityList: List[LanguageRange], 
-                            customizations: Map[String, List[String]]): Result[String, List[LanguageRange]] = region rc {
+                            customizations: Map[String, List[String]]): Result[String, List[LanguageRange]] =
         Interop/Flix/Util.try(_ -> {
             import static java.util.Locale$LanguageRange.mapEquivalents(##java.util.List, ##java.util.Map): ##java.util.List \ {};
-            let ps1 = Interop/Util/ArrayList.fromFoldable(rc, priorityList) |> Interop/Util/ImpListZ.toListHH;
-            let cs1 = Interop/Util/HashMap.fromFlixMap(rc, customizations) |> Interop/Util/ImpMapZ.toMapHH;
-            let prim = mapEquivalents(ps1, cs1);
-            Interop/Util/ListZ.wrapHH(rc, prim) |> Interop/Util/ListZ.toFlixList
+            let ps1 = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
+            let cs1 = Interop/Util/MapZ.fromFlixMapViaHashMapHH(customizations);
+            mapEquivalents(ps1, cs1) |> Interop/Util/ListZ.primListToFlixList
         })
-    }
 
 
 }   
