@@ -210,6 +210,13 @@ namespace Interop/Util/SetZ {
     }
 
 
+    pub def fromFoldableViaHashSet(rc: Region[r], t: t[a]): SetZ[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
+        Interop/Util/HashSet.fromFoldable(rc, t) |> Interop/Util/ImpSetZ.toSetZ
+
+    pub def fromFoldableViaHashSetHH(t: t[a]): ##java.util.Set with Foldable[t], Marshal[a] = region rc {
+        Interop/Util/HashSet.fromFoldable(rc, t) |> Interop/Util/ImpSetZ.toSetHH
+    }
+
     ///
     /// Returns an iterator over `s`.
     ///

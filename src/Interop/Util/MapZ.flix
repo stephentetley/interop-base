@@ -216,6 +216,19 @@ namespace Interop/Util/MapZ {
     }
 
 
+    pub def fromFlixMapViaHashMapWith(rc: Region[r], 
+                                        kcast: k -> ##java.lang.Object, 
+                                        vcast: v -> ##java.lang.Object, 
+                                        t: Map[k, v]): MapZ[k, v, r] \ { Write(r) } =
+        Interop/Util/HashMap.fromFlixMapWith(rc, kcast, vcast, t) |> Interop/Util/ImpMapZ.toMapZ
+
+    pub def fromFlixMapViaHashMapHHWith(kcast: k -> ##java.lang.Object, 
+                                        vcast: v -> ##java.lang.Object, 
+                                        t: Map[k, v]): ##java.util.Map = region rc {
+        Interop/Util/HashMap.fromFlixMapWith(rc, kcast, vcast, t) |> Interop/Util/ImpMapZ.toMapHH
+    }
+
+
     pub def fromFoldableViaHashMap(rc: Region[r], t: t[(k, v)]): MapZ[k, v, r] \ { Write(r) } with Foldable[t], Marshal[k], Marshal[v] =
         Interop/Util/HashMap.fromFoldable(rc, t) |> Interop/Util/ImpMapZ.toMapZ
 

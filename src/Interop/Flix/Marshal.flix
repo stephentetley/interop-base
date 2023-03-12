@@ -86,16 +86,16 @@ namespace Interop/Flix {
 
     /// TODO - remove this and use a function that makes the transit (through ArrayList or whatever) explicit.
     /// Warning - uses ArrayList as an intermediate, is this acceptable in all cases?
-    instance Marshal[List[a]] with Marshal[a] {
-        pub def toJavaObject(l: List[a]): ##java.lang.Object = region rc {
-            let l1 = Interop/Util/ArrayList.fromFoldable(rc, l);
-            unsafe_cast Interop/Util/ImpListZ.toListHH(l1) as ##java.lang.Object
-        } 
+    // instance Marshal[List[a]] with Marshal[a] {
+    //     pub def toJavaObject(l: List[a]): ##java.lang.Object = region rc {
+    //         let l1 = Interop/Util/ArrayList.fromFoldable(rc, l);
+    //         unsafe_cast Interop/Util/ImpListZ.toListHH(l1) as ##java.lang.Object
+    //     } 
         
-        pub def fromJavaObject(o: ##java.lang.Object): List[a] = region rc {
-            Interop/Util/ListZ.wrapHH(rc, unsafe_cast o as ##java.util.List) |> Interop/Util/ListZ.toFlixList
-        }
-    }
+    //     pub def fromJavaObject(o: ##java.lang.Object): List[a] = region rc {
+    //         Interop/Util/ListZ.wrapHH(rc, unsafe_cast o as ##java.util.List) |> Interop/Util/ListZ.toFlixList
+    //     }
+    // }
 
     instance Marshal[Option[a]] with Marshal[a] {
         pub def toJavaObject(o: Option[a]): ##java.lang.Object =
@@ -111,6 +111,9 @@ namespace Interop/Flix {
 
 namespace Interop/Flix/Marshal {
 
+    /// Use this only on primitive Java objects.
+    pub def unsafeCastToObject(x: a): ##java.lang.Object = 
+        unsafe_cast x as ##java.lang.Object
 
     pub def marshalBool(b: Bool): ##java.lang.Boolean = 
         import static java.lang.Boolean.valueOf(Bool): ##java.lang.Boolean \ {};

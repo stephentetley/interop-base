@@ -158,5 +158,13 @@ namespace Interop/Util/HashSet {
         let set1 = new(r);
         Foldable.forEach(x -> discard addWith!(x, ocast, set1), t);
         set1
+    
+    pub def iterator(rc: Region[r1], m: HashSet[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
+        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, m)
+
+    pub def toFlixIterator(rc: Region[r1], 
+                            ocast: ##java.lang.Object -> a,
+                            s: HashSet[a, r]): Iterator[a, r1, r1] \ { Read(r)} with Marshal[a] =
+        Interop/Util/SetZ.toFlixIterator(rc, ocast, ImpSetZ.toSetZ(s))
 
 }

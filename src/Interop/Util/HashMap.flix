@@ -146,6 +146,13 @@ namespace Interop/Util/HashMap {
         Map.forEach((k, v) -> discard put!(k, v, map1), t);
         map1
 
+    pub def fromFlixMapWith(r: Region[r], 
+                            kcast: k -> ##java.lang.Object, 
+                            vcast: v -> ##java.lang.Object, 
+                            t: Map[k, v]): HashMap[k, v, r] \ Write(r) =
+        let map1 = new(r);
+        Map.forEach((k, v) -> putWith!(k, v, kcast, vcast, map1), t);
+        map1
 
     pub def fromFoldable(r: Region[r], t: t[(k, v)]): HashMap[k, v, r] \ Write(r) with Foldable[t], Marshal[k], Marshal[v] =
         let map1 = new(r);
