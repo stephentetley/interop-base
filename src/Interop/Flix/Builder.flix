@@ -35,7 +35,7 @@ namespace Interop/Flix/Builder {
     /// 
     pub def lift(f: t -> t \ Write(r)): Builder[t, r] =
         Builder(o -> 
-            Interop/Flix/Util.try(_ -> f(o))
+            Result.tryCatch(_ -> f(o))
         )
 
     pub def empty(): Builder[t, r] =

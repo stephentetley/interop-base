@@ -40,7 +40,7 @@ namespace Interop/NIO/Channels/Pipe {
         Pipe(prim)
 
     pub def open(): Result[String, Pipe[r]] \ Write(r) =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.nio.channels.Pipe.open(): ##java.nio.channels.Pipe \ r;
             open() |> Pipe
         })

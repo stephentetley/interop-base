@@ -70,7 +70,7 @@ namespace Interop/NIO/Charset/Charset {
         Charset(prim)
 
     pub def forName(name: String): Result[String, Charset] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.nio.charset.Charset.forName(String): ##java.nio.charset.Charset \ {};
             Charset(forName(name))
         })
@@ -83,7 +83,7 @@ namespace Interop/NIO/Charset/Charset {
 
 
     pub def isSupported(name: String): Result[String, Bool] \ IO =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.nio.charset.Charset.isSupported(String): Bool \ IO;
             isSupported(name)
         })

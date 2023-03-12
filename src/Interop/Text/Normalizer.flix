@@ -23,14 +23,14 @@ namespace Interop/Text/Normalizer {
     use Interop/Text.NormalizerForm.{NormalizerForm};
 
     pub def normalize(nform: NormalizerForm, src: String): Result[String, String] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.text.Normalizer.normalize(##java.lang.CharSequence, ##java.text.Normalizer$Form): String \ {};
             let NormalizerForm(nform1) = nform;
             normalize(unsafe_cast src as ##java.lang.CharSequence, nform1)
         })
 
     pub def isNormalized(nform: NormalizerForm, src: String): Result[String, Bool] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.text.Normalizer.isNormalized(##java.lang.CharSequence, ##java.text.Normalizer$Form): Bool & Pure;            
             let NormalizerForm(nform1) = nform;
             isNormalized(unsafe_cast src as ##java.lang.CharSequence, nform1)

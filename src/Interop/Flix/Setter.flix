@@ -38,7 +38,7 @@ namespace Interop/Flix/Setter {
     /// 
     pub def lift(f: t -> Unit \ Write(r)): Setter[t, r] =
         Setter(o -> 
-            Interop/Flix/Util.try(_ -> f(o))            
+            Result.tryCatch(_ -> f(o))            
         )
 
     pub def empty(): Setter[t, r] =

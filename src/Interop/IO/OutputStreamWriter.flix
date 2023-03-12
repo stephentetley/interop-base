@@ -74,14 +74,14 @@ namespace Interop/IO/OutputStreamWriter {
         OutputStreamWriter(newOutputStreamWriter(outs1, cs1))
 
     pub def flush!(w: OutputStreamWriter[r]): Result[String, Unit] \ Write(r) =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.OutputStreamWriter.flush(): Unit \ r;
             let OutputStreamWriter(w1) = w;
             flush(w1)
         })
 
     pub def close!(w: OutputStreamWriter[r]): Result[String, Unit] \ Write(r) =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.OutputStreamWriter.close(): Unit \ r;
             let OutputStreamWriter(w1) = w;
             close(w1)
@@ -95,21 +95,21 @@ namespace Interop/IO/OutputStreamWriter {
     pub def writeSubCharArray!(arr: Array[Char, r2], 
                                 sub: {offset = Int32, len = Int32}, 
                                 w: OutputStreamWriter[r]): Result[String, Unit] \ {Read(r2), Write(r)} =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.OutputStreamWriter.write(Array[Char, r2], Int32, Int32): Unit \ {r, r2};
             let OutputStreamWriter(w1) = w;
             write(w1, arr, sub.offset, sub.len)
         })
 
     pub def writeCharacter!(i: Int32, w: OutputStreamWriter[r]): Result[String, Unit] \ Write(r) =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.OutputStreamWriter.write(Int32): Unit \ r;
             let OutputStreamWriter(w1) = w;
             write(w1, i)
         })
 
     pub def writeSubstring!(s: String, sub: {offset = Int32, len = Int32}, w: OutputStreamWriter[r]): Result[String, Unit] \ Write(r) =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.OutputStreamWriter.write(String, Int32, Int32): Unit \ r;
             let OutputStreamWriter(w1) = w;
             write(w1, s, sub.offset, sub.len)

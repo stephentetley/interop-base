@@ -46,7 +46,7 @@ namespace Interop/IO/File {
 
 
     pub def toPath(f: File[r]): Result[String, Path] \ Read(r) =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.File.toPath(): ##java.nio.file.Path \ r;
             let File(f1) = f;
             toPath(f1) |> Path

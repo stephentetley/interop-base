@@ -66,7 +66,7 @@ namespace Interop/IO/Writer {
 
 
     pub def appendChar!(c: Char, w: Writer[r]): Result[String, Writer[r]] \ Write(r) =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.Writer.append(Char): ##java.io.Writer \ r;
             let Writer(w1) = w;
             Writer(append(w1, c))
@@ -74,7 +74,7 @@ namespace Interop/IO/Writer {
 
 
     pub def appendCharSequence!(cs: CharSequence[r2], w: Writer[r]): Result[String, Writer[r]] \ { Read(r1), Write(r) } =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.Writer.append(##java.lang.CharSequence): ##java.io.Writer \ {r, r1};
             let Writer(w1) = w;
             let cs1 = Interop/Lang/CharSequence.getHH(cs);
@@ -84,7 +84,7 @@ namespace Interop/IO/Writer {
     pub def appendSubCharSequence!(cs: CharSequence[r1], 
                                     sub: {start = Int32, end = Int32}, 
                                     w: Writer[r]): Result[String, Writer[r]] \ { Read(r1), Write(r) } =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.Writer.append(##java.lang.CharSequence, Int32, Int32): ##java.io.Writer \ {r, r1};
             let Writer(w1) = w;
             let cs1 = Interop/Lang/CharSequence.getHH(cs);
@@ -92,21 +92,21 @@ namespace Interop/IO/Writer {
         })
 
     pub def flush!(w: Writer[r]): Result[String, Unit] \ Write(r) =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.Writer.flush(): Unit \ r;
             let Writer(w1) = w;
             flush(w1)
         })
 
     pub def close!(w: Writer[r]): Result[String, Unit] \ Write(r) =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.Writer.close(): Unit \ r;
             let Writer(w1) = w;
             close(w1)
         })
 
     pub def writeCharArray!(arr: Array[Char, r2], w: Writer[r]): Result[String, Unit] \ {Read(r2), Write(r)} =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.Writer.write(Array[Char, r2]): Unit \ {r, r2};
             let Writer(w1) = w;
             write(w1, arr)
@@ -115,28 +115,28 @@ namespace Interop/IO/Writer {
     pub def writeSubCharArray!(arr: Array[Char, r2], 
                                 sub: {offset = Int32, len = Int32}, 
                                 w: Writer[r]): Result[String, Unit] \ {Read(r2), Write(r)} =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.Writer.write(Array[Char, r2], Int32, Int32): Unit \ {r, r2};
             let Writer(w1) = w;
             write(w1, arr, sub.offset, sub.len)
         })
 
     pub def writeCharacter!(i: Int32, w: Writer[r]): Result[String, Unit] \ Write(r) =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.Writer.write(Int32): Unit \ r;
             let Writer(w1) = w;
             write(w1, i)
         })
 
     pub def writeString!(s: String, w: Writer[r]): Result[String, Unit] \ Write(r) =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.Writer.write(String): Unit \ r;
             let Writer(w1) = w;
             write(w1, s)
         })
 
     pub def writeSubstring!(s: String, sub: {offset = Int32, len = Int32}, w: Writer[r]): Result[String, Unit] \ Write(r) =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.Writer.write(String, Int32, Int32): Unit \ r;
             let Writer(w1) = w;
             write(w1, s, sub.offset, sub.len)

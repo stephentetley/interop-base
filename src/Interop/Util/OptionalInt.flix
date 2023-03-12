@@ -54,7 +54,7 @@ namespace Interop/Util/OptionalInt {
         of(i) |> OptionalInt
 
     pub def getAsInt(o: OptionalInt): Result[String, Int32] = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.OptionalInt.getAsInt(): Int32 \ {};
             let OptionalInt(o1) = o;
             getAsInt(o1)

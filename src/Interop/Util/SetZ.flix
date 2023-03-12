@@ -129,7 +129,7 @@ namespace Interop/Util/SetZ {
         size(s1)
 
     pub def add!(x: a, s: SetZ[a, r]): Result[String, Bool] \  Read(r) with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Set.add(##java.lang.Object): Bool \ r; 
             let SetZ(_, s1) = s;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
@@ -137,7 +137,7 @@ namespace Interop/Util/SetZ {
         })
 
     pub def addAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Set.addAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;
             let Collection(_, c1) = c;
@@ -145,7 +145,7 @@ namespace Interop/Util/SetZ {
         })
 
     pub def contains(x: a, s: SetZ[a, r]): Result[String, Bool] \  Read(r) with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Set.contains(##java.lang.Object): Bool \ r; 
             let SetZ(_, s1) = s;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
@@ -153,7 +153,7 @@ namespace Interop/Util/SetZ {
         })
 
     pub def containsAll(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Set.containsAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;
             let Collection(_, c1) = c;
@@ -161,14 +161,14 @@ namespace Interop/Util/SetZ {
         })
 
     pub def clear!(s: SetZ[a, r]): Result[String, Unit] \ Read(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Set.clear(): Unit \ r;
             let SetZ(_, s1) = s;
             clear(s1)
         })
 
     pub def remove!(x: a, s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Set.remove(##java.lang.Object): Bool \ r; 
             let SetZ(_, s1) = s;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
@@ -176,7 +176,7 @@ namespace Interop/Util/SetZ {
         })
 
     pub def removeAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Set.removeAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;
             let Collection(_, c1) = c;
@@ -185,7 +185,7 @@ namespace Interop/Util/SetZ {
 
     
     pub def removeIf!(f: a -> Bool \ ef, s: SetZ[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Set.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let SetZ(_, s1) = s;        
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
@@ -193,7 +193,7 @@ namespace Interop/Util/SetZ {
         })
 
     pub def retainAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Set.retainAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;
             let Collection(_, c1) = c;

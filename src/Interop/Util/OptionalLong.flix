@@ -54,7 +54,7 @@ namespace Interop/Util/OptionalLong {
         of(i) |> OptionalLong
 
     pub def getAsLong(o: OptionalLong): Result[String, Int64] = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.OptionalLong.getAsLong(): Int64 \ {};
             let OptionalLong(o1) = o;
             getAsLong(o1)

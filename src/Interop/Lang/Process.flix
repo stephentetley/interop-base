@@ -46,7 +46,7 @@ namespace Interop/Lang/Process {
         Process(prim)
 
     pub def waitFor!(p: Process[r]): Result[String, Int32] \ { IO } =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.lang.Process.waitFor(): Int32 \ { IO };
             let Process(p1) = p;
             waitFor(p1)

@@ -43,7 +43,7 @@ namespace Interop/Util/DoubleSummaryStatistics {
         ss1 |> toString
 
     pub def combine!(i: DoubleSummaryStatistics[r], j: DoubleSummaryStatistics[r]): Result[String, Unit] \ {Read(r), Write(r)} =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.DoubleSummaryStatistics.combine(##java.util.DoubleSummaryStatistics): Unit \ r;
             let DoubleSummaryStatistics(i1) = i;
             let DoubleSummaryStatistics(j1) = j;

@@ -64,7 +64,7 @@ namespace Interop/IO/BufferedReader {
 
     /// None indicates end-of-stream.
     pub def read!(rd: BufferedReader[r]): Result[String, Option[Int32]] \ Read(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.BufferedReader.read(): Int32 \ r;
             let BufferedReader(rd1) = rd;
             match read(rd1) { 
@@ -78,7 +78,7 @@ namespace Interop/IO/BufferedReader {
                             offset: {offset = Int32}, 
                             len: {len = Int32}, 
                             rd: BufferedReader[r]): Result[String, Int32] \ { Write(r2), Read(r) } = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.BufferedReader.read(Array[Char, r2], Int32, Int32): Int32 \ {r, r2};
             let BufferedReader(rd1) = rd;
             read(rd1, buf, offset.offset, len.len)
@@ -86,14 +86,14 @@ namespace Interop/IO/BufferedReader {
 
     
     pub def readLine!(rd: BufferedReader[r]): Result[String, String] \ Read(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.BufferedReader.readLine(): String \ r;
             let BufferedReader(rd1) = rd;
             readLine(rd1)
         })
 
     pub def ready(rd: BufferedReader[r]): Result[String, Bool] \ Read(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.BufferedReader.ready(): Bool \ r;
             let BufferedReader(rd1) = rd;
             ready(rd1)
@@ -106,28 +106,28 @@ namespace Interop/IO/BufferedReader {
 
 
     pub def mark!(readAheadLimit: Int32, rd: BufferedReader[r]): Result[String, Unit] \ Write(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.BufferedReader.mark(Int32): Unit \ r;
             let BufferedReader(rd1) = rd;
             mark(rd1, readAheadLimit)
         })
 
     pub def reset!(rd: BufferedReader[r]): Result[String, Unit] \ Write(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.BufferedReader.reset(): Unit \ r;
             let BufferedReader(rd1) = rd;
             reset(rd1)
         })
 
     pub def close!(rd: BufferedReader[r]): Result[String, Unit] \ Write(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.BufferedReader.close(): Unit \ r;
             let BufferedReader(rd1) = rd;
             close(rd1)
         })
 
     pub def lines!(rc: Region[r1], rd: BufferedReader[r]): Result[String, Stream[String, r1]] \ { Read(r), Write(r1) } = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.BufferedReader.lines(): ##java.util.stream.Stream \ {r, r1};
             let BufferedReader(rd1) = rd;
             Stream(rc, lines(rd1))

@@ -45,7 +45,7 @@ namespace Interop/Util/LongSummaryStatistics {
         ss1 |> toString
 
     pub def combine!(i: LongSummaryStatistics[r], j: LongSummaryStatistics[r]): Result[String, Unit] \ { Read(r), Write(r) } =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.LongSummaryStatistics.combine(##java.util.LongSummaryStatistics): Unit \ r;
             let LongSummaryStatistics(i1) = i;
             let LongSummaryStatistics(j1) = j;

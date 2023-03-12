@@ -117,7 +117,7 @@ namespace Interop/Util/HashSet {
 
     /// Use Result - `s` could be null...
     pub def remove!(x: a, s: HashSet[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.HashSet.remove(##java.lang.Object): Bool \ r; 
             let HashSet(_, s1) = s;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
@@ -125,7 +125,7 @@ namespace Interop/Util/HashSet {
         })
 
     pub def removeAll!(c: Collection[a, r1], s: HashSet[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.HashSet.removeAll(##java.util.Collection): Bool \ {r, r1}; 
             let HashSet(_, s1) = s;
             let Collection(_, c1) = c;
@@ -134,7 +134,7 @@ namespace Interop/Util/HashSet {
 
     
     pub def removeIf!(f: a -> Bool \ ef, s: HashSet[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.HashSet.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let HashSet(_, s1) = s;        
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
@@ -142,7 +142,7 @@ namespace Interop/Util/HashSet {
         })
 
     pub def retainAll!(c: Collection[a, r1], s: HashSet[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.HashSet.retainAll(##java.util.Collection): Bool \ {r, r1}; 
             let HashSet(_, s1) = s;
             let Collection(_, c1) = c;

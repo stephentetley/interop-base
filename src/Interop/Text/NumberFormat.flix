@@ -108,21 +108,21 @@ namespace Interop/Text/NumberFormat {
 
 
     pub def parse(s: String, nf: NumberFormat): Result[String, Number] = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.text.NumberFormat.parse(String): ##java.lang.Number \ {};
             let NumberFormat(nf1) = nf;
             Number(parse(nf1, s))
         })
 
     pub def formatInt64(n: Int64, nf: NumberFormat): Result[String, String] = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.text.NumberFormat.format(Int64): String \ {};
             let NumberFormat(nf1) = nf;
             format(nf1, n)
         })
 
     pub def formatFloat64(d: Float64, nf: NumberFormat): Result[String, String] =  
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.text.NumberFormat.format(Float64): String \ {};
             let NumberFormat(nf1) = nf;
             format(nf1, d)
@@ -136,7 +136,7 @@ namespace Interop/Text/NumberFormat {
     }
    
     pub def getCurrency(nf: NumberFormat): Result[String, Currency] = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.text.NumberFormat.getCurrency(): ##java.util.Currency \ {};
             let NumberFormat(nf1) = nf;
             getCurrency(nf1) |> Currency

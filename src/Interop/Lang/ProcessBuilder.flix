@@ -76,7 +76,7 @@ namespace Interop/Lang/ProcessBuilder {
         File(directory(pb1))
 
     pub def environment(pb: ProcessBuilder[r]): Result[String, Map[String, String]] \ {Read(r), IO} =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.lang.ProcessBuilder.environment(): ##java.util.Map \ {r, IO};
             let ProcessBuilder(pb1) = pb;
             environment(pb1) |> Interop/Util/MapZ.primMapToFlixMap
@@ -128,7 +128,7 @@ namespace Interop/Lang/ProcessBuilder {
 
 
     pub def start(_: Region[r1], pb: ProcessBuilder[r]): Result[String, Process[r1]] \ { Read(r), Write(r1) } =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.lang.ProcessBuilder.start(): ##java.lang.Process \ {r, r1};
             let ProcessBuilder(pb1) = pb;
             Process(start(pb1))

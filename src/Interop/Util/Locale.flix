@@ -151,7 +151,7 @@ namespace Interop/Util/Locale {
 
 
     pub def setJvmDefaultLocale!(x: Locale): Result[String, Unit] \ IO =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.util.Locale.setDefault(##java.util.Locale): Unit \ IO;
             let Locale(x1) = x;
             setDefault(x1)
@@ -161,7 +161,7 @@ namespace Interop/Util/Locale {
 
 
     pub def setJvmDefaultLocaleWithCategory!(category: Category, x: Locale): Result[String, Unit] \ IO =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.util.Locale.setDefault(##java.util.Locale$Category, ##java.util.Locale): Unit \ IO;
             import static get java.util.Locale$Category.DISPLAY: ##java.util.Locale$Category \ {} as getDisplay;
             import static get java.util.Locale$Category.FORMAT: ##java.util.Locale$Category \ {} as getFormat;
@@ -319,14 +319,14 @@ namespace Interop/Util/Locale {
         getScript(x1)
 
     pub def getISO3Country(x: Locale): Result[String, String] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Locale.getISO3Country(): String \ {};
             let Locale(x1) = x;
             getISO3Country(x1)
         })
 
     pub def getISO3Language(x: Locale): Result[String, String] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Locale.getISO3Language(): String \ {};
             let Locale(x1) = x;
             getISO3Language(x1)
@@ -426,7 +426,7 @@ namespace Interop/Util/Locale {
     }
 
     pub def getIsoCountriesWithIsoCountryCode(icc: IsoCountryCode): Result[String, Set[String]] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.util.Locale.getISOCountries(##java.util.Locale$IsoCountryCode): ##java.util.Set \ {};
             let icc1 = marshalIsoCountryCode(icc);
             getISOCountries(icc1) |> Interop/Util/SetZ.primSetToFlixSet
@@ -434,7 +434,7 @@ namespace Interop/Util/Locale {
 
 
     pub def getIsoLanguages(): Result[String, List[String]] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             region rc {
                 import static java.util.Locale.getISOLanguages(): Array[String, rc] \ Write(rc);
                 let _ = Array#{} @ rc;            
@@ -443,7 +443,7 @@ namespace Interop/Util/Locale {
         })
 
     pub def getExtension(key: Char, x: Locale): Result[String, String] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Locale.getExtension(Char): String \ {};
             let Locale(x1) = x;
             getExtension(x1, key) |> Interop/Flix/Util.getStringWithoutNull(default = "")
@@ -468,7 +468,7 @@ namespace Interop/Util/Locale {
 
 
     pub def lookup(priorityList: List[LanguageRange], locales: List[Locale]): Result[String, Option[Locale]] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.util.Locale.lookup(##java.util.List, ##java.util.Collection): ##java.util.Locale \ {};
             let ls  = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
             let col = Interop/Util/Collection.fromFoldableViaArrayListHH(locales);
@@ -477,7 +477,7 @@ namespace Interop/Util/Locale {
 
 
     pub def lookupTag(priorityList: List[LanguageRange], tags: List[String]): Result[String, Option[String]] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.util.Locale.lookupTag(##java.util.List, ##java.util.Collection): String \ {};
             let ls      = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
             let col     = Interop/Util/Collection.fromFoldableViaArrayListHH(tags);
@@ -486,7 +486,7 @@ namespace Interop/Util/Locale {
 
 
     pub def filter(priorityList: List[LanguageRange], locales: List[Locale]): Result[String, List[Locale]] =         
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.util.Locale.filter(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
             let ls      = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
             let col     = Interop/Util/Collection.fromFoldableViaArrayListHH(locales);
@@ -497,7 +497,7 @@ namespace Interop/Util/Locale {
     pub def filterWithFilteringMode(priorityList: List[LanguageRange], 
                                     mode: FilteringMode, 
                                     locales: List[Locale]): Result[String, List[Locale]] = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.util.Locale.filter(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};
             let ps      = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
             let col     = Interop/Util/Collection.fromFoldableViaArrayListHH(locales);
@@ -506,7 +506,7 @@ namespace Interop/Util/Locale {
         })
 
     pub def filterTags(priorityList: List[LanguageRange], tags: List[String]): Result[String, List[String]] = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
             let ls      = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
             let col     = Interop/Util/Collection.fromFoldableViaArrayListHH(tags);
@@ -516,7 +516,7 @@ namespace Interop/Util/Locale {
     pub def filterTagsWithFilteringMode(priorityList: List[LanguageRange], 
                                         mode: FilteringMode, 
                                         tags: List[String]): Result[String, List[String]] = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};
             let ls      = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
             let col     = Interop/Util/Collection.fromFoldableViaArrayListHH(tags);

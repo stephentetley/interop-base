@@ -58,7 +58,7 @@ namespace Interop/IO/InputStreamReader {
 
     /// None indicates end-of-stream.
     pub def read!(rd: InputStreamReader[r]): Result[String, Option[Int32]] \ Read(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.InputStreamReader.read(): Int32 \ r;
             let InputStreamReader(rd1) = rd;
             match read(rd1) { 
@@ -72,7 +72,7 @@ namespace Interop/IO/InputStreamReader {
                         offset: {offset = Int32}, 
                         len: {len = Int32}, 
                         rd: InputStreamReader[r]): Result[String, Int32] \ { Write(r2), Read(r) } = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.InputStreamReader.read(Array[Char, r2], Int32, Int32): Int32 \ {r, r2};
             let InputStreamReader(rd1) = rd;
             read(rd1, buf, offset.offset, len.len)
@@ -84,14 +84,14 @@ namespace Interop/IO/InputStreamReader {
         getEncoding(rd1)
 
     pub def ready(rd: InputStreamReader[r]): Result[String, Bool] \ Read(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.InputStreamReader.ready(): Bool \ r;
             let InputStreamReader(rd1) = rd;
             ready(rd1)
         })
 
     pub def close!(rd: InputStreamReader[r]): Result[String, Unit] \ Write(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.InputStreamReader.close(): Unit \ r;
             let InputStreamReader(rd1) = rd;
             close(rd1)

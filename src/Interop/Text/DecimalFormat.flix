@@ -143,7 +143,7 @@ namespace Interop/Text/DecimalFormat {
 
 
     pub def getCurrency(df: DecimalFormat): Result[String, Currency] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.text.DecimalFormat.getCurrency(): ##java.util.Currency \ {};
             let DecimalFormat(df1) = df;
             getCurrency(df1) |> Currency
@@ -160,7 +160,7 @@ namespace Interop/Text/DecimalFormat {
 
 
     pub def getDecimalFormatSymbols(df: DecimalFormat): Result[String, DecimalFormatSymbols] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.text.DecimalFormat.getDecimalFormatSymbols(): ##java.text.DecimalFormatSymbols \ {};
             let DecimalFormat(df1) = df;
             DecimalFormatSymbols(getDecimalFormatSymbols(df1))

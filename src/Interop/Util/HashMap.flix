@@ -87,7 +87,7 @@ namespace Interop/Util/HashMap {
         hashCode(m1)
 
     pub def get(k: k, m: HashMap[k, v, r]): Result[String, Option[v]] \ Write(r) with Marshal[k], Marshal[v] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.HashMap.get(##java.lang.Object): ##java.lang.Object \ r; 
             let HashMap(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);

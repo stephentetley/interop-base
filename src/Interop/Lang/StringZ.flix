@@ -27,19 +27,19 @@ namespace Interop/Lang/StringZ {
         newString(arr)
 
     pub def fromSubarray(offset: {offset = Int32}, len: {len = Int32}, arr: Array[Int8, r]): Result[String, String] \ Read(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import new java.lang.String(Array[Int8, r], Int32, Int32): String \ r as newString;
             newString(arr, offset.offset, len.len)
         })
 
     pub def fromSubarrayWithCharsetName(offset: {offset = Int32}, len: {len = Int32}, charsetName: String, arr: Array[Int8, r]): Result[String, String] \ Read(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import new java.lang.String(Array[Int8, r], Int32, Int32, String): String \ r as newString;
             newString(arr, offset.offset, len.len, charsetName)
         })
 
     pub def fromSubarrayWithCharset(offset: {offset = Int32}, len: {len = Int32}, cs: Charset, arr: Array[Int8, r]): Result[String, String] \ Read(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import new java.lang.String(Array[Int8, r], Int32, Int32, ##java.nio.charset.Charset): String \ r as newString;
             let Charset(cs1) = cs;
             newString(arr, offset.offset, len.len, cs1)
@@ -47,7 +47,7 @@ namespace Interop/Lang/StringZ {
 
 
     pub def fromArrayWithCharsetName(charsetName: String, arr: Array[Int8, r]): Result[String, String] \ Read(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import new java.lang.String(Array[Int8, r], String): String \ r as newString;
             newString(arr, charsetName)
         })
@@ -62,13 +62,13 @@ namespace Interop/Lang/StringZ {
         newString(arr)
 
     pub def fromCharSubarray(offset: {offset = Int32}, len: {len = Int32}, arr: Array[Char, r]): Result[String, String] \ Read(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import new java.lang.String(Array[Char, r], Int32, Int32): String \ r as newString;
             newString(arr, offset.offset, len.len)
         })
 
     pub def fromCodePointSubarray(offset: {offset = Int32}, len: {len = Int32}, arr: Array[Int32, r]): Result[String, String] \ Read(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import new java.lang.String(Array[Int32, r], Int32, Int32): String \ r as newString;
             newString(arr, offset.offset, len.len)
         })

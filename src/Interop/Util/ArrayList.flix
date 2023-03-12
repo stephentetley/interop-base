@@ -91,7 +91,7 @@ namespace Interop/Util/ArrayList {
     /// Returns a new mutable ArrayList.
     ///
     pub def newWithCapacity(rc: Region[r], initialCapacity: Int32): Result[String, ArrayList[a, r]] \ Write(r) =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import new java.util.ArrayList(Int32): ##java.util.ArrayList \ r as newArrayList;
             ArrayList(rc, newArrayList(initialCapacity))
         })
@@ -100,7 +100,7 @@ namespace Interop/Util/ArrayList {
     /// Returns a new mutable ArrayList.
     ///
     pub def newWithCollection(rc: Region[r1], c: Collection[a, r]): Result[String, ArrayList[a, r1]] \ {Read(r), Write(r1) } =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import new java.util.ArrayList(##java.util.Collection): ##java.util.ArrayList \ {r, r1} as newArrayList;
             let Collection(_, c1) = c;
             ArrayList(rc, newArrayList(c1))
@@ -145,7 +145,7 @@ namespace Interop/Util/ArrayList {
         add(l1, Interop/Flix/Marshal.toJavaObject(x))
 
     pub def addAt!(ix: Int32, x: a, l: ArrayList[a, r]): Result[String, Unit] \ { Write(r) } with Marshal[a] = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.ArrayList.add(Int32, ##java.lang.Object): Unit \ r;
             let ArrayList(_, l1) = l;
             add(l1, ix, Interop/Flix/Marshal.toJavaObject(x))
@@ -157,7 +157,7 @@ namespace Interop/Util/ArrayList {
         add(l1, ocast(x))
 
     pub def addAll!(c: Collection[a, r1], l: ArrayList[a, r]): Result[String, Bool] \ { Read(r1), Write(r) }= 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.ArrayList.addAll(##java.util.Collection): Bool \ {r, r1};
             let ArrayList(_, l1) = l;
             let Collection(_, c1) = c;
@@ -166,7 +166,7 @@ namespace Interop/Util/ArrayList {
 
 
     pub def remove!(x: a, l: ArrayList[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.ArrayList.remove(##java.lang.Object): Bool \ r; 
             let ArrayList(_, l1) = l;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
@@ -174,7 +174,7 @@ namespace Interop/Util/ArrayList {
         })
 
     pub def removeAll!(c: Collection[a, r1], l: ArrayList[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.ArrayList.removeAll(##java.util.Collection): Bool \ {r, r1}; 
             let ArrayList(_, l1) = l;
             let Collection(_, c1) = c;
@@ -182,7 +182,7 @@ namespace Interop/Util/ArrayList {
         })
 
     pub def removeIf!(f: a -> Bool \ ef, l: ArrayList[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.ArrayList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let ArrayList(_, l1) = l;            
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
@@ -192,7 +192,7 @@ namespace Interop/Util/ArrayList {
 
 
     pub def retainAll!(c: Collection[a, r1], l: ArrayList[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.ArrayList.retainAll(##java.util.Collection): Bool \ {r, r1}; 
             let ArrayList(_, l1) = l;
             let Collection(_, c1) = c;
@@ -202,7 +202,7 @@ namespace Interop/Util/ArrayList {
 
 
     pub def forEach(f: a -> Unit \ ef, l: ArrayList[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.ArrayList.forEach(##java.util.function.Consumer): Unit \ r; 
             let ArrayList(_, l1) = l;
             let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
@@ -216,7 +216,7 @@ namespace Interop/Util/ArrayList {
 
 
     pub def sortWithComparator!(c: Comparator[a], l: ArrayList[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.ArrayList.sort(##java.util.Comparator): Unit \ r; 
             let ArrayList(_, l1) = l;
             sort(l1, c)

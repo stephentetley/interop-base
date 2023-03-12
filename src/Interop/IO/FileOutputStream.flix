@@ -51,14 +51,14 @@ namespace Interop/IO/FileOutputStream {
 
 
     pub def newWithFile(_: Region[r1], file: File[r]): Result[String, FileOutputStream[r1]] \ {Read(r), Write(r1), IO} = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import new java.io.FileOutputStream(##java.io.File): ##java.io.FileOutputStream \ {Read(r), Write(r1), IO} as newOutputStream;
             let file1 = Interop/IO/File.getHH(file);
             FileOutputStream(newOutputStream(file1))
         })
 
     pub def newWithPath(_: Region[r], path: String): Result[String, FileOutputStream[r]] \ { Write(r), IO } = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import new java.io.FileOutputStream(String): ##java.io.FileOutputStream \ {r, IO} as newOutputStream;
             FileOutputStream(newOutputStream(path))
         })
@@ -66,7 +66,7 @@ namespace Interop/IO/FileOutputStream {
 
 
     pub def write!(b: Int32, s: FileOutputStream[r]): Result[String, Unit] \ { Write(r), IO } = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.FileOutputStream.write(Int32): Unit \ { r, IO };
             let FileOutputStream(s1) = s;
             write(s1, b)
@@ -74,7 +74,7 @@ namespace Interop/IO/FileOutputStream {
 
 
     pub def close!(s: FileOutputStream[r]): Result[String, Unit] \ { Write(r), IO } = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.FileOutputStream.close(): Unit \ { r, IO };
             let FileOutputStream(s1) = s;
             close(s1)

@@ -57,14 +57,14 @@ namespace Interop/Lang/Appendable {
 
 
     pub def appendChar!(c: Char, ap: Appendable[r]): Result[String, Appendable[r]] \ Write(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.lang.Appendable.append(Char): ##java.lang.Appendable \ Write(r);
             let Appendable(ap1) = ap;
             Appendable(append(ap1, c))
         })
 
     pub def appendCharSequence!(cs: CharSequence[r1], ap: Appendable[r]): Result[String, Appendable[r]] \ { Read(r1), Write(r) } = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.lang.Appendable.append(##java.lang.CharSequence): ##java.lang.Appendable \ { Read(r1), Write(r) };
             let cs1 = Interop/Lang/CharSequence.getHH(cs);
             let Appendable(ap1) = ap;
@@ -75,7 +75,7 @@ namespace Interop/Lang/Appendable {
                                     start: {start = Int32},
                                     end: {end = Int32},
                                     ap: Appendable[r2]): Result[String, Appendable[r]] \ { Read(r1), Write(r2) } = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.lang.Appendable.append(##java.lang.CharSequence, Int32, Int32): ##java.lang.Appendable \ { Read(r1), Write(r2) };
             let cs1 = Interop/Lang/CharSequence.getHH(cs);
             let Appendable(ap1) = ap;

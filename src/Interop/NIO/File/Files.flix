@@ -31,7 +31,7 @@ namespace Interop/NIO/File/Files {
     use Interop/IO.OutputStream.{OutputStream};
 
     pub def newInputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, InputStream[r]] \ IO =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static flixinterop.nio.file.Filesz.newInputStream(##java.nio.file.Path, ##java.util.List): ##java.io.InputStream \ {IO, r};
             let Path(path1) = path;
             let opts1 = Interop/Util/ListZ.fromFoldableViaArrayListHH(opts);
@@ -39,7 +39,7 @@ namespace Interop/NIO/File/Files {
         })
 
     pub def newOutputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, OutputStream[r]] \ {IO, Write(r)} =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static flixinterop.nio.file.Filesz.newOutputStream(##java.nio.file.Path, ##java.util.List): ##java.io.OutputStream \ {IO, r};
             let Path(path1) = path;
             let opts1 = Interop/Util/ListZ.fromFoldableViaArrayListHH(opts);
@@ -48,7 +48,7 @@ namespace Interop/NIO/File/Files {
 
     /// UTF_8
     pub def exists(path: Path, opts: List[LinkOption]): Result[String, Bool] \ IO = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static flixinterop.nio.file.Filesz.exists(##java.nio.file.Path, ##java.util.List): Bool \ IO;
             let Path(path1) = path;
             let opts1 = Interop/Util/ListZ.fromFoldableViaArrayListHH(opts);
@@ -57,14 +57,14 @@ namespace Interop/NIO/File/Files {
 
     /// UTF_8
     pub def readStringUtf8(path: Path): Result[String, String] \ IO = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.nio.file.Files.readString(##java.nio.file.Path): String \ IO;
             let path1 = Interop/NIO/File/Path.getHH(path);
             readString(path1)
         })
 
     pub def readString(path: Path, cs: Charset): Result[String, String] \IO = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.nio.file.Files.readString(##java.nio.file.Path, ##java.nio.charset.Charset): String \ IO;
             let Path(path1) = path;
             let Charset(cs1) = cs;
@@ -73,7 +73,7 @@ namespace Interop/NIO/File/Files {
 
     /// UTF_8
     pub def writeStringUtf8!(path: Path, s: CharSequence[r], opts: List[OpenOption]): Result[String, Path] \ IO = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static flixinterop.nio.file.Filesz.writeString(##java.nio.file.Path, 
                     ##java.lang.CharSequence, ##java.util.List): ##java.nio.file.Path \ IO;
             let Path(path1) = path;
@@ -83,7 +83,7 @@ namespace Interop/NIO/File/Files {
         })
 
     pub def writeString!(path: Path, s: CharSequence[r], cs: Charset, opts: List[OpenOption]): Result[String, Path] \ IO = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static flixinterop.nio.file.Filesz.writeString(##java.nio.file.Path, 
                             ##java.lang.CharSequence, ##java.nio.charset.Charset, ##java.util.List): ##java.nio.file.Path \ IO;
             let Path(path1) = path;

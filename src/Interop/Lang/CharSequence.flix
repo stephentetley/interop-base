@@ -76,14 +76,14 @@ namespace Interop/Lang/CharSequence {
         length(cs1)
 
     pub def charAt(ix: Int32, cs: CharSequence[r]): Result[String, Char] \ Read(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.lang.CharSequence.charAt(Int32): Char \ r;
             let CharSequence(cs1) = cs;
             charAt(cs1, ix)
         })
 
     pub def subSequence(start: {start = Int32}, end: {end = Int32}, cs: CharSequence[r]): Result[String, CharSequence[r]] \ {Read(r), Write(r)} = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.lang.CharSequence.subSequence(Int32, Int32): ##java.lang.CharSequence \ r;
             let CharSequence(cs1) = cs;
             CharSequence(subSequence(cs1, start.start, end.end))

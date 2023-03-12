@@ -81,7 +81,7 @@ namespace Interop/Util/SortedMap {
         hashCode(m1)
 
     pub def get(k: k, m: SortedMap[k, v, r]): Result[String, Option[v]] \ Write(r) with Marshal[k], Marshal[v] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.SortedMap.get(##java.lang.Object): ##java.lang.Object \ r; 
             let SortedMap(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);

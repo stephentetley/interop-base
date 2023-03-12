@@ -117,7 +117,7 @@ namespace Interop/Util/LinkedList {
         add(l1, Interop/Flix/Marshal.toJavaObject(x))
 
     pub def addAt!(ix: Int32, x: a, l: LinkedList[a, r]): Result[String, Unit] \ { Write(r) } with Marshal[a] = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.LinkedList.add(Int32, ##java.lang.Object): Unit \ r;
             let LinkedList(_, l1) = l;
             add(l1, ix, Interop/Flix/Marshal.toJavaObject(x))
@@ -129,7 +129,7 @@ namespace Interop/Util/LinkedList {
         add(l1, ocast(x))
 
     pub def addAll!(c: Collection[a, r1], l: LinkedList[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.LinkedList.addAll(##java.util.Collection): Bool \ {r1, r};
             let LinkedList(_, l1) = l;
             let Collection(_, c1) = c;
@@ -139,7 +139,7 @@ namespace Interop/Util/LinkedList {
 
 
     pub def remove!(x: a, l: LinkedList[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.LinkedList.remove(##java.lang.Object): Bool \ r; 
             let LinkedList(_, l1) = l;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
@@ -147,7 +147,7 @@ namespace Interop/Util/LinkedList {
         })
 
     pub def removeAll!(c: Collection[a, r1], l: LinkedList[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.LinkedList.removeAll(##java.util.Collection): Bool \ {r1, r}; 
             let LinkedList(_, l1) = l;
             let Collection(_, c1) = c;
@@ -155,7 +155,7 @@ namespace Interop/Util/LinkedList {
         })
 
     pub def removeIf!(f: a -> Bool \ ef, l: LinkedList[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.LinkedList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let LinkedList(_, l1) = l;            
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
@@ -165,7 +165,7 @@ namespace Interop/Util/LinkedList {
 
 
     pub def retainAll!(c: Collection[a, r1], l: LinkedList[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.LinkedList.retainAll(##java.util.Collection): Bool \ {r1, r}; 
             let LinkedList(_, l1) = l;
             let Collection(_, c1) = c;
@@ -174,7 +174,7 @@ namespace Interop/Util/LinkedList {
 
 
     pub def forEach(f: a -> Unit \ ef, l: LinkedList[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.LinkedList.forEach(##java.util.function.Consumer): Unit \ r; 
             let LinkedList(_, l1) = l;
             let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
@@ -188,7 +188,7 @@ namespace Interop/Util/LinkedList {
 
 
     pub def sortWithComparator!(c: Comparator[a], l: LinkedList[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.LinkedList.sort(##java.util.Comparator): Unit \ r; 
             let LinkedList(_, l1) = l;
             sort(l1, c)

@@ -58,7 +58,7 @@ namespace Interop/IO/StringReader {
 
 
     pub def close!(rd: StringReader[r]): Result[String, Unit] \ Write(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.StringReader.close(): Unit \ r;
             let StringReader(rd1) = rd;
             close(rd1)
@@ -66,7 +66,7 @@ namespace Interop/IO/StringReader {
 
 
     pub def mark!(limit: Int32, rd: StringReader[r]): Result[String, Unit] \ Write(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.StringReader.mark(Int32): Unit \ r;
             let StringReader(rd1) = rd;
             mark(rd1, limit)
@@ -81,7 +81,7 @@ namespace Interop/IO/StringReader {
 
     /// None indicates end-of-stream.
     pub def read!(rd: StringReader[r]): Result[String, Option[Int32]] \ Read(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.StringReader.read(): Int32 \ r;
             let StringReader(rd1) = rd;
             match read(rd1) { 

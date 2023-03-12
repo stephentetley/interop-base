@@ -74,14 +74,14 @@ namespace Interop/Util/Collection {
         hashCode(c1)
 
     pub def clear!(c: Collection[a, r]): Result[String, Unit] \ Write(r) =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Collection.clear(): Unit \ r;
             let Collection(_, c1) = c;
             clear(c1)
         })
 
     pub def add!(x: a, c: Collection[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Collection.add(##java.lang.Object): Bool \ r; 
             let Collection(_, c1) = c;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
@@ -89,7 +89,7 @@ namespace Interop/Util/Collection {
         })
 
     pub def remove!(x: a, c: Collection[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Collection.remove(##java.lang.Object): Bool \ r; 
             let Collection(_, c1) = c;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        
@@ -98,7 +98,7 @@ namespace Interop/Util/Collection {
 
 
     pub def removeIf!(f: a -> Bool \ ef, c: Collection[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Collection.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let Collection(_, c1) = c;            
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
@@ -106,7 +106,7 @@ namespace Interop/Util/Collection {
         })
 
     pub def forEach(f: a -> Unit \ ef, c: Collection[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Collection.forEach(##java.util.function.Consumer): Unit \ r; 
             let Collection(_, c1) = c;
             let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
@@ -116,7 +116,7 @@ namespace Interop/Util/Collection {
 
     // Uses `Object.equals` for comparing.
     pub def contains(x: a, c: Collection[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Collection.contains(##java.lang.Object): Bool \ r; 
             let Collection(_, c1) = c;
             let x1 = Interop/Flix/Marshal.toJavaObject(x);        

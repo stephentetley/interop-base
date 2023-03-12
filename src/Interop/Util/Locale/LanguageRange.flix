@@ -48,7 +48,7 @@ namespace Interop/Util/Locale/LanguageRange {
     /// Returns a new LanguageRange for the supplied `range`.
     ///
     pub def new(range: String): Result[String, LanguageRange] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import new java.util.Locale$LanguageRange(String): ##java.util.Locale$LanguageRange \ {} as new1;
             LanguageRange(new1(range))
         })
@@ -89,7 +89,7 @@ namespace Interop/Util/Locale/LanguageRange {
 
 
     pub def parse(ranges: String): Result[String, List[LanguageRange]] = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.util.Locale$LanguageRange.parse(String): ##java.util.List \ {};
             parse(ranges) |> Interop/Util/ListZ.primListToFlixList
         })
@@ -97,7 +97,7 @@ namespace Interop/Util/Locale/LanguageRange {
 
     pub def parseWithCustomizations(ranges: String, 
                                     customizations: Map[String, List[String]]): Result[String, List[LanguageRange]] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.util.Locale$LanguageRange.parse(String, ##java.util.Map): ##java.util.List \ {};
             let marshalKey = Interop/Flix/Marshal.toJavaObject;
             let marshalValue = Interop/Util/ListZ.fromFoldableViaArrayListHH >> Interop/Flix/Marshal.unsafeCastToObject;
@@ -108,7 +108,7 @@ namespace Interop/Util/Locale/LanguageRange {
 
     pub def mapEquivalents(priorityList: List[LanguageRange], 
                             customizations: Map[String, List[String]]): Result[String, List[LanguageRange]] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.util.Locale$LanguageRange.mapEquivalents(##java.util.List, ##java.util.Map): ##java.util.List \ {};
             let ps1 = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
             let marshalKey = Interop/Flix/Marshal.toJavaObject;

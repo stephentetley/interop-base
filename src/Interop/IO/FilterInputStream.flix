@@ -51,7 +51,7 @@ namespace Interop/IO/FilterInputStream {
 
 
     pub def read!(s: FilterInputStream[r]): Result[String, Option[Int32]] \ Read(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.FilterInputStream.read(): Int32 \ { r };
             let FilterInputStream(s1) = s;
             match read(s1) { 
@@ -62,7 +62,7 @@ namespace Interop/IO/FilterInputStream {
 
     // read (into-array) to figure out...
     pub def readIntoArray!(buf: Array[Int8, r1], s: FilterInputStream[r]): Result[String, Int32] \ { Read(r), Write(r1)} = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.FilterInputStream.read(Array[Int8, r1]): Int32 \ { r, r1 };
             let FilterInputStream(s1) = s;
             read(s1, buf)
@@ -74,14 +74,14 @@ namespace Interop/IO/FilterInputStream {
                                 offset: {offset = Int32}, 
                                 len: {len = Int32}, 
                                 s: FilterInputStream[r]): Result[String, Int32] \ { Write(r2), IO } = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.FilterInputStream.read(Array[Int8, r2], Int32, Int32): Int32 \ { IO };
             let FilterInputStream(s1) = s;
             read(s1, buf, offset.offset, len.len)
         })
 
     pub def skip!(n: Int64, s: FilterInputStream[r]): Result[String, Int64] \ IO = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.FilterInputStream.skip(Int64): Int64 \ { IO };
             let FilterInputStream(s1) = s;
             skip(s1, n)
@@ -90,7 +90,7 @@ namespace Interop/IO/FilterInputStream {
 
     /// Estimate!
     pub def available(s: FilterInputStream[r]): Result[String, Int32] \ IO = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.FilterInputStream.available(): Int32 \ { IO };
             let FilterInputStream(s1) = s;
             available(s1)
@@ -98,7 +98,7 @@ namespace Interop/IO/FilterInputStream {
 
 
     pub def close!(s: FilterInputStream[r]): Result[String, Unit] \ IO = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.io.FilterInputStream.close(): Unit \ { IO };
             let FilterInputStream(s1) = s;
             close(s1)

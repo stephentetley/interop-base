@@ -54,7 +54,7 @@ namespace Interop/Util/OptionalDouble {
         of(d) |> OptionalDouble
 
     pub def getAsDouble(o: OptionalDouble): Result[String, Float64] = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.OptionalDouble.getAsDouble(): Float64 \ {};
             let OptionalDouble(o1) = o;
             getAsDouble(o1)

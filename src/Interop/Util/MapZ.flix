@@ -147,7 +147,7 @@ namespace Interop/Util/MapZ {
         clear(m1)
 
     pub def get(k: k, m: MapZ[k, v, r]): Result[String, Option[v]] \ Write(r) with Marshal[k], Marshal[v] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Map.get(##java.lang.Object): ##java.lang.Object \ r; 
             let MapZ(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);
@@ -155,7 +155,7 @@ namespace Interop/Util/MapZ {
         })
 
     pub def put!(k: k, v: v, m: MapZ[k, v, r]): Result[String, Option[v]] \ Write(r) with Marshal[k], Marshal[v] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Map.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
             let MapZ(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);
@@ -164,7 +164,7 @@ namespace Interop/Util/MapZ {
         })
 
     pub def containsKey(k: k, m: MapZ[k, v, r]): Result[String, Bool] \ Read(r) with Marshal[k] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Map.containsKey(##java.lang.Object): Bool \ r; 
             let MapZ(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);
@@ -172,7 +172,7 @@ namespace Interop/Util/MapZ {
         })
 
     pub def containsValue(v: v, m: MapZ[k, v, r]): Result[String, Bool] \ Read(r) with Marshal[v] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Map.containsValue(##java.lang.Object): Bool \ r; 
             let MapZ(_, m1) = m;
             let v1 = Interop/Flix/Marshal.toJavaObject(v);
@@ -193,7 +193,7 @@ namespace Interop/Util/MapZ {
         Collection(rc, values(m1))
 
     pub def remove!(k: k, m: MapZ[k, v, r]): Result[String, Option[v]] \  Write(r) with Marshal[k], Marshal[v] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Map.remove(##java.lang.Object): ##java.lang.Object \ r; 
             let MapZ(_, m1) = m;
             let k1 = Interop/Flix/Marshal.toJavaObject(k);        
@@ -201,7 +201,7 @@ namespace Interop/Util/MapZ {
         })
 
     pub def forEach(f: (k, v) -> Unit \ ef, m: MapZ[k, v, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[k], Marshal[v] =
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.util.Map.forEach(##java.util.function.BiConsumer): Unit \ r; 
             let MapZ(_, m1) = m;
             let f1 = Interop/Util/Function/BiConsumer.makeBiConsumer(f);

@@ -39,20 +39,20 @@ namespace Interop/NIO/ByteBuffer {
 
 
     pub def allocate(_: Region[r], capacity: Int32): Result[String, ByteBuffer[r]] \ Write(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import static java.nio.ByteBuffer.allocate(Int32): ##java.nio.ByteBuffer \ r;
             allocate(capacity) |> ByteBuffer        
         })
 
     pub def put!(b: Int8, bb: ByteBuffer[r]): Result[String, ByteBuffer[r]] \ Write(r) = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.nio.ByteBuffer.put(Int8): ##java.nio.ByteBuffer \ r;
             let ByteBuffer(bb1) = bb;
             put(bb1, b) |> ByteBuffer
         })
 
     pub def putArray!(arr: Array[Int8, r2], bb: ByteBuffer[r]): Result[String, ByteBuffer[r]] \ {Write(r), Read(r2)} = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.nio.ByteBuffer.put(Array[Int8, r2]): ##java.nio.ByteBuffer \ {r, r2};
             let ByteBuffer(bb1) = bb;
             put(bb1, arr) |> ByteBuffer
@@ -63,7 +63,7 @@ namespace Interop/NIO/ByteBuffer {
                             offset: {offset = Int32}, 
                             len: {len = Int32}, 
                             bb: ByteBuffer[r]): Result[String, ByteBuffer[r]] \ {Write(r), Read(r2)} = 
-        Interop/Flix/Util.try(_ -> {
+        Result.tryCatch(_ -> {
             import java.nio.ByteBuffer.put(Array[Int8, r2], Int32, Int32): ##java.nio.ByteBuffer \ {r, r2};
             let ByteBuffer(bb1) = bb;
             put(bb1, arr, offset.offset, len.len) |> ByteBuffer
