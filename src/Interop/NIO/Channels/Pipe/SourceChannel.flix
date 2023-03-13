@@ -27,11 +27,11 @@ namespace Interop/NIO/Channels/Pipe {
     instance SubChannel[SourceChannel] {
         pub def toChannel(c: SourceChannel[r]): ChannelZ[r] = 
             let SourceChannel(c1) = c;
-            ChannelZ(unsafe_cast c1 as ##java.nio.channels.Channel)
+            ChannelZ(unchecked_cast(c1 as ##java.nio.channels.Channel))
 
         pub def fromChannel(c: ChannelZ[r]): SourceChannel[r] = 
             let ChannelZ(c1) = c;
-            SourceChannel(unsafe_cast c1 as ##java.nio.channels.Pipe$SourceChannel) 
+            SourceChannel(unchecked_cast(c1 as ##java.nio.channels.Pipe$SourceChannel))
     }
 }
 

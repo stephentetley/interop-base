@@ -33,10 +33,10 @@ namespace Interop/Util/Function/ToLongFunction {
     use Interop/Flix.Marshal
 
     pub def makeToLongFunction(f: a -> Int64 \ ef): ToLongFunction[a] \ ef with Marshal[a]= 
-        unsafe_cast (new ##java.util.function.ToLongFunction {
+        unchecked_cast((new ##java.util.function.ToLongFunction {
             def applyAsLong(_this: ##java.util.function.ToLongFunction, t: ##java.lang.Object): Int64 = 
                 Interop/Flix/Marshal.fromJavaObject(t) |> f
-        }) as _ \ ef
+        }) as _ \ ef)
 
 
     pub def applyAsLong(f: ToLongFunction[a], t: a): Int64 \ ef with Marshal[a]  = 

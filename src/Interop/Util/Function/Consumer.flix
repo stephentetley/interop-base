@@ -35,7 +35,7 @@ namespace Interop/Util/Function/Consumer {
 
 
     pub def makeConsumer(f: a -> Unit \ ef): Consumer[a] \ ef with Marshal[a] = 
-        unsafe_cast (Interop/Flix/Marshal.fromJavaObject >> f) as Consumer[a] \ ef
+        unchecked_cast((Interop/Flix/Marshal.fromJavaObject >> f) as Consumer[a] \ ef)
 
 
     // /// Result?

@@ -39,10 +39,10 @@ namespace Interop/Util {
     instance Interop/Flix.Marshal[Locale] {
         pub def toJavaObject(x: Locale): ##java.lang.Object =
             let Locale(x1) = x;
-            unsafe_cast x1 as ##java.lang.Object
+            checked_cast(x1)
 
         pub def fromJavaObject(o: ##java.lang.Object): Locale = 
-            Locale(unsafe_cast o as ##java.util.Locale)
+            Locale(unchecked_cast(o as ##java.util.Locale))
     }
 
 }
@@ -177,7 +177,7 @@ namespace Interop/Util/Locale {
         import java.util.Locale.equals(##java.lang.Object): Bool \ {};
         let Locale(x1) = x;
         let Locale(y1) = y;
-        equals(x1, unsafe_cast y1 as ##java.lang.Object)
+        equals(x1, checked_cast(y1))
 
     pub def toString(x: Locale): String =
         import java.util.Locale.toString(): String \ {};

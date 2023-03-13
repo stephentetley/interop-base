@@ -36,10 +36,10 @@ namespace Interop/Util/Function/DoubleBinaryOperator {
     
 
     pub def makeDoubleBinaryOperator(f: (Float64, Float64) -> Float64 \ ef): DoubleBinaryOperator \ ef = 
-        unsafe_cast (new ##java.util.function.DoubleBinaryOperator {
+        unchecked_cast((new ##java.util.function.DoubleBinaryOperator {
             def applyAsDouble(_this: ##java.util.function.DoubleBinaryOperator, t: Float64, u: Float64): Float64 = 
                 f(t, u)
-        }) as _ \ ef
+        }) as _ \ ef)
 
         
     pub def apply(t: Float64, u: Float64, f: DoubleBinaryOperator): Float64 \ ef = 

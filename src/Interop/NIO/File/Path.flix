@@ -46,10 +46,10 @@ namespace Interop/NIO/File {
     instance Interop/Flix.Marshal[Path] {
         pub def toJavaObject(x: Path): ##java.lang.Object =
             let Path(x1) = x;
-            unsafe_cast x1 as ##java.lang.Object
+            checked_cast(x1)
 
         pub def fromJavaObject(o: ##java.lang.Object): Path = 
-            Path(unsafe_cast o as ##java.nio.file.Path)
+            Path(unchecked_cast(o as ##java.nio.file.Path))
     }
 
 }
@@ -79,7 +79,7 @@ namespace Interop/NIO/File/Path {
         import java.nio.file.Path.equals(##java.lang.Object): Bool \ {};
         let Path(x1) = x;
         let Path(y1) = y;
-        equals(x1, unsafe_cast y1 as ##java.lang.Object)
+        equals(x1, checked_cast(y1))
 
     pub def compareTo(x: Path, y: Path): Int32 =
         import java.nio.file.Path.compareTo(##java.nio.file.Path): Int32 \ {};

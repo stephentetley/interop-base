@@ -33,22 +33,22 @@ namespace Interop/Util {
     instance Interop/Util.ImpCollection[LinkedList] {
         pub def toCollection(t: LinkedList[a, r]): Collection[a, r] = 
             let LinkedList(rc, t1) = t;
-            Collection(rc, unsafe_cast t1 as ##java.util.Collection)
+            Collection(rc, unchecked_cast(t1 as ##java.util.Collection))
 
         pub def fromCollection(t: Collection[a, r]): LinkedList[a, r] = 
             let Collection(rc, t1) = t;
-            LinkedList(rc, unsafe_cast t1 as ##java.util.LinkedList) 
+            LinkedList(rc, unchecked_cast(t1 as ##java.util.LinkedList))
     }
 
 
     instance Interop/Util.ImpListZ[LinkedList] {
         pub def toListZ(t: LinkedList[a, r]): ListZ[a, r] = 
             let LinkedList(rc, t1) = t;
-            ListZ(rc, unsafe_cast t1 as ##java.util.List)
+            ListZ(rc, unchecked_cast(t1 as ##java.util.List))
 
         pub def fromListZ(t: ListZ[a, r]): LinkedList[a, r] = 
             let ListZ(rc, t1) = t;
-            LinkedList(rc, unsafe_cast t1 as ##java.util.LinkedList) 
+            LinkedList(rc, unchecked_cast(t1 as ##java.util.LinkedList))
     }
 
 }
@@ -93,7 +93,7 @@ namespace Interop/Util/LinkedList {
         import java.util.LinkedList.equals(##java.lang.Object): Bool \ r; 
         let LinkedList(_, ll1) = l1;
         let LinkedList(_, ll2) = l2;
-        equals(ll1, unsafe_cast ll2 as ##java.lang.Object)
+        equals(ll1, checked_cast(ll2))
 
     pub def isEmpty(l: LinkedList[a, r]): Bool \ Read(r) = 
         import java.util.LinkedList.isEmpty(): Bool \ r;
@@ -159,7 +159,7 @@ namespace Interop/Util/LinkedList {
             import java.util.LinkedList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let LinkedList(_, l1) = l;            
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            unsafe_cast removeIf(l1, f1) as _ \ {ef, Write(r)}
+            unchecked_cast(removeIf(l1, f1) as _ \ {ef, Write(r)})
         })
 
 

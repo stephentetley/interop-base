@@ -40,13 +40,13 @@ namespace Interop/Util/Map/Entry {
 
     /// Entry cannot be an instance of Marshal because it carries a region.
     pub def castObject(_: Region[r], o: ##java.lang.Object): Entry[k, v, r] \ Write(r) = 
-        unsafe_cast (Entry(unsafe_cast o as ##java.util.Map$Entry)) as _ \ Write(r)
+        unchecked_cast(Entry(unchecked_cast(o as ##java.util.Map$Entry)) as _ \ Write(r))
 
     pub def equals(e1: Entry[k, v, r], e2: Entry[k, v, r]): Bool \ Read(r) = 
         import java.util.Map$Entry.equals(##java.lang.Object): Bool \ r;
         let Entry(ee1) = e1;
         let Entry(ee2) = e2;
-        equals(ee1, unsafe_cast ee2 as ##java.lang.Object) 
+        equals(ee1, checked_cast(ee2))
 
     pub def hashCode(e: Entry[k, v, r]): Int32 \ Read(r) = 
         import java.util.Map$Entry.hashCode(): Int32 \ r;

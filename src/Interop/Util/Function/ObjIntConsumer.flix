@@ -36,10 +36,10 @@ namespace Interop/Util/Function/ObjIntConsumer {
     use Interop/Flix.Marshal
 
     pub def makeObjIntConsumer(f: (a, Int32) -> Unit \ ef): ObjIntConsumer[a] \ ef with Marshal[a] = 
-        unsafe_cast (new ##java.util.function.ObjIntConsumer {
+        unchecked_cast((new ##java.util.function.ObjIntConsumer {
             def accept(_this: ##java.util.function.ObjIntConsumer, t: ##java.lang.Object, u: Int32): Unit = 
                 f(Interop/Flix/Marshal.fromJavaObject(t), u)
-        }) as _ \ ef
+        }) as _ \ ef)
 
         
     pub def accept(t: a, u: Int32, f: ObjIntConsumer[a]): Unit \ ef with Marshal[a] = 

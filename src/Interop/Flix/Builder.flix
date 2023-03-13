@@ -39,7 +39,7 @@ namespace Interop/Flix/Builder {
         )
 
     pub def empty(): Builder[t, r] =
-        Builder(o -> unsafe_cast Ok(o) as _ \ r)
+        Builder(o -> unchecked_cast(Ok(o) as _ \ r))
 
 
     pub def combine(a: Builder[t, r], b: Builder[t, r]): Builder[t, r] =

@@ -28,31 +28,31 @@ namespace Interop/NIO/File {
     instance Interop/Flix.Marshal[StandardOpenOption] {
         pub def toJavaObject(x: StandardOpenOption): ##java.lang.Object =
             let StandardOpenOption(x1) = x;
-            unsafe_cast x1 as ##java.lang.Object
+            checked_cast(x1)
 
         pub def fromJavaObject(o: ##java.lang.Object): StandardOpenOption = 
-            StandardOpenOption(unsafe_cast o as ##java.nio.file.StandardOpenOption)
+            StandardOpenOption(unchecked_cast(o as ##java.nio.file.StandardOpenOption))
     }
 
 
     instance Interop/NIO/File.ImpOpenOption[StandardOpenOption] {
         pub def toOpenOption(x: StandardOpenOption): OpenOption = 
             let StandardOpenOption(x1) = x;
-            OpenOption(unsafe_cast x1 as ##java.nio.file.OpenOption)
+            OpenOption(unchecked_cast(x1 as ##java.nio.file.OpenOption))
 
         pub def fromOpenOption(x: OpenOption): StandardOpenOption = 
             let OpenOption(x1) = x;
-            StandardOpenOption(unsafe_cast x1 as ##java.nio.file.StandardOpenOption) 
+            StandardOpenOption(unchecked_cast(x1 as ##java.nio.file.StandardOpenOption))
     }
 
     instance Interop/Lang.SubEnum[StandardOpenOption] {
         pub def toEnum(x: StandardOpenOption): Enum[a] = 
             let StandardOpenOption(x1) = x;
-            Enum(unsafe_cast x1 as ##java.lang.Enum)
+            Enum(unchecked_cast(x1 as ##java.lang.Enum))
 
         pub def fromEnum(x: Enum[a]): StandardOpenOption = 
             let Enum(x1) = x;
-            StandardOpenOption(unsafe_cast x1 as ##java.nio.file.StandardOpenOption) 
+            StandardOpenOption(unchecked_cast(x1 as ##java.nio.file.StandardOpenOption))
     }
 
 }

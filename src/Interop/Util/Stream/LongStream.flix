@@ -63,7 +63,7 @@ namespace Interop/Util/Stream/LongStream {
     pub def longStreamIterator(rc: Region[r1], s: LongStream[r]): Iterator[Int64, r1, r1] \ { Read(r), Write(r1) } =
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ { Read(r), Write(r1) };
         let LongStream(_, s1) = s;
-        let iter1 = iterator(unsafe_cast s1 as ##java.util.stream.BaseStream);
+        let iter1 = iterator(unchecked_cast(s1 as ##java.util.stream.BaseStream));
         let iter2 = Interop/Util/IteratorZ.wrapHH(rc, iter1);
         Interop/Util/IteratorZ.iterator(rc, iter2)
 
@@ -136,8 +136,8 @@ namespace Interop/Util/Stream/LongStream {
     pub def flatMap(f: Int64 -> LongStream[r] \ ef, s: LongStream[r]): LongStream[r] \ {Write(r), ef} = 
         import java.util.stream.LongStream.flatMap(LongFunction[##java.util.stream.LongStream]): ##java.util.stream.LongStream \ {r, ef};
         let LongStream(rc, s1) = s;
-        let f1 = Interop/Util/Function/LongFunction.makeLongFunctionWith(f, t -> {let LongStream(_, t1) = t; unsafe_cast t1 as ##java.lang.Object});
-        LongStream(rc, unsafe_cast (flatMap(s1, f1)) as _ \ {Write(r), ef})
+        let f1 = Interop/Util/Function/LongFunction.makeLongFunctionWith(f, t -> {let LongStream(_, t1) = t; unchecked_cast(t1 as ##java.lang.Object)});
+        LongStream(rc, unchecked_cast(flatMap(s1, f1) as _ \ {Write(r), ef}))
 
 
     pub def forEach(f: Int64 -> Unit \ ef, s: LongStream[r]): Unit \ {Read(r), ef} = 

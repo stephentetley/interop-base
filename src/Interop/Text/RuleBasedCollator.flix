@@ -27,11 +27,11 @@ namespace Interop/Text {
     instance SubCollator[RuleBasedCollator] {
         pub def toCollator(x: RuleBasedCollator): Collator = 
             let RuleBasedCollator(x1) = x;
-            Collator(unsafe_cast x1 as ##java.text.Collator)
+            Collator(unchecked_cast(x1 as ##java.text.Collator))
         
         pub def fromCollator(x: Collator): RuleBasedCollator = 
             let Collator(x1) = x;
-            RuleBasedCollator(unsafe_cast x1 as ##java.text.RuleBasedCollator)
+            RuleBasedCollator(unchecked_cast(x1 as ##java.text.RuleBasedCollator))
 
     }
 

@@ -33,7 +33,7 @@ namespace Interop/Util/Function/DoubleConsumer {
     use Interop/Util/Function.DoubleConsumer
 
 
-    pub def makeDoubleConsumer(f: Float64 -> Unit \ ef): DoubleConsumer \ ef = unsafe_cast f as DoubleConsumer \ ef
+    pub def makeDoubleConsumer(f: Float64 -> Unit \ ef): DoubleConsumer \ ef = unchecked_cast(f as DoubleConsumer \ ef)
 
 
 }

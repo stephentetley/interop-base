@@ -35,11 +35,11 @@ namespace Interop/Util {
     instance Interop/Util.ImpCollection[SetZ] {
         pub def toCollection(t: SetZ[a, r]): Collection[a, r] = 
             let SetZ(rc, t1) = t;
-            Collection(rc, unsafe_cast t1 as ##java.util.Collection)
+            Collection(rc, unchecked_cast(t1 as ##java.util.Collection))
 
         pub def fromCollection(t: Collection[a, r]): SetZ[a, r] = 
             let Collection(rc, t1) = t;
-            SetZ(rc, unsafe_cast t1 as ##java.util.Set) 
+            SetZ(rc, unchecked_cast(t1 as ##java.util.Set))
     }
 
 
@@ -110,7 +110,7 @@ namespace Interop/Util/SetZ {
         import java.util.Set.equals(##java.lang.Object): Bool \ r; 
         let SetZ(_, ss1) = s1;
         let SetZ(_, ss2) = s2;
-        equals(ss1, unsafe_cast ss2 as ##java.lang.Object)
+        equals(ss1, checked_cast(ss2))
 
 
     pub def hashCode(s: SetZ[a, r]): Int32 \ Read(r) = 
@@ -189,7 +189,7 @@ namespace Interop/Util/SetZ {
             import java.util.Set.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let SetZ(_, s1) = s;        
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            unsafe_cast (removeIf(s1, f1)) as _ \ {ef, Write(r)}
+            unchecked_cast(removeIf(s1, f1) as _ \ {ef, Write(r)})
         })
 
     pub def retainAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =

@@ -32,32 +32,32 @@ namespace Interop/Util {
     // instance Interop/Flix.MutMarshal[ArrayList] {
     //     pub def mmToJavaObject(x: ArrayList[a, r]): ##java.lang.Object =
     //         let ArrayList(x1) = x;
-    //         unsafe_cast x1 as ##java.lang.Object
+    //         checked_cast(x1)
 
     //     pub def mmFromJavaObject(_: Region[r], o: ##java.lang.Object): ArrayList[a, r] = 
-    //         ArrayList(unsafe_cast o as ##java.util.ArrayList)
+    //         ArrayList(unchecked_cast(o as ##java.util.ArrayList))
     // }
 
 
     instance Interop/Util.ImpCollection[ArrayList] {
         pub def toCollection(t: ArrayList[a, r]): Collection[a, r] = 
             let ArrayList(rc, t1) = t;
-            Collection(rc, unsafe_cast t1 as ##java.util.Collection)
+            Collection(rc, unchecked_cast(t1 as ##java.util.Collection))
 
         pub def fromCollection(t: Collection[a, r]): ArrayList[a, r] = 
             let Collection(rc, t1) = t;
-            ArrayList(rc, unsafe_cast t1 as ##java.util.ArrayList) 
+            ArrayList(rc, unchecked_cast(t1 as ##java.util.ArrayList))
     }
 
 
     instance Interop/Util.ImpListZ[ArrayList] {
         pub def toListZ(t: ArrayList[a, r]): ListZ[a, r] = 
             let ArrayList(rc, t1) = t;
-            ListZ(rc, unsafe_cast t1 as ##java.util.List)
+            ListZ(rc, unchecked_cast(t1 as ##java.util.List))
 
         pub def fromListZ(t: ListZ[a, r]): ArrayList[a, r] = 
             let ListZ(rc, t1) = t;
-            ArrayList(rc, unsafe_cast t1 as ##java.util.ArrayList) 
+            ArrayList(rc, unchecked_cast(t1 as ##java.util.ArrayList))
     }
 
 }
@@ -121,7 +121,7 @@ namespace Interop/Util/ArrayList {
         import java.util.ArrayList.equals(##java.lang.Object): Bool \ r; 
         let ArrayList(_, ll1) = l1;
         let ArrayList(_, ll2) = l2;
-        equals(ll1, unsafe_cast ll2 as ##java.lang.Object)
+        equals(ll1, checked_cast(ll2))
 
     pub def isEmpty(l: ArrayList[a, r]): Bool \ Read(r) = 
         import java.util.ArrayList.isEmpty(): Bool \ r;
@@ -186,7 +186,7 @@ namespace Interop/Util/ArrayList {
             import java.util.ArrayList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let ArrayList(_, l1) = l;            
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            unsafe_cast removeIf(l1, f1) as _ \ {ef, Write(r)}
+            unchecked_cast(removeIf(l1, f1) as _ \ {ef, Write(r)})
         })
 
 

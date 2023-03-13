@@ -25,10 +25,10 @@ namespace Interop/Lang {
     instance Interop/Flix.Marshal[Byte] {
         pub def toJavaObject(x: Byte): ##java.lang.Object = 
             let Byte(x1) = x;
-            unsafe_cast x1 as ##java.lang.Object
+            checked_cast(x1)
 
         pub def fromJavaObject(o: ##java.lang.Object): Byte = 
-            Byte(unsafe_cast o as ##java.lang.Byte)
+            Byte(unchecked_cast(o as ##java.lang.Byte))
     }
 
 }
@@ -57,7 +57,7 @@ namespace Interop/Lang/Byte {
         import java.lang.Byte.equals(##java.lang.Object): Bool \ {};
         let Byte(x1) = x;
         let Byte(y1) = y;
-        equals(x1, unsafe_cast y1 as ##java.lang.Object)
+        equals(x1, checked_cast(y1))
 
     pub def compare(x: Int8, y: Int8): Int32 =
         import static java.lang.Byte.compare(Int8, Int8): Int32 \ {};

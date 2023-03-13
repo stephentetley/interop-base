@@ -29,10 +29,10 @@ namespace Interop/Lang {
     instance Interop/Flix.Marshal[Number] {
         pub def toJavaObject(x: Number): ##java.lang.Object = 
             let Number(x1) = x;
-            unsafe_cast x1 as ##java.lang.Object
+            checked_cast(x1)
 
         pub def fromJavaObject(o: ##java.lang.Object): Number = 
-            Number(unsafe_cast o as ##java.lang.Number)
+            Number(unchecked_cast(o as ##java.lang.Number))
     }
 
 }

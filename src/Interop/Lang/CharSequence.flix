@@ -31,11 +31,11 @@ namespace Interop/Lang {
     instance Interop/Lang.ImpCharSequence[StringBuilder] {
         pub def toCharSequence(s: StringBuilder[r]): CharSequence[r] = 
             let StringBuilder(s1) = s;
-            CharSequence(unsafe_cast s1 as ##java.lang.CharSequence)
+            CharSequence(unchecked_cast(s1 as ##java.lang.CharSequence))
 
         pub def fromCharSequence(s: CharSequence[r]): StringBuilder[r] = 
             let CharSequence(s1) = s;
-            StringBuilder(unsafe_cast s1 as ##java.lang.StringBuilder) 
+            StringBuilder(unchecked_cast(s1 as ##java.lang.StringBuilder))
     }
 
 }

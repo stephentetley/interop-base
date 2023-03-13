@@ -42,7 +42,7 @@ namespace Interop/Flix/Setter {
         )
 
     pub def empty(): Setter[t, r] =
-        Setter(_ -> unsafe_cast Ok() as _ \ r)
+        Setter(_ -> unchecked_cast(Ok() as _ \ r))
 
 
     pub def combine(a: Setter[t, r], b: Setter[t, r]): Setter[t, r] =

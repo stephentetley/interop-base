@@ -30,20 +30,20 @@ namespace Interop/Util/Stream/Collector {
     instance Interop/Flix.Marshal[Characteristics] {
         pub def toJavaObject(x: Characteristics): ##java.lang.Object =
             let Characteristics(x1) = x;
-            unsafe_cast x1 as ##java.lang.Object
+            checked_cast(x1)
 
         pub def fromJavaObject(o: ##java.lang.Object): Characteristics = 
-            Characteristics(unsafe_cast o as ##java.util.stream.Collector$Characteristics)
+            Characteristics(unchecked_cast(o as ##java.util.stream.Collector$Characteristics))
     }
 
     instance SubEnum[Characteristics] {
         pub def toEnum(x: Characteristics): Enum[a] = 
             let Characteristics(x1) = x;
-            Enum(unsafe_cast x1 as ##java.lang.Enum)
+            Enum(unchecked_cast(x1 as ##java.lang.Enum))
 
         pub def fromEnum(x: Enum[a]): Characteristics = 
             let Enum(x1) = x;
-            Characteristics(unsafe_cast x1 as ##java.util.stream.Collector$Characteristics) 
+            Characteristics(unchecked_cast(x1 as ##java.util.stream.Collector$Characteristics))
     }
 }
 

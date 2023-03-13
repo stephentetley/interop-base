@@ -36,7 +36,7 @@ namespace Interop/Util/LocaleBuilder {
     pub def wrapHH(prim: ##java.util.Locale$Builder): LocaleBuilder = 
         LocaleBuilder(prim)
 
-    pub enum LocaleBuilderAction with Eq, ToString {
+    pub enum LocaleBuilderAction {
         case AddUnicodeLocaleAttribute(String)
         case Clear
         case ClearExtensions

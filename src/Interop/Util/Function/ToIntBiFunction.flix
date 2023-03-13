@@ -33,12 +33,12 @@ namespace Interop/Util/Function/ToIntBiFunction {
     use Interop/Flix.Marshal
 
     pub def makeToIntBiFunction(f: (a, b) -> Int32 \ ef): ToIntBiFunction[a, b] \ ef with Marshal[a], Marshal[b] = 
-        unsafe_cast (new ##java.util.function.ToIntBiFunction {
+        unchecked_cast((new ##java.util.function.ToIntBiFunction {
             def applyAsInt(_this: ##java.util.function.ToIntBiFunction, t: ##java.lang.Object, u: ##java.lang.Object): Int32 = 
                 let a1 = Interop/Flix/Marshal.fromJavaObject(t);
                 let b1 = Interop/Flix/Marshal.fromJavaObject(u);
                 f(a1, b1)
-        }) as _ \ ef
+        }) as _ \ ef)
 
 
     pub def applyAsInt(f: ToIntBiFunction[a, b], t: a, u: b): Int32 \ ef with Marshal[a], Marshal[b] = 

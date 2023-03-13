@@ -124,7 +124,7 @@ namespace Interop/Util/MapZ {
         import java.util.Map.equals(##java.lang.Object): Bool \ r; 
         let MapZ(_, mm1) = m1;
         let MapZ(_, mm2) = m2;
-        equals(mm1, unsafe_cast mm2 as ##java.lang.Object)
+        equals(mm1, checked_cast(mm2))
 
     pub def size(m: MapZ[k, v, r]): Int32 \ Read(r) =
         import java.util.Map.size(): Int32 \ r;

@@ -29,11 +29,11 @@ namespace Interop/Text {
     instance SubNumberFormat[CompactNumberFormat] {
         pub def toNumberFormat(fmt: CompactNumberFormat): NumberFormat = 
             let CompactNumberFormat(fmt1) = fmt;
-            NumberFormat(unsafe_cast fmt1 as ##java.text.NumberFormat)
+            NumberFormat(unchecked_cast(fmt1 as ##java.text.NumberFormat))
 
         pub def fromNumberFormat(fmt: NumberFormat): CompactNumberFormat = 
             let NumberFormat(fmt1) = fmt;
-            CompactNumberFormat(unsafe_cast fmt1 as ##java.text.CompactNumberFormat) 
+            CompactNumberFormat(unchecked_cast(fmt1 as ##java.text.CompactNumberFormat))
     }
 
 }
@@ -92,7 +92,7 @@ namespace Interop/Text/CompactNumberFormat {
         import java.text.CompactNumberFormat.equals(##java.lang.Object): Bool \ {};
         let CompactNumberFormat(x1) = x;
         let CompactNumberFormat(y1) = y;
-        equals(x1, unsafe_cast y1 as ##java.lang.Object)
+        equals(x1, checked_cast(y1))
 
     pub def hashCode(nf: CompactNumberFormat): Int32 =
         import java.text.CompactNumberFormat.hashCode(): Int32 \ {};

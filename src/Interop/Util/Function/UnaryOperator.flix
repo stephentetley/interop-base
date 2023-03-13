@@ -43,10 +43,10 @@ namespace Interop/Util/Function/UnaryOperator {
             let ans = f(a);
             Interop/Flix/Marshal.toJavaObject(ans)
         };
-        unsafe_cast (new ##java.util.function.UnaryOperator {
+        unchecked_cast((new ##java.util.function.UnaryOperator {
             def apply(_this: ##java.util.function.UnaryOperator, t: ##java.lang.Object): ##java.lang.Object = 
                 f1(t)
-        }) as _ \ ef
+        }) as _ \ ef)
 
         
     pub def apply(t: a, f: UnaryOperator[a]): a \ ef with Marshal[a] = 

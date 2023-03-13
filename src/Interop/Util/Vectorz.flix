@@ -30,11 +30,11 @@ namespace Interop/Util {
     // instance Interop/Util.ImpCollection[VectorZ] {
     //     pub def toCollection(t: VectorZ[a, r]): Collection[a, r] = 
     //         let VectorZ(_, t1) = t;
-    //         Collection(unsafe_cast t1 as ##java.util.Collection)
+    //         Collection(unchecked_cast(t1 as ##java.util.Collection))
 
     //     pub def fromCollection(rc: Region[r], t: Collection[a, r]): VectorZ[a, r] = 
     //         let Collection(t1) = t;
-    //         VectorZ(rc, unsafe_cast t1 as ##java.util.Vector) 
+    //         VectorZ(rc, unchecked_cast(t1 as ##java.util.Vector))
     // }
 
 
@@ -67,7 +67,7 @@ namespace Interop/Util/VectorZ {
         import java.util.Vector.equals(##java.lang.Object): Bool \ r; 
         let VectorZ(_, jv1) = v1;
         let VectorZ(_, jv2) = v2;
-        equals(jv1, unsafe_cast jv2 as ##java.lang.Object)
+        equals(jv1, checked_cast(jv2))
 
 
     pub def hashCode(v: VectorZ[a, r]): Int32 \ Read(r) = 

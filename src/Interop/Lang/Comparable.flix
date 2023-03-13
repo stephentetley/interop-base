@@ -45,6 +45,6 @@ namespace Interop/Lang/Comparable {
         import java.lang.Comparable.compareTo(##java.lang.Object): Int32 \ {};
         let Comparable(jc1) = c1;
         let Comparable(jc2) = c2;
-        compareTo(jc1, unsafe_cast jc2 as ##java.lang.Object)
+        compareTo(jc1, checked_cast(jc2))
 
 }

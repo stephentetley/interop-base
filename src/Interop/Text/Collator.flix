@@ -133,7 +133,7 @@ namespace Interop/Text/Collator {
     pub def clone(c: Collator): Collator =
         import java.text.Collator.clone(): ##java.lang.Object \ {};
         let Collator(c1) = c;
-        Collator(unsafe_cast clone(c1) as ##java.text.Collator)
+        Collator(unchecked_cast(clone(c1) as ##java.text.Collator))
 
     pub def getDecomposition(c: Collator): Int32 =
         import java.text.Collator.getDecomposition(): Int32 \ {};

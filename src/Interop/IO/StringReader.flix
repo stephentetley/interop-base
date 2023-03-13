@@ -26,11 +26,11 @@ namespace Interop/IO {
     instance SubReader[StringReader] {
         pub def toReader(s: StringReader[r]): Reader[r] = 
             let StringReader(s1) = s;
-            Reader(unsafe_cast s1 as ##java.io.Reader)
+            Reader(unchecked_cast(s1 as ##java.io.Reader))
 
         pub def fromReader(s: Reader[r]): StringReader[r] = 
             let Reader(s1) = s;
-            StringReader(unsafe_cast s1 as ##java.io.StringReader) 
+            StringReader(unchecked_cast(s1 as ##java.io.StringReader))
     }
 
 

@@ -32,9 +32,9 @@ namespace Interop/Util/Function/BooleanSupplier {
     use Interop/Util/Function.BooleanSupplier
 
     pub def makeBooleanSupplier(f: Unit -> Bool \ ef): BooleanSupplier \ ef = 
-        unsafe_cast (new ##java.util.function.BooleanSupplier {
+        unchecked_cast((new ##java.util.function.BooleanSupplier {
             def getAsBoolean(_this: ##java.util.function.BooleanSupplier): Bool = f()
-        }) as _ \ ef
+        }) as _ \ ef)
 
     pub def getAsBoolean(f: BooleanSupplier): Bool \ ef = 
         import java.util.function.BooleanSupplier.getAsBoolean(): Bool \ ef;

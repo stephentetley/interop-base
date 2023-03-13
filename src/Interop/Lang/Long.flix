@@ -25,10 +25,10 @@ namespace Interop/Lang {
     instance Interop/Flix.Marshal[Long] {
         pub def toJavaObject(x: Long): ##java.lang.Object = 
             let Long(x1) = x;
-            unsafe_cast x1 as ##java.lang.Object
+            checked_cast(x1)
 
         pub def fromJavaObject(o: ##java.lang.Object): Long = 
-            Long(unsafe_cast o as ##java.lang.Long)
+            Long(unchecked_cast(o as ##java.lang.Long))
     }
 
 }
@@ -56,7 +56,7 @@ namespace Interop/Lang/Long {
         import java.lang.Long.equals(##java.lang.Object): Bool \ {};
         let Long(x1) = x;
         let Long(y1) = y;
-        equals(x1, unsafe_cast y1 as ##java.lang.Object)
+        equals(x1, checked_cast(y1))
 
     pub def compare(x: Int64, y: Int64): Int32 =
         import static java.lang.Long.compare(Int64, Int64): Int32 \ {};

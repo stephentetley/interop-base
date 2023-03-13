@@ -36,10 +36,10 @@ namespace Interop/Util/Function/ObjDoubleConsumer {
     use Interop/Flix.Marshal
 
     pub def makeObjDoubleConsumer(f: (a, Float64) -> Unit \ ef): ObjDoubleConsumer[a] \ ef with Marshal[a] = 
-        unsafe_cast (new ##java.util.function.ObjDoubleConsumer {
+        unchecked_cast((new ##java.util.function.ObjDoubleConsumer {
             def accept(_this: ##java.util.function.ObjDoubleConsumer, t: ##java.lang.Object, u: Float64): Unit = 
                 f(Interop/Flix/Marshal.fromJavaObject(t), u)
-        }) as _ \ ef
+        }) as _ \ ef)
 
         
     pub def accept(t: a, u: Float64, f: ObjDoubleConsumer[a]): Unit \ ef with Marshal[a] = 

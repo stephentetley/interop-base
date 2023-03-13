@@ -45,10 +45,10 @@ namespace Interop/NIO/Charset {
     instance Interop/Flix.Marshal[Charset] {
         pub def toJavaObject(x: Charset): ##java.lang.Object =
             let Charset(x1) = x;
-            unsafe_cast x1 as ##java.lang.Object
+            checked_cast(x1)
 
         pub def fromJavaObject(o: ##java.lang.Object): Charset = 
-            Charset(unsafe_cast o as ##java.nio.charset.Charset)
+            Charset(unchecked_cast(o as ##java.nio.charset.Charset))
     }
 
 }
@@ -97,7 +97,7 @@ namespace Interop/NIO/Charset/Charset {
         import java.nio.charset.Charset.equals(##java.lang.Object): Bool \ {};
         let Charset(x1) = x;
         let Charset(y1) = y;
-        equals(x1, unsafe_cast y1 as ##java.lang.Object)
+        equals(x1, checked_cast(y1))
 
     pub def hashCode(cs: Charset): Int32 =
         import java.nio.charset.Charset.hashCode(): Int32 \ {};

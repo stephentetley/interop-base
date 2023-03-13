@@ -28,11 +28,11 @@ namespace Interop/Util {
     instance Interop/Util.ImpMapZ[HashMap] {
         pub def toMapZ(t: HashMap[k, v, r]): MapZ[k, v, r] = 
             let HashMap(rc, t1) = t;
-            MapZ(rc, unsafe_cast t1 as ##java.util.Map)
+            MapZ(rc, unchecked_cast(t1 as ##java.util.Map))
 
         pub def fromMapZ(t: MapZ[k, v, r]): HashMap[k, v, r] = 
             let MapZ(rc, t1) = t;
-            HashMap(rc, unsafe_cast t1 as ##java.util.HashMap) 
+            HashMap(rc, unchecked_cast(t1 as ##java.util.HashMap))
     }
 
 }
@@ -69,7 +69,7 @@ namespace Interop/Util/HashMap {
         import java.util.HashMap.equals(##java.lang.Object): Bool \ r; 
         let HashMap(_, mm1) = m1;
         let HashMap(_, mm2) = m2;
-        equals(mm1, unsafe_cast mm2 as ##java.lang.Object)
+        equals(mm1, checked_cast(mm2))
 
     pub def size(m: HashMap[k, v, r]): Int32 \ Read(r) =
         import java.util.HashMap.size(): Int32 \ r;

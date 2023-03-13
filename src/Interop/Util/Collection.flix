@@ -102,7 +102,7 @@ namespace Interop/Util/Collection {
             import java.util.Collection.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let Collection(_, c1) = c;            
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            unsafe_cast removeIf(c1, f1) as _ \ {ef, Write(r)}
+            unchecked_cast(removeIf(c1, f1) as _ \ {ef, Write(r)})
         })
 
     pub def forEach(f: a -> Unit \ ef, c: Collection[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
@@ -167,7 +167,7 @@ namespace Interop/Util/Collection {
         import new java.util.LinkedList(): ##java.util.LinkedList & r as new1;
         import java.util.LinkedList.add(##java.lang.Object): Bool & r as add1;
         def loop(st1, acc) = match f(st1) {
-            case None         => Collection(rc, unsafe_cast acc as ##java.util.Collection)
+            case None         => Collection(rc, unchecked_cast(acc as ##java.util.Collection))
             case Some(o, st2) => {discard add1(acc, Interop/Flix/Marshal.toJavaObject(o)); loop(st2, acc)}
         };
         loop(st, new1())

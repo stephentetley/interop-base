@@ -35,74 +35,62 @@ namespace Interop/Flix {
     }
 
     instance Marshal[String] {
-        pub def toJavaObject(x: String): ##java.lang.Object = unsafe_cast x as ##java.lang.Object
-        pub def fromJavaObject(o: ##java.lang.Object): String = unsafe_cast o as String
+        pub def toJavaObject(x: String): ##java.lang.Object = checked_cast(x)
+        pub def fromJavaObject(o: ##java.lang.Object): String = unchecked_cast(o as String)
     }
 
     instance Marshal[Bool] {
-        pub def toJavaObject(x: Bool): ##java.lang.Object = unsafe_cast Interop/Flix/Marshal.marshalBool(x) as ##java.lang.Object
-        pub def fromJavaObject(o: ##java.lang.Object): Bool = Interop/Flix/Marshal.unmarshalBool(unsafe_cast o as ##java.lang.Boolean)
+        pub def toJavaObject(x: Bool): ##java.lang.Object = checked_cast(Interop/Flix/Marshal.marshalBool(x))
+        pub def fromJavaObject(o: ##java.lang.Object): Bool = Interop/Flix/Marshal.unmarshalBool(unchecked_cast(o as ##java.lang.Boolean))
     }
 
     instance Marshal[Char] {
-        pub def toJavaObject(x: Char): ##java.lang.Object = unsafe_cast Interop/Flix/Marshal.marshalChar(x) as ##java.lang.Object
-        pub def fromJavaObject(o: ##java.lang.Object): Char = Interop/Flix/Marshal.unmarshalChar(unsafe_cast o as ##java.lang.Character)
+        pub def toJavaObject(x: Char): ##java.lang.Object = checked_cast(Interop/Flix/Marshal.marshalChar(x))
+        pub def fromJavaObject(o: ##java.lang.Object): Char = Interop/Flix/Marshal.unmarshalChar(unchecked_cast(o as ##java.lang.Character))
     }
 
     instance Marshal[Int8] {
-        pub def toJavaObject(x: Int8): ##java.lang.Object = unsafe_cast Interop/Flix/Marshal.marshalInt8(x) as ##java.lang.Object
-        pub def fromJavaObject(o: ##java.lang.Object): Int8 = Interop/Flix/Marshal.unmarshalInt8(unsafe_cast o as ##java.lang.Byte)
+        pub def toJavaObject(x: Int8): ##java.lang.Object = checked_cast(Interop/Flix/Marshal.marshalInt8(x))
+        pub def fromJavaObject(o: ##java.lang.Object): Int8 = Interop/Flix/Marshal.unmarshalInt8(unchecked_cast(o as ##java.lang.Byte))
     }
 
     instance Marshal[Int16] {
-        pub def toJavaObject(x: Int16): ##java.lang.Object = unsafe_cast Interop/Flix/Marshal.marshalInt16(x) as ##java.lang.Object
-        pub def fromJavaObject(o: ##java.lang.Object): Int16 = Interop/Flix/Marshal.unmarshalInt16(unsafe_cast o as ##java.lang.Short)
+        pub def toJavaObject(x: Int16): ##java.lang.Object = checked_cast(Interop/Flix/Marshal.marshalInt16(x))
+        pub def fromJavaObject(o: ##java.lang.Object): Int16 = Interop/Flix/Marshal.unmarshalInt16(unchecked_cast(o as ##java.lang.Short))
     }
 
     instance Marshal[Int32] {
-        pub def toJavaObject(x: Int32): ##java.lang.Object = unsafe_cast Interop/Flix/Marshal.marshalInt32(x) as ##java.lang.Object
-        pub def fromJavaObject(o: ##java.lang.Object): Int32 = Interop/Flix/Marshal.unmarshalInt32(unsafe_cast o as ##java.lang.Integer)
+        pub def toJavaObject(x: Int32): ##java.lang.Object = checked_cast(Interop/Flix/Marshal.marshalInt32(x))
+        pub def fromJavaObject(o: ##java.lang.Object): Int32 = Interop/Flix/Marshal.unmarshalInt32(unchecked_cast(o as ##java.lang.Integer))
     }
     
     instance Marshal[Int64] {
-        pub def toJavaObject(x: Int64): ##java.lang.Object = unsafe_cast Interop/Flix/Marshal.marshalInt64(x) as ##java.lang.Object
-        pub def fromJavaObject(o: ##java.lang.Object): Int64 = Interop/Flix/Marshal.unmarshalInt64(unsafe_cast o as ##java.lang.Long)
+        pub def toJavaObject(x: Int64): ##java.lang.Object = checked_cast(Interop/Flix/Marshal.marshalInt64(x))
+        pub def fromJavaObject(o: ##java.lang.Object): Int64 = Interop/Flix/Marshal.unmarshalInt64(unchecked_cast(o as ##java.lang.Long))
     }
 
     instance Marshal[BigInt] {
-        pub def toJavaObject(x: BigInt): ##java.lang.Object = unsafe_cast x as ##java.lang.Object
-        pub def fromJavaObject(o: ##java.lang.Object): BigInt = unsafe_cast o as BigInt
+        pub def toJavaObject(x: BigInt): ##java.lang.Object = checked_cast(x)
+        pub def fromJavaObject(o: ##java.lang.Object): BigInt = unchecked_cast(o as BigInt)
     }
 
     instance Marshal[Float32] {
-        pub def toJavaObject(x: Float32): ##java.lang.Object = unsafe_cast Interop/Flix/Marshal.marshalFloat32(x) as ##java.lang.Object
-        pub def fromJavaObject(o: ##java.lang.Object): Float32 = Interop/Flix/Marshal.unmarshalFloat32(unsafe_cast o as ##java.lang.Float)
+        pub def toJavaObject(x: Float32): ##java.lang.Object = checked_cast(Interop/Flix/Marshal.marshalFloat32(x))
+        pub def fromJavaObject(o: ##java.lang.Object): Float32 = Interop/Flix/Marshal.unmarshalFloat32(unchecked_cast(o as ##java.lang.Float))
     }
 
     instance Marshal[Float64] {
-        pub def toJavaObject(x: Float64): ##java.lang.Object = unsafe_cast Interop/Flix/Marshal.marshalFloat64(x) as ##java.lang.Object
-        pub def fromJavaObject(o: ##java.lang.Object): Float64 = Interop/Flix/Marshal.unmarshalFloat64(unsafe_cast o as ##java.lang.Double)
+        pub def toJavaObject(x: Float64): ##java.lang.Object = checked_cast(Interop/Flix/Marshal.marshalFloat64(x))
+        pub def fromJavaObject(o: ##java.lang.Object): Float64 = Interop/Flix/Marshal.unmarshalFloat64(unchecked_cast(o as ##java.lang.Double))
     }
 
-    /// TODO - remove this and use a function that makes the transit (through ArrayList or whatever) explicit.
-    /// Warning - uses ArrayList as an intermediate, is this acceptable in all cases?
-    // instance Marshal[List[a]] with Marshal[a] {
-    //     pub def toJavaObject(l: List[a]): ##java.lang.Object = region rc {
-    //         let l1 = Interop/Util/ArrayList.fromFoldable(rc, l);
-    //         unsafe_cast Interop/Util/ImpListZ.toListHH(l1) as ##java.lang.Object
-    //     } 
-        
-    //     pub def fromJavaObject(o: ##java.lang.Object): List[a] = region rc {
-    //         Interop/Util/ListZ.wrapHH(rc, unsafe_cast o as ##java.util.List) |> Interop/Util/ListZ.toFlixList
-    //     }
-    // }
 
     instance Marshal[Option[a]] with Marshal[a] {
         pub def toJavaObject(o: Option[a]): ##java.lang.Object =
-            unsafe_cast Interop/Util/Optional.fromOption(o) as ##java.lang.Object
+            checked_cast(Interop/Util/Optional.fromOption(o))
         
         pub def fromJavaObject(o: ##java.lang.Object): Option[a] = 
-            Interop/Util/Optional.hhToOption(Interop/Flix/Marshal.fromJavaObject, unsafe_cast o as ##java.util.Optional)
+            Interop/Util/Optional.hhToOption(Interop/Flix/Marshal.fromJavaObject, unchecked_cast(o as ##java.util.Optional))
             
     }
 
@@ -111,9 +99,10 @@ namespace Interop/Flix {
 
 namespace Interop/Flix/Marshal {
 
+    /// TODO - remove?
     /// Use this only on primitive Java objects.
     pub def unsafeCastToObject(x: a): ##java.lang.Object = 
-        unsafe_cast x as ##java.lang.Object
+        unchecked_cast(x as ##java.lang.Object)
 
     pub def marshalBool(b: Bool): ##java.lang.Boolean = 
         import static java.lang.Boolean.valueOf(Bool): ##java.lang.Boolean \ {};

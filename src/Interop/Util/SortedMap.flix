@@ -25,15 +25,15 @@ namespace Interop/Util {
     }
 
 
-    // instance Interop/Util.ImpMapZ[SortedMap] {
-    //     pub def toMapZ(t: SortedMap[k, v, r]): MapZ[k, v, r] = 
-    //         let SortedMap(t1) = t;
-    //         MapZ(unsafe_cast t1 as ##java.util.Map)
+    instance Interop/Util.ImpMapZ[SortedMap] {
+        pub def toMapZ(t: SortedMap[k, v, r]): MapZ[k, v, r] = 
+            let SortedMap(rc, t1) = t;
+            MapZ(rc, unchecked_cast(t1 as ##java.util.Map))
 
-    //     pub def fromMapZ(t: MapZ[k, v, r]): SortedMap[k, v, r] = 
-    //         let MapZ(t1) = t;
-    //         SortedMap(unsafe_cast t1 as ##java.util.SortedMap) 
-    // }
+        pub def fromMapZ(t: MapZ[k, v, r]): SortedMap[k, v, r] = 
+            let MapZ(rc, t1) = t;
+            SortedMap(rc, unchecked_cast(t1 as ##java.util.SortedMap))
+    }
 
 
 }
@@ -63,7 +63,7 @@ namespace Interop/Util/SortedMap {
         import java.util.SortedMap.equals(##java.lang.Object): Bool \ r; 
         let SortedMap(_, mm1) = m1;
         let SortedMap(_, mm2) = m2;
-        equals(mm1, unsafe_cast mm2 as ##java.lang.Object)
+        equals(mm1, checked_cast(mm2))
 
     pub def size(m: SortedMap[k, v, r]): Int32 \ Read(r) =
         import java.util.SortedMap.size(): Int32 \ r;
@@ -119,7 +119,7 @@ namespace Interop/Util/SortedMap {
         import new java.util.TreeMap(): ##java.util.TreeMap & r as newTreeMap;
         import java.util.TreeMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object & r as put; 
         def loop(st1, ac) = match f(st1) {
-            case None            => SortedMap(rc, unsafe_cast ac as ##java.util.SortedMap)
+            case None            => SortedMap(rc, unchecked_cast(ac as ##java.util.SortedMap))
             case Some(k, v, st2) => { discard put(ac, Interop/Flix/Marshal.toJavaObject(k), Interop/Flix/Marshal.toJavaObject(v)); loop(st2, ac) }
         };
         loop(st, newTreeMap())

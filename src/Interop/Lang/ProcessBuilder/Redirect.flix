@@ -41,7 +41,7 @@ namespace Interop/Lang/ProcessBuilder/Redirect {
         import java.lang.ProcessBuilder$Redirect.equals(##java.lang.Object): Bool \ {};
         let Redirect(x1) = x;
         let Redirect(y1) = y;
-        equals(x1, unsafe_cast y1 as ##java.lang.Object)
+        equals(x1, checked_cast(y1))
 
 
     pub def discardz(): Redirect = 

@@ -32,21 +32,21 @@ namespace Interop/IO {
     instance Interop/IO.SubWriter[OutputStreamWriter] {
         pub def toWriter(s: OutputStreamWriter[r]): Writer[r] = 
             let OutputStreamWriter(s1) = s;
-            Writer(unsafe_cast s1 as ##java.io.Writer)
+            Writer(unchecked_cast(s1 as ##java.io.Writer))
 
         pub def fromWriter(s: Writer[r]): OutputStreamWriter[r] = 
             let Writer(s1) = s;
-            OutputStreamWriter(unsafe_cast s1 as ##java.io.OutputStreamWriter) 
+            OutputStreamWriter(unchecked_cast(s1 as ##java.io.OutputStreamWriter))
     }
 
     instance Interop/Lang.ImpAppendable[OutputStreamWriter] {
         pub def toAppendable(s: OutputStreamWriter[r]): Appendable[r] = 
             let OutputStreamWriter(s1) = s;
-            Appendable(unsafe_cast s1 as ##java.lang.Appendable)
+            Appendable(unchecked_cast(s1 as ##java.lang.Appendable))
 
         pub def fromAppendable(s: Appendable[r]): OutputStreamWriter[r] = 
             let Appendable(s1) = s;
-            OutputStreamWriter(unsafe_cast s1 as ##java.io.OutputStreamWriter) 
+            OutputStreamWriter(unchecked_cast(s1 as ##java.io.OutputStreamWriter))
     }
 
 }

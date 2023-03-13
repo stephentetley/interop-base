@@ -25,10 +25,10 @@ namespace Interop/Lang {
     instance Interop/Flix.Marshal[Double] {
         pub def toJavaObject(x: Double): ##java.lang.Object = 
             let Double(x1) = x;
-            unsafe_cast x1 as ##java.lang.Object
+            checked_cast(x1)
 
         pub def fromJavaObject(o: ##java.lang.Object): Double = 
-            Double(unsafe_cast o as ##java.lang.Double)
+            Double(unchecked_cast(o as ##java.lang.Double))
     }
 
 }
@@ -56,7 +56,7 @@ namespace Interop/Lang/Double {
         import java.lang.Double.equals(##java.lang.Object): Bool \ {};
         let Double(x1) = x;
         let Double(y1) = y;
-        equals(x1, unsafe_cast y1 as ##java.lang.Object)
+        equals(x1, checked_cast(y1))
 
     pub def compare(x: Float64, y: Float64): Int32 =
         import static java.lang.Double.compare(Float64, Float64): Int32 \ {};

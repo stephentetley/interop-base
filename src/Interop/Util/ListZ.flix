@@ -39,11 +39,11 @@ namespace Interop/Util {
     instance Interop/Util.ImpCollection[ListZ] {
         pub def toCollection(t: ListZ[a, r]): Collection[a, r] = 
             let ListZ(rc, t1) = t;
-            Collection(rc, unsafe_cast t1 as ##java.util.Collection)
+            Collection(rc, unchecked_cast(t1 as ##java.util.Collection))
 
         pub def fromCollection(t: Collection[a, r]): ListZ[a, r] = 
             let Collection(rc, t1) = t;
-            ListZ(rc, unsafe_cast t1 as ##java.util.List) 
+            ListZ(rc, unchecked_cast(t1 as ##java.util.List))
     }
 
 }
@@ -110,7 +110,7 @@ namespace Interop/Util/ListZ {
         import java.util.List.equals(##java.lang.Object): Bool \ r; 
         let ListZ(_, ll1) = l1;
         let ListZ(_, ll2) = l2;
-        equals(ll1, unsafe_cast ll2 as ##java.lang.Object)
+        equals(ll1, checked_cast(ll2))
 
 
     pub def hashCode(l: ListZ[a, r]): Int32 \ Read(r) = 
@@ -189,7 +189,7 @@ namespace Interop/Util/ListZ {
             import java.util.List.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let ListZ(_, l1) = l;        
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            unsafe_cast removeIf(l1, f1) as _ \ {ef, Write(r)}
+            unchecked_cast(removeIf(l1, f1) as _ \ {ef, Write(r)})
         })
 
     pub def retainAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =

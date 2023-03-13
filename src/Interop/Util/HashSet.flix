@@ -27,21 +27,21 @@ namespace Interop/Util {
     instance Interop/Util.ImpCollection[HashSet] {
         pub def toCollection(t: HashSet[a, r]): Collection[a, r] = 
             let HashSet(rc, t1) = t;
-            Collection(rc, unsafe_cast t1 as ##java.util.Collection)
+            Collection(rc, unchecked_cast(t1 as ##java.util.Collection))
 
         pub def fromCollection(t: Collection[a, r]): HashSet[a, r] = 
             let Collection(rc, t1) = t;
-            HashSet(rc, unsafe_cast t1 as ##java.util.HashSet) 
+            HashSet(rc, unchecked_cast(t1 as ##java.util.HashSet))
     }
 
     instance Interop/Util.ImpSetZ[HashSet] {
         pub def toSetZ(t: HashSet[a, r]): SetZ[a, r] = 
             let HashSet(rc, t1) = t;
-            SetZ(rc, unsafe_cast t1 as ##java.util.Set)
+            SetZ(rc, unchecked_cast(t1 as ##java.util.Set))
 
         pub def fromSetZ(t: SetZ[a, r]): HashSet[a, r] = 
             let SetZ(rc, t1) = t;
-            HashSet(rc, unsafe_cast t1 as ##java.util.HashSet) 
+            HashSet(rc, unchecked_cast(t1 as ##java.util.HashSet))
     }
 
 }
@@ -79,7 +79,7 @@ namespace Interop/Util/HashSet {
         import java.util.HashSet.equals(##java.lang.Object): Bool \ r; 
         let HashSet(_, ss1) = s1;
         let HashSet(_, ss2) = s2;
-        equals(ss1, unsafe_cast ss2 as ##java.lang.Object)
+        equals(ss1, checked_cast(ss2))
 
 
     pub def hashCode(s: HashSet[a, r]): Int32 \ Read(r) = 
@@ -138,7 +138,7 @@ namespace Interop/Util/HashSet {
             import java.util.HashSet.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let HashSet(_, s1) = s;        
             let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            unsafe_cast removeIf(s1, f1) as _ \ {ef, Write(r)}
+            unchecked_cast(removeIf(s1, f1) as _ \ {ef, Write(r)})
         })
 
     pub def retainAll!(c: Collection[a, r1], s: HashSet[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =

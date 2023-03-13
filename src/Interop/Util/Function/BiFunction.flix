@@ -44,10 +44,10 @@ namespace Interop/Util/Function/BiFunction {
             let ans = f(a, b);
             Interop/Flix/Marshal.toJavaObject(ans)
         };
-        unsafe_cast (new ##java.util.function.BiFunction {
+        unchecked_cast((new ##java.util.function.BiFunction {
             def apply(_this: ##java.util.function.BiFunction, t: ##java.lang.Object, u: ##java.lang.Object): ##java.lang.Object = 
                 f1(t, u)
-        }) as _ \ ef
+        }) as _ \ ef)
 
 
     pub def apply(f: BiFunction[a, b, c], t: a, u: b): c \ ef with Marshal[a], Marshal[b], Marshal[c]  = 

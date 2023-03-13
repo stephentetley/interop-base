@@ -102,7 +102,7 @@ namespace Interop/Text/DecimalFormatSymbols {
         import java.text.DecimalFormatSymbols.equals(##java.lang.Object): Bool \ {};
         let DecimalFormatSymbols(x1) = x;
         let DecimalFormatSymbols(y1) = y;
-        equals(x1, unsafe_cast y1 as ##java.lang.Object)
+        equals(x1, checked_cast(y1))
 
     pub def hashCode(dfs: DecimalFormatSymbols): Int32 =
         import java.text.DecimalFormatSymbols.hashCode(): Int32 \ {};

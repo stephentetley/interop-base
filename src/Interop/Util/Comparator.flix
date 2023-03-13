@@ -21,6 +21,7 @@ namespace Interop/Util {
     ///
     /// Functional interface
     ///
+    /// TODO should comparator have an effect type param?
     pub type alias Comparator[_: Type] = ##java.util.Comparator
 
 
@@ -39,10 +40,10 @@ namespace Interop/Util/Comparator {
             let b = Interop/Flix/Marshal.fromJavaObject(o2); 
             f(a, b)
         };
-        unsafe_cast (new ##java.util.Comparator {
+        unchecked_cast((new ##java.util.Comparator {
             def compare(_this: ##java.util.Comparator, t: ##java.lang.Object, u: ##java.lang.Object): Int32 = 
                 f1(t, u)
-        }) as _ \ ef
+        }) as _ \ ef)
 
     pub def naturalOrder(): Comparator[a] = 
         import static java.util.Comparator.naturalOrder(): ##java.util.Comparator \ {}; 

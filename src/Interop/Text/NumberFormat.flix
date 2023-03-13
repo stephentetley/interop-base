@@ -86,7 +86,7 @@ namespace Interop/Text/NumberFormat {
         import java.text.NumberFormat.equals(##java.lang.Object): Bool \ {};
         let NumberFormat(x1) = x;
         let NumberFormat(y1) = y;
-        equals(x1, unsafe_cast y1 as ##java.lang.Object)
+        equals(x1, checked_cast(y1))
 
 
     pub def hashCode(nf: NumberFormat): Int32 =

@@ -25,11 +25,11 @@ namespace Interop/IO {
     instance Interop/IO.SubOutputStream[FileOutputStream] {
         pub def toOutputStream(s: FileOutputStream[r]): OutputStream[r] = 
             let FileOutputStream(s1) = s;
-            OutputStream(unsafe_cast s1 as ##java.io.OutputStream)
+            OutputStream(unchecked_cast(s1 as ##java.io.OutputStream))
 
         pub def fromOutputStream(s: OutputStream[r]): FileOutputStream[r] = 
             let OutputStream(s1) = s;
-            FileOutputStream(unsafe_cast s1 as ##java.io.FileOutputStream) 
+            FileOutputStream(unchecked_cast(s1 as ##java.io.FileOutputStream))
     }
 
 

@@ -30,11 +30,11 @@ namespace Interop/Lang {
     instance Interop/Lang.ImpAppendable[StringBuilder] {
         pub def toAppendable(s: StringBuilder[r]): Appendable[r] = 
             let StringBuilder(s1) = s;
-            Appendable(unsafe_cast s1 as ##java.lang.Appendable)
+            Appendable(unchecked_cast(s1 as ##java.lang.Appendable))
 
         pub def fromAppendable(s: Appendable[r]): StringBuilder[r] = 
             let Appendable(s1) = s;
-            StringBuilder(unsafe_cast s1 as ##java.lang.StringBuilder) 
+            StringBuilder(unchecked_cast(s1 as ##java.lang.StringBuilder))
     }
 
 }

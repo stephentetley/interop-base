@@ -88,7 +88,7 @@ namespace Interop/Util/Stream/Stream {
         import java.util.Iterator.hasNext(): Bool \ Read(r);
         import java.util.Iterator.next(): ##java.lang.Object \ Read(r);
         let Stream(_, s1) = s;
-        let iter1 = iterator(unsafe_cast s1 as ##java.util.stream.BaseStream);
+        let iter1 = iterator(unchecked_cast(s1 as ##java.util.stream.BaseStream));
         let step = () -> match hasNext(iter1) {
             case true  => next(iter1) |> ocast |> Some
             case false => None
@@ -130,11 +130,12 @@ namespace Interop/Util/Stream/Stream {
         let f1 = Interop/Util/Function/Function.makeFunction(f);
         Stream(rc, map(s1, f1))
 
+    /// Warning `f1` ...
     pub def flatMap(f: a -> Stream[b, r] \ ef, s: Stream[a, r]): Stream[b, r] \ {Write(r), ef} with Marshal[a], Marshal[b] = 
         import java.util.stream.Stream.flatMap(Function[a, ##java.util.stream.Stream]): ##java.util.stream.Stream \ {r, ef};
         let Stream(rc, s1) = s;
-        let f1 = Interop/Util/Function/Function.makeFunctionWith(f, Interop/Flix/Marshal.fromJavaObject, strm -> unsafe_cast strm as ##java.lang.Object);
-        Stream(rc, unsafe_cast (flatMap(s1, f1)) as _ \ {Write(r), ef})
+        let f1 = Interop/Util/Function/Function.makeFunctionWith(f, Interop/Flix/Marshal.fromJavaObject, strm -> unchecked_cast(strm as ##java.lang.Object));
+        Stream(rc, unchecked_cast(flatMap(s1, f1) as _ \ {Write(r), ef}))
 
 
 

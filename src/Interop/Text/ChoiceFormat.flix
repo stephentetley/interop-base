@@ -25,11 +25,11 @@ namespace Interop/Text {
     instance SubNumberFormat[ChoiceFormat] {
         pub def toNumberFormat(fmt: ChoiceFormat): NumberFormat = 
             let ChoiceFormat(fmt1) = fmt;
-            NumberFormat(unsafe_cast fmt1 as ##java.text.NumberFormat)
+            NumberFormat(unchecked_cast(fmt1 as ##java.text.NumberFormat))
 
         pub def fromNumberFormat(fmt: NumberFormat): ChoiceFormat = 
             let NumberFormat(fmt1) = fmt;
-            ChoiceFormat(unsafe_cast fmt1 as ##java.text.ChoiceFormat) 
+            ChoiceFormat(unchecked_cast(fmt1 as ##java.text.ChoiceFormat))
     }
 
 }

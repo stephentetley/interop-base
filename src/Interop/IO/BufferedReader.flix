@@ -23,11 +23,11 @@ namespace Interop/IO {
     instance Interop/IO.SubReader[BufferedReader] {
         pub def toReader(s: BufferedReader[r]): Reader[r] = 
             let BufferedReader(s1) = s;
-            Reader(unsafe_cast s1 as ##java.io.Reader)
+            Reader(unchecked_cast(s1 as ##java.io.Reader))
 
         pub def fromReader(s: Reader[r]): BufferedReader[r] = 
             let Reader(s1) = s;
-            BufferedReader(unsafe_cast s1 as ##java.io.BufferedReader) 
+            BufferedReader(unchecked_cast(s1 as ##java.io.BufferedReader))
     }
 
 }
