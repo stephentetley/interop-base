@@ -30,6 +30,14 @@ namespace Interop/Text/DecimalFormatSymbols {
 
     use Interop/Text.DecimalFormatSymbols
     use Interop/Text.DecimalFormatSymbols.{DecimalFormatSymbols}
+    use Interop/Text/DecimalFormatSymbols.DecimalFormatSymbolsProperty
+    use Interop/Text/DecimalFormatSymbols.DecimalFormatSymbolsProperty.{
+        CurrencyP, CurrencySymbol, DecimalSeparator, Digit,
+        ExponentSeparator, Infinity, MinusSign, MonetaryDecimalSeparator, 
+        NaN, PatternSeparator, Percent, PerMill, 
+        ZeroDigit
+    }
+
     use Interop/Util.Currency
     use Interop/Util.Locale
     use Interop/Util.Locale.{Locale}

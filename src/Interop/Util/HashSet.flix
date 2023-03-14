@@ -16,6 +16,13 @@
 
 namespace Interop/Util {
 
+    use Interop/Util.HashSet
+    use Interop/Util.HashSet.{HashSet}
+    use Interop/Util.Collection
+    use Interop/Util.Collection.{Collection}
+    use Interop/Util.SetZ
+    use Interop/Util.SetZ.{SetZ}
+
     ///
     /// Represents a Java HashSet.
     /// Class / Mutable

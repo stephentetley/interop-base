@@ -16,6 +16,11 @@
 
 namespace Interop/Text {
     
+    use Interop/Text.RuleBasedCollator
+    use Interop/Text.RuleBasedCollator.{RuleBasedCollator}
+    use Interop/Text.Collator
+    use Interop/Text.Collator.{Collator}
+    
     ///
     /// Represents a RuleBasedCollator.
     /// Subclass of Collator

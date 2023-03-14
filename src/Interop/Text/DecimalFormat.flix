@@ -16,6 +16,11 @@
 
 namespace Interop/Text {
     
+    use Interop/Text.DecimalFormat
+    use Interop/Text.DecimalFormat.{DecimalFormat}
+    use Interop/Text.NumberFormat
+    use Interop/Text.NumberFormat.{NumberFormat}
+
     ///
     /// Represents a DecimalFormat.
     /// "Immutable with Setter"
@@ -41,6 +46,17 @@ namespace Interop/Text/DecimalFormat {
 
     use Interop/Text.DecimalFormat
     use Interop/Text.DecimalFormat.{DecimalFormat}
+    use Interop/Text/DecimalFormat.DecimalFormatProperty
+    use Interop/Text/DecimalFormat.DecimalFormatProperty.{
+        ApplyPattern, ApplyLocalizedPattern, CurrencyP, 
+        DecimalFormatSymbolsP, DecimalSeparatorAlwaysShown, GroupingSize, 
+        GroupingUsed, MaximumFractionDigits, MaximumIntegerDigits, 
+        MinimumFractionDigits, MinimumIntegerDigits, Multiplier, 
+        NegativePrefix, NegativeSuffix, ParseBigDecimal, 
+        ParseIntegerOnly, PositivePrefix, PositiveSuffix,
+        RoundingModeP
+    }
+
     use Interop/Text.DecimalFormatSymbols
     use Interop/Text.DecimalFormatSymbols.{DecimalFormatSymbols}
     use Interop/Math.RoundingMode

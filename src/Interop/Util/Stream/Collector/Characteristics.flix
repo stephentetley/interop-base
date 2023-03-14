@@ -15,10 +15,12 @@
  */
 
 namespace Interop/Util/Stream/Collector {
-
-    use Interop/Lang.Enum;
-    use Interop/Lang.Enum.{Enum};
-    use Interop/Lang.SubEnum;
+    
+    use Interop/Util/Stream/Collector.Characteristics
+    use Interop/Util/Stream/Collector.Characteristics.{Characteristics}
+    use Interop/Lang.Enum
+    use Interop/Lang.Enum.{Enum}
+    use Interop/Lang.SubEnum
 
     ///
     /// Represents a Java Stream.Characteristics.

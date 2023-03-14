@@ -16,10 +16,12 @@
 
 namespace Interop/Util {
 
-    use Interop/Util.Collection;
-    use Interop/Util.Collection.{Collection};
-    use Interop/Util.ListZ;
-    use Interop/Util.ListZ.{ListZ};
+    use Interop/Util.ArrayList
+    use Interop/Util.ArrayList.{ArrayList}
+    use Interop/Util.Collection
+    use Interop/Util.Collection.{Collection}
+    use Interop/Util.ListZ
+    use Interop/Util.ListZ.{ListZ}
 
     ///
     /// Represents a ArrayList.

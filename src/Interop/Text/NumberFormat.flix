@@ -35,6 +35,11 @@ namespace Interop/Text/NumberFormat {
     use Interop/Text.NumberFormat
     use Interop/Text.NumberFormat.{NumberFormat}
     use Interop/Text.SubNumberFormat
+    use Interop/Text/NumberFormat.NumberFormatProperty
+    use Interop/Text/NumberFormat.NumberFormatProperty.{
+        CurrencyP, GroupingUsed, MaximumFractionDigits, MaximumIntegerDigits,
+        MinimumFractionDigits, MinimumIntegerDigits, ParseIntegerOnly, RoundingModeP
+    }
 
     use Interop/Lang.Number
     use Interop/Lang.Number.{Number}

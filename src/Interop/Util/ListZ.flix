@@ -16,6 +16,8 @@
 
 namespace Interop/Util {
 
+    use Interop/Util.ListZ
+    use Interop/Util.ListZ.{ListZ}
     use Interop/Util.Collection
     use Interop/Util.Collection.{Collection}
 

@@ -16,6 +16,9 @@
 
 namespace Interop/Util {
 
+    use Interop/Util.Currency
+    use Interop/Util.Currency.{Currency}
+    
     ///
     /// Represents a Java Currency.
     /// Immutable 

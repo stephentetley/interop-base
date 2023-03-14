@@ -16,6 +16,9 @@
 
 namespace Interop/Util {
 
+    use Interop/Util.Locale
+    use Interop/Util.Locale.{Locale}
+    
     /// 
     /// Locale is a wrapper over the Java class `java.util.Locale`.
     /// Class / Immutable
@@ -53,7 +56,13 @@ namespace Interop/Util/Locale {
 
     use Interop/Util.Locale
     use Interop/Util.Locale.{Locale}
-
+    use Interop/Util/Locale.Category
+    use Interop/Util/Locale.Category.{Display, Format}
+    use Interop/Util/Locale.FilteringMode
+    use Interop/Util/Locale.FilteringMode.{
+        AutoselectFiltering, ExtendedFiltering, IgnoreExtendedRanges, MapExtendedRanges, RejectExtendedRanges}
+    use Interop/Util/Locale.IsoCountryCode
+    use Interop/Util/Locale.IsoCountryCode.{Part1Alpha2, Part1Alpha3, Part3}
     use Interop/Util/Locale.LanguageRange
     use Interop/Util/Locale.LanguageRange.{LanguageRange}
 

@@ -16,6 +16,11 @@
 
 namespace Interop/Util {
 
+    use Interop/Util.HashMap
+    use Interop/Util.HashMap.{HashMap}    
+    use Interop/Util.MapZ
+    use Interop/Util.MapZ.{MapZ}
+
     ///
     /// Represents a Java HashMap.
     /// Mutable / Class

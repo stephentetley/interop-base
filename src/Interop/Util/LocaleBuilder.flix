@@ -25,6 +25,13 @@ namespace Interop/Util/LocaleBuilder {
 
     use Interop/Util.LocaleBuilder
     use Interop/Util.LocaleBuilder.{LocaleBuilder}
+    use Interop/Util.LocaleBuilder.LocaleBuilderAction
+    use Interop/Util.LocaleBuilder.LocaleBuilderAction.{
+        AddUnicodeLocaleAttribute, Clear, ClearExtensions,
+        RemoveUnicodeLocaleAttribute, SetExtension, SetLanguage,
+        SetLanguageTag, SetLocale, SetRegion,
+        SetScript, SetUnicodeLocaleKeyword, SetVariant
+    }
     use Interop/Util.Locale
     use Interop/Util.Locale.{Locale}
     use Interop/Flix.Builder

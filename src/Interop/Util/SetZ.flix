@@ -15,6 +15,11 @@
  */
 
 namespace Interop/Util {
+    
+    use Interop/Util.SetZ
+    use Interop/Util.SetZ.{SetZ}
+    use Interop/Util.Collection
+    use Interop/Util.Collection.{Collection}
 
     ///
     /// Represents a Java Set.

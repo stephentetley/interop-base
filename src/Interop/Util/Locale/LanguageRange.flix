@@ -16,6 +16,8 @@
 
 namespace Interop/Util/Locale {
 
+    use Interop/Util/Locale.LanguageRange
+    use Interop/Util/Locale.LanguageRange.{LanguageRange}
 
     /// Class / Immutable
     pub enum LanguageRange(##java.util.Locale$LanguageRange)
@@ -34,8 +36,8 @@ namespace Interop/Util/Locale {
 
 namespace Interop/Util/Locale/LanguageRange {
 
-    use Interop/Util/Locale.LanguageRange;
-    use Interop/Util/Locale.LanguageRange.{LanguageRange};
+    use Interop/Util/Locale.LanguageRange
+    use Interop/Util/Locale.LanguageRange.{LanguageRange}
 
 
     pub def getHH(lr: LanguageRange): ##java.util.Locale$LanguageRange = 

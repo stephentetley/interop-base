@@ -16,6 +16,11 @@
 
 namespace Interop/Util {
 
+    use Interop/Util.SortedMap
+    use Interop/Util.SortedMap.{SortedMap}
+    use Interop/Util.MapZ
+    use Interop/Util.MapZ.{MapZ}
+
     ///
     /// Represents a Java SortedMap.
     /// Interface

@@ -16,6 +16,8 @@
 
 namespace Interop/Util {
 
+    use Interop/Util.LinkedList
+    use Interop/Util.LinkedList.{LinkedList}
     use Interop/Util.Collection;
     use Interop/Util.Collection.{Collection};
     use Interop/Util.ListZ;
