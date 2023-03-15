@@ -19,6 +19,9 @@ namespace Interop/Lang {
     /// Interface...
     /// Read-only (not pure) - in Java handles both String and StringBuilder[r]
 
+    use Interop/Lang.CharSequence
+    use Interop/Lang.CharSequence.{CharSequence}
+    use StringBuilder.{StringBuilder}
 
     pub enum CharSequence[_: Region](##java.lang.CharSequence)
 

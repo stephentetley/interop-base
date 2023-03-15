@@ -15,9 +15,11 @@
  */
 namespace Interop/Math {
 
-    use Interop/Lang.Enum;
-    use Interop/Lang.Enum.{Enum};
-    use Interop/Lang.SubEnum;
+    use Interop/Math.RoundingMode
+    use Interop/Math.RoundingMode.{RoundingMode}
+    use Interop/Lang.Enum
+    use Interop/Lang.Enum.{Enum}
+    use Interop/Lang.SubEnum
 
     // Design note - Basis libraries should define enums so that constructors
     // are in the Basis namespace.
@@ -38,8 +40,8 @@ namespace Interop/Math {
 
 namespace Interop/Math/RoundingMode {
 
-    use Interop/Math.RoundingMode;
-    use Interop/Math.RoundingMode.{RoundingMode};
+    use Interop/Math.RoundingMode
+    use Interop/Math.RoundingMode.{RoundingMode}
 
     pub def getHH(x: RoundingMode): ##java.math.RoundingMode = 
         let RoundingMode(x1) = x;

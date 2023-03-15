@@ -17,6 +17,9 @@
 
 namespace Interop/NIO/File {
 
+    use Interop/NIO/File.OpenOption
+    use Interop/NIO/File.OpenOption.{OpenOption}
+
     pub enum OpenOption(##java.nio.file.OpenOption)
 
     pub class ImpOpenOption[t: Type] {

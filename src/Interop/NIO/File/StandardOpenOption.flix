@@ -17,11 +17,12 @@
 
 namespace Interop/NIO/File {
 
-    use Interop/Lang.Enum;
-    use Interop/Lang.Enum.{Enum};
-
-    use Interop/NIO/File.OpenOption;
-    use Interop/NIO/File.OpenOption.{OpenOption};
+    use Interop/NIO/File.StandardOpenOption
+    use Interop/NIO/File.StandardOpenOption.{StandardOpenOption}
+    use Interop/Lang.Enum
+    use Interop/Lang.Enum.{Enum}
+    use Interop/NIO/File.OpenOption
+    use Interop/NIO/File.OpenOption.{OpenOption}
 
     pub enum StandardOpenOption(##java.nio.file.StandardOpenOption)
 
@@ -59,8 +60,8 @@ namespace Interop/NIO/File {
 
 namespace Interop/NIO/File/StandardOpenOption { 
 
-    use Interop/NIO/File.StandardOpenOption;
-    use Interop/NIO/File.StandardOpenOption.{StandardOpenOption};
+    use Interop/NIO/File.StandardOpenOption
+    use Interop/NIO/File.StandardOpenOption.{StandardOpenOption}
 
     pub def getHH(x: StandardOpenOption): ##java.nio.file.StandardOpenOption = 
         let StandardOpenOption(x1) = x;

@@ -16,10 +16,12 @@
 
 namespace Interop/IO {
 
-    use Interop/IO.Writer;
-    use Interop/IO.Writer.{Writer};
-    use Interop/Lang.Appendable;
-    use Interop/Lang.Appendable.{Appendable};
+    use Interop/IO.OutputStreamWriter
+    use Interop/IO.OutputStreamWriter.{OutputStreamWriter}
+    use Interop/IO.Writer
+    use Interop/IO.Writer.{Writer}
+    use Interop/Lang.Appendable
+    use Interop/Lang.Appendable.{Appendable}
 
     pub enum OutputStreamWriter[_: Region](##java.io.OutputStreamWriter)
 
@@ -53,12 +55,12 @@ namespace Interop/IO {
 
 namespace Interop/IO/OutputStreamWriter {
 
-    use Interop/IO.OutputStreamWriter;
-    use Interop/IO.OutputStreamWriter.{OutputStreamWriter};
-    use Interop/IO.OutputStream;
+    use Interop/IO.OutputStreamWriter
+    use Interop/IO.OutputStreamWriter.{OutputStreamWriter}
+    use Interop/IO.OutputStream
 
-    use Interop/NIO/Charset.Charset;
-    use Interop/NIO/Charset.Charset.{Charset};
+    use Interop/NIO/Charset.Charset
+    use Interop/NIO/Charset.Charset.{Charset}
 
     pub def getHH(w: OutputStreamWriter[r]): ##java.io.OutputStreamWriter = 
         let OutputStreamWriter(w1) = w;

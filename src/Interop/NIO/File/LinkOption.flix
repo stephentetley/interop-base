@@ -17,13 +17,15 @@
 
 namespace Interop/NIO/File {
 
-    use Interop/Lang.Enum;
-    use Interop/Lang.Enum.{Enum};
-    use Interop/Lang.SubEnum;
+    use Interop/NIO/File.LinkOption
+    use Interop/NIO/File.LinkOption.{LinkOption}
+    use Interop/Lang.Enum
+    use Interop/Lang.Enum.{Enum}
+    use Interop/Lang.SubEnum
 
-    use Interop/NIO/File.OpenOption;
-    use Interop/NIO/File.OpenOption.{OpenOption};
-    use Interop/NIO/File.ImpOpenOption;
+    use Interop/NIO/File.OpenOption
+    use Interop/NIO/File.OpenOption.{OpenOption}
+    use Interop/NIO/File.ImpOpenOption
 
     pub enum LinkOption(##java.nio.file.LinkOption)
 
@@ -61,8 +63,8 @@ namespace Interop/NIO/File {
 
 namespace Interop/NIO/File/LinkOption { 
 
-    use Interop/NIO/File.LinkOption;
-    use Interop/NIO/File.LinkOption.{LinkOption};
+    use Interop/NIO/File.LinkOption
+    use Interop/NIO/File.LinkOption.{LinkOption}
 
     pub def getHH(x: LinkOption): ##java.nio.file.LinkOption = 
         let LinkOption(x1) = x;

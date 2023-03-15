@@ -33,7 +33,9 @@ namespace Interop/Text {
 namespace Interop/Text/Collator {
 
     use Interop/Text.Collator
-    use Interop/Text.Collator.{Collator}    
+    use Interop/Text.Collator.{Collator}
+    use Interop/Text/Collator.CollatorProperty
+    use Interop/Text/Collator.CollatorProperty.{Decomposition, Strength}
     use Interop/Util.Locale
     use Interop/Util.Locale.{Locale}
     use Interop/Flix.Setter

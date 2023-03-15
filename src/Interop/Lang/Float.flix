@@ -16,6 +16,9 @@
 
 namespace Interop/Lang {
 
+    use Interop/Lang.Float
+    use Interop/Lang.Float.{Float}
+
     ///
     /// Represents a Java Float class.
     ///

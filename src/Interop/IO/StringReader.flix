@@ -16,6 +16,8 @@
 
 namespace Interop/IO {
 
+    use Interop/IO.StringReader
+    use Interop/IO.StringReader.{StringReader}
     use Interop/IO.Reader
     use Interop/IO.Reader.{Reader}
 

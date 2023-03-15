@@ -16,6 +16,9 @@
 
 namespace Interop/Lang {
 
+    use Interop/Lang.Double
+    use Interop/Lang.Double.{Double}
+
     ///
     /// Represents a Java Double class.
     ///

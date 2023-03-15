@@ -17,6 +17,8 @@
 
 namespace Interop/NIO/Channels/Pipe {
 
+    use Interop/NIO/Channels/Pipe.SourceChannel
+    use Interop/NIO/Channels/Pipe.SourceChannel.{SourceChannel}
     use Interop/NIO/Channels.ChannelZ
     use Interop/NIO/Channels.ChannelZ.{ChannelZ}
     use Interop/NIO/Channels.SubChannel
@@ -37,8 +39,8 @@ namespace Interop/NIO/Channels/Pipe {
 
 namespace Interop/NIO/Channels/Pipe/SourceChannel { 
 
-    use Interop/NIO/Channels/Pipe.SourceChannel;
-    use Interop/NIO/Channels/Pipe.SourceChannel.{SourceChannel};
+    use Interop/NIO/Channels/Pipe.SourceChannel
+    use Interop/NIO/Channels/Pipe.SourceChannel.{SourceChannel}
 
     pub def getHH(x: SourceChannel[r]): ##java.nio.channels.Pipe$SourceChannel = 
         let SourceChannel(x1) = x;

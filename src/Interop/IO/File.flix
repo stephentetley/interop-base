@@ -26,11 +26,11 @@ namespace Interop/IO {
 
 namespace Interop/IO/File {
 
-    use Interop/IO.File;
-    use Interop/IO.File.{File};
+    use Interop/IO.File
+    use Interop/IO.File.{File}
 
-    use Interop/NIO/File.Path;
-    use Interop/NIO/File.Path.{Path};
+    use Interop/NIO/File.Path
+    use Interop/NIO/File.Path.{Path}
 
     pub def getHH(f: File[r]): ##java.io.File = 
         let File(f1) = f;

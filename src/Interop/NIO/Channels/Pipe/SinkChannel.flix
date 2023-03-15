@@ -17,6 +17,8 @@
 
 namespace Interop/NIO/Channels/Pipe {
 
+    use Interop/NIO/Channels/Pipe.SinkChannel
+    use Interop/NIO/Channels/Pipe.SinkChannel.{SinkChannel}
     use Interop/NIO/Channels.ChannelZ
     use Interop/NIO/Channels.ChannelZ.{ChannelZ}
     use Interop/NIO/Channels.SubChannel
@@ -38,8 +40,8 @@ namespace Interop/NIO/Channels/Pipe {
 
 namespace Interop/NIO/Channels/Pipe/SinkChannel { 
 
-    use Interop/NIO/Channels/Pipe.SinkChannel;
-    use Interop/NIO/Channels/Pipe.SinkChannel.{SinkChannel};
+    use Interop/NIO/Channels/Pipe.SinkChannel
+    use Interop/NIO/Channels/Pipe.SinkChannel.{SinkChannel}
 
     pub def getHH(x: SinkChannel[r]): ##java.nio.channels.Pipe$SinkChannel = 
         let SinkChannel(x1) = x;

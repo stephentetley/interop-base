@@ -16,6 +16,9 @@
 
 namespace Interop/NIO/Charset {
 
+    use Interop/NIO/Charset.Charset
+    use Interop/NIO/Charset.Charset.{Charset}
+    
     /// 
     /// Charset is a wrapper over the Java class `java.nio.charset.Charset`.
     /// Immutable / Abstract ...

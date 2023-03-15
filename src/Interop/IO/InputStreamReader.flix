@@ -16,8 +16,10 @@
 
 namespace Interop/IO {
 
-    use Interop/IO.Reader;
-    use Interop/IO.Reader.{Reader};
+    use Interop/IO.InputStreamReader
+    use Interop/IO.InputStreamReader.{InputStreamReader}
+    use Interop/IO.Reader
+    use Interop/IO.Reader.{Reader}
 
     pub enum InputStreamReader[_: Region](##java.io.InputStreamReader)
 
@@ -36,12 +38,11 @@ namespace Interop/IO {
 
 namespace Interop/IO/InputStreamReader {
 
-    use Interop/IO.InputStreamReader;
-    use Interop/IO.InputStreamReader.{InputStreamReader};
-    use Interop/IO.InputStream;
-
-    use Interop/NIO/Charset.Charset;
-    use Interop/NIO/Charset.Charset.{Charset};
+    use Interop/IO.InputStreamReader
+    use Interop/IO.InputStreamReader.{InputStreamReader}
+    use Interop/IO.InputStream
+    use Interop/NIO/Charset.Charset
+    use Interop/NIO/Charset.Charset.{Charset}
 
     pub def getHH(rd: InputStreamReader[r]): ##java.io.InputStreamReader = 
         let InputStreamReader(rd1) = rd;

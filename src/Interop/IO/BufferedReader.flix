@@ -16,6 +16,11 @@
 
 namespace Interop/IO {
 
+    use Interop/IO.BufferedReader
+    use Interop/IO.BufferedReader.{BufferedReader}
+    use Interop/IO.Reader
+    use Interop/IO.Reader.{Reader}
+
     /// Class
 
     pub enum BufferedReader[_: Region](##java.io.BufferedReader)
@@ -34,9 +39,9 @@ namespace Interop/IO {
 
 namespace Interop/IO/BufferedReader {
 
-    use Interop/IO.BufferedReader;
-    use Interop/IO.BufferedReader.{BufferedReader};
-    use Interop/IO.Reader;
+    use Interop/IO.BufferedReader
+    use Interop/IO.BufferedReader.{BufferedReader}
+    use Interop/IO.Reader
 
     use Interop/Util/Stream.Stream;
     use Interop/Util/Stream.Stream.{Stream};

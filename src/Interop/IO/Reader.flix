@@ -32,11 +32,11 @@ namespace Interop/IO {
 
 namespace Interop/IO/Reader {
 
-    use Interop/IO.Reader;
-    use Interop/IO.Reader.{Reader};
-    use Interop/IO.Writer;
-    use Interop/IO.SubReader;
-    use Interop/NIO.CharBuffer;
+    use Interop/IO.Reader
+    use Interop/IO.Reader.{Reader}
+    use Interop/IO.Writer
+    use Interop/IO.SubReader
+    use Interop/NIO.CharBuffer
 
 
 

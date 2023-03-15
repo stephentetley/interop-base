@@ -16,6 +16,10 @@
 
 namespace Interop/Lang {
 
+    use Interop/Lang.Appendable
+    use Interop/Lang.Appendable.{Appendable}
+    use StringBuilder.{StringBuilder}
+
     /// Interface...
     /// Mutable, no alloc
     pub enum Appendable[_: Region](##java.lang.Appendable)
@@ -41,8 +45,8 @@ namespace Interop/Lang {
 
 namespace Interop/Lang/Appendable {
 
-    use Interop/Lang.Appendable;
-    use Interop/Lang.Appendable.{Appendable};
+    use Interop/Lang.Appendable
+    use Interop/Lang.Appendable.{Appendable}
 
     use Interop/Lang.CharSequence
     use Interop/Lang.CharSequence.{CharSequence}

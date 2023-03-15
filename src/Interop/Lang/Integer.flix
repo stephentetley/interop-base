@@ -16,6 +16,9 @@
 
 namespace Interop/Lang {
 
+    use Interop/Lang.Integer
+    use Interop/Lang.Integer.{Integer}
+
     ///
     /// Represents a Java Integer class.
     ///

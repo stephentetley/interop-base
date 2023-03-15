@@ -16,6 +16,9 @@
 
 namespace Interop/Lang {
 
+    use Interop/Lang.Byte
+    use Interop/Lang.Byte.{Byte}
+
     ///
     /// Represents a Java Byte class.
     ///

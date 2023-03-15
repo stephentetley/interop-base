@@ -16,8 +16,10 @@
 
 namespace Interop/IO {
 
-    use Interop/IO.InputStream;
-    use Interop/IO.InputStream.{InputStream};
+    use Interop/IO.FilterInputStream
+    use Interop/IO.FilterInputStream.{FilterInputStream}
+    use Interop/IO.InputStream
+    use Interop/IO.InputStream.{InputStream}
 
     pub enum FilterInputStream[_: Region](##java.io.FilterInputStream)
 
@@ -37,10 +39,10 @@ namespace Interop/IO {
 
 namespace Interop/IO/FilterInputStream {
 
-    use Interop/IO.FilterInputStream;
-    use Interop/IO.FilterInputStream.{FilterInputStream};
-    use Interop/IO.File;
-    use Interop/IO.File.{File};
+    use Interop/IO.FilterInputStream
+    use Interop/IO.FilterInputStream.{FilterInputStream}
+    use Interop/IO.File
+    use Interop/IO.File.{File}
 
     pub def getHH(s: FilterInputStream[r]): ##java.io.FilterInputStream = 
         let FilterInputStream(s1) = s;

@@ -16,6 +16,9 @@
 
 namespace Interop/Lang {
 
+    use Interop/Lang.Long
+    use Interop/Lang.Long.{Long}
+
     ///
     /// Represents a Java Long class.
     ///

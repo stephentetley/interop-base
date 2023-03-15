@@ -16,6 +16,11 @@
 
 namespace Interop/Text {
     
+    use Interop/Text.ChoiceFormat
+    use Interop/Text.ChoiceFormat.{ChoiceFormat}
+    use Interop/Text.NumberFormat
+    use Interop/Text.NumberFormat.{NumberFormat}
+
     ///
     /// Represents a ChoiceFormat.
     /// "Immutable with Setter"

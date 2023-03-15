@@ -17,6 +17,9 @@
 
 namespace Interop/NIO/File {
 
+    use Interop/NIO/File.Path
+    use Interop/NIO/File.Path.{Path}
+    
     ///
     /// Represents a FilePath.
     /// Interface / Immutable
@@ -57,11 +60,11 @@ namespace Interop/NIO/File {
 namespace Interop/NIO/File/Path {
 
 
-    use Interop/NIO/File.Path;
-    use Interop/NIO/File.Path.{Path};
+    use Interop/NIO/File.Path
+    use Interop/NIO/File.Path.{Path}
 
-    use Interop/IO.File;
-    use Interop/IO.File.{File};
+    use Interop/IO.File
+    use Interop/IO.File.{File}
 
     /// Note - current set of operations should be pure?
 

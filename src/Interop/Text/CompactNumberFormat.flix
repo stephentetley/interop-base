@@ -16,6 +16,11 @@
 
 namespace Interop/Text {
     
+    use Interop/Text.CompactNumberFormat
+    use Interop/Text.CompactNumberFormat.{CompactNumberFormat}
+    use Interop/Text.NumberFormat
+    use Interop/Text.NumberFormat.{NumberFormat}
+
     ///
     /// Represents a CompactNumberFormat.
     /// "Immutable with Setter"
@@ -43,6 +48,15 @@ namespace Interop/Text/CompactNumberFormat {
 
     use Interop/Text.CompactNumberFormat
     use Interop/Text.CompactNumberFormat.{CompactNumberFormat}
+    use Interop/Text/CompactNumberFormat.CompactNumberFormatProperty
+    use Interop/Text/CompactNumberFormat.CompactNumberFormatProperty.{
+        CurrencyP, GroupingSize, 
+        GroupingUsed, MaximumFractionDigits,
+        MaximumIntegerDigits, MinimumFractionDigits, 
+        MinimumIntegerDigits, ParseBigDecimal, 
+        ParseIntegerOnly, RoundingModeP
+    }
+
     use Interop/Math.RoundingMode
     use Interop/Math.RoundingMode.{RoundingMode}
     use Interop/Util.Currency

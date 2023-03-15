@@ -16,6 +16,8 @@
 
 namespace Interop/IO {
 
+    use Interop/IO.FileInputStream
+    use Interop/IO.FileInputStream.{FileInputStream}
     use Interop/IO.InputStream;
     use Interop/IO.InputStream.{InputStream};
 
@@ -40,10 +42,10 @@ namespace Interop/IO {
 
 namespace Interop/IO/FileInputStream {
 
-    use Interop/IO.FileInputStream;
-    use Interop/IO.FileInputStream.{FileInputStream};
-    use Interop/IO.File;
-    use Interop/IO.File.{File};
+    use Interop/IO.FileInputStream
+    use Interop/IO.FileInputStream.{FileInputStream}
+    use Interop/IO.File
+    use Interop/IO.File.{File}
 
     pub def getHH(s: FileInputStream[r]): ##java.io.FileInputStream = 
         let FileInputStream(s1) = s;

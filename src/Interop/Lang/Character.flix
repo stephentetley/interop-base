@@ -16,6 +16,9 @@
 
 namespace Interop/Lang {
 
+    use Interop/Lang.Character
+    use Interop/Lang.Character.{Character}
+
     ///
     /// Represents a Java Boolean.
     ///

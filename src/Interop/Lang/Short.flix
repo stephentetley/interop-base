@@ -16,6 +16,9 @@
 
 namespace Interop/Lang {
 
+    use Interop/Lang.Short
+    use Interop/Lang.Short.{Short}
+    
     ///
     /// Represents a Java Short class.
     ///

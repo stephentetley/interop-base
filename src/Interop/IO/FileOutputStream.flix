@@ -16,6 +16,8 @@
 
 namespace Interop/IO {
 
+    use Interop/IO.FileOutputStream
+    use Interop/IO.FileOutputStream.{FileOutputStream}
     use Interop/IO.OutputStream
     use Interop/IO.OutputStream.{OutputStream}
 

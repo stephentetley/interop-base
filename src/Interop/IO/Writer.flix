@@ -16,8 +16,10 @@
 
 namespace Interop/IO {
 
-    use Interop/Lang.Appendable;
-    use Interop/Lang.Appendable.{Appendable};
+    use Interop/IO.Writer
+    use Interop/IO.Writer.{Writer}
+    use Interop/Lang.Appendable
+    use Interop/Lang.Appendable.{Appendable}
     
     /// Abstract class...
 
@@ -44,10 +46,10 @@ namespace Interop/IO {
 
 namespace Interop/IO/Writer {
 
-    use Interop/IO.Writer;
-    use Interop/IO.Writer.{Writer};
-    use Interop/IO.SubWriter;
-    use Interop/Lang.CharSequence;
+    use Interop/IO.Writer
+    use Interop/IO.Writer.{Writer}
+    use Interop/IO.SubWriter
+    use Interop/Lang.CharSequence
 
 
     pub def getHH(w: Writer[r]): ##java.io.Writer = 

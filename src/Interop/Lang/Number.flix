@@ -16,6 +16,9 @@
 
 namespace Interop/Lang {
     
+    use Interop/Lang.Number
+    use Interop/Lang.Number.{Number}
+    
     /// Abstract Class
     /// Represents a Number.
     ///
@@ -41,8 +44,8 @@ namespace Interop/Lang {
 namespace Interop/Lang/Number {
 
 
-    use Interop/Lang.Number;
-    use Interop/Lang.Number.{Number};
+    use Interop/Lang.Number
+    use Interop/Lang.Number.{Number}
 
     pub def getHH(x: Number): ##java.lang.Number = 
         let Number(x1) = x;

@@ -16,6 +16,9 @@
 
 namespace Interop/Lang {
 
+    use Interop/Lang.Boolean
+    use Interop/Lang.Boolean.{Boolean}
+
     ///
     /// Represents a Java Boolean.
     ///
