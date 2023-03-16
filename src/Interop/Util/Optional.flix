@@ -48,6 +48,13 @@ namespace Interop/Util/Optional {
             None
 
 
+    pub def toString(o: Optional[a]): String  =
+        import java.util.Optional.toString(): String \ {};
+        let Optional(o1) = o;
+        toString(o1)
+
+        
+
     pub def toOption(o: Optional[a]): Option[a] with Marshal[a] =
         let Optional(o1) = o;
         o1 |> hhToOption(Interop/Flix/Marshal.fromJavaObject)

@@ -16,11 +16,26 @@
 
 namespace Interop/Util {
     
+    use Interop/Util.LocaleCategory
+    use Interop/Util.LocaleCategory.{LocaleCategory}
+    use Interop/Lang.Enum
+    use Interop/Lang.Enum.{Enum}
+
     /// 
     /// Enum
     /// 
     pub enum LocaleCategory(##java.util.Locale$Category)
 
+
+    instance Interop/Lang.SubEnum[LocaleCategory] {
+        pub def toEnum(x: LocaleCategory): Enum = 
+            let LocaleCategory(x1) = x;
+            Enum(unchecked_cast(x1 as ##java.lang.Enum))
+
+        pub def fromEnum(x: Enum): LocaleCategory = 
+            let Enum(x1) = x;
+            LocaleCategory(unchecked_cast(x1 as ##java.util.Locale$Category))
+    }
 
 }
 

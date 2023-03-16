@@ -16,12 +16,26 @@
 
 namespace Interop/Util {
 
+    use Interop/Util.LocaleFilteringMode
+    use Interop/Util.LocaleFilteringMode.{LocaleFilteringMode}
+    use Interop/Lang.Enum
+    use Interop/Lang.Enum.{Enum}
     
     /// 
     /// Enum
     ///
     pub enum LocaleFilteringMode(##java.util.Locale$FilteringMode)
 
+
+    instance Interop/Lang.SubEnum[LocaleFilteringMode] {
+        pub def toEnum(x: LocaleFilteringMode): Enum = 
+            let LocaleFilteringMode(x1) = x;
+            Enum(unchecked_cast(x1 as ##java.lang.Enum))
+
+        pub def fromEnum(x: Enum): LocaleFilteringMode = 
+            let Enum(x1) = x;
+            LocaleFilteringMode(unchecked_cast(x1 as ##java.util.Locale$FilteringMode))
+    }
 
 }
 

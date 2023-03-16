@@ -15,12 +15,26 @@
  */
 
 namespace Interop/Util {
-    
+
+    use Interop/Util.LocaleIsoCountryCode
+    use Interop/Util.LocaleIsoCountryCode.{LocaleIsoCountryCode}
+    use Interop/Lang.Enum
+    use Interop/Lang.Enum.{Enum}
+
     /// 
     /// Enum
     /// 
     pub enum LocaleIsoCountryCode(##java.util.Locale$IsoCountryCode)
 
+    instance Interop/Lang.SubEnum[LocaleIsoCountryCode] {
+        pub def toEnum(x: LocaleIsoCountryCode): Enum = 
+            let LocaleIsoCountryCode(x1) = x;
+            Enum(unchecked_cast(x1 as ##java.lang.Enum))
+
+        pub def fromEnum(x: Enum): LocaleIsoCountryCode = 
+            let Enum(x1) = x;
+            LocaleIsoCountryCode(unchecked_cast(x1 as ##java.util.Locale$IsoCountryCode))
+    }
 
 }
 
