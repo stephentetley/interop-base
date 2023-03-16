@@ -39,11 +39,11 @@ namespace Interop/Util/Stream/Collector {
     }
 
     instance SubEnum[Characteristics] {
-        pub def toEnum(x: Characteristics): Enum[a] = 
+        pub def toEnum(x: Characteristics): Enum = 
             let Characteristics(x1) = x;
             Enum(unchecked_cast(x1 as ##java.lang.Enum))
 
-        pub def fromEnum(x: Enum[a]): Characteristics = 
+        pub def fromEnum(x: Enum): Characteristics = 
             let Enum(x1) = x;
             Characteristics(unchecked_cast(x1 as ##java.util.stream.Collector$Characteristics))
     }

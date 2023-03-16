@@ -50,11 +50,11 @@ namespace Interop/NIO/File {
     }
 
     instance SubEnum[LinkOption] {
-        pub def toEnum(x: LinkOption): Enum[a] = 
+        pub def toEnum(x: LinkOption): Enum = 
             let LinkOption(x1) = x;
             Enum(unchecked_cast(x1 as ##java.lang.Enum))
 
-        pub def fromEnum(x: Enum[a]): LinkOption = 
+        pub def fromEnum(x: Enum): LinkOption = 
             let Enum(x1) = x;
             LinkOption(unchecked_cast(x1 as ##java.nio.file.LinkOption))
     }

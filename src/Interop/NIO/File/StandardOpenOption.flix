@@ -47,11 +47,11 @@ namespace Interop/NIO/File {
     }
 
     instance Interop/Lang.SubEnum[StandardOpenOption] {
-        pub def toEnum(x: StandardOpenOption): Enum[a] = 
+        pub def toEnum(x: StandardOpenOption): Enum = 
             let StandardOpenOption(x1) = x;
             Enum(unchecked_cast(x1 as ##java.lang.Enum))
 
-        pub def fromEnum(x: Enum[a]): StandardOpenOption = 
+        pub def fromEnum(x: Enum): StandardOpenOption = 
             let Enum(x1) = x;
             StandardOpenOption(unchecked_cast(x1 as ##java.nio.file.StandardOpenOption))
     }

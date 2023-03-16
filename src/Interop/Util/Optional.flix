@@ -19,6 +19,9 @@ namespace Interop/Util {
     ///
     /// Represents a Java Optional.
     /// Immutable 
+    ///
+    /// TODO - remove type param?
+    ///
     pub enum Optional[_a: Type](##java.util.Optional)
 
 

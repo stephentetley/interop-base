@@ -28,11 +28,11 @@ namespace Interop/Text {
     pub enum NormalizerForm(##java.text.Normalizer$Form)
 
     instance SubEnum[NormalizerForm] {
-        pub def toEnum(x: NormalizerForm): Enum[a] = 
+        pub def toEnum(x: NormalizerForm): Enum = 
             let NormalizerForm(x1) = x;
             Enum(unchecked_cast(x1 as ##java.lang.Enum))
 
-        pub def fromEnum(x: Enum[a]): NormalizerForm = 
+        pub def fromEnum(x: Enum): NormalizerForm = 
             let Enum(x1) = x;
             NormalizerForm(unchecked_cast(x1 as ##java.text.Normalizer$Form))
     }

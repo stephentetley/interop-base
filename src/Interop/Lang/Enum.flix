@@ -20,11 +20,11 @@ namespace Interop/Lang {
     /// Represents a Java Enum.
     /// Class
     ///
-    pub enum Enum[_: Type](##java.lang.Enum)
+    pub enum Enum(##java.lang.Enum)
 
     pub class SubEnum[t: Type] {
-        pub def toEnum[a: Type](s: t): Enum[a]
-        pub def fromEnum[a: Type](s: Enum[a]): t
+        pub def toEnum(s: t): Enum
+        pub def fromEnum(s: Enum): t
     }
 
 }
@@ -35,28 +35,28 @@ namespace Interop/Lang/Enum {
     use Interop/Lang.Enum
     use Interop/Lang.Enum.{Enum}
 
-    pub def toString(x: Enum[a]): String =
+    pub def toString(x: Enum): String =
         import java.lang.Enum.toString(): String \ {};
         let Enum(x1) = x;
         toString(x1)
 
-    pub def equals(x: Enum[a], y: Enum[a]): Bool =
+    pub def equals(x: Enum, y: Enum): Bool =
         import java.lang.Enum.equals(##java.lang.Object): Bool \ {};
         let Enum(x1) = x;
         let Enum(y1) = y;
         equals(x1, checked_cast(y1))
 
-    pub def hashCode(x: Enum[a]): Int32 =
+    pub def hashCode(x: Enum): Int32 =
         import java.lang.Enum.hashCode(): Int32 \ {};
         let Enum(x1) = x;
         hashCode(x1)
 
-    pub def name(x: Enum[a]): String =
+    pub def name(x: Enum): String =
         import java.lang.Enum.name(): String \ {};
         let Enum(x1) = x;
         name(x1)
 
-    pub def ordinal(x: Enum[a]): Int32 =
+    pub def ordinal(x: Enum): Int32 =
         import java.lang.Enum.ordinal(): Int32 \ {};
         let Enum(x1) = x;
         ordinal(x1)
