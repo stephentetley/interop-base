@@ -56,69 +56,16 @@ namespace Interop/Util/Locale {
 
     use Interop/Util.Locale
     use Interop/Util.Locale.{Locale}
-    use Interop/Util/Locale.Category
-    use Interop/Util/Locale.Category.{Display, Format}
-    use Interop/Util/Locale.FilteringMode
-    use Interop/Util/Locale.FilteringMode.{
-        AutoselectFiltering, ExtendedFiltering, IgnoreExtendedRanges, MapExtendedRanges, RejectExtendedRanges}
-    use Interop/Util/Locale.IsoCountryCode
-    use Interop/Util/Locale.IsoCountryCode.{Part1Alpha2, Part1Alpha3, Part3}
+    use Interop/Util.LocaleCategory
+    use Interop/Util/LocaleCategory.{LocaleCategory}
+    use Interop/Util/LocaleFilteringMode
+    use Interop/Util/LocaleFilteringMode.{LocaleFilteringMode}
+    use Interop/Util/LocaleIsoCountryCode
+    use Interop/Util/LocaleIsoCountryCode.{LocaleIsoCountryCode}
     use Interop/Util/Locale.LanguageRange
     use Interop/Util/Locale.LanguageRange.{LanguageRange}
 
     /// TODO - move enums into Basis-Base...
-
-    /// 
-    /// `Category` is an enum for Locale categories.
-    /// 
-    /// Case `Display` represents the default locale for displaying user interfaces.
-    //
-    /// Case `Format` represents the default locale for formatting dates / times / numbers etc.
-    //
-    pub enum Category with Eq, Order, Boxable, Hash, ToString {
-        case Display
-        case Format
-    }
-
-
-    pub enum FilteringMode with Eq, Order, Boxable, Hash, ToString {
-        case AutoselectFiltering
-        case ExtendedFiltering
-        case IgnoreExtendedRanges
-        case MapExtendedRanges
-        case RejectExtendedRanges
-    }
-
-
-    pub def marshalFilteringMode(x: FilteringMode): ##java.util.Locale$FilteringMode =
-        import static get java.util.Locale$FilteringMode.AUTOSELECT_FILTERING: ##java.util.Locale$FilteringMode \ {} as get_AUTOSELECT_FILTERING;
-        import static get java.util.Locale$FilteringMode.EXTENDED_FILTERING: ##java.util.Locale$FilteringMode \ {} as get_EXTENDED_FILTERING;
-        import static get java.util.Locale$FilteringMode.IGNORE_EXTENDED_RANGES: ##java.util.Locale$FilteringMode \ {} as get_IGNORE_EXTENDED_RANGES;
-        import static get java.util.Locale$FilteringMode.MAP_EXTENDED_RANGES: ##java.util.Locale$FilteringMode \ {} as get_MAP_EXTENDED_RANGES;
-        import static get java.util.Locale$FilteringMode.REJECT_EXTENDED_RANGES: ##java.util.Locale$FilteringMode \ {} as get_REJECT_EXTENDED_RANGES;
-        match x {
-            case AutoselectFiltering    => get_AUTOSELECT_FILTERING()
-            case ExtendedFiltering      => get_EXTENDED_FILTERING()
-            case IgnoreExtendedRanges   => get_IGNORE_EXTENDED_RANGES()
-            case MapExtendedRanges      => get_MAP_EXTENDED_RANGES()
-            case RejectExtendedRanges   => get_REJECT_EXTENDED_RANGES()
-        }
-
-    pub enum IsoCountryCode with Eq, Order, Boxable, Hash, ToString {
-        case Part1Alpha2
-        case Part1Alpha3
-        case Part3
-    }
-
-    pub def marshalIsoCountryCode(x: IsoCountryCode): ##java.util.Locale$IsoCountryCode =
-        import static get java.util.Locale$IsoCountryCode.PART1_ALPHA2: ##java.util.Locale$IsoCountryCode \ {} as get_PART1_ALPHA2;
-        import static get java.util.Locale$IsoCountryCode.PART1_ALPHA3: ##java.util.Locale$IsoCountryCode \ {} as get_PART1_ALPHA3;
-        import static get java.util.Locale$IsoCountryCode.PART3: ##java.util.Locale$IsoCountryCode \ {} as get_PART3;
-        match x {
-            case Part1Alpha2    => get_PART1_ALPHA2()
-            case Part1Alpha3    => get_PART1_ALPHA3()
-            case Part3          => get_PART3()
-        }
 
 
 
@@ -169,16 +116,11 @@ namespace Interop/Util/Locale {
 
 
 
-    pub def setJvmDefaultLocaleWithCategory!(category: Category, x: Locale): Result[String, Unit] \ IO =
+    pub def setJvmDefaultLocaleWithCategory!(cat: LocaleCategory, x: Locale): Result[String, Unit] \ IO =
         Result.tryCatch(_ -> {
             import static java.util.Locale.setDefault(##java.util.Locale$Category, ##java.util.Locale): Unit \ IO;
-            import static get java.util.Locale$Category.DISPLAY: ##java.util.Locale$Category \ {} as getDisplay;
-            import static get java.util.Locale$Category.FORMAT: ##java.util.Locale$Category \ {} as getFormat;
             let Locale(x1) = x;
-            let cat1 = match category {
-                case Display => getDisplay()
-                case Format  => getFormat()
-            };
+            let LocaleCategory(cat1) = cat;
             setDefault(cat1, x1)
         })
 
@@ -303,14 +245,10 @@ namespace Interop/Util/Locale {
         import static java.util.Locale.getDefault(): ##java.util.Locale \ IO;
         Locale(getDefault())
 
-    pub def getDefaultWithCategory(x: Category): Locale \ IO =
+    pub def getDefaultWithCategory(cat: LocaleCategory): Locale \ IO =
         import static java.util.Locale.getDefault(##java.util.Locale$Category): ##java.util.Locale \ IO;
-        import static get java.util.Locale$Category.DISPLAY: ##java.util.Locale$Category \ {} as getDisplay;
-        import static get java.util.Locale$Category.FORMAT: ##java.util.Locale$Category \ {} as getFormat;
-        match x {
-            case Display => getDisplay() |> getDefault |> Locale
-            case Format  => getFormat() |> getDefault |> Locale
-        }
+        let LocaleCategory(cat1) = cat;
+        Locale(getDefault(cat1))
 
     pub def getCountry(x: Locale): String =
         import java.util.Locale.getCountry(): String \ {};
@@ -434,10 +372,10 @@ namespace Interop/Util/Locale {
         getISOCountries() |> Array.toList
     }
 
-    pub def getIsoCountriesWithIsoCountryCode(icc: IsoCountryCode): Result[String, Set[String]] =
+    pub def getIsoCountriesWithIsoCountryCode(icc: LocaleIsoCountryCode): Result[String, Set[String]] =
         Result.tryCatch(_ -> {
             import static java.util.Locale.getISOCountries(##java.util.Locale$IsoCountryCode): ##java.util.Set \ {};
-            let icc1 = marshalIsoCountryCode(icc);
+            let LocaleIsoCountryCode(icc1) = icc;
             getISOCountries(icc1) |> Interop/Util/SetZ.primSetToFlixSet
         })
 
@@ -504,13 +442,13 @@ namespace Interop/Util/Locale {
 
 
     pub def filterWithFilteringMode(priorityList: List[LanguageRange], 
-                                    mode: FilteringMode, 
+                                    mode: LocaleFilteringMode, 
                                     locales: List[Locale]): Result[String, List[Locale]] = 
         Result.tryCatch(_ -> {
             import static java.util.Locale.filter(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};
             let ps      = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
             let col     = Interop/Util/Collection.fromFoldableViaArrayListHH(locales);
-            let mode1   = marshalFilteringMode(mode);
+            let LocaleFilteringMode(mode1) = mode;
             filter(ps, col, mode1) |> Interop/Util/ListZ.primListToFlixList
         })
 
@@ -523,13 +461,13 @@ namespace Interop/Util/Locale {
         })
 
     pub def filterTagsWithFilteringMode(priorityList: List[LanguageRange], 
-                                        mode: FilteringMode, 
+                                        mode: LocaleFilteringMode, 
                                         tags: List[String]): Result[String, List[String]] = 
         Result.tryCatch(_ -> {
             import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};
             let ls      = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
             let col     = Interop/Util/Collection.fromFoldableViaArrayListHH(tags);
-            let mode1   = marshalFilteringMode(mode);
+            let LocaleFilteringMode(mode1) = mode;
             filterTags(ls, col, mode1) |> Interop/Util/ListZ.primListToFlixList
         })
 }
