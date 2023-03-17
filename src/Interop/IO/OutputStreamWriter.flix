@@ -95,12 +95,13 @@ namespace Interop/IO/OutputStreamWriter {
         getEncoding(w1) |> Object.toOption
 
     pub def writeSubCharArray!(arr: Array[Char, r2], 
-                                sub: {offset = Int32, len = Int32}, 
+                                offset: {offset = Int32}, 
+                                len: {len = Int32}, 
                                 w: OutputStreamWriter[r]): Result[String, Unit] \ {Read(r2), Write(r)} =
         Result.tryCatch(_ -> {
             import java.io.OutputStreamWriter.write(Array[Char, r2], Int32, Int32): Unit \ {r, r2};
             let OutputStreamWriter(w1) = w;
-            write(w1, arr, sub.offset, sub.len)
+            write(w1, arr, offset.offset, len.len)
         })
 
     pub def writeCharacter!(i: Int32, w: OutputStreamWriter[r]): Result[String, Unit] \ Write(r) =
@@ -110,11 +111,11 @@ namespace Interop/IO/OutputStreamWriter {
             write(w1, i)
         })
 
-    pub def writeSubstring!(s: String, sub: {offset = Int32, len = Int32}, w: OutputStreamWriter[r]): Result[String, Unit] \ Write(r) =
+    pub def writeSubstring!(s: String, offset: {offset = Int32}, len: {len = Int32}, w: OutputStreamWriter[r]): Result[String, Unit] \ Write(r) =
         Result.tryCatch(_ -> {
             import java.io.OutputStreamWriter.write(String, Int32, Int32): Unit \ r;
             let OutputStreamWriter(w1) = w;
-            write(w1, s, sub.offset, sub.len)
+            write(w1, s, offset.offset, len.len)
         })
 
 }
