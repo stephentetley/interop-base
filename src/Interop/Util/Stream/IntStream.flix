@@ -132,7 +132,7 @@ namespace Interop/Util/Stream/IntStream {
         IntStream(rc, checked_ecast(map(s1, f1)))
 
 
-    /// This is a bit wild - should we encapsulate `ef` in the IntStream type? ...
+    /// 
     pub def flatMap(f: Int32 -> IntStream[ef1, r] \ ef2, s: IntStream[ef, r]): IntStream[ef and ef1 and ef2, r] = 
         import java.util.stream.IntStream.flatMap(IntFunction[##java.util.stream.IntStream]): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
@@ -146,10 +146,10 @@ namespace Interop/Util/Stream/IntStream {
         let IntStream(_, s1) = s;
         forEach(s1, f1)
 
-    pub def toArray(s: IntStream[ef, r]): Array[Int32, r] \ { ef, Write(r) } = 
-        import java.util.stream.IntStream.toArray(): Array[Int32, r] \ {ef, r};
+    pub def toArray(_: Region[r1], s: IntStream[ef, r]): Array[Int32, r1] \ { ef, Read(r), Write(r1) } = 
+        import java.util.stream.IntStream.toArray(): Array[Int32, r1] \ {};
         let IntStream(_, s1) = s;
-        toArray(s1)
+        checked_ecast(toArray(s1))
 
 
     pub def average(s: IntStream[ef, r]): OptionalDouble \ {Read(r), ef} = 
@@ -181,34 +181,34 @@ namespace Interop/Util/Stream/IntStream {
         let f1 = Interop/Util/Function/IntPredicate.makeIntPredicate(f);
         noneMatch(s1, f1)
 
-    pub def findFirst(s: IntStream[ef, r]): OptionalInt \ Read(r) = 
-        import java.util.stream.IntStream.findFirst(): ##java.util.OptionalInt \ r;
+    pub def findFirst(s: IntStream[ef, r]): OptionalInt \ {ef, Read(r)} = 
+        import java.util.stream.IntStream.findFirst(): ##java.util.OptionalInt \ { ef, r };
         let IntStream(_, s1) = s;
         findFirst(s1) |> OptionalInt
 
-    pub def findAny(s: IntStream[ef, r]): OptionalInt \ Read(r) = 
-        import java.util.stream.IntStream.findAny(): ##java.util.OptionalInt \ r;
+    pub def findAny(s: IntStream[ef, r]): OptionalInt \ {ef, Read(r)} = 
+        import java.util.stream.IntStream.findAny(): ##java.util.OptionalInt \ {ef, r};
         let IntStream(_, s1) = s;
         findAny(s1) |> OptionalInt
 
-    pub def max(s: IntStream[ef, r]): OptionalInt \ Read(r) = 
-        import java.util.stream.IntStream.max(): ##java.util.OptionalInt \ r;
+    pub def max(s: IntStream[ef, r]): OptionalInt \ {ef, Read(r)} = 
+        import java.util.stream.IntStream.max(): ##java.util.OptionalInt \ {ef, r};
         let IntStream(_, s1) = s;
         max(s1) |> OptionalInt
 
-    pub def min(s: IntStream[ef, r]): OptionalInt \ { ef, Read(r) } = 
+    pub def min(s: IntStream[ef, r]): OptionalInt \ {ef, Read(r)} = 
         import java.util.stream.IntStream.min(): ##java.util.OptionalInt \ {ef, r};
         let IntStream(_, s1) = s;
         min(s1) |> OptionalInt
 
-    pub def sorted(s: IntStream[ef, r]): IntStream[ef, r] \ Write(r) = 
-        import java.util.stream.IntStream.sorted(): ##java.util.stream.IntStream \ r;
+    pub def sorted(s: IntStream[ef, r]): IntStream[ef, r] = 
+        import java.util.stream.IntStream.sorted(): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
-        IntStream(rc, sorted(s1))
+        IntStream(rc, checked_ecast(sorted(s1)))
 
 
-    pub def asLongStream(rc: Region[r1], s: IntStream[ef, r]): LongStream[r1] \ Read(r) = 
-        import java.util.stream.IntStream.asLongStream(): ##java.util.stream.LongStream \ r;
+    pub def asLongStream(rc: Region[r1], s: IntStream[ef, r]): LongStream[ef, r1] = 
+        import java.util.stream.IntStream.asLongStream(): ##java.util.stream.LongStream \ {};
         let IntStream(_, s1) = s;
         LongStream(rc, asLongStream(s1))
 
