@@ -38,7 +38,7 @@ namespace Interop/Util/Function/Predicate {
 
 
 
-    // pub def andz(f: Predicate, g: Predicate): IntPredicate = 
+    // pub def andz(f: Predicate, g: Predicate): Predicate = 
     //     import java.util.function.Predicate.and(##java.util.function.Predicate): ##java.util.function.Predicate \ {} as and1;
     //     let Predicate(f1) = f;
     //     let Predicate(g1) = g;
