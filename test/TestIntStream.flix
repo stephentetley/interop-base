@@ -2,7 +2,7 @@
 
 namespace TestIntStream {
 
-/*
+
     @test
     def flatMap01(): Bool \ {} = region rc {
         /// for every i gen 3...
@@ -13,7 +13,7 @@ namespace TestIntStream {
         ct == 6i64
     }
 
-
+/*
     @test
     def flatMap02(): Bool \ IO = 
         /// for every i gen 3...

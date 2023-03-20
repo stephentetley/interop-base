@@ -62,38 +62,38 @@ namespace Interop/Util/Stream/IntStream {
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ {} as mkIterator;
         let IntStream(_, s1) = s;
         let iter1 = mkIterator(unchecked_cast(s1 as ##java.util.stream.BaseStream));
-        let iter2 = unchecked_cast(Interop/Util/IteratorZ.wrapHH(rc, iter1) as IteratorZ[Int32, ef, r]);
+        let iter2 = checked_ecast(Interop/Util/IteratorZ.wrapHH(rc, iter1)); // as IteratorZ[Int32, ef, r]);
         Interop/Util/IteratorZ.iterator(rc, iter2)
 
     pub def empty(rc: Region[r]): IntStream[ef, r] = 
         import static java.util.stream.IntStream.empty(): ##java.util.stream.IntStream \ {};
-        unchecked_cast(IntStream(rc, empty()) as IntStream[ef, r])
+        IntStream(rc, checked_ecast(empty()))
 
-    pub def ofInt32(rc: Region[r], i: Int32): IntStream[ef, r] \ Write(r) = 
-        import static java.util.stream.IntStream.of(Int32): ##java.util.stream.IntStream \ {ef, r};
-        IntStream(rc, of(i))
+    pub def ofInt32(rc: Region[r], i: Int32): IntStream[ef, r] = 
+        import static java.util.stream.IntStream.of(Int32): ##java.util.stream.IntStream \ {};
+        IntStream(rc, checked_ecast(of(i)))
 
-    pub def ofArray(rc: Region[r], arr: Array[Int32, r2]): IntStream[ef and r2, r] \ {Write(r), Read(r2)} = 
-        import static java.util.stream.IntStream.of(Array[Int32, r2]): ##java.util.stream.IntStream \ {ef, r, r2};
-        IntStream(rc, of(arr))
+    pub def ofArray(rc: Region[r1], arr: Array[Int32, r]): IntStream[ef and r, r1] = 
+        import static java.util.stream.IntStream.of(Array[Int32, r]): ##java.util.stream.IntStream \ {};
+        IntStream(rc, checked_ecast(of(arr)))
 
-    pub def iterate(rc: Region[r], seed: Int32, f: Int32 -> Int32 \ ef): IntStream[ef, r] \ {Write(r), ef} = 
-        import static java.util.stream.IntStream.iterate(Int32, IntUnaryOperator): ##java.util.stream.IntStream \ {r, ef};
-        let f1 = Interop/Util/Function/IntUnaryOperator.makeIntUnaryOperator(f);
-        IntStream(rc, iterate(seed, f1))
+    pub def iterate(rc: Region[r], seed: Int32, f: Int32 -> Int32 \ ef): IntStream[ef, r] = 
+        import static java.util.stream.IntStream.iterate(Int32, IntUnaryOperator): ##java.util.stream.IntStream \ {};
+        let f1 = unchecked_cast(Interop/Util/Function/IntUnaryOperator.makeIntUnaryOperator(f) as _ \ {});
+        unchecked_cast(IntStream(rc, iterate(seed, f1)) as IntStream[ef, r])
 
     pub def generate(rc: Region[r], f: Unit -> Int32 \ ef): IntStream[ef, r] = 
         import static java.util.stream.IntStream.generate(IntSupplier): ##java.util.stream.IntStream \ {};
         let s1 = unchecked_cast(Interop/Util/Function/IntSupplier.makeIntSupplier(f) as _ \ {});
-        unchecked_cast(IntStream(rc, generate(s1)) as IntStream[ef, r])
+        IntStream(rc, checked_ecast(generate(s1)))
 
-    pub def range(rc: Region[r], b: Int32, e: Int32): IntStream[ef, r] \ Write(r) = 
-        import static java.util.stream.IntStream.range(Int32, Int32): ##java.util.stream.IntStream \ r;
+    pub def range(rc: Region[r], b: Int32, e: Int32): IntStream[ef, r] = 
+        import static java.util.stream.IntStream.range(Int32, Int32): ##java.util.stream.IntStream \ {};
         IntStream(rc, checked_ecast(range(b, e)))
 
-    pub def rangeClosed(rc: Region[r], b: Int32, e: Int32): IntStream[ef, r] \ Write(r) = 
-        import static java.util.stream.IntStream.rangeClosed(Int32, Int32): ##java.util.stream.IntStream \ r;
-        IntStream(rc, rangeClosed(b, e))
+    pub def rangeClosed(rc: Region[r], b: Int32, e: Int32): IntStream[ef, r] = 
+        import static java.util.stream.IntStream.rangeClosed(Int32, Int32): ##java.util.stream.IntStream \ {};
+        IntStream(rc, checked_ecast(rangeClosed(b, e)))
 
     pub def boxed(rc: Region[r1], s: IntStream[ef, r]): Stream[##java.lang.Integer, r1] \ {ef, Read(r)} = 
         import java.util.stream.IntStream.boxed(): ##java.util.stream.Stream \ {ef, r};
@@ -105,31 +105,31 @@ namespace Interop/Util/Stream/IntStream {
         let IntStream(_, s1) = s;
         count(s1)
 
-    // pub def concat(s: IntStream[ef1, r], t: IntStream[ef2, r]): IntStream[ef1 and ef2, r] = 
-    //     import static java.util.stream.IntStream.concat(##java.util.stream.IntStream, ##java.util.stream.IntStream): ##java.util.stream.IntStream \ r;
-    //     let IntStream(rc, s1) = s;
-    //     let IntStream(_, t1) = t;
-    //     IntStream(rc, concat(s1, t1))
+    pub def concat(s: IntStream[ef1, r], t: IntStream[ef2, r]): IntStream[ef1 and ef2, r] = 
+        import static java.util.stream.IntStream.concat(##java.util.stream.IntStream, ##java.util.stream.IntStream): ##java.util.stream.IntStream \ {};
+        let IntStream(rc, s1) = s;
+        let IntStream(_, t1) = t;
+        IntStream(rc, checked_ecast(concat(s1, t1)))
 
 
-    // pub def filter(p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): IntStream[ef and ef1, r] = 
-    //     import java.util.stream.IntStream.filter(IntPredicate): ##java.util.stream.IntStream \ {};
-    //     let IntStream(rc, s1) = s;
-    //     let p1 = Interop/Util/Function/IntPredicate.makeIntPredicate(p);
-    //     IntStream(rc, filter(s1, p1))
+    pub def filter(p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): IntStream[ef and ef1, r] = 
+        import java.util.stream.IntStream.filter(IntPredicate): ##java.util.stream.IntStream \ {};
+        let IntStream(rc, s1) = s;
+        let p1 = unchecked_cast(Interop/Util/Function/IntPredicate.makeIntPredicate(p) as _ \ {});
+        IntStream(rc, checked_ecast(filter(s1, p1)))
 
-    pub def dropWhile(p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): IntStream[ef and ef1, r]= 
+    pub def dropWhile(p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): IntStream[ef and ef1, r] = 
         import java.util.stream.IntStream.dropWhile(IntPredicate): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
         let p1 = unchecked_cast(Interop/Util/Function/IntPredicate.makeIntPredicate(p) as _ \ {});
-        unchecked_cast(IntStream(rc, dropWhile(s1, p1)) as IntStream[ef and ef1, r])
+        IntStream(rc, checked_ecast(dropWhile(s1, p1)))
 
 
     pub def map(f: Int32 -> Int32 \ ef1, s: IntStream[ef, r]): IntStream[ef and ef1, r] = 
         import java.util.stream.IntStream.map(IntUnaryOperator): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
         let f1 = unchecked_cast(Interop/Util/Function/IntUnaryOperator.makeIntUnaryOperator(f) as Interop/Util/Function.IntUnaryOperator \ {});
-        unchecked_cast(IntStream(rc, map(s1, f1)) as IntStream[ef and ef1, r])
+        IntStream(rc, checked_ecast(map(s1, f1)))
 
 
     /// This is a bit wild - should we encapsulate `ef` in the IntStream type? ...
@@ -137,7 +137,7 @@ namespace Interop/Util/Stream/IntStream {
         import java.util.stream.IntStream.flatMap(IntFunction[##java.util.stream.IntStream]): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
         let f1 = unchecked_cast(Interop/Util/Function/IntFunction.makeIntFunctionWith(f, t -> {let IntStream(_, t1) = t; unchecked_cast(t1 as ##java.lang.Object)}) as _ \ {});
-        unchecked_cast(IntStream(rc, flatMap(s1, f1)) as IntStream[ef and ef1 and ef2, r])
+        IntStream(rc, checked_ecast(flatMap(s1, f1)))
 
 
     pub def forEach(f: Int32 -> Unit \ ef1, s: IntStream[ef, r]): Unit \ { ef, ef1, Read(r) } = 
