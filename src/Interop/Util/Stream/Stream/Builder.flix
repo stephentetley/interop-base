@@ -59,11 +59,11 @@ namespace Interop/Util/Stream/Stream/Builder {
             Builder(rc, add(b1, t1))
         })
 
-    pub def build(b: Builder[a, r]): Result[String, Stream[a, r]] \ Write(r) =
+    pub def build(b: Builder[a, r]): Result[String, Stream[a, ef, r]] \ Write(r) =
         Result.tryCatch(_ -> {
-            import java.util.stream.Stream$Builder.build(): ##java.util.stream.Stream \ r;
+            import java.util.stream.Stream$Builder.build(): ##java.util.stream.Stream \ {};
             let Builder(rc, b1) = b;
-            Stream(rc, build(b1))
+            Stream(rc, checked_ecast(build(b1)))
         })
 
 }

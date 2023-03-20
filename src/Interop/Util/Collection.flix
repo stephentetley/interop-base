@@ -123,10 +123,10 @@ namespace Interop/Util/Collection {
             contains(c1, x1)
         })
 
-    pub def stream(rc: Region[r1], c: Collection[a, r]): Stream[a, r1] \ { Read(r) }  with Marshal[a] =
-        import java.util.Collection.stream(): ##java.util.stream.Stream \ r; 
+    pub def stream(rc: Region[r1], c: Collection[a, r]): Stream[a, ef and r, r1] with Marshal[a] =
+        import java.util.Collection.stream(): ##java.util.stream.Stream \ {}; 
         let Collection(_, c1) = c;
-        Stream(rc, stream(c1))
+        Stream(rc, checked_ecast(stream(c1)))
 
 
     pub def fromFoldableViaArrayList(rc: Region[r], t: t[a]): Collection[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =

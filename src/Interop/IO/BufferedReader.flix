@@ -131,11 +131,11 @@ namespace Interop/IO/BufferedReader {
             close(rd1)
         })
 
-    pub def lines!(rc: Region[r1], rd: BufferedReader[r]): Result[String, Stream[String, r1]] \ { Read(r), Write(r1) } = 
+    pub def lines!(rc: Region[r1], rd: BufferedReader[r]): Result[String, Stream[String, ef and r, r1]] = 
         Result.tryCatch(_ -> {
-            import java.io.BufferedReader.lines(): ##java.util.stream.Stream \ {r, r1};
+            import java.io.BufferedReader.lines(): ##java.util.stream.Stream \ {};
             let BufferedReader(rd1) = rd;
-            Stream(rc, lines(rd1))
+            Stream(rc, checked_ecast(lines(rd1)))
         })
 
 

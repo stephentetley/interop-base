@@ -81,10 +81,10 @@ namespace Interop/Util/Stream/DoubleStream {
         DoubleStream(rc, checked_ecast(generate(s1)))
 
 
-    pub def boxed(rc: Region[r1], s: DoubleStream[ef, r]): Stream[##java.lang.Double, r1] \ {Write(r), ef} = 
-        import java.util.stream.DoubleStream.boxed(): ##java.util.stream.Stream \ {r, ef};
+    pub def boxed(rc: Region[r1], s: DoubleStream[ef, r]): Stream[##java.lang.Double, ef, r1] = 
+        import java.util.stream.DoubleStream.boxed(): ##java.util.stream.Stream \ {};
         let DoubleStream(_, s1) = s;
-        Stream(rc, boxed(s1))
+        Stream(rc, checked_ecast(boxed(s1)))
 
     pub def count(s: DoubleStream[ef, r]): Int64 \ {ef, Read(r)} = 
         import java.util.stream.DoubleStream.count(): Int64 \ {ef, r};

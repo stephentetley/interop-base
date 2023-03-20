@@ -94,10 +94,10 @@ namespace Interop/Util/Stream/IntStream {
         import static java.util.stream.IntStream.rangeClosed(Int32, Int32): ##java.util.stream.IntStream \ {};
         IntStream(rc, checked_ecast(rangeClosed(b, e)))
 
-    pub def boxed(rc: Region[r1], s: IntStream[ef, r]): Stream[##java.lang.Integer, r1] \ {ef, Read(r)} = 
-        import java.util.stream.IntStream.boxed(): ##java.util.stream.Stream \ {ef, r};
+    pub def boxed(rc: Region[r1], s: IntStream[ef, r]): Stream[##java.lang.Integer, ef, r1] = 
+        import java.util.stream.IntStream.boxed(): ##java.util.stream.Stream \ {};
         let IntStream(_, s1) = s;
-        Stream(rc, boxed(s1))
+        Stream(rc, checked_ecast(boxed(s1)))
 
     pub def count(s: IntStream[ef, r]): Int64 \ { ef, Read(r) } = 
         import java.util.stream.IntStream.count(): Int64 \ {ef, r};
@@ -139,13 +139,13 @@ namespace Interop/Util/Stream/IntStream {
         IntStream(rc, checked_ecast(flatMap(s1, f1)))
 
 
-    pub def forEach(f: Int32 -> Unit \ ef1, s: IntStream[ef, r]): Unit \ { ef, ef1, Read(r) } = 
+    pub def forEach(f: Int32 -> Unit \ ef1, s: IntStream[ef, r]): Unit \ {ef, ef1, Read(r)} = 
         import java.util.stream.IntStream.forEach(IntConsumer): Unit \ {ef, ef1, r};
         let f1 = Interop/Util/Function/IntConsumer.makeIntConsumer(f);
         let IntStream(_, s1) = s;
         forEach(s1, f1)
 
-    pub def toArray(_: Region[r1], s: IntStream[ef, r]): Array[Int32, r1] \ { ef, Read(r), Write(r1) } = 
+    pub def toArray(_: Region[r1], s: IntStream[ef, r]): Array[Int32, r1] \ {ef, Read(r), Write(r1)} = 
         import java.util.stream.IntStream.toArray(): Array[Int32, r1] \ {};
         let IntStream(_, s1) = s;
         checked_ecast(toArray(s1))

@@ -98,10 +98,10 @@ namespace Interop/Util/Stream/LongStream {
         import static java.util.stream.LongStream.rangeClosed(Int64, Int64): ##java.util.stream.LongStream \ {};
         LongStream(rc, checked_ecast(rangeClosed(b, e)))
 
-    pub def boxed(s: LongStream[ef, r]): Stream[##java.lang.Long, r] \ {ef, Write(r)} = 
-        import java.util.stream.LongStream.boxed(): ##java.util.stream.Stream \ {ef, r};
+    pub def boxed(s: LongStream[ef, r]): Stream[##java.lang.Long, ef, r] = 
+        import java.util.stream.LongStream.boxed(): ##java.util.stream.Stream \ {};
         let LongStream(rc, s1) = s;
-        Stream(rc, boxed(s1))
+        Stream(rc, checked_ecast(boxed(s1)))
 
     pub def count(s: LongStream[ef, r]): Int64 \ { ef, Read(r) } = 
         import java.util.stream.LongStream.count(): Int64 \ {ef, r};
@@ -141,7 +141,7 @@ namespace Interop/Util/Stream/LongStream {
 
 
     pub def forEach(f: Int64 -> Unit \ ef1, s: LongStream[ef, r]): Unit \ {ef, ef1, Read(r)} = 
-        import java.util.stream.LongStream.forEach(LongConsumer): Unit \ {ef, ef, r};
+        import java.util.stream.LongStream.forEach(LongConsumer): Unit \ {ef, ef1, r};
         let f1 = Interop/Util/Function/LongConsumer.makeLongConsumer(f);
         let LongStream(_, s1) = s;
         forEach(s1, f1)
