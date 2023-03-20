@@ -73,11 +73,11 @@ namespace Interop/Lang/StringZ {
             newString(arr, offset.offset, len.len)
         })
 
-    pub def chars(rc: Region[r], s: String): IntStream[r] \ Write(r) = 
+    pub def chars(rc: Region[r], s: String): IntStream[ef, r] \ Write(r) = 
         import java.lang.String.chars(): ##java.util.stream.IntStream \ r ;
         IntStream(rc, chars(s))
 
-    pub def codePoints(rc: Region[r], s: String): IntStream[r] \ Write(r) = 
+    pub def codePoints(rc: Region[r], s: String): IntStream[ef, r] \ Write(r) = 
         import java.lang.String.codePoints(): ##java.util.stream.IntStream \ r ;
         IntStream(rc, codePoints(s))
 
