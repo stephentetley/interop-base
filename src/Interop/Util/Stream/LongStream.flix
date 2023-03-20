@@ -140,8 +140,8 @@ namespace Interop/Util/Stream/LongStream {
         LongStream(rc, checked_ecast(flatMap(s1, f1)))
 
 
-    pub def forEach(f: Int64 -> Unit \ ef, s: LongStream[ef, r]): Unit \ { ef, Read(r) } = 
-        import java.util.stream.LongStream.forEach(LongConsumer): Unit \ {r, ef};
+    pub def forEach(f: Int64 -> Unit \ ef1, s: LongStream[ef, r]): Unit \ {ef, ef1, Read(r)} = 
+        import java.util.stream.LongStream.forEach(LongConsumer): Unit \ {ef, ef, r};
         let f1 = Interop/Util/Function/LongConsumer.makeLongConsumer(f);
         let LongStream(_, s1) = s;
         forEach(s1, f1)
@@ -162,21 +162,21 @@ namespace Interop/Util/Stream/LongStream {
         let LongStream(_, s1) = s;
         LongSummaryStatistics(summaryStatistics(s1))
 
-    pub def anyMatch(f: Int64 -> Bool \ ef, s: LongStream[ef, r]): Bool \ {ef, Read(r)} = 
-        import java.util.stream.LongStream.anyMatch(LongPredicate): Bool \ {ef, r};
+    pub def anyMatch(f: Int64 -> Bool \ ef1, s: LongStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
+        import java.util.stream.LongStream.anyMatch(LongPredicate): Bool \ {ef, ef1, r};
         let LongStream(_, s1) = s;
         let f1 = Interop/Util/Function/LongPredicate.makeLongPredicate(f);
         anyMatch(s1, f1)
 
-    pub def allMatch(f: Int64 -> Bool \ ef, s: LongStream[ef, r]): Bool \ {ef, Read(r)} = 
-        import java.util.stream.LongStream.allMatch(LongPredicate): Bool \ {ef, r};
+    pub def allMatch(f: Int64 -> Bool \ ef1, s: LongStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
+        import java.util.stream.LongStream.allMatch(LongPredicate): Bool \ {ef, ef1, r};
         let LongStream(_, s1) = s;
         let f1 = Interop/Util/Function/LongPredicate.makeLongPredicate(f);
         allMatch(s1, f1)
 
 
-    pub def noneMatch(f: Int64 -> Bool \ ef, s: LongStream[ef, r]): Bool \ {ef, Read(r)} = 
-        import java.util.stream.LongStream.noneMatch(LongPredicate): Bool \ {ef, r};
+    pub def noneMatch(f: Int64 -> Bool \ ef1, s: LongStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
+        import java.util.stream.LongStream.noneMatch(LongPredicate): Bool \ {ef, ef1, r};
         let LongStream(_, s1) = s;
         let f1 = Interop/Util/Function/LongPredicate.makeLongPredicate(f);
         noneMatch(s1, f1)
@@ -202,13 +202,13 @@ namespace Interop/Util/Stream/LongStream {
         let LongStream(_, s1) = s;
         min(s1) |> OptionalLong
 
-    pub def sorted(s: LongStream[ef, r]): LongStream[ef, r] \ Write(r) = 
-        import java.util.stream.LongStream.sorted(): ##java.util.stream.LongStream \ r;
+    pub def sorted(s: LongStream[ef, r]): LongStream[ef, r] = 
+        import java.util.stream.LongStream.sorted(): ##java.util.stream.LongStream \ {};
         let LongStream(rc, s1) = s;
-        LongStream(rc, sorted(s1))
+        LongStream(rc, checked_ecast(sorted(s1)))
 
-    pub def asDoubleStream(rc: Region[r1], s: LongStream[ef, r]): DoubleStream[r1] \ Write(r) = 
-        import java.util.stream.LongStream.asDoubleStream(): ##java.util.stream.DoubleStream \ r;
+    pub def asDoubleStream(rc: Region[r1], s: LongStream[ef, r]): DoubleStream[ef, r1] = 
+        import java.util.stream.LongStream.asDoubleStream(): ##java.util.stream.DoubleStream \ {};
         let LongStream(_, s1) = s;
         DoubleStream(rc, asDoubleStream(s1))
 

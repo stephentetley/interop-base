@@ -37,7 +37,6 @@ namespace Interop/Util/Stream/IntStream {
     use Interop/Util/Stream.LongStream.{LongStream}
     use Interop/Util/Stream.Stream
     use Interop/Util/Stream.Stream.{Stream}
-    use Interop/Util.IteratorZ
     use Interop/Util.IntSummaryStatistics
     use Interop/Util.IntSummaryStatistics.{IntSummaryStatistics}
     use Interop/Util.OptionalDouble
@@ -62,7 +61,7 @@ namespace Interop/Util/Stream/IntStream {
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ {} as mkIterator;
         let IntStream(_, s1) = s;
         let iter1 = mkIterator(unchecked_cast(s1 as ##java.util.stream.BaseStream));
-        let iter2 = checked_ecast(Interop/Util/IteratorZ.wrapHH(rc, iter1)); // as IteratorZ[Int32, ef, r]);
+        let iter2 = checked_ecast(Interop/Util/IteratorZ.wrapHH(rc, iter1));
         Interop/Util/IteratorZ.iterator(rc, iter2)
 
     pub def empty(rc: Region[r]): IntStream[ef, r] = 
@@ -141,7 +140,7 @@ namespace Interop/Util/Stream/IntStream {
 
 
     pub def forEach(f: Int32 -> Unit \ ef1, s: IntStream[ef, r]): Unit \ { ef, ef1, Read(r) } = 
-        import java.util.stream.IntStream.forEach(IntConsumer): Unit \ {r, ef};
+        import java.util.stream.IntStream.forEach(IntConsumer): Unit \ {ef, ef1, r};
         let f1 = Interop/Util/Function/IntConsumer.makeIntConsumer(f);
         let IntStream(_, s1) = s;
         forEach(s1, f1)
@@ -162,21 +161,21 @@ namespace Interop/Util/Stream/IntStream {
         let IntStream(_, s1) = s;
         IntSummaryStatistics(summaryStatistics(s1))
 
-    pub def anyMatch(f: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {Read(r), ef, ef1} = 
-        import java.util.stream.IntStream.anyMatch(IntPredicate): Bool \ {r, ef};
+    pub def anyMatch(f: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
+        import java.util.stream.IntStream.anyMatch(IntPredicate): Bool \ {ef, ef1, r};
         let IntStream(_, s1) = s;
         let f1 = Interop/Util/Function/IntPredicate.makeIntPredicate(f);
         anyMatch(s1, f1)
 
-    pub def allMatch(f: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {Read(r), ef, ef1} = 
-        import java.util.stream.IntStream.allMatch(IntPredicate): Bool \ {r, ef};
+    pub def allMatch(f: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
+        import java.util.stream.IntStream.allMatch(IntPredicate): Bool \ {ef, ef1, r};
         let IntStream(_, s1) = s;
         let f1 = Interop/Util/Function/IntPredicate.makeIntPredicate(f);
         allMatch(s1, f1)
 
 
-    pub def noneMatch(f: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {Read(r), ef, ef1} = 
-        import java.util.stream.IntStream.noneMatch(IntPredicate): Bool \ {r, ef};
+    pub def noneMatch(f: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
+        import java.util.stream.IntStream.noneMatch(IntPredicate): Bool \ {ef, ef1, r};
         let IntStream(_, s1) = s;
         let f1 = Interop/Util/Function/IntPredicate.makeIntPredicate(f);
         noneMatch(s1, f1)
@@ -212,8 +211,8 @@ namespace Interop/Util/Stream/IntStream {
         let IntStream(_, s1) = s;
         LongStream(rc, asLongStream(s1))
 
-    pub def asDoubleStream(rc: Region[r1], s: IntStream[ef, r]): DoubleStream[r1] \ Read(r)= 
-        import java.util.stream.IntStream.asDoubleStream(): ##java.util.stream.DoubleStream \ r;
+    pub def asDoubleStream(rc: Region[r1], s: IntStream[ef, r]): DoubleStream[ef, r1] = 
+        import java.util.stream.IntStream.asDoubleStream(): ##java.util.stream.DoubleStream \ {};
         let IntStream(_, s1) = s;
         DoubleStream(rc, asDoubleStream(s1))
 
