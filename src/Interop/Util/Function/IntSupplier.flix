@@ -21,7 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// IntSupplier is not a builtin functional Interface so it is created as a new object.
     ///
-    pub type alias IntSupplier = ##java.util.function.IntSupplier
+    pub enum IntSupplier[_: Bool](##java.util.function.IntSupplier)
 
 
 }
@@ -30,15 +30,17 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/IntSupplier {
     
     use Interop/Util/Function.IntSupplier
+    use Interop/Util/Function.IntSupplier.{IntSupplier}
 
-    pub def makeIntSupplier(f: Unit -> Int32 \ ef): IntSupplier \ ef = 
-        unchecked_cast((new ##java.util.function.IntSupplier {
+    pub def makeIntSupplier(f: Unit -> Int32 \ ef): IntSupplier[ef] = 
+        IntSupplier(unchecked_cast(new ##java.util.function.IntSupplier {
             def getAsInt(_this: ##java.util.function.IntSupplier): Int32 = f()
-        }) as _ \ ef)
+        } as  _ \ {}))
 
-    pub def getAsInt(f: IntSupplier): Int32 \ ef = 
+    pub def getAsInt(f: IntSupplier[ef]): Int32 \ ef = 
         import java.util.function.IntSupplier.getAsInt(): Int32 \ ef;
-        getAsInt(f)
+        let IntSupplier(f1) = f;
+        getAsInt(f1)
 
 
 }

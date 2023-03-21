@@ -13,6 +13,19 @@ namespace TestIntStream {
         ct == 6i64
     }
 
+    @test
+    def generate01(): Bool \ {} = region rc {
+        let rx = ref 0 @ rc;
+        let gen = () -> {
+            let x = deref rx;
+            rx := x + 1;
+            x
+        };
+        let stream0 = Interop/Util/Stream/IntStream.generate(rc, gen);
+        let stream1 = Interop/Util/Stream/IntStream.limit(10i64, stream0);
+        let ct = Interop/Util/Stream/IntStream.count(stream1);
+        ct == 10i64
+    }
 /*
     @test
     def flatMap02(): Bool \ IO = 

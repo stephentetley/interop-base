@@ -79,11 +79,12 @@ namespace Interop/Util/Stream/IntStream {
     pub def iterate(rc: Region[r], seed: Int32, f: Int32 -> Int32 \ ef): IntStream[ef, r] = 
         import static java.util.stream.IntStream.iterate(Int32, IntUnaryOperator): ##java.util.stream.IntStream \ {};
         let f1 = unchecked_cast(Interop/Util/Function/IntUnaryOperator.makeIntUnaryOperator(f) as _ \ {});
-        unchecked_cast(IntStream(rc, iterate(seed, f1)) as IntStream[ef, r])
+        IntStream(rc, checked_ecast(iterate(seed, f1)))
 
     pub def generate(rc: Region[r], f: Unit -> Int32 \ ef): IntStream[ef, r] = 
-        import static java.util.stream.IntStream.generate(IntSupplier): ##java.util.stream.IntStream \ {};
-        let s1 = unchecked_cast(Interop/Util/Function/IntSupplier.makeIntSupplier(f) as _ \ {});
+        use Interop/Util/Function.IntSupplier.{IntSupplier};
+        import static java.util.stream.IntStream.generate(##java.util.function.IntSupplier): ##java.util.stream.IntStream \ {};
+        let IntSupplier(s1) = Interop/Util/Function/IntSupplier.makeIntSupplier(f);
         IntStream(rc, checked_ecast(generate(s1)))
 
     pub def range(rc: Region[r], b: Int32, e: Int32): IntStream[ef, r] = 
@@ -122,6 +123,12 @@ namespace Interop/Util/Stream/IntStream {
         let IntStream(rc, s1) = s;
         let p1 = unchecked_cast(Interop/Util/Function/IntPredicate.makeIntPredicate(p) as _ \ {});
         IntStream(rc, checked_ecast(dropWhile(s1, p1)))
+
+
+    pub def limit(size: Int64, s: IntStream[ef, r]): IntStream[ef, r] = 
+        import java.util.stream.IntStream.limit(Int64): ##java.util.stream.IntStream \ {};
+        let IntStream(rc, s1) = s;
+        IntStream(rc, checked_ecast(limit(s1, size)))
 
 
     pub def map(f: Int32 -> Int32 \ ef1, s: IntStream[ef, r]): IntStream[ef and ef1, r] = 
