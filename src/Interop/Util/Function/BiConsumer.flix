@@ -34,10 +34,6 @@ namespace Interop/Util/Function/BiConsumer {
     use Interop/Flix.MutMarshal
 
 
-    // pub def getHH(f: BiConsumer[k, v, ef]): ##java.util.function.BiConsumer \ ef = 
-    //     let BiConsumer(f1) = f;
-    //     checked_ecast(f1)
-
 
     pub def makeBiConsumer(f: (a, b) -> Unit \ ef): BiConsumer[a, b, ef] with Marshal[a], Marshal[b] = 
         let f1 = (o1, o2) -> {

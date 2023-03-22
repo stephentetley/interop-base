@@ -21,9 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// BiFunction is not a builtin functional Interface so it is created as a new object.
     ///
-    /// NOTE - type alias not enum
-    ///
-    pub type alias BiFunction[_: Type, _: Type, _: Type] = ##java.util.function.BiFunction
+    pub enum BiFunction[_: Type, _: Type, _: Type, _: Bool](##java.util.function.BiFunction)
 
 
 }
@@ -37,26 +35,28 @@ namespace Interop/Util/Function/BiFunction {
 
 
 
-    pub def makeBiFunction(f: (a, b) -> c \ ef): BiFunction[a, b, c] \ ef with Marshal[a], Marshal[b], Marshal[c] = 
+    pub def makeBiFunction(f: (a, b) -> c \ ef): BiFunction[a, b, c, ef] with Marshal[a], Marshal[b], Marshal[c] = 
         let f1 = (o1, o2) -> {
             let a = Interop/Flix/Marshal.fromJavaObject(o1); 
             let b = Interop/Flix/Marshal.fromJavaObject(o2);
             let ans = f(a, b);
             Interop/Flix/Marshal.toJavaObject(ans)
         };
-        unchecked_cast((new ##java.util.function.BiFunction {
+        BiFunction(unchecked_cast(new ##java.util.function.BiFunction {
             def apply(_this: ##java.util.function.BiFunction, t: ##java.lang.Object, u: ##java.lang.Object): ##java.lang.Object = 
                 f1(t, u)
-        }) as _ \ ef)
+        } as _ \ {}))
 
 
-    pub def apply(f: BiFunction[a, b, c], t: a, u: b): c \ ef with Marshal[a], Marshal[b], Marshal[c]  = 
+    pub def apply(f: BiFunction[a, b, c, ef], t: a, u: b): c \ ef with Marshal[a], Marshal[b], Marshal[c]  = 
         import java.util.function.BiFunction.apply(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ ef;
-        apply(f, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u)) |> Interop/Flix/Marshal.fromJavaObject
+        let BiFunction(f1) = f;
+        apply(f1, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u)) |> Interop/Flix/Marshal.fromJavaObject
 
-    pub def andThen(f: BiFunction[a, b, c], g: Function[c, d]): BiFunction[a, b, d] = 
-        import java.util.function.BiFunction.andThen(##java.util.function.Function): ##java.util.function.BiFunction \ {};
-        andThen(f, g)
+    pub def andThen(f: BiFunction[a, b, c, ef], g: Function[c, d]): BiFunction[a, b, d, ef] = 
+        import java.util.function.BiFunction.andThen(##java.util.function.Function): ##java.util.function.BiFunction \ {ef};
+        let BiFunction(f1) = f;
+        BiFunction(unchecked_cast(andThen(f1, g) as _ \ {}))
 
 
 }
