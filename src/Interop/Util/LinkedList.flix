@@ -22,6 +22,7 @@ namespace Interop/Util {
     use Interop/Util.Collection.{Collection};
     use Interop/Util.ListZ;
     use Interop/Util.ListZ.{ListZ};
+    use Interop/Util/Function.ConsumerZ.{ConsumerZ};
 
     ///
     /// Represents a LinkedList.
@@ -63,6 +64,7 @@ namespace Interop/Util/LinkedList {
     use Interop/Util.Collection.{Collection}
     use Interop/Util.Comparator
     use Interop/Util.ImpCollection
+    use Interop/Util/Function.ConsumerZ.{ConsumerZ}
     use Interop/Flix.Marshal;
 
     
@@ -175,11 +177,12 @@ namespace Interop/Util/LinkedList {
         })
 
 
-    pub def forEach(f: a -> Unit \ ef, l: LinkedList[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
+    pub def forEach[a: Type, ef: Bool, r: Region]
+                    (f: a -> Unit \ ef, l: LinkedList[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
         Result.tryCatch(_ -> {
-            import java.util.LinkedList.forEach(##java.util.function.Consumer): Unit \ r; 
+            import java.util.LinkedList.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let LinkedList(_, l1) = l;
-            let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
+            let ConsumerZ(f1) = Interop/Util/Function/ConsumerZ.makeConsumerZ(f);
             forEach(l1, f1)
         })
 

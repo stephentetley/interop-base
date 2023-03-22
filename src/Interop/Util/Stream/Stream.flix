@@ -32,7 +32,8 @@ namespace Interop/Util/Stream/Stream {
     use Interop/Util/Stream.Stream.{Stream}
     use Interop/Util/Stream.Collector
     use Interop/Util/Stream/Stream.Builder.{Builder}
-    use Interop/Util/Function.Consumer
+    // use Interop/Util/Function.Consumer
+    use Interop/Util/Function.ConsumerZ.{ConsumerZ}
     use Interop/Util/Function.Function
     use Interop/Util/Function.Predicate
     use Interop/Util/Function.Supplier
@@ -140,9 +141,10 @@ namespace Interop/Util/Stream/Stream {
         let f1 = unchecked_cast(Interop/Util/Function/Function.makeFunctionWith(f, Interop/Flix/Marshal.fromJavaObject, strm -> unchecked_cast(strm as ##java.lang.Object)) as _ \ {});
         Stream(rc, checked_ecast(flatMap(s1, f1)))
 
-    pub def forEach(f: a -> Unit \ ef1, s: Stream[a, ef, r]): Unit \ {ef, ef1, Read(r)} with Marshal[a] = 
-        import java.util.stream.Stream.forEach(Consumer[a]): Unit \ {ef, ef1, r};
-        let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
+    pub def forEach[a: Type, ef: Bool, ef1: Region, r: Region]
+                    (f: a -> Unit \ ef1, s: Stream[a, ef, r]): Unit \ {ef, ef1, Read(r)} with Marshal[a] = 
+        import java.util.stream.Stream.forEach(##java.util.function.Consumer): Unit \ {ef, ef1, r};
+        let ConsumerZ(f1) = Interop/Util/Function/ConsumerZ.makeConsumerZ(f);
         let Stream(_, s1) = s;
         forEach(s1, f1)
 

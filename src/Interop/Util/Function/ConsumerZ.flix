@@ -21,26 +21,27 @@ namespace Interop/Util/Function {
     ///
     /// Consumer is a builtin functional Interface.
     ///
-    pub type alias Consumer[_: Type] = ##java.util.function.Consumer
+    pub enum ConsumerZ[_: Type, _: Bool](##java.util.function.Consumer)
 
 
 
 }
 
 
-namespace Interop/Util/Function/Consumer {
+namespace Interop/Util/Function/ConsumerZ {
     
-    use Interop/Util/Function.Consumer
+    use Interop/Util/Function.ConsumerZ
+    use Interop/Util/Function.ConsumerZ.{ConsumerZ}
     use Interop/Flix.Marshal
 
 
-    pub def makeConsumer(f: a -> Unit \ ef): Consumer[a] \ ef with Marshal[a] = 
-        unchecked_cast((Interop/Flix/Marshal.fromJavaObject >> f) as Consumer[a] \ ef)
+    pub def makeConsumerZ(f: a -> Unit \ ef): ConsumerZ[a, ef] with Marshal[a] = 
+        ConsumerZ(unchecked_cast((Interop/Flix/Marshal.fromJavaObject >> f) as ##java.util.function.Consumer))
 
 
     // /// Result?
-    // pub def andThen(f: IntConsumer, g: IntConsumer): IntConsumer = 
-    //     import java.util.function.IntConsumer.andThen(##java.util.function.IntConsumer): ##java.util.function.IntConsumer \ {};
+    // pub def andThen(f: Consumer, g: Consumer): Consumer = 
+    //     import java.util.function.Consumer.andThen(##java.util.function.Consumer): ##java.util.function.Consumer \ {};
     //     let IntConsumer(f1) = f;
     //     let IntConsumer(g1) = g;
     //     andThen(f1, g1) |> IntConsumer

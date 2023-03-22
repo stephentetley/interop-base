@@ -20,6 +20,7 @@ namespace Interop/Util {
     use Interop/Util.ListZ.{ListZ}
     use Interop/Util.Collection
     use Interop/Util.Collection.{Collection}
+    use Interop/Util/Function.ConsumerZ.{ConsumerZ}
 
     ///
     /// Represents a Java List.
@@ -58,6 +59,7 @@ namespace Interop/Util/ListZ {
     use Interop/Util.Collection.{Collection}
     use Interop/Util.Comparator
     use Interop/Util.ImpListZ
+    use Interop/Util/Function.ConsumerZ.{ConsumerZ}
     use Interop/Flix.Marshal
 
 
@@ -202,11 +204,12 @@ namespace Interop/Util/ListZ {
             retainAll(l1, c1)
         })
 
-    pub def forEach(f: a -> Unit \ ef, l: ListZ[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
+    pub def forEach[a: Type, ef: Bool, r: Region]
+                    (f: a -> Unit \ ef, l: ListZ[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
         Result.tryCatch(_ -> {
-            import java.util.List.forEach(##java.util.function.Consumer): Unit \ r; 
+            import java.util.List.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let ListZ(_, l1) = l;
-            let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
+            let ConsumerZ(f1) = Interop/Util/Function/ConsumerZ.makeConsumerZ(f);
             forEach(l1, f1)
         })
 

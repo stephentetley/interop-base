@@ -44,7 +44,7 @@ namespace Interop/Util/Collection {
     use Interop/Util.ImpCollection
     use Interop/Util/Stream.Stream
     use Interop/Util/Stream.Stream.{Stream}
-
+    use Interop/Util/Function.ConsumerZ.{ConsumerZ}
     use Interop/Flix.Marshal
 
 
@@ -105,11 +105,12 @@ namespace Interop/Util/Collection {
             unchecked_cast(removeIf(c1, f1) as _ \ {ef, Write(r)})
         })
 
-    pub def forEach(f: a -> Unit \ ef, c: Collection[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
+    pub def forEach[a: Type, ef: Bool, r: Region]
+                    (f: a -> Unit \ ef, c: Collection[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
         Result.tryCatch(_ -> {
-            import java.util.Collection.forEach(##java.util.function.Consumer): Unit \ r; 
+            import java.util.Collection.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let Collection(_, c1) = c;
-            let f1 = Interop/Util/Function/Consumer.makeConsumer(f);
+            let ConsumerZ(f1) = Interop/Util/Function/ConsumerZ.makeConsumerZ(f);
             forEach(c1, f1)
         })
 
