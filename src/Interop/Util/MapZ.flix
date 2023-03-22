@@ -49,6 +49,8 @@ namespace Interop/Util/MapZ {
     use Interop/Util.SetZ
     use Interop/Util.SetZ.{SetZ}
     use Interop/Util.ImpMapZ
+    use Interop/Util/Function.BiConsumer
+    use Interop/Util/Function.BiConsumer.{BiConsumer}
     use Interop/Flix.Marshal
 
     pub def getHH(m: MapZ[k, v, r]): ##java.util.Map = 
@@ -200,11 +202,13 @@ namespace Interop/Util/MapZ {
             remove(m1, k1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject)
         })
 
-    pub def forEach(f: (k, v) -> Unit \ ef, m: MapZ[k, v, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[k], Marshal[v] =
+    /// Note - needs kinds specifying...
+    pub def forEach[k: Type, v: Type, ef: Bool, r: Region]
+                    (f: (k, v) -> Unit \ ef, m: MapZ[k, v, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[k], Marshal[v] =
         Result.tryCatch(_ -> {
-            import java.util.Map.forEach(##java.util.function.BiConsumer): Unit \ r; 
+            import java.util.Map.forEach(##java.util.function.BiConsumer): Unit \ {ef, r}; 
             let MapZ(_, m1) = m;
-            let f1 = Interop/Util/Function/BiConsumer.makeBiConsumer(f);
+            let BiConsumer(f1) = Interop/Util/Function/BiConsumer.makeBiConsumer(f);
             forEach(m1, f1)
         })
 

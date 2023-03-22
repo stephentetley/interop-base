@@ -127,6 +127,11 @@ namespace Interop/Util/Stream/LongStream {
         let p1 = unchecked_cast(Interop/Util/Function/LongPredicate.makeLongPredicate(p) as _ \ {});
         LongStream(rc, checked_ecast(dropWhile(s1, p1)))
 
+    pub def limit(size: Int64, s: LongStream[ef, r]): LongStream[ef, r] = 
+        import java.util.stream.LongStream.limit(Int64): ##java.util.stream.LongStream \ {};
+        let LongStream(rc, s1) = s;
+        LongStream(rc, checked_ecast(limit(s1, size)))
+
     pub def map(f: Int64 -> Int64 \ ef1, s: LongStream[ef, r]): LongStream[ef and ef1, r] = 
         import java.util.stream.LongStream.map(LongUnaryOperator): ##java.util.stream.LongStream \ {};
         let LongStream(rc, s1) = s;

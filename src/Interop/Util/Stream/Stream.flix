@@ -122,6 +122,11 @@ namespace Interop/Util/Stream/Stream {
         let p1 = unchecked_cast(Interop/Util/Function/Predicate.makePredicate(p) as _ \ {});
         Stream(rc, checked_ecast(dropWhile(s1, p1)))
 
+    pub def limit(size: Int64, s: Stream[a, ef, r]): Stream[a, ef, r] = 
+        import java.util.stream.Stream.limit(Int64): ##java.util.stream.Stream \ {};
+        let Stream(rc, s1) = s;
+        Stream(rc, checked_ecast(limit(s1, size)))
+
     pub def map(f: a -> b \ ef, s: Stream[a, ef, r]): Stream[b, ef and ef1, r] with Marshal[a], Marshal[b] = 
         import java.util.stream.Stream.map(Function[a, b]): ##java.util.stream.Stream \ {};
         let Stream(rc, s1) = s;

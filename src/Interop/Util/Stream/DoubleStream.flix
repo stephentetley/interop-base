@@ -110,6 +110,11 @@ namespace Interop/Util/Stream/DoubleStream {
         let p1 = unchecked_cast(Interop/Util/Function/DoublePredicate.makeDoublePredicate(p) as _ \ {});
         DoubleStream(rc, checked_ecast(dropWhile(s1, p1)))
 
+    pub def limit(size: Int64, s: DoubleStream[ef, r]): DoubleStream[ef, r] = 
+        import java.util.stream.DoubleStream.limit(Int64): ##java.util.stream.DoubleStream \ {};
+        let DoubleStream(rc, s1) = s;
+        DoubleStream(rc, checked_ecast(limit(s1, size)))
+
     pub def map(f: Float64 -> Float64 \ ef1, s: DoubleStream[ef, r]): DoubleStream[ef and ef1, r] = 
         import java.util.stream.DoubleStream.map(DoubleUnaryOperator): ##java.util.stream.DoubleStream \ {};
         let DoubleStream(rc, s1) = s;

@@ -21,7 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// BiConsumer is not a builtin functional Interface so it is created as a new object.
     ///
-    pub type alias BiConsumer[_: Type, _: Type] = ##java.util.function.BiConsumer
+    pub enum BiConsumer[_: Type, _: Type, _: Bool](##java.util.function.BiConsumer)
 
 }
 
@@ -29,52 +29,59 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/BiConsumer {
     
     use Interop/Util/Function.BiConsumer
+    use Interop/Util/Function.BiConsumer.{BiConsumer}
     use Interop/Flix.Marshal
     use Interop/Flix.MutMarshal
 
 
-    pub def makeBiConsumer(f: (a, b) -> Unit \ ef): BiConsumer[a, b] \ ef with Marshal[a], Marshal[b] = 
+    // pub def getHH(f: BiConsumer[k, v, ef]): ##java.util.function.BiConsumer \ ef = 
+    //     let BiConsumer(f1) = f;
+    //     checked_ecast(f1)
+
+
+    pub def makeBiConsumer(f: (a, b) -> Unit \ ef): BiConsumer[a, b, ef] with Marshal[a], Marshal[b] = 
         let f1 = (o1, o2) -> {
             let a = Interop/Flix/Marshal.fromJavaObject(o1); 
             let b = Interop/Flix/Marshal.fromJavaObject(o2);
             f(a, b)
         };
-        unchecked_cast((new ##java.util.function.BiConsumer {
+        BiConsumer(unchecked_cast(new ##java.util.function.BiConsumer {
             def accept(_this: ##java.util.function.BiConsumer, t: ##java.lang.Object, u: ##java.lang.Object): Unit = 
                 f1(t, u)
-        }) as _ \ ef)
+        } as _ \ {}))
 
 
     /// Collector imposes arg order: collection * element
     pub def makeAccumulator[a: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
-                            (r: Region[r], f: (t[a, r], a) -> Unit \ ef): BiConsumer[t[a, r], a] \ ef with Marshal[a], MutMarshal[t] = 
+                            (r: Region[r], f: (t[a, r], a) -> Unit \ ef): BiConsumer[t[a, r], a, ef] with Marshal[a], MutMarshal[t] = 
         let f1 = (o1, o2) -> {
             let t = Interop/Flix/MutMarshal.mmFromJavaObject(r, o1); 
             let a = Interop/Flix/Marshal.fromJavaObject(o2);
             f(t, a)
         };
-        unchecked_cast((new ##java.util.function.BiConsumer {
+        BiConsumer(unchecked_cast(new ##java.util.function.BiConsumer {
             def accept(_this: ##java.util.function.BiConsumer, t: ##java.lang.Object, u: ##java.lang.Object): Unit = 
                 f1(t, u)
-        }) as _ \ ef)
+        } as _ \ {}))
 
 
     pub def makeBiConsumer2(f: (a, b) -> Unit \ ef, 
                             castToA: ##java.lang.Object -> a,
-                            castToB: ##java.lang.Object -> b): BiConsumer[a, b] \ ef = 
+                            castToB: ##java.lang.Object -> b): BiConsumer[a, b, ef] = 
         let f1 = (o1, o2) -> {
             let a = castToA(o1); 
             let b = castToB(o2);
             f(a, b)
         };
-        unchecked_cast((new ##java.util.function.BiConsumer {
+        BiConsumer(unchecked_cast(new ##java.util.function.BiConsumer {
             def accept(_this: ##java.util.function.BiConsumer, t: ##java.lang.Object, u: ##java.lang.Object): Unit = 
                 f1(t, u)
-        }) as _ \ ef)
+        } as _ \ {}))
 
         
-    pub def accept(t: a, u: b, f: BiConsumer[a, b]): Unit \ ef with Marshal[a], Marshal[b] = 
+    pub def accept(t: a, u: b, f: BiConsumer[a, b, ef]): Unit \ ef with Marshal[a], Marshal[b] = 
         import java.util.function.BiConsumer.accept(##java.lang.Object, ##java.lang.Object): Unit \ ef;
-        accept(f, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u))
+        let BiConsumer(f1) = f;
+        accept(f1, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u))
 
 }

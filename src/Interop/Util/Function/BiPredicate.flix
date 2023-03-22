@@ -21,7 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// BiPredicate is not a builtin functional Interface so it is created as a new object.
     ///
-    pub type alias BiPredicate[_: Type, _: Type] = ##java.util.function.BiPredicate
+    pub enum BiPredicate[_: Type, _: Type, _: Bool](##java.util.function.BiPredicate)
 
 }
 
@@ -32,21 +32,22 @@ namespace Interop/Util/Function/BiPredicate {
     use Interop/Flix.Marshal
 
 
-    pub def makeBiPredicate(f: (a, b) -> Bool \ ef): BiPredicate[a, b] \ ef with Marshal[a], Marshal[b] = 
+    pub def makeBiPredicate(f: (a, b) -> Bool \ ef): BiPredicate[a, b, ef] with Marshal[a], Marshal[b] = 
         let f1 = (o1, o2) -> {
             let a = Interop/Flix/Marshal.fromJavaObject(o1); 
             let b = Interop/Flix/Marshal.fromJavaObject(o2);
             f(a, b)
         };
-        unchecked_cast((new ##java.util.function.BiPredicate {
+        BiPredicate(unchecked_cast(new ##java.util.function.BiPredicate {
             def test(_this: ##java.util.function.BiPredicate, t: ##java.lang.Object, u: ##java.lang.Object): Bool = 
                 f1(t, u)
-        }) as _ \ ef)
+        } as _ \ {}))
 
 
         
-    pub def test(t: a, u: b, f: BiPredicate[a, b]): Bool \ ef with Marshal[a], Marshal[b] = 
+    pub def test(t: a, u: b, f: BiPredicate[a, b, ef]): Bool \ ef with Marshal[a], Marshal[b] = 
         import java.util.function.BiPredicate.test(##java.lang.Object, ##java.lang.Object): Bool \ ef;
-        test(f, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u))
+        let BiPredicate(f1) = f;
+        test(f1, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u))
 
 }
