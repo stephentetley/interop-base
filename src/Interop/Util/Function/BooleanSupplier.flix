@@ -21,7 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// BooleanSupplier is not a builtin functional Interface so it is created as a new object.
     ///
-    pub type alias BooleanSupplier = ##java.util.function.BooleanSupplier
+    pub enum BooleanSupplier[_: Bool](##java.util.function.BooleanSupplier)
 
 
 }
@@ -30,15 +30,17 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/BooleanSupplier {
     
     use Interop/Util/Function.BooleanSupplier
+    use Interop/Util/Function.BooleanSupplier.{BooleanSupplier}
 
-    pub def makeBooleanSupplier(f: Unit -> Bool \ ef): BooleanSupplier \ ef = 
-        unchecked_cast((new ##java.util.function.BooleanSupplier {
+    pub def makeBooleanSupplier(f: Unit -> Bool \ ef): BooleanSupplier[ef] = 
+        BooleanSupplier(unchecked_cast(new ##java.util.function.BooleanSupplier {
             def getAsBoolean(_this: ##java.util.function.BooleanSupplier): Bool = f()
-        }) as _ \ ef)
+        } as _ \ {}))
 
-    pub def getAsBoolean(f: BooleanSupplier): Bool \ ef = 
+    pub def getAsBoolean(f: BooleanSupplier[ef]): Bool \ ef = 
         import java.util.function.BooleanSupplier.getAsBoolean(): Bool \ ef;
-        getAsBoolean(f)
+        let BooleanSupplier(f1) = f;
+        getAsBoolean(f1)
 
 
 }

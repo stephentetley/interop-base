@@ -21,9 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// BinaryOperator is not a builtin functional Interface so it is created as a new object.
     ///
-    /// NOTE - type alias not enum
-    ///    
-    pub type alias BinaryOperator[_: Type] = ##java.util.function.BinaryOperator
+    pub enum BinaryOperator[_: Type, _: Bool](##java.util.function.BinaryOperator)
 
 
 
@@ -33,51 +31,53 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/BinaryOperator {
     
     use Interop/Util/Function.BinaryOperator
+    use Interop/Util/Function.BinaryOperator.{BinaryOperator}
     use Interop/Flix.Marshal
     use Interop/Flix.MutMarshal
     
 
-    pub def makeBinaryOperator(f: (a, a) -> a \ ef): BinaryOperator[a] \ ef with Marshal[a] = 
+    pub def makeBinaryOperator(f: (a, a) -> a \ ef): BinaryOperator[a, ef] with Marshal[a] = 
         let f1 = (o1, o2) -> {
             let a = Interop/Flix/Marshal.fromJavaObject(o1); 
             let b = Interop/Flix/Marshal.fromJavaObject(o2); 
             let ans = f(a, b);
             Interop/Flix/Marshal.toJavaObject(ans)
         };
-        unchecked_cast((new ##java.util.function.BinaryOperator {
+        BinaryOperator(unchecked_cast(new ##java.util.function.BinaryOperator {
             def apply(_this: ##java.util.function.BinaryOperator, t: ##java.lang.Object, u: ##java.lang.Object): ##java.lang.Object = 
                 f1(t, u)
-        }) as _ \ ef)
+        } as _ \ {}))
 
 
     pub def makeCombiner[a: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
-                        (r: Region[r], f: (t[a, r], t[a, r]) -> t[a, r] \ef): BinaryOperator[t[a, r]] \ef with MutMarshal[t] = 
+                        (r: Region[r], f: (t[a, r], t[a, r]) -> t[a, r] \ef): BinaryOperator[t[a, r], ef] with MutMarshal[t] = 
         let f1 = (o1, o2) -> {
             let a = Interop/Flix/MutMarshal.mmFromJavaObject(r, o1); 
             let b = Interop/Flix/MutMarshal.mmFromJavaObject(r, o2); 
             let ans = f(a, b);
             Interop/Flix/MutMarshal.mmToJavaObject(ans)
         };
-        unchecked_cast((new ##java.util.function.BinaryOperator {
+        BinaryOperator(unchecked_cast(new ##java.util.function.BinaryOperator {
             def apply(_this: ##java.util.function.BinaryOperator, t: ##java.lang.Object, u: ##java.lang.Object): ##java.lang.Object = 
                 f1(t, u)
-        }) as _ \ ef)
+        } as _ \ {}))
 
-    pub def makeBinaryOperator2(f: (a, a) -> a \ ef, castToObj: a -> ##java.lang.Object, castToA: ##java.lang.Object -> a): BinaryOperator[a] \ ef = 
+    pub def makeBinaryOperator2(f: (a, a) -> a \ ef, castToObj: a -> ##java.lang.Object, castToA: ##java.lang.Object -> a): BinaryOperator[a, ef] = 
         let f1 = (o1, o2) -> {
             let a = castToA(o1); 
             let b = castToA(o2); 
             let ans = f(a, b);
             castToObj(ans)
         };
-        unchecked_cast((new ##java.util.function.BinaryOperator {
+        BinaryOperator(unchecked_cast(new ##java.util.function.BinaryOperator {
             def apply(_this: ##java.util.function.BinaryOperator, t: ##java.lang.Object, u: ##java.lang.Object): ##java.lang.Object = 
                 f1(t, u)
-        }) as _ \ ef)
+        } as _ \ {}))
 
-    pub def apply(t: a, u: a, f: BinaryOperator[a]): a \ ef with Marshal[a] = 
+    pub def apply(t: a, u: a, f: BinaryOperator[a, ef]): a \ ef with Marshal[a] = 
         import java.util.function.BinaryOperator.apply(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ ef;        
-        apply(f, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u)) |> Interop/Flix/Marshal.fromJavaObject
+        let BinaryOperator(f1) = f;
+        apply(f1, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u)) |> Interop/Flix/Marshal.fromJavaObject
 
 
 }
