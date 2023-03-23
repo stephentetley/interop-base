@@ -33,7 +33,6 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/UnaryOperator {
     
     use Interop/Util/Function.UnaryOperator
-    use Interop/Util/Function.Function
     use Interop/Flix.Marshal
     
 

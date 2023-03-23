@@ -32,9 +32,8 @@ namespace Interop/Util/Stream/Stream {
     use Interop/Util/Stream.Stream.{Stream}
     use Interop/Util/Stream.Collector
     use Interop/Util/Stream/Stream.Builder.{Builder}
-    // use Interop/Util/Function.Consumer
     use Interop/Util/Function.ConsumerZ.{ConsumerZ}
-    use Interop/Util/Function.Function
+    use Interop/Util/Function.FunctionZ.{FunctionZ}
     use Interop/Util/Function.Predicate
     use Interop/Util/Function.Supplier
     use Interop/Util/Function.UnaryOperator    
@@ -129,16 +128,16 @@ namespace Interop/Util/Stream/Stream {
         Stream(rc, checked_ecast(limit(s1, size)))
 
     pub def map(f: a -> b \ ef, s: Stream[a, ef, r]): Stream[b, ef and ef1, r] with Marshal[a], Marshal[b] = 
-        import java.util.stream.Stream.map(Function[a, b]): ##java.util.stream.Stream \ {};
+        import java.util.stream.Stream.map(##java.util.function.Function): ##java.util.stream.Stream \ {};
         let Stream(rc, s1) = s;
-        let f1 = unchecked_cast(Interop/Util/Function/Function.makeFunction(f) as _ \ {});
+        let FunctionZ(f1) =Interop/Util/Function/FunctionZ.makeFunctionZ(f);
         Stream(rc, checked_ecast(map(s1, f1)))
 
     /// Warning `f1` ...
     pub def flatMap(f: a -> Stream[b, ef1, r] \ ef2, s: Stream[a, ef, r]): Stream[b, ef and ef1 and ef2, r] with Marshal[a], Marshal[b] = 
-        import java.util.stream.Stream.flatMap(Function[a, ##java.util.stream.Stream]): ##java.util.stream.Stream \ {};
+        import java.util.stream.Stream.flatMap(##java.util.function.Function): ##java.util.stream.Stream \ {};
         let Stream(rc, s1) = s;
-        let f1 = unchecked_cast(Interop/Util/Function/Function.makeFunctionWith(f, Interop/Flix/Marshal.fromJavaObject, strm -> unchecked_cast(strm as ##java.lang.Object)) as _ \ {});
+        let FunctionZ(f1) = Interop/Util/Function/FunctionZ.makeFunctionZWith(f, Interop/Flix/Marshal.fromJavaObject, strm -> unchecked_cast(strm as ##java.lang.Object));
         Stream(rc, checked_ecast(flatMap(s1, f1)))
 
     pub def forEach[a: Type, ef: Bool, ef1: Region, r: Region]

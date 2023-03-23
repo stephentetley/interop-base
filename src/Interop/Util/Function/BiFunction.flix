@@ -29,13 +29,16 @@ namespace Interop/Util/Function {
 
 namespace Interop/Util/Function/BiFunction {
     
-    use Interop/Util/Function.BiFunction    
-    use Interop/Util/Function.Function
+    use Interop/Util/Function.BiFunction
+    use Interop/Util/Function.BiFunction.{BiFunction}
+    use Interop/Util/Function.FunctionZ
+    use Interop/Util/Function.FunctionZ.{FunctionZ}
     use Interop/Flix.Marshal
 
 
 
-    pub def makeBiFunction(f: (a, b) -> c \ ef): BiFunction[a, b, c, ef] with Marshal[a], Marshal[b], Marshal[c] = 
+    pub def makeBiFunction[a: Type, b: Type, c: Type, ef: Bool]
+                            (f: (a, b) -> c \ ef): BiFunction[a, b, c, ef] with Marshal[a], Marshal[b], Marshal[c] = 
         let f1 = (o1, o2) -> {
             let a = Interop/Flix/Marshal.fromJavaObject(o1); 
             let b = Interop/Flix/Marshal.fromJavaObject(o2);
@@ -45,7 +48,7 @@ namespace Interop/Util/Function/BiFunction {
         BiFunction(unchecked_cast(new ##java.util.function.BiFunction {
             def apply(_this: ##java.util.function.BiFunction, t: ##java.lang.Object, u: ##java.lang.Object): ##java.lang.Object = 
                 f1(t, u)
-        } as _ \ {}))
+        } as ##java.util.function.BiFunction \ {}))
 
 
     pub def apply(f: BiFunction[a, b, c, ef], t: a, u: b): c \ ef with Marshal[a], Marshal[b], Marshal[c]  = 
@@ -53,10 +56,12 @@ namespace Interop/Util/Function/BiFunction {
         let BiFunction(f1) = f;
         apply(f1, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u)) |> Interop/Flix/Marshal.fromJavaObject
 
-    pub def andThen(f: BiFunction[a, b, c, ef], g: Function[c, d]): BiFunction[a, b, d, ef] = 
-        import java.util.function.BiFunction.andThen(##java.util.function.Function): ##java.util.function.BiFunction \ {ef};
+    pub def andThen[a: Type, b: Type, c: Type, d: Type, ef1: Bool, ef2: Bool]
+                    (f: BiFunction[a, b, c, ef1], g: FunctionZ[c, d, ef2]): BiFunction[a, b, d, ef1 and ef2] = 
+        import java.util.function.BiFunction.andThen(##java.util.function.Function): ##java.util.function.BiFunction \ {};
         let BiFunction(f1) = f;
-        BiFunction(unchecked_cast(andThen(f1, g) as _ \ {}))
+        let FunctionZ(g1) = g;
+        BiFunction(unchecked_cast(andThen(f1, g1) as ##java.util.function.BiFunction))
 
 
 }

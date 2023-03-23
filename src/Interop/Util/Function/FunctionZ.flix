@@ -21,54 +21,57 @@ namespace Interop/Util/Function {
     ///
     /// Function is a builtin functional Interface.
     ///
-    pub type alias Function[_: Type, _: Type] = ##java.util.function.Function
+    pub enum FunctionZ[_: Type, _: Type, _: Bool](##java.util.function.Function)
 
 
 }
 
 
-namespace Interop/Util/Function/Function {
+namespace Interop/Util/Function/FunctionZ {
     
-    use Interop/Util/Function.Function
+    use Interop/Util/Function.FunctionZ
+    use Interop/Util/Function.FunctionZ.{FunctionZ}
     use Interop/Flix.Marshal
     use Interop/Flix.MutMarshal
 
 
-    pub def makeFunction(f: a -> b \ ef): Function[a, b] \ ef with Marshal[a], Marshal[b] = 
+    pub def makeFunctionZ(f: a -> b \ ef): FunctionZ[a, b, ef] with Marshal[a], Marshal[b] = 
         let f1 = obj -> {
             let a = Interop/Flix/Marshal.fromJavaObject(obj); 
-            let ans = unchecked_cast(f(a) as _ \ IO);
+            let ans = unchecked_cast(f(a) as _ \ {});
             Interop/Flix/Marshal.toJavaObject(ans) 
         };
-        unchecked_cast(f1 as _ \ ef)
+        FunctionZ(unchecked_cast(f1 as ##java.util.function.Function))
 
 
     pub def makeSummaryFinisher[a: Type, b: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
-                                (r: Region[r], f: t[a, r] -> b \ ef): Function[t[a, r], b] \ ef with MutMarshal[t], Marshal[b] = 
+                                (r: Region[r], f: t[a, r] -> b \ ef): FunctionZ[t[a, r], b, ef] with MutMarshal[t], Marshal[b] = 
         let f1 = obj -> {
             let t1 = Interop/Flix/MutMarshal.mmFromJavaObject(r, obj);
             let ans = unchecked_cast(f(t1) as _ \ IO);
             Interop/Flix/Marshal.toJavaObject(ans) 
         };
-        unchecked_cast(f1 as _ \ ef)
+        FunctionZ(unchecked_cast(f1 as ##java.util.function.Function))
 
     pub def makeCollectionFinisher[a: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
-                                    (r: Region[r], f: t[a, r] -> t[a, r] \ ef): Function[t[a, r], t[a, r]] \ ef with MutMarshal[t] = 
+                                    (r: Region[r], f: t[a, r] -> t[a, r] \ ef): FunctionZ[t[a, r], t[a, r], ef] with MutMarshal[t] = 
         let f1 = obj -> {
             let t1 = Interop/Flix/MutMarshal.mmFromJavaObject(r, obj);
             let ans = unchecked_cast(f(t1) as _ \ IO);
             Interop/Flix/MutMarshal.mmToJavaObject(ans) 
         };
-        unchecked_cast(f1 as _ \ ef)
+        FunctionZ(unchecked_cast(f1 as ##java.util.function.Function))
 
 
-    pub def makeFunctionWith(f: a -> b \ ef, toA: ##java.lang.Object -> a, fromB: b -> ##java.lang.Object): Function[a, b] \ ef = 
-        unchecked_cast((obj -> f(toA(obj)) |> fromB) as Function[a, b] \ ef)
+
+    pub def makeFunctionZWith(f: a -> b \ ef, toA: ##java.lang.Object -> a, fromB: b -> ##java.lang.Object): FunctionZ[a, b, ef] = 
+        FunctionZ(unchecked_cast((obj -> f(toA(obj)) |> fromB) as ##java.util.function.Function))
 
 
-    pub def apply(f: Function[a, b], t: a): b \ ef with Marshal[a], Marshal[b] =
+    pub def apply(f: FunctionZ[a, b, ef], t: a): b \ ef with Marshal[a], Marshal[b] =
         let obj = Interop/Flix/Marshal.toJavaObject(t);
-        let ans = unchecked_cast(f(obj) as _ \ ef);
+        let FunctionZ(f1) = f;
+        let ans = unchecked_cast(f1(obj) as _ \ ef);
         Interop/Flix/Marshal.fromJavaObject(ans)
     
 
