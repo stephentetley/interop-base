@@ -21,9 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// DoubleBinaryOperator is not a builtin functional Interface so it is created as a new object.
     ///
-    /// NOTE - type alias not enum
-    ///    
-    pub type alias DoubleBinaryOperator = ##java.util.function.DoubleBinaryOperator
+    pub enum DoubleBinaryOperator[_: Bool](##java.util.function.DoubleBinaryOperator)
 
 
 
@@ -33,18 +31,19 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/DoubleBinaryOperator {
     
     use Interop/Util/Function.DoubleBinaryOperator
-    
+    use Interop/Util/Function.DoubleBinaryOperator.{DoubleBinaryOperator}
 
-    pub def makeDoubleBinaryOperator(f: (Float64, Float64) -> Float64 \ ef): DoubleBinaryOperator \ ef = 
-        unchecked_cast((new ##java.util.function.DoubleBinaryOperator {
+    pub def makeDoubleBinaryOperator(f: (Float64, Float64) -> Float64 \ ef): DoubleBinaryOperator[ef] = 
+        DoubleBinaryOperator(unchecked_cast(new ##java.util.function.DoubleBinaryOperator {
             def applyAsDouble(_this: ##java.util.function.DoubleBinaryOperator, t: Float64, u: Float64): Float64 = 
                 f(t, u)
-        }) as _ \ ef)
+        } as _ \ {}))
 
         
-    pub def apply(t: Float64, u: Float64, f: DoubleBinaryOperator): Float64 \ ef = 
+    pub def apply(t: Float64, u: Float64, f: DoubleBinaryOperator[ef]): Float64 \ ef = 
         import java.util.function.DoubleBinaryOperator.applyAsDouble(Float64, Float64): Float64 \ ef;        
-        applyAsDouble(f, t, u)
+        let DoubleBinaryOperator(f1) = f;
+        applyAsDouble(f1, t, u)
 
 
 }

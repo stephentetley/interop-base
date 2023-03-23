@@ -21,19 +21,20 @@ namespace Interop/Util/Function {
     ///
     /// DoubleConsumer is a builtin functional Interface.
     ///
-    pub type alias DoubleConsumer = ##java.util.function.DoubleConsumer
+    pub enum DoubleConsumerZ[_: Bool](##java.util.function.DoubleConsumer)
 
 
 
 }
 
 
-namespace Interop/Util/Function/DoubleConsumer {
+namespace Interop/Util/Function/DoubleConsumerZ {
     
-    use Interop/Util/Function.DoubleConsumer
+    use Interop/Util/Function.DoubleConsumerZ
+    use Interop/Util/Function.DoubleConsumerZ.DoubleConsumerZ
 
-
-    pub def makeDoubleConsumer(f: Float64 -> Unit \ ef): DoubleConsumer \ ef = unchecked_cast(f as DoubleConsumer \ ef)
+    pub def makeDoubleConsumerZ(f: Float64 -> Unit \ ef): DoubleConsumerZ[ef] = 
+        DoubleConsumerZ(unchecked_cast(f as ##java.util.function.DoubleConsumer))
 
 
 }

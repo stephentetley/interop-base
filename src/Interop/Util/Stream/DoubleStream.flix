@@ -37,7 +37,7 @@ namespace Interop/Util/Stream/DoubleStream {
     use Interop/Util.DoubleSummaryStatistics.{DoubleSummaryStatistics}
     use Interop/Util.OptionalDouble
     use Interop/Util.OptionalDouble.{OptionalDouble}
-    use Interop/Util/Function.DoubleConsumer
+    use Interop/Util/Function.DoubleConsumerZ.{DoubleConsumerZ}
     use Interop/Util/Function.DoubleFunction
     use Interop/Util/Function.DoublePredicate
     use Interop/Util/Function.DoubleSupplier
@@ -128,9 +128,10 @@ namespace Interop/Util/Stream/DoubleStream {
         DoubleStream(rc, checked_ecast(flatMap(s1, f1)))
 
 
-    pub def forEach(f: Float64 -> Unit \ ef1, s: DoubleStream[ef, r]): Unit \ {ef, ef1, Read(r)} = 
-        import java.util.stream.DoubleStream.forEach(DoubleConsumer): Unit \ {r, ef};
-        let f1 = Interop/Util/Function/DoubleConsumer.makeDoubleConsumer(f);
+    pub def forEach[ef: Bool, ef1: Region, r: Region]
+                    (f: Float64 -> Unit \ ef1, s: DoubleStream[ef, r]): Unit \ {ef, ef1, Read(r)} = 
+        import java.util.stream.DoubleStream.forEach(##java.util.function.DoubleConsumer): Unit \ {ef, ef1, r};
+        let DoubleConsumerZ(f1) = Interop/Util/Function/DoubleConsumerZ.makeDoubleConsumerZ(f);
         let DoubleStream(_, s1) = s;
         forEach(s1, f1)
 
