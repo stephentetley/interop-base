@@ -21,7 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// DoubleFunction is a builtin functional Interface.
     ///
-    pub type alias DoubleFunction[_: Type] = ##java.util.function.DoubleFunction
+    pub enum DoubleFunctionZ[_: Type, _: Bool](##java.util.function.DoubleFunction)
 
 
     
@@ -29,17 +29,18 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/DoubleFunction {
+namespace Interop/Util/Function/DoubleFunctionZ {
     
-    use Interop/Util/Function.DoubleFunction;
-    use Interop/Flix.Marshal;
+    use Interop/Util/Function.DoubleFunctionZ
+    use Interop/Util/Function.DoubleFunctionZ.{DoubleFunctionZ}
+    use Interop/Flix.Marshal
 
 
-    pub def makeDoubleFunction(f: Float64 -> a \ ef): DoubleFunction[a] \ ef with Marshal[a] = 
-        unchecked_cast((d -> f(d) |> Interop/Flix/Marshal.toJavaObject) as DoubleFunction[a] \ ef)
+    pub def makeDoubleFunctionZ(f: Float64 -> a \ ef): DoubleFunctionZ[a, ef] with Marshal[a] = 
+        DoubleFunctionZ(unchecked_cast((d -> f(d) |> Interop/Flix/Marshal.toJavaObject) as ##java.util.function.DoubleFunction))
 
 
-    pub def makeDoubleFunctionWith(f: Float64 -> a \ ef, castToObj: a -> ##java.lang.Object): DoubleFunction[a] \ ef = 
-        unchecked_cast((i -> f(i) |> castToObj) as DoubleFunction[a] \ ef)
+    pub def makeDoubleFunctionZWith(f: Float64 -> a \ ef, castToObj: a -> ##java.lang.Object): DoubleFunctionZ[a, ef] = 
+        DoubleFunctionZ(unchecked_cast((i -> f(i) |> castToObj) as ##java.util.function.DoubleFunction))
 
 }

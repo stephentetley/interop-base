@@ -38,7 +38,7 @@ namespace Interop/Util/Stream/DoubleStream {
     use Interop/Util.OptionalDouble
     use Interop/Util.OptionalDouble.{OptionalDouble}
     use Interop/Util/Function.DoubleConsumerZ.{DoubleConsumerZ}
-    use Interop/Util/Function.DoubleFunction
+    use Interop/Util/Function.DoubleFunctionZ.{DoubleFunctionZ}
     use Interop/Util/Function.DoublePredicate
     use Interop/Util/Function.DoubleSupplier
     use Interop/Util/Function.DoubleUnaryOperator
@@ -122,9 +122,9 @@ namespace Interop/Util/Stream/DoubleStream {
         DoubleStream(rc, checked_ecast(map(s1, f1)))
 
     pub def flatMap(f: Float64 -> DoubleStream[ef, r] \ ef, s: DoubleStream[ef, r]): DoubleStream[ef, r] = 
-        import java.util.stream.DoubleStream.flatMap(DoubleFunction[##java.util.stream.DoubleStream]): ##java.util.stream.DoubleStream \ {};
+        import java.util.stream.DoubleStream.flatMap(##java.util.function.DoubleFunction): ##java.util.stream.DoubleStream \ {};
         let DoubleStream(rc, s1) = s;
-        let f1 = unchecked_cast(Interop/Util/Function/DoubleFunction.makeDoubleFunctionWith(f, t -> {let DoubleStream(_, t1) = t; unchecked_cast(t1 as ##java.lang.Object)}) as _ \ {});
+        let DoubleFunctionZ(f1) = Interop/Util/Function/DoubleFunctionZ.makeDoubleFunctionZWith(f, t -> {let DoubleStream(_, t1) = t; unchecked_cast(t1 as ##java.lang.Object)});
         DoubleStream(rc, checked_ecast(flatMap(s1, f1)))
 
 
