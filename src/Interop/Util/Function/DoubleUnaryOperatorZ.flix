@@ -21,18 +21,19 @@ namespace Interop/Util/Function {
     ///
     /// DoubleUnaryOperator is a builtin functional Interface.
     ///
-    pub type alias DoubleUnaryOperator = ##java.util.function.DoubleUnaryOperator
+    pub enum DoubleUnaryOperatorZ[_: Bool](##java.util.function.DoubleUnaryOperator)
 
 
 }
 
 
-namespace Interop/Util/Function/DoubleUnaryOperator {
+namespace Interop/Util/Function/DoubleUnaryOperatorZ {
     
-    use Interop/Util/Function.DoubleUnaryOperator;
-    
+    use Interop/Util/Function.DoubleUnaryOperatorZ
+    use Interop/Util/Function.DoubleUnaryOperatorZ.{DoubleUnaryOperatorZ}
 
-    pub def makeDoubleUnaryOperator(f: Float64 -> Float64 \ ef): DoubleUnaryOperator \ ef = unchecked_cast(f as DoubleUnaryOperator \ ef)
+    pub def makeDoubleUnaryOperatorZ(f: Float64 -> Float64 \ ef): DoubleUnaryOperatorZ[ef] = 
+        DoubleUnaryOperatorZ(unchecked_cast(f as ##java.util.function.DoubleUnaryOperator))
 
 
 

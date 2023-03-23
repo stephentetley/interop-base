@@ -21,17 +21,19 @@ namespace Interop/Util/Function {
     ///
     /// DoublePredicate is a builtin functional Interface.
     ///
-    pub type alias DoublePredicate = ##java.util.function.DoublePredicate
+    pub enum DoublePredicateZ[_: Bool](##java.util.function.DoublePredicate)
 
 
 }
 
 
-namespace Interop/Util/Function/DoublePredicate {
+namespace Interop/Util/Function/DoublePredicateZ {
     
-    use Interop/Util/Function.DoublePredicate;
+    use Interop/Util/Function.DoublePredicateZ
+    use Interop/Util/Function.DoublePredicateZ.{DoublePredicateZ}
 
-    pub def makeDoublePredicate(f: Float64 -> Bool \ ef): DoublePredicate \ ef = unchecked_cast(f as DoublePredicate \ ef)
+    pub def makeDoublePredicateZ(f: Float64 -> Bool \ ef): DoublePredicateZ[ef] = 
+        DoublePredicateZ(unchecked_cast(f as ##java.util.function.DoublePredicate))
 
 
 }

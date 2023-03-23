@@ -21,7 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// DoubleSupplier is not a builtin functional Interface so it is created as a new object.
     ///
-    pub type alias DoubleSupplier = ##java.util.function.DoubleSupplier
+    pub enum DoubleSupplier[_: Bool](##java.util.function.DoubleSupplier)
 
 
 }
@@ -30,15 +30,17 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/DoubleSupplier {
     
     use Interop/Util/Function.DoubleSupplier
+    use Interop/Util/Function.DoubleSupplier.{DoubleSupplier}
 
-    pub def makeDoubleSupplier(f: Unit -> Float64 \ ef): DoubleSupplier \ ef = 
-        unchecked_cast((new ##java.util.function.DoubleSupplier {
+    pub def makeDoubleSupplier(f: Unit -> Float64 \ ef): DoubleSupplier[ef] = 
+        DoubleSupplier(unchecked_cast(new ##java.util.function.DoubleSupplier {
             def getAsDouble(_this: ##java.util.function.DoubleSupplier): Float64 = f()
-        }) as _ \ ef)
+        } as _ \ {}))
 
-    pub def getAsDouble(f: DoubleSupplier): Float64 \ ef = 
+    pub def getAsDouble(f: DoubleSupplier[ef]): Float64 \ ef = 
         import java.util.function.DoubleSupplier.getAsDouble(): Float64 \ ef;
-        getAsDouble(f)
+        let DoubleSupplier(f1) = f;
+        getAsDouble(f1)
 
 
 }
