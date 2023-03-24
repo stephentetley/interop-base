@@ -21,19 +21,20 @@ namespace Interop/Util/Function {
     ///
     /// IntConsumer is a builtin functional Interface.
     ///
-    pub type alias IntConsumer = ##java.util.function.IntConsumer
+    pub enum IntConsumerZ[_: Bool](##java.util.function.IntConsumer)
 
 
 
 }
 
 
-namespace Interop/Util/Function/IntConsumer {
+namespace Interop/Util/Function/IntConsumerZ {
     
-    use Interop/Util/Function.IntConsumer
+    use Interop/Util/Function.IntConsumerZ
 
 
-    pub def makeIntConsumer(f: Int32 -> Unit \ ef): IntConsumer \ ef = unchecked_cast(f as IntConsumer \ ef)
+    pub def makeIntConsumerZ(f: Int32 -> Unit \ ef): IntConsumerZ[ef] = 
+        IntConsumerZ(unchecked_cast(f as ##java.util.function.IntConsumer))
 
 
     // /// Result?

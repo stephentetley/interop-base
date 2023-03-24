@@ -21,7 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// IntBinaryOperator is not a builtin functional Interface so it is created as a new object.
     ///
-    pub type alias IntBinaryOperator = ##java.util.function.IntBinaryOperator
+    pub enum IntBinaryOperator[_: Bool](##java.util.function.IntBinaryOperator)
 
 
 }
@@ -29,13 +29,14 @@ namespace Interop/Util/Function {
 
 namespace Interop/Util/Function/IntBinaryOperator {
     
-    use Interop/Util/Function.IntBinaryOperator;
+    use Interop/Util/Function.IntBinaryOperator
+    use Interop/Util/Function.IntBinaryOperator.{IntBinaryOperator}
     
 
-    pub def makeIntBinaryOperator(f: (Int32, Int32) -> Int32 \ ef): IntBinaryOperator \ ef = 
-        unchecked_cast((new ##java.util.function.IntBinaryOperator {
+    pub def makeIntBinaryOperator(f: (Int32, Int32) -> Int32 \ ef): IntBinaryOperator[ef] = 
+        IntBinaryOperator(unchecked_cast(new ##java.util.function.IntBinaryOperator {
             def applyAsInt(_this: ##java.util.function.IntBinaryOperator, i: Int32, j: Int32): Int32 = f(i, j)
-        }) as _ \ ef)
+        } as _ \ {}))
 
 
 }

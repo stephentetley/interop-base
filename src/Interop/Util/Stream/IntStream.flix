@@ -43,7 +43,7 @@ namespace Interop/Util/Stream/IntStream {
     use Interop/Util.OptionalDouble.{OptionalDouble}
     use Interop/Util.OptionalInt
     use Interop/Util.OptionalInt.{OptionalInt}
-    use Interop/Util/Function.IntConsumer
+    use Interop/Util/Function.IntConsumerZ.{IntConsumerZ}
     use Interop/Util/Function.IntFunction
     use Interop/Util/Function.IntPredicate
     use Interop/Util/Function.IntSupplier
@@ -146,9 +146,10 @@ namespace Interop/Util/Stream/IntStream {
         IntStream(rc, checked_ecast(flatMap(s1, f1)))
 
 
-    pub def forEach(f: Int32 -> Unit \ ef1, s: IntStream[ef, r]): Unit \ {ef, ef1, Read(r)} = 
-        import java.util.stream.IntStream.forEach(IntConsumer): Unit \ {ef, ef1, r};
-        let f1 = Interop/Util/Function/IntConsumer.makeIntConsumer(f);
+    pub def forEach[ef: Bool, ef1: Bool, r: Region]
+                    (f: Int32 -> Unit \ ef1, s: IntStream[ef, r]): Unit \ {ef, ef1, Read(r)} = 
+        import java.util.stream.IntStream.forEach(##java.util.function.IntConsumer): Unit \ {ef, ef1, r};
+        let IntConsumerZ(f1) = Interop/Util/Function/IntConsumerZ.makeIntConsumerZ(f);
         let IntStream(_, s1) = s;
         forEach(s1, f1)
 
