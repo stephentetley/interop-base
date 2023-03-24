@@ -60,6 +60,7 @@ namespace Interop/Util/HashSet {
     use Interop/Util.Collection
     use Interop/Util.Collection.{Collection}
     use Interop/Util.ImpSetZ
+    use Interop/Util/Function.PredicateZ.{PredicateZ}
     use Interop/Flix.Marshal
 
 
@@ -140,11 +141,12 @@ namespace Interop/Util/HashSet {
         })
 
     
-    pub def removeIf!(f: a -> Bool \ ef, s: HashSet[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
+    pub def removeIf![a: Type, ef: Bool, r: Region]
+                        (f: a -> Bool \ ef, s: HashSet[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.HashSet.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
-            let HashSet(_, s1) = s;        
-            let f1 = Interop/Util/Function/Predicate.makePredicate(f);
+            let HashSet(_, s1) = s;
+            let PredicateZ(f1) = Interop/Util/Function/PredicateZ.makePredicateZ(f);
             unchecked_cast(removeIf(s1, f1) as _ \ {ef, Write(r)})
         })
 

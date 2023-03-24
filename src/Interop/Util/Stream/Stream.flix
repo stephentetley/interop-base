@@ -34,7 +34,7 @@ namespace Interop/Util/Stream/Stream {
     use Interop/Util/Stream/Stream.Builder.{Builder}
     use Interop/Util/Function.ConsumerZ.{ConsumerZ}
     use Interop/Util/Function.FunctionZ.{FunctionZ}
-    use Interop/Util/Function.Predicate
+    use Interop/Util/Function.PredicateZ.{PredicateZ}
     use Interop/Util/Function.Supplier
     use Interop/Util/Function.UnaryOperator    
     use Interop/Flix.Marshal;
@@ -111,15 +111,15 @@ namespace Interop/Util/Stream/Stream {
         Stream(rc, checked_ecast(concat(s1, t1)))
 
     pub def filter(p: a -> Bool \ ef1, s: Stream[a, ef, r]): Stream[a, ef and ef1, r] with Marshal[a] = 
-        import java.util.stream.Stream.filter(Predicate[a]): ##java.util.stream.Stream \ {};
+        import java.util.stream.Stream.filter(##java.util.function.Predicate): ##java.util.stream.Stream \ {};
         let Stream(rc, s1) = s;
-        let p1 = unchecked_cast(Interop/Util/Function/Predicate.makePredicate(p) as _ \ {});
+        let PredicateZ(p1) = Interop/Util/Function/PredicateZ.makePredicateZ(p);
         Stream(rc, checked_ecast(filter(s1, p1)))
 
     pub def dropWhile(p: a -> Bool \ ef1, s: Stream[a, ef, r]): Stream[a, ef and ef1, r] with Marshal[a] =
-        import java.util.stream.Stream.dropWhile(Predicate[a]): ##java.util.stream.Stream \ {};
+        import java.util.stream.Stream.dropWhile(##java.util.function.Predicate): ##java.util.stream.Stream \ {};
         let Stream(rc, s1) = s;
-        let p1 = unchecked_cast(Interop/Util/Function/Predicate.makePredicate(p) as _ \ {});
+        let PredicateZ(p1) = Interop/Util/Function/PredicateZ.makePredicateZ(p);
         Stream(rc, checked_ecast(dropWhile(s1, p1)))
 
     pub def limit(size: Int64, s: Stream[a, ef, r]): Stream[a, ef, r] = 
@@ -152,22 +152,25 @@ namespace Interop/Util/Stream/Stream {
         let Stream(_, s1) = s;
         checked_ecast(toArray(s1))
 
-    pub def anyMatch(f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, Read(r)} with Marshal[a] = 
-        import java.util.stream.Stream.anyMatch(Predicate[a]): Bool \ {r, ef, ef1};
+    pub def anyMatch[a: Type, ef: Bool, ef1: Bool, r: Region]
+                    (f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, Read(r)} with Marshal[a] = 
+        import java.util.stream.Stream.anyMatch(##java.util.function.Predicate): Bool \ {r, ef, ef1};
         let Stream(_, s1) = s;
-        let f1 = Interop/Util/Function/Predicate.makePredicate(f);
+        let PredicateZ(f1) = Interop/Util/Function/PredicateZ.makePredicateZ(f);
         anyMatch(s1, f1)
 
-    pub def allMatch(f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, Read(r)} with Marshal[a] = 
-        import java.util.stream.Stream.allMatch(Predicate[a]): Bool \ {r, ef, ef1};
+    pub def allMatch[a: Type, ef: Bool, ef1: Bool, r: Region]
+                    (f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, Read(r)} with Marshal[a] = 
+        import java.util.stream.Stream.allMatch(##java.util.function.Predicate): Bool \ {r, ef, ef1};
         let Stream(_, s1) = s;
-        let f1 = Interop/Util/Function/Predicate.makePredicate(f);
+        let PredicateZ(f1) = Interop/Util/Function/PredicateZ.makePredicateZ(f);
         allMatch(s1, f1)
 
-    pub def noneMatch(f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, Read(r)} with Marshal[a] = 
-        import java.util.stream.Stream.noneMatch(Predicate[a]): Bool \ {r, ef, ef1};
+    pub def noneMatch[a: Type, ef: Bool, ef1: Bool, r: Region]
+                        (f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, Read(r)} with Marshal[a] = 
+        import java.util.stream.Stream.noneMatch(##java.util.function.Predicate): Bool \ {r, ef, ef1};
         let Stream(_, s1) = s;
-        let f1 = Interop/Util/Function/Predicate.makePredicate(f);
+        let PredicateZ(f1) = Interop/Util/Function/PredicateZ.makePredicateZ(f);
         noneMatch(s1, f1)
 
 

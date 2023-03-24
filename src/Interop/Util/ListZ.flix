@@ -60,6 +60,7 @@ namespace Interop/Util/ListZ {
     use Interop/Util.Comparator
     use Interop/Util.ImpListZ
     use Interop/Util/Function.ConsumerZ.{ConsumerZ}
+    use Interop/Util/Function.PredicateZ.{PredicateZ}
     use Interop/Flix.Marshal
 
 
@@ -188,12 +189,13 @@ namespace Interop/Util/ListZ {
             removeAll(l1, c1)
         })
     
-    pub def removeIf!(f: a -> Bool \ ef, l: ListZ[a, r]): Result[String, Bool] \ { ef, Write(r) } with Marshal[a] =
+    pub def removeIf![a: Type, ef: Bool, r: Region]
+                        (f: a -> Bool \ ef, l: ListZ[a, r]): Result[String, Bool] \ { ef, Write(r) } with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.List.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
-            let ListZ(_, l1) = l;        
-            let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            unchecked_cast(removeIf(l1, f1) as _ \ {ef, Write(r)})
+            let ListZ(_, l1) = l;
+            let PredicateZ(f1) = Interop/Util/Function/PredicateZ.makePredicateZ(f);
+            checked_ecast(removeIf(l1, f1))
         })
 
     pub def retainAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =

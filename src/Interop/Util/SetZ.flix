@@ -57,6 +57,7 @@ namespace Interop/Util/SetZ {
     use Interop/Util.Collection
     use Interop/Util.Collection.{Collection}
     use Interop/Util.ImpSetZ
+    use Interop/Util/Function.PredicateZ.{PredicateZ}
     use Interop/Flix.Marshal
 
 
@@ -189,12 +190,13 @@ namespace Interop/Util/SetZ {
         })
 
     
-    pub def removeIf!(f: a -> Bool \ ef, s: SetZ[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
+    pub def removeIf![a: Type, ef: Bool, r: Region]
+                        (f: a -> Bool \ ef, s: SetZ[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Set.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
-            let SetZ(_, s1) = s;        
-            let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            unchecked_cast(removeIf(s1, f1) as _ \ {ef, Write(r)})
+            let SetZ(_, s1) = s;
+            let PredicateZ(f1) = Interop/Util/Function/PredicateZ.makePredicateZ(f);
+            checked_ecast(removeIf(s1, f1))
         })
 
     pub def retainAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =

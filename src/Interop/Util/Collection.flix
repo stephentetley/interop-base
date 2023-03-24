@@ -45,6 +45,7 @@ namespace Interop/Util/Collection {
     use Interop/Util/Stream.Stream
     use Interop/Util/Stream.Stream.{Stream}
     use Interop/Util/Function.ConsumerZ.{ConsumerZ}
+    use Interop/Util/Function.PredicateZ.{PredicateZ}
     use Interop/Flix.Marshal
 
 
@@ -97,12 +98,13 @@ namespace Interop/Util/Collection {
         })
 
 
-    pub def removeIf!(f: a -> Bool \ ef, c: Collection[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
+    pub def removeIf![a: Type, ef: Bool, r: Region]
+                        (f: a -> Bool \ ef, c: Collection[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Collection.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
-            let Collection(_, c1) = c;            
-            let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            unchecked_cast(removeIf(c1, f1) as _ \ {ef, Write(r)})
+            let Collection(_, c1) = c;
+            let PredicateZ(f1) = Interop/Util/Function/PredicateZ.makePredicateZ(f);
+            checked_ecast(removeIf(c1, f1))
         })
 
     pub def forEach[a: Type, ef: Bool, r: Region]

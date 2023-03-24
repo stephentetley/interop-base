@@ -73,7 +73,8 @@ namespace Interop/Util/ArrayList {
     use Interop/Util.Collection.{Collection}
     use Interop/Util.Comparator
     use Interop/Util.ImpCollection
-    use Interop/Util/Function.ConsumerZ.{ConsumerZ}
+    use Interop/Util/Function.ConsumerZ.{ConsumerZ}    
+    use Interop/Util/Function.PredicateZ.{PredicateZ}
     use Interop/Flix.Marshal;
 
     
@@ -185,12 +186,13 @@ namespace Interop/Util/ArrayList {
             removeAll(l1, c1)
         })
 
-    pub def removeIf!(f: a -> Bool \ ef, l: ArrayList[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
+    pub def removeIf![a: Type, ef: Bool, r: Region]
+                        (f: a -> Bool \ ef, l: ArrayList[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.ArrayList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
-            let ArrayList(_, l1) = l;            
-            let f1 = Interop/Util/Function/Predicate.makePredicate(f);
-            unchecked_cast(removeIf(l1, f1) as _ \ {ef, Write(r)})
+            let ArrayList(_, l1) = l;
+            let PredicateZ(f1) = Interop/Util/Function/PredicateZ.makePredicateZ(f);
+            checked_ecast(removeIf(l1, f1))
         })
 
 

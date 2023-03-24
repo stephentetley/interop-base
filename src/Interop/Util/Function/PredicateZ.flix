@@ -21,19 +21,20 @@ namespace Interop/Util/Function {
     ///
     /// Predicate is a builtin functional Interface.
     ///
-    pub type alias Predicate[_: Type] = ##java.util.function.Predicate
+    pub enum PredicateZ[_: Type, _: Bool](##java.util.function.Predicate)
 
 
 }
 
 
-namespace Interop/Util/Function/Predicate {
+namespace Interop/Util/Function/PredicateZ {
     
-    use Interop/Util/Function.Predicate;
+    use Interop/Util/Function.PredicateZ
+    use Interop/Util/Function.PredicateZ.{PredicateZ}
     use Interop/Flix.Marshal
 
-    pub def makePredicate(f: a -> Bool \ ef): Predicate[a] \ ef with Marshal[a] = 
-        unchecked_cast(unchecked_cast(obj -> f(Interop/Flix/Marshal.fromJavaObject(obj)) as Predicate[a]) as _ \ ef)
+    pub def makePredicateZ(f: a -> Bool \ ef): PredicateZ[a, ef] with Marshal[a] = 
+        PredicateZ(unchecked_cast(obj -> f(Interop/Flix/Marshal.fromJavaObject(obj)) as ##java.util.function.Predicate))
 
 
 
