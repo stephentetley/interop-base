@@ -21,18 +21,19 @@ namespace Interop/Util/Function {
     ///
     /// IntUnaryOperator is a builtin functional Interface.
     ///
-    pub type alias IntUnaryOperator = ##java.util.function.IntUnaryOperator
+    pub enum IntUnaryOperatorZ[_: Bool](##java.util.function.IntUnaryOperator)
 
 
 }
 
 
-namespace Interop/Util/Function/IntUnaryOperator {
+namespace Interop/Util/Function/IntUnaryOperatorZ {
     
-    use Interop/Util/Function.IntUnaryOperator;
+    use Interop/Util/Function.IntUnaryOperatorZ;
     
 
-    pub def makeIntUnaryOperator(f: Int32 -> Int32 \ ef): IntUnaryOperator \ ef = unchecked_cast(f as IntUnaryOperator \ ef)
+    pub def makeIntUnaryOperatorZ(f: Int32 -> Int32 \ ef): IntUnaryOperatorZ[ef] = 
+        IntUnaryOperatorZ(unchecked_cast(f as ##java.util.function.IntUnaryOperator))
 
 
     // pub def identity(): IntUnaryOperator = 

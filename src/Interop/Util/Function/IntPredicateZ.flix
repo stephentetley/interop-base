@@ -21,17 +21,19 @@ namespace Interop/Util/Function {
     ///
     /// IntPredicate is a builtin functional Interface.
     ///
-    pub type alias IntPredicate = ##java.util.function.IntPredicate
+    pub enum IntPredicateZ[_: Bool](##java.util.function.IntPredicate)
 
 
 }
 
 
-namespace Interop/Util/Function/IntPredicate {
+namespace Interop/Util/Function/IntPredicateZ {
     
-    use Interop/Util/Function.IntPredicate;
+    use Interop/Util/Function.IntPredicateZ
+    use Interop/Util/Function.IntPredicateZ.{IntPredicateZ}
 
-    pub def makeIntPredicate(f: Int32 -> Bool \ ef): IntPredicate \ ef = unchecked_cast(f as IntPredicate \ ef)
+    pub def makeIntPredicateZ(f: Int32 -> Bool \ ef): IntPredicateZ[ef] = 
+        IntPredicateZ(unchecked_cast(f as ##java.util.function.IntPredicate))
 
 
 

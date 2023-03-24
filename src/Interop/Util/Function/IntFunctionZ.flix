@@ -21,21 +21,22 @@ namespace Interop/Util/Function {
     ///
     /// IntFunction is a builtin functional Interface.
     ///
-    pub type alias IntFunction[_: Type] = ##java.util.function.IntFunction
+    pub enum IntFunctionZ[_: Type, _: Bool](##java.util.function.IntFunction)
 
 }
 
 
-namespace Interop/Util/Function/IntFunction {
+namespace Interop/Util/Function/IntFunctionZ {
     
-    use Interop/Util/Function.IntFunction;
-    use Interop/Flix.Marshal;
+    use Interop/Util/Function.IntFunctionZ
+    use Interop/Util/Function.IntFunctionZ.{IntFunctionZ}
+    use Interop/Flix.Marshal
 
 
-    pub def makeIntFunction(f: Int32 -> a \ ef): IntFunction[a] \ ef with Marshal[a] = 
-        unchecked_cast((i -> f(i) |> Interop/Flix/Marshal.toJavaObject) as IntFunction[a] \ ef)
+    pub def makeIntFunctionZ(f: Int32 -> a \ ef): IntFunctionZ[a, ef] with Marshal[a] = 
+        IntFunctionZ(unchecked_cast((i -> f(i) |> Interop/Flix/Marshal.toJavaObject) as ##java.util.function.IntFunction))
 
-    pub def makeIntFunctionWith(f: Int32 -> a \ ef, castToObj: a -> ##java.lang.Object): IntFunction[a] \ ef = 
-        unchecked_cast((i -> f(i) |> castToObj) as IntFunction[a] \ ef)
+    pub def makeIntFunctionZWith(f: Int32 -> a \ ef, castToObj: a -> ##java.lang.Object): IntFunctionZ[a, ef] = 
+        IntFunctionZ(unchecked_cast((i -> f(i) |> castToObj) as ##java.util.function.IntFunction))
 
 }
