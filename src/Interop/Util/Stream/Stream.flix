@@ -35,8 +35,7 @@ namespace Interop/Util/Stream/Stream {
     use Interop/Util/Function.ConsumerZ.{ConsumerZ}
     use Interop/Util/Function.FunctionZ.{FunctionZ}
     use Interop/Util/Function.PredicateZ.{PredicateZ}
-    use Interop/Util/Function.Supplier
-    use Interop/Util/Function.UnaryOperator    
+    use Interop/Util/Function.UnaryOperator.{UnaryOperator}
     use Interop/Flix.Marshal;
 
     pub def getHH(x: Stream[a, ef, r]): ##java.util.stream.Stream = 
@@ -74,7 +73,7 @@ namespace Interop/Util/Stream/Stream {
     pub def iterate(rc: Region[r], seed: a, op: a -> a \ ef): Stream[a, ef, r] with Marshal[a] = 
         import static java.util.stream.Stream.iterate(##java.lang.Object, ##java.util.function.UnaryOperator): ##java.util.stream.Stream \ {};
         let seed1 = Interop/Flix/Marshal.toJavaObject(seed);
-        let op1 = unchecked_cast(Interop/Util/Function/UnaryOperator.makeUnaryOperator(op) as _ \ {});
+        let UnaryOperator(op1) = Interop/Util/Function/UnaryOperator.makeUnaryOperator(op);
         Stream(rc, checked_ecast(iterate(seed1, op1)))
 
 
