@@ -21,7 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// ToDoubleFunction is not a builtin functional Interface so it is created as a new object.
     ///
-    pub type alias ToDoubleFunction[_: Type] = ##java.util.function.ToDoubleFunction
+    pub enum ToDoubleFunction[_: Type, _: Bool](##java.util.function.ToDoubleFunction)
 
 
 }
@@ -30,17 +30,19 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/ToDoubleFunction {
     
     use Interop/Util/Function.ToDoubleFunction
+    use Interop/Util/Function.ToDoubleFunction.{ToDoubleFunction}
     use Interop/Flix.Marshal
 
-    pub def makeToDoubleFunction(f: a -> Float64 \ ef): ToDoubleFunction[a] \ ef with Marshal[a]= 
-        unchecked_cast((new ##java.util.function.ToDoubleFunction {
+    pub def makeToDoubleFunction(f: a -> Float64 \ ef): ToDoubleFunction[a, ef] with Marshal[a]= 
+        ToDoubleFunction(unchecked_cast(new ##java.util.function.ToDoubleFunction {
             def applyAsDouble(_this: ##java.util.function.ToDoubleFunction, t: ##java.lang.Object): Float64 = 
                 Interop/Flix/Marshal.fromJavaObject(t) |> f
-        }) as _ \ ef)
+        } as _ \ {}))
 
 
-    pub def applyAsDouble(f: ToDoubleFunction[a], t: a): Float64 \ ef with Marshal[a]  = 
+    pub def applyAsDouble(f: ToDoubleFunction[a, ef], t: a): Float64 \ ef with Marshal[a]  = 
         import java.util.function.ToDoubleFunction.applyAsDouble(##java.lang.Object): Float64 \ ef;
-        applyAsDouble(f, Interop/Flix/Marshal.toJavaObject(t))
+        let ToDoubleFunction(f1) = f;
+        applyAsDouble(f1, Interop/Flix/Marshal.toJavaObject(t))
 
 }

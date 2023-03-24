@@ -21,7 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// ToIntFunction is not a builtin functional Interface so it is created as a new object.
     ///
-    pub type alias ToIntFunction[_: Type] = ##java.util.function.ToIntFunction
+    pub enum ToIntFunction[_: Type, _: Bool](##java.util.function.ToIntFunction)
 
 
 }
@@ -30,17 +30,19 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/ToIntFunction {
     
     use Interop/Util/Function.ToIntFunction
+    use Interop/Util/Function.ToIntFunction.{ToIntFunction}
     use Interop/Flix.Marshal
 
-    pub def makeToIntFunction(f: a -> Int32 \ ef): ToIntFunction[a] \ ef with Marshal[a]= 
-        unchecked_cast((new ##java.util.function.ToIntFunction {
+    pub def makeToIntFunction(f: a -> Int32 \ ef): ToIntFunction[a, ef] with Marshal[a]= 
+        ToIntFunction(unchecked_cast(new ##java.util.function.ToIntFunction {
             def applyAsInt(_this: ##java.util.function.ToIntFunction, t: ##java.lang.Object): Int32 = 
                 Interop/Flix/Marshal.fromJavaObject(t) |> f
-        }) as _ \ ef)
+        } as _ \ {}))
 
 
-    pub def applyAsInt(f: ToIntFunction[a], t: a): Int32 \ ef with Marshal[a]  = 
+    pub def applyAsInt(f: ToIntFunction[a, ef], t: a): Int32 \ ef with Marshal[a]  = 
         import java.util.function.ToIntFunction.applyAsInt(##java.lang.Object): Int32 \ ef;
-        applyAsInt(f, Interop/Flix/Marshal.toJavaObject(t))
+        let ToIntFunction(f1) = f;
+        applyAsInt(f1, Interop/Flix/Marshal.toJavaObject(t))
 
 }

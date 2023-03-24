@@ -21,7 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// ToIntBiFunction is not a builtin functional Interface so it is created as a new object.
     ///
-    pub type alias ToIntBiFunction[_: Type, _: Type] = ##java.util.function.ToIntBiFunction
+    pub enum ToIntBiFunction[_: Type, _: Type, _: Bool](##java.util.function.ToIntBiFunction)
 
 
 }
@@ -30,19 +30,21 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/ToIntBiFunction {
     
     use Interop/Util/Function.ToIntBiFunction
+    use Interop/Util/Function.ToIntBiFunction.{ToIntBiFunction}
     use Interop/Flix.Marshal
 
-    pub def makeToIntBiFunction(f: (a, b) -> Int32 \ ef): ToIntBiFunction[a, b] \ ef with Marshal[a], Marshal[b] = 
-        unchecked_cast((new ##java.util.function.ToIntBiFunction {
+    pub def makeToIntBiFunction(f: (a, b) -> Int32 \ ef): ToIntBiFunction[a, b, ef] with Marshal[a], Marshal[b] = 
+        ToIntBiFunction(unchecked_cast(new ##java.util.function.ToIntBiFunction {
             def applyAsInt(_this: ##java.util.function.ToIntBiFunction, t: ##java.lang.Object, u: ##java.lang.Object): Int32 = 
                 let a1 = Interop/Flix/Marshal.fromJavaObject(t);
                 let b1 = Interop/Flix/Marshal.fromJavaObject(u);
                 f(a1, b1)
-        }) as _ \ ef)
+        } as _ \ {}))
 
 
-    pub def applyAsInt(f: ToIntBiFunction[a, b], t: a, u: b): Int32 \ ef with Marshal[a], Marshal[b] = 
+    pub def applyAsInt(f: ToIntBiFunction[a, b, ef], t: a, u: b): Int32 \ ef with Marshal[a], Marshal[b] = 
         import java.util.function.ToIntBiFunction.applyAsInt(##java.lang.Object, ##java.lang.Object): Int32 \ ef;
-        applyAsInt(f, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u))
+        let ToIntBiFunction(f1) = f;
+        applyAsInt(f1, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u))
 
 }

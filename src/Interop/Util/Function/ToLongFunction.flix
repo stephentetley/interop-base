@@ -21,7 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// ToLongFunction is not a builtin functional Interface so it is created as a new object.
     ///
-    pub type alias ToLongFunction[_: Type] = ##java.util.function.ToLongFunction
+    pub enum ToLongFunction[_: Type, _: Bool](##java.util.function.ToLongFunction)
 
 
 }
@@ -30,17 +30,19 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/ToLongFunction {
     
     use Interop/Util/Function.ToLongFunction
+    use Interop/Util/Function.ToLongFunction.{ToLongFunction}
     use Interop/Flix.Marshal
 
-    pub def makeToLongFunction(f: a -> Int64 \ ef): ToLongFunction[a] \ ef with Marshal[a]= 
-        unchecked_cast((new ##java.util.function.ToLongFunction {
+    pub def makeToLongFunction(f: a -> Int64 \ ef): ToLongFunction[a, ef] with Marshal[a]= 
+        ToLongFunction(unchecked_cast(new ##java.util.function.ToLongFunction {
             def applyAsLong(_this: ##java.util.function.ToLongFunction, t: ##java.lang.Object): Int64 = 
                 Interop/Flix/Marshal.fromJavaObject(t) |> f
-        }) as _ \ ef)
+        } as _ \ {}))
 
 
-    pub def applyAsLong(f: ToLongFunction[a], t: a): Int64 \ ef with Marshal[a]  = 
+    pub def applyAsLong(f: ToLongFunction[a, ef], t: a): Int64 \ ef with Marshal[a]  = 
         import java.util.function.ToLongFunction.applyAsLong(##java.lang.Object): Int64 \ ef;
-        applyAsLong(f, Interop/Flix/Marshal.toJavaObject(t))
+        let ToLongFunction(f1) = f;
+        applyAsLong(f1, Interop/Flix/Marshal.toJavaObject(t))
 
 }

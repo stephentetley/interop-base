@@ -21,7 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// ToLongBiFunction is not a builtin functional Interface so it is created as a new object.
     ///
-    pub type alias ToLongBiFunction[_: Type, _: Type] = ##java.util.function.ToLongBiFunction
+    pub enum ToLongBiFunction[_: Type, _: Type, _: Bool](##java.util.function.ToLongBiFunction)
 
 
 }
@@ -30,19 +30,21 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/ToLongBiFunction {
     
     use Interop/Util/Function.ToLongBiFunction
+    use Interop/Util/Function.ToLongBiFunction.{ToLongBiFunction}
     use Interop/Flix.Marshal
 
-    pub def makeToLongBiFunction(f: (a, b) -> Int64 \ ef): ToLongBiFunction[a, b] \ ef with Marshal[a], Marshal[b] = 
-        unchecked_cast((new ##java.util.function.ToLongBiFunction {
+    pub def makeToLongBiFunction(f: (a, b) -> Int64 \ ef): ToLongBiFunction[a, b, ef] with Marshal[a], Marshal[b] = 
+        ToLongBiFunction(unchecked_cast(new ##java.util.function.ToLongBiFunction {
             def applyAsLong(_this: ##java.util.function.ToLongBiFunction, t: ##java.lang.Object, u: ##java.lang.Object): Int64 = 
                 let a1 = Interop/Flix/Marshal.fromJavaObject(t);
                 let b1 = Interop/Flix/Marshal.fromJavaObject(u);
                 f(a1, b1)
-        }) as _ \ ef)
+        } as _ \ {}))
 
 
-    pub def applyAsInt(f: ToLongBiFunction[a, b], t: a, u: b): Int64 \ ef with Marshal[a], Marshal[b] = 
+    pub def applyAsInt(f: ToLongBiFunction[a, b, ef], t: a, u: b): Int64 \ ef with Marshal[a], Marshal[b] = 
         import java.util.function.ToLongBiFunction.applyAsLong(##java.lang.Object, ##java.lang.Object): Int64 \ ef;
-        applyAsLong(f, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u))
+        let ToLongBiFunction(f1) = f;
+        applyAsLong(f1, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u))
 
 }
