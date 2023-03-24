@@ -21,7 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// LongFunction is a builtin functional Interface.
     ///
-    pub type alias LongFunction[_: Type] = ##java.util.function.LongFunction
+    pub enum LongFunctionZ[_: Type, _: Bool](##java.util.function.LongFunction)
 
 
     
@@ -29,17 +29,18 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/LongFunction {
+namespace Interop/Util/Function/LongFunctionZ {
     
-    use Interop/Util/Function.LongFunction;
+    use Interop/Util/Function.LongFunctionZ
+    use Interop/Util/Function.LongFunctionZ.{LongFunctionZ}
     use Interop/Flix.Marshal;
 
 
-    pub def makeLongFunction(f: Int64 -> a \ ef): LongFunction[a] \ ef with Marshal[a] = 
-        unchecked_cast((i -> f(i) |> Interop/Flix/Marshal.toJavaObject) as LongFunction[a] \ ef)
+    pub def makeLongFunctionZ(f: Int64 -> a \ ef): LongFunctionZ[a, ef] with Marshal[a] = 
+        LongFunctionZ(unchecked_cast((i -> f(i) |> Interop/Flix/Marshal.toJavaObject) as ##java.util.function.LongFunction))
 
 
-    pub def makeLongFunctionWith(f: Int64 -> a \ ef, castToObj: a -> ##java.lang.Object): LongFunction[a] \ ef = 
-        unchecked_cast((i -> f(i) |> castToObj) as LongFunction[a] \ ef)
+    pub def makeLongFunctionZWith(f: Int64 -> a \ ef, castToObj: a -> ##java.lang.Object): LongFunctionZ[a, ef] = 
+        LongFunctionZ(unchecked_cast((i -> f(i) |> castToObj) as ##java.util.function.LongFunction))
 
 }

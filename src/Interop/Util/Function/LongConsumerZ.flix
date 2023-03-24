@@ -21,19 +21,20 @@ namespace Interop/Util/Function {
     ///
     /// LongConsumer is a builtin functional Interface.
     ///
-    pub type alias LongConsumer = ##java.util.function.LongConsumer
+    pub enum LongConsumerZ[_: Bool](##java.util.function.LongConsumer)
 
 
 
 }
 
 
-namespace Interop/Util/Function/LongConsumer {
+namespace Interop/Util/Function/LongConsumerZ {
     
-    use Interop/Util/Function.LongConsumer
+    use Interop/Util/Function.LongConsumerZ
+    use Interop/Util/Function.LongConsumerZ.{LongConsumerZ}
 
-
-    pub def makeLongConsumer(f: Int64 -> Unit \ ef): LongConsumer \ ef = unchecked_cast(f as LongConsumer \ ef)
+    pub def makeLongConsumerZ(f: Int64 -> Unit \ ef): LongConsumerZ[ef] = 
+        LongConsumerZ(unchecked_cast(f as ##java.util.function.LongConsumer))
 
 
 }

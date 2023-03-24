@@ -21,9 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// LongBinaryOperator is not a builtin functional Interface so it is created as a new object.
     ///
-    /// NOTE - type alias not enum
-    ///    
-    pub type alias LongBinaryOperator = ##java.util.function.LongBinaryOperator
+    pub enum LongBinaryOperator[_: Bool](##java.util.function.LongBinaryOperator)
 
 
 
@@ -33,18 +31,19 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/LongBinaryOperator {
     
     use Interop/Util/Function.LongBinaryOperator
-    
+    use Interop/Util/Function.LongBinaryOperator.{LongBinaryOperator}
 
-    pub def makeLongBinaryOperator(f: (Int64, Int64) -> Int64 \ ef): LongBinaryOperator \ ef = 
-        unchecked_cast((new ##java.util.function.LongBinaryOperator {
+    pub def makeLongBinaryOperator(f: (Int64, Int64) -> Int64 \ ef): LongBinaryOperator[ef] = 
+        LongBinaryOperator(unchecked_cast((new ##java.util.function.LongBinaryOperator {
             def applyAsLong(_this: ##java.util.function.LongBinaryOperator, t: Int64, u: Int64): Int64 = 
                 f(t, u)
-        }) as _ \ ef)
+        }) as _ \ {}))
 
         
-    pub def applyAsLong(t: Int64, u: Int64, f: LongBinaryOperator): Int64 \ ef = 
-        import java.util.function.LongBinaryOperator.applyAsLong(Int64, Int64): Int64 \ ef;        
-        applyAsLong(f, t, u)
+    pub def applyAsLong(t: Int64, u: Int64, f: LongBinaryOperator[ef]): Int64 \ ef = 
+        import java.util.function.LongBinaryOperator.applyAsLong(Int64, Int64): Int64 \ ef;
+        let LongBinaryOperator(f1) = f;
+        applyAsLong(f1, t, u)
 
 
 }

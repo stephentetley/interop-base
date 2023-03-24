@@ -17,22 +17,24 @@
 namespace Interop/Util/Function {
 
     ///
-    /// Represents a Java LongUnaryOperator.
+    /// Represents a Java LongPredicate.
     ///
-    /// LongUnaryOperator is a builtin functional Interface.
+    /// LongPredicate is a builtin functional Interface.
     ///
-    pub type alias LongUnaryOperator = ##java.util.function.LongUnaryOperator
+    pub enum LongPredicateZ[_: Bool](##java.util.function.LongPredicate)
 
 
 }
 
 
-namespace Interop/Util/Function/LongUnaryOperator {
+namespace Interop/Util/Function/LongPredicateZ {
     
-    use Interop/Util/Function.LongUnaryOperator;
-    
+    use Interop/Util/Function.LongPredicateZ
+    use Interop/Util/Function.LongPredicateZ.{LongPredicateZ}
 
-    pub def makeLongUnaryOperator(f: Int64 -> Int64 \ ef): LongUnaryOperator \ ef = unchecked_cast(f as LongUnaryOperator \ ef)
+    pub def makeLongPredicateZ(f: Int64 -> Bool \ ef): LongPredicateZ[ef] = 
+        LongPredicateZ(unchecked_cast(f as ##java.util.function.LongPredicate))
+
 
 
 }

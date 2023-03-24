@@ -21,7 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// LongSupplier is not a builtin functional Interface so it is created as a new object.
     ///
-    pub type alias LongSupplier = ##java.util.function.LongSupplier
+    pub enum LongSupplier[_: Bool](##java.util.function.LongSupplier)
 
 
 }
@@ -30,15 +30,17 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/LongSupplier {
     
     use Interop/Util/Function.LongSupplier
+    use Interop/Util/Function.LongSupplier.{LongSupplier}
 
-    pub def makeLongSupplier(f: Unit -> Int64 \ ef): LongSupplier \ ef = 
-        unchecked_cast((new ##java.util.function.LongSupplier {
+    pub def makeLongSupplier(f: Unit -> Int64 \ ef): LongSupplier[ef] = 
+        LongSupplier(unchecked_cast((new ##java.util.function.LongSupplier {
             def getAsLong(_this: ##java.util.function.LongSupplier): Int64 = f()
-        }) as _ \ ef)
+        }) as _ \ {}))
 
-    pub def getAsInt(f: LongSupplier): Int64 \ ef = 
+    pub def getAsInt(f: LongSupplier[ef]): Int64 \ ef = 
         import java.util.function.LongSupplier.getAsLong(): Int64 \ ef;
-        getAsLong(f)
+        let LongSupplier(f1) = f;
+        getAsLong(f1)
 
 
 }
