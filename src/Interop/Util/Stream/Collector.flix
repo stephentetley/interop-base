@@ -37,23 +37,25 @@ namespace Interop/Util/Stream/Collector {
     use Interop/Util/Function.FunctionZ
     use Interop/Util/Function.FunctionZ.{FunctionZ}
     use Interop/Util/Function.Supplier
+    use Interop/Util/Function.Supplier.{Supplier}
     use Interop/Flix.Marshal
 
 
-    pub def of5(supplier: Supplier[a], 
+    pub def of5(supplier: Supplier[a, ef1], 
                 accumulator: BiConsumer[a, t, ef2],
                 combiner: BinaryOperator[a, ef3],
                 finisher: FunctionZ[a, ans, ef4], 
-                characteristics: Array[##java.util.stream.Collector$Characteristics, r]): Collector[t, a, ans] \ {ef2, ef3, ef4, Read(r)} = 
+                characteristics: Array[##java.util.stream.Collector$Characteristics, r]): Collector[t, a, ans] \ {ef1, ef2, ef3, ef4, Read(r)} = 
         import static java.util.stream.Collector.of(##java.util.function.Supplier, 
                                                     ##java.util.function.BiConsumer,
                                                     ##java.util.function.BinaryOperator, 
                                                     ##java.util.function.Function,
-                                                    Array[##java.util.stream.Collector$Characteristics, r]): ##java.util.stream.Collector \ {ef2, ef3, ef4, r};
+                                                    Array[##java.util.stream.Collector$Characteristics, r]): ##java.util.stream.Collector \ {ef1, ef2, ef3, ef4, r};
+        let Supplier(supplier1) = supplier;
         let BiConsumer(accumulator1) = accumulator;
         let BinaryOperator(combiner1) = combiner;
         let FunctionZ(finisher1) = finisher;
-        of(supplier, accumulator1, combiner1, finisher1, characteristics)
+        of(supplier1, accumulator1, combiner1, finisher1, characteristics)
 
     // /// TODO Supplier should be mutable...
     // pub def supplier(c: Collector[t, a, ans]): Supplier[a] \ Read(r) =

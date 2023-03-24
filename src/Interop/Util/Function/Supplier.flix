@@ -21,7 +21,7 @@ namespace Interop/Util/Function {
     ///
     /// Supplier is not a builtin functional Interface so it is created as a new object.
     ///
-    pub type alias Supplier[_: Type] = ##java.util.function.Supplier
+    pub enum Supplier[_: Type, _: Bool](##java.util.function.Supplier)
 
 
 }
@@ -30,32 +30,35 @@ namespace Interop/Util/Function {
 namespace Interop/Util/Function/Supplier {
     
     use Interop/Util/Function.Supplier
+    use Interop/Util/Function.Supplier.{Supplier}
     use Interop/Flix.Marshal
     use Interop/Flix.MutMarshal
 
-    pub def makeSupplier(f: Unit -> a \ ef): Supplier[a] \ ef with Marshal[a] = 
-        unchecked_cast((new ##java.util.function.Supplier {
+    pub def makeSupplier(f: Unit -> a \ ef): Supplier[a, ef] with Marshal[a] = 
+        Supplier(unchecked_cast(new ##java.util.function.Supplier {
             def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 
                 f() |> Interop/Flix/Marshal.toJavaObject
-        }) as _ \ ef)
+        } as _ \ {}))
+
 
     pub def makeInitialSupplier[a: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
-                                (_: Region[r], f: Unit -> t[a, r] \ ef): Supplier[t[a, r]] \ ef with MutMarshal[t] = 
-        unchecked_cast((new ##java.util.function.Supplier {
+                                (_: Region[r], f: Unit -> t[a, r] \ ef): Supplier[t[a, r], ef] with MutMarshal[t] = 
+        Supplier(unchecked_cast(new ##java.util.function.Supplier {
             def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 
                 f() |> Interop/Flix/MutMarshal.mmToJavaObject
-        }) as _ \ ef)
+        } as _ \ {}))
 
 
-    pub def makeSupplier2(f: Unit -> a \ ef, castToObj: a -> ##java.lang.Object): Supplier[a] \ ef = 
-        unchecked_cast((new ##java.util.function.Supplier {
+    pub def makeSupplier2(f: Unit -> a \ ef, castToObj: a -> ##java.lang.Object): Supplier[a, ef] = 
+        Supplier(unchecked_cast(new ##java.util.function.Supplier {
             def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 
                 f() |> castToObj
-        }) as _ \ ef)
+        } as _ \ {}))
 
-    pub def get(f: Supplier[a]): a \ ef with Marshal[a] = 
+    pub def get(f: Supplier[a, ef]): a \ ef with Marshal[a] = 
         import java.util.function.Supplier.get(): ##java.lang.Object \ ef;
-        get(f) |> Interop/Flix/Marshal.fromJavaObject
+        let Supplier(f1) = f;
+        get(f1) |> Interop/Flix/Marshal.fromJavaObject
 
 
 }
