@@ -191,25 +191,25 @@ namespace Interop/Util/Stream/LongStream {
         noneMatch(s1, f1)
 
 
-    pub def findFirst(s: LongStream[ef, r]): OptionalLong \ {ef, Read(r)} = 
+    pub def findFirst(s: LongStream[ef, r]): Option[Int64] \ {ef, Read(r)} = 
         import java.util.stream.LongStream.findFirst(): ##java.util.OptionalLong \ {ef, r};
         let LongStream(_, s1) = s;
-        findFirst(s1) |> OptionalLong
+        findFirst(s1) |> Interop/Util/OptionalLong.hhToOption
 
-    pub def findAny(s: LongStream[ef, r]): OptionalLong \ {ef, Read(r)} = 
+    pub def findAny(s: LongStream[ef, r]): Option[Int64] \ {ef, Read(r)} = 
         import java.util.stream.LongStream.findAny(): ##java.util.OptionalLong \ {ef, r};
         let LongStream(_, s1) = s;
-        findAny(s1) |> OptionalLong
+        findAny(s1) |> Interop/Util/OptionalLong.hhToOption
 
-    pub def max(s: LongStream[ef, r]): OptionalLong \ {ef, Read(r)} = 
+    pub def max(s: LongStream[ef, r]): Option[Int64] \ {ef, Read(r)} = 
         import java.util.stream.LongStream.max(): ##java.util.OptionalLong \ {ef, r};
         let LongStream(_, s1) = s;
-        max(s1) |> OptionalLong
+        max(s1) |> Interop/Util/OptionalLong.hhToOption
 
-    pub def min(s: LongStream[ef, r]): OptionalLong \ {ef, Read(r)} = 
+    pub def min(s: LongStream[ef, r]): Option[Int64] \ {ef, Read(r)} = 
         import java.util.stream.LongStream.min(): ##java.util.OptionalLong \ {ef, r};
         let LongStream(_, s1) = s;
-        min(s1) |> OptionalLong
+        min(s1) |> Interop/Util/OptionalLong.hhToOption
 
     pub def sorted(s: LongStream[ef, r]): LongStream[ef, r] = 
         import java.util.stream.LongStream.sorted(): ##java.util.stream.LongStream \ {};

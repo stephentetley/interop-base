@@ -35,6 +35,9 @@ namespace Interop/Util/OptionalDouble {
         let OptionalDouble(o1) = o;
         o1
 
+    pub def hhToOption(o: ##java.util.OptionalDouble): Option[Float64] = 
+        OptionalDouble(o) |> toOption
+
     pub def toOption(o: OptionalDouble): Option[Float64] =
         getAsDouble(o) |> Result.toOption
     

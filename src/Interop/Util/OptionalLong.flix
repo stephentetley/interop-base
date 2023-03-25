@@ -27,13 +27,17 @@ namespace Interop/Util {
 
 namespace Interop/Util/OptionalLong {
     
-    use Interop/Util.OptionalLong;
-    use Interop/Util.OptionalLong.{OptionalLong};
-    use Interop/Flix.Marshal;
+    use Interop/Util.OptionalLong
+    use Interop/Util.OptionalLong.{OptionalLong}
+    use Interop/Flix.Marshal
 
     pub def getHH(o: OptionalLong): ##java.util.OptionalLong = 
         let OptionalLong(o1) = o;
         o1
+
+
+    pub def hhToOption(o: ##java.util.OptionalLong): Option[Int64] = 
+        OptionalLong(o) |> toOption
 
     pub def toOption(o: OptionalLong): Option[Int64] =
         getAsLong(o) |> Result.toOption

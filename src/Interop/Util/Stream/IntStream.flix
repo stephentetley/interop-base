@@ -192,25 +192,25 @@ namespace Interop/Util/Stream/IntStream {
         let IntPredicateZ(p1) = Interop/Util/Function/IntPredicateZ.makeIntPredicateZ(p);
         noneMatch(s1, p1)
 
-    pub def findFirst(s: IntStream[ef, r]): OptionalInt \ {ef, Read(r)} = 
+    pub def findFirst(s: IntStream[ef, r]): Option[Int32] \ {ef, Read(r)} = 
         import java.util.stream.IntStream.findFirst(): ##java.util.OptionalInt \ { ef, r };
         let IntStream(_, s1) = s;
-        findFirst(s1) |> OptionalInt
+        findFirst(s1) |> Interop/Util/OptionalInt.hhToOption
 
-    pub def findAny(s: IntStream[ef, r]): OptionalInt \ {ef, Read(r)} = 
+    pub def findAny(s: IntStream[ef, r]): Option[Int32] \ {ef, Read(r)} = 
         import java.util.stream.IntStream.findAny(): ##java.util.OptionalInt \ {ef, r};
         let IntStream(_, s1) = s;
-        findAny(s1) |> OptionalInt
+        findAny(s1) |> Interop/Util/OptionalInt.hhToOption
 
-    pub def max(s: IntStream[ef, r]): OptionalInt \ {ef, Read(r)} = 
+    pub def max(s: IntStream[ef, r]): Option[Int32] \ {ef, Read(r)} = 
         import java.util.stream.IntStream.max(): ##java.util.OptionalInt \ {ef, r};
         let IntStream(_, s1) = s;
-        max(s1) |> OptionalInt
+        max(s1) |> Interop/Util/OptionalInt.hhToOption
 
-    pub def min(s: IntStream[ef, r]): OptionalInt \ {ef, Read(r)} = 
+    pub def min(s: IntStream[ef, r]): Option[Int32] \ {ef, Read(r)} = 
         import java.util.stream.IntStream.min(): ##java.util.OptionalInt \ {ef, r};
         let IntStream(_, s1) = s;
-        min(s1) |> OptionalInt
+        min(s1) |> Interop/Util/OptionalInt.hhToOption
 
     pub def sorted(s: IntStream[ef, r]): IntStream[ef, r] = 
         import java.util.stream.IntStream.sorted(): ##java.util.stream.IntStream \ {};

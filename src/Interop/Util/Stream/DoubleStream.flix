@@ -176,25 +176,25 @@ namespace Interop/Util/Stream/DoubleStream {
         noneMatch(s1, f1)
 
 
-    pub def findFirst(s: DoubleStream[ef, r]): OptionalDouble \ {ef, Read(r)} = 
+    pub def findFirst(s: DoubleStream[ef, r]): Option[Float64] \ {ef, Read(r)} = 
         import java.util.stream.DoubleStream.findFirst(): ##java.util.OptionalDouble \ {ef, r};
         let DoubleStream(_, s1) = s;
-        findFirst(s1) |> OptionalDouble
+        findFirst(s1) |> Interop/Util/OptionalDouble.hhToOption
 
-    pub def findAny(s: DoubleStream[ef, r]): OptionalDouble \ {ef, Read(r)} = 
+    pub def findAny(s: DoubleStream[ef, r]): Option[Float64] \ {ef, Read(r)} = 
         import java.util.stream.DoubleStream.findAny(): ##java.util.OptionalDouble \ {ef, r};
         let DoubleStream(_, s1) = s;
-        findAny(s1) |> OptionalDouble
+        findAny(s1) |> Interop/Util/OptionalDouble.hhToOption
 
-    pub def max(s: DoubleStream[ef, r]): OptionalDouble \ {ef, Read(r)} = 
+    pub def max(s: DoubleStream[ef, r]): Option[Float64] \ {ef, Read(r)} = 
         import java.util.stream.DoubleStream.max(): ##java.util.OptionalDouble \ {ef, r};
         let DoubleStream(_, s1) = s;
-        max(s1) |> OptionalDouble
+        max(s1) |> Interop/Util/OptionalDouble.hhToOption
 
-    pub def min(s: DoubleStream[ef, r]): OptionalDouble \ {ef, Read(r)} = 
+    pub def min(s: DoubleStream[ef, r]): Option[Float64] \ {ef, Read(r)} = 
         import java.util.stream.DoubleStream.min(): ##java.util.OptionalDouble \ {ef, r};
         let DoubleStream(_, s1) = s;
-        min(s1) |> OptionalDouble
+        min(s1) |> Interop/Util/OptionalDouble.hhToOption
 
     pub def sorted(s: DoubleStream[ef, r]): DoubleStream[ef, r] = 
         import java.util.stream.DoubleStream.sorted(): ##java.util.stream.DoubleStream \ {};

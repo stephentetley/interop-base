@@ -35,6 +35,9 @@ namespace Interop/Util/OptionalInt {
         let OptionalInt(o1) = o;
         o1
 
+    pub def hhToOption(o: ##java.util.OptionalInt): Option[Int32] = 
+        OptionalInt(o) |> toOption
+
     pub def toOption(o: OptionalInt): Option[Int32] =
         getAsInt(o) |> Result.toOption
     
