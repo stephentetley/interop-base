@@ -32,9 +32,10 @@ namespace Interop/Lang {
     }
 
     instance Interop/Lang.ImpCharSequence[StringBuilder] {
-        pub def toCharSequence(s: StringBuilder[r]): CharSequence[r] = 
+        pub def toCharSequence(s: StringBuilder[r]): CharSequence[r] =             
             let StringBuilder(s1) = s;
-            CharSequence(unchecked_cast(s1 as ##java.lang.CharSequence))
+            let cs: ##java.lang.CharSequence = checked_cast(s1);
+            CharSequence(cs)
 
         pub def fromCharSequence(s: CharSequence[r]): StringBuilder[r] = 
             let CharSequence(s1) = s;
@@ -49,7 +50,6 @@ namespace Interop/Lang/CharSequence {
 
     use Interop/Lang.CharSequence
     use Interop/Lang.CharSequence.{CharSequence}
-
     use Interop/Lang.ImpCharSequence
 
     pub def getHH(cs: CharSequence[r]): ##java.lang.CharSequence = 
@@ -91,5 +91,15 @@ namespace Interop/Lang/CharSequence {
             let CharSequence(cs1) = cs;
             CharSequence(subSequence(cs1, start.start, end.end))
         })
+
+    // Define explicit "from" functions because `CharSequence` is mutable but String isn't.
+
+    pub def fromString(_: Region[r], s: String): CharSequence[r] = 
+        let cs: ##java.lang.CharSequence = checked_cast(s);
+        CharSequence(cs)
+
+    pub def fromStringBuilder(sb: StringBuilder[r]): CharSequence[r] = 
+        Interop/Lang/ImpCharSequence.toCharSequence(sb)
+
 
 }

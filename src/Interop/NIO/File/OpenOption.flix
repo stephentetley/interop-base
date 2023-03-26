@@ -20,6 +20,9 @@ namespace Interop/NIO/File {
     use Interop/NIO/File.OpenOption
     use Interop/NIO/File.OpenOption.{OpenOption}
 
+    ///
+    /// Interface
+    ///
     pub enum OpenOption(##java.nio.file.OpenOption)
 
     pub class ImpOpenOption[t: Type] {
@@ -35,5 +38,19 @@ namespace Interop/NIO/File {
         pub def fromJavaObject(o: ##java.lang.Object): OpenOption = 
             OpenOption(unchecked_cast(o as ##java.nio.file.OpenOption))
     }
+
+}
+
+namespace Interop/NIO/File/OpenOption {
+
+
+    use Interop/NIO/File.OpenOption
+    use Interop/NIO/File.OpenOption.{OpenOption}
+
+
+    /// Unwrap
+    pub def getHH(opt: OpenOption): ##java.nio.file.OpenOption = 
+        let OpenOption(opt1) = opt;
+        opt1
 
 }

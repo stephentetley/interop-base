@@ -25,8 +25,8 @@ namespace Interop/Util/LocaleBuilder {
 
     use Interop/Util.LocaleBuilder
     use Interop/Util.LocaleBuilder.{LocaleBuilder}
-    use Interop/Util.LocaleBuilder.LocaleBuilderAction
-    use Interop/Util.LocaleBuilder.LocaleBuilderAction.{
+    use Interop/Util/LocaleBuilder.LocaleBuilderAction
+    use Interop/Util/LocaleBuilder.LocaleBuilderAction.{
         AddUnicodeLocaleAttribute, Clear, ClearExtensions,
         RemoveUnicodeLocaleAttribute, SetExtension, SetLanguage,
         SetLanguageTag, SetLocale, SetRegion,

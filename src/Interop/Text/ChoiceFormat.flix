@@ -65,10 +65,12 @@ namespace Interop/Text/ChoiceFormat {
     ///
     pub def newWithChoices(limits: List[Float64], formats: List[String]): Result[String, ChoiceFormat] =
         Result.tryCatch(_ -> {
-            import static flixinterop.text.ChoiceFormatz.newChoiceFormat(##java.util.List, ##java.util.List): ##java.text.ChoiceFormat \ {};
-            let limits1 = List.map(Interop/Lang/Double.valueOf, limits) |> Interop/Util/ListZ.fromFoldableViaArrayListHH;
-            let formats1 = Interop/Util/ListZ.fromFoldableViaArrayListHH(formats);
-            ChoiceFormat(newChoiceFormat(limits1, formats1))
+            region rc {
+                import new java.text.ChoiceFormat(Array[Float64, rc], Array[String, rc]): ##java.text.ChoiceFormat \ {} as new1;
+                let limits1 = List.toArray(rc, limits);
+                let formats1 = List.toArray(rc, formats);
+                ChoiceFormat(new1(limits1, formats1))
+            }
         })
 
 

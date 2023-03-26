@@ -101,10 +101,11 @@ namespace Interop/NIO/File/Path {
     ///
     pub def of(s: String, l: List[String]): Result[String, Path] =
         Result.tryCatch(_ -> {
-            // Currently we have to use a wrapper due to java.nio.file.Path.of using varargs 
-            import static flixinterop.nio.file.Pathz.ofList(String, ##java.util.List): ##java.nio.file.Path \ {} as of1;
-            let ls1 = Interop/Util/ListZ.fromFoldableViaArrayListHH(l);
-            Path(of1(s, ls1))
+            region rc {
+                import static java.nio.file.Path.of(String, Array[String, rc]): ##java.nio.file.Path \ rc as of1;
+                let arr = List.toArray(rc, l);
+                Path(of1(s, arr))
+            }
         })
 
 

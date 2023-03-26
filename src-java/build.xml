@@ -1,8 +1,0 @@
-<project default="compile">
-    <target name="compile">
-        <mkdir dir="build/classes"/>
-        <javac srcdir="flixinterop" destdir="build/classes"/>
-        <jar destfile="build/interop-base-java.0.1.5.jar" basedir="build/classes"/>
-    </target>
-
-</project>
