@@ -4,32 +4,33 @@ namespace TestPath {
 
 
     @test
-    def path01(): Bool \ IO = 
+    def path01(): Bool = 
         use Result.flatMap;
         let step = () -> {
-            let* p1 = Interop/NIO/File/Path.of("/user", Nil);
-            println("path01: ${Interop/NIO/File/Path.toString(p1)}");
-            Ok(true)
+            forM (p1 <- Interop/NIO/File/Path.of("/usr", Nil);
+                    depth <- Ok(Interop/NIO/File/Path.getNameCount(p1)))
+            yield (depth == 1)
         };
         step() |> Result.getWithDefault(false)
 
     @test
-    def path02(): Bool \ IO = 
+    def path02(): Bool = 
         use Result.flatMap;
         let step = () -> {            
-            let* p1 = Interop/NIO/File/Path.of("/user", "local" :: Nil);
-            println("path02: ${Interop/NIO/File/Path.toString(p1)}");
-            Ok(true)
+            forM (p1 <- Interop/NIO/File/Path.of("/usr", "local" :: Nil);
+                    depth <- Ok(Interop/NIO/File/Path.getNameCount(p1)))
+            yield (depth == 2)
         };
         step() |> Result.getWithDefault(false)
 
     @test
-    def path03(): Bool \ IO = 
+    def path03(): Bool = 
         use Result.flatMap;
         let step = () -> {
-            let* p1 = Interop/NIO/File/Path.of("/usr", "local" :: "bin" :: Nil);
-            println("path02: ${Interop/NIO/File/Path.toString(p1)}");
-            Ok(true)
+            forM (p1 <- Interop/NIO/File/Path.of("/usr", "local" :: "bin" :: Nil);
+                    depth <- Ok(Interop/NIO/File/Path.getNameCount(p1)))
+            yield (depth == 3)
         };
         step() |> Result.getWithDefault(false)
+
 }
