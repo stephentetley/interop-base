@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Lang {
+mod Interop.Lang {
 
     ///
     /// Represents a Java Enum.
@@ -29,11 +29,11 @@ namespace Interop/Lang {
 
 }
 
-namespace Interop/Lang/Enum {
+mod Interop.Lang.Enum {
 
 
-    use Interop/Lang.Enum
-    use Interop/Lang.Enum.{Enum}
+    use Interop.Lang.Enum
+    use Interop.Lang.Enum.{Enum}
 
     pub def toString(x: Enum): String =
         import java.lang.Enum.toString(): String \ {};

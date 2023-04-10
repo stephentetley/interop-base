@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java IntSupplier.
@@ -27,10 +27,10 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/IntSupplier {
+mod Interop.Util.Function.IntSupplier {
     
-    use Interop/Util/Function.IntSupplier
-    use Interop/Util/Function.IntSupplier.{IntSupplier}
+    use Interop.Util.Function.IntSupplier
+    use Interop.Util.Function.IntSupplier.{IntSupplier}
 
     pub def makeIntSupplier(f: Unit -> Int32 \ ef): IntSupplier[ef] = 
         IntSupplier(unchecked_cast(new ##java.util.function.IntSupplier {

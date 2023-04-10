@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-namespace Interop/IO {
+mod Interop.IO {
 
-    use Interop/IO.StringReader
-    use Interop/IO.StringReader.{StringReader}
-    use Interop/IO.Reader
-    use Interop/IO.Reader.{Reader}
+    use Interop.IO.StringReader
+    use Interop.IO.StringReader.{StringReader}
+    use Interop.IO.Reader
+    use Interop.IO.Reader.{Reader}
 
     // StringReader has a read pointer so it is mutable
     pub enum StringReader[_: Region](##java.io.StringReader)
@@ -39,10 +39,10 @@ namespace Interop/IO {
 }
 
 
-namespace Interop/IO/StringReader {
+mod Interop.IO.StringReader {
 
-    use Interop/IO.StringReader
-    use Interop/IO.StringReader.{StringReader}
+    use Interop.IO.StringReader
+    use Interop.IO.StringReader.{StringReader}
 
 
 

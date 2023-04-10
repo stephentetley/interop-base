@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java Predicate.
@@ -27,14 +27,14 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/PredicateZ {
+mod Interop.Util.Function.PredicateZ {
     
-    use Interop/Util/Function.PredicateZ
-    use Interop/Util/Function.PredicateZ.{PredicateZ}
-    use Interop/Flix.Marshal
+    use Interop.Util.Function.PredicateZ
+    use Interop.Util.Function.PredicateZ.{PredicateZ}
+    use Interop.Flix.Marshal
 
     pub def makePredicateZ(f: a -> Bool \ ef): PredicateZ[a, ef] with Marshal[a] = 
-        PredicateZ(unchecked_cast(obj -> f(Interop/Flix/Marshal.fromJavaObject(obj)) as ##java.util.function.Predicate))
+        PredicateZ(unchecked_cast(obj -> f(Interop.Flix.Marshal.fromJavaObject(obj)) as ##java.util.function.Predicate))
 
 
 

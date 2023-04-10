@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
-    use Interop/Util.ArrayList
-    use Interop/Util.ArrayList.{ArrayList}
-    use Interop/Util.Collection
-    use Interop/Util.Collection.{Collection}
-    use Interop/Util.ListZ
-    use Interop/Util.ListZ.{ListZ}
+    use Interop.Util.ArrayList
+    use Interop.Util.ArrayList.{ArrayList}
+    use Interop.Util.Collection
+    use Interop.Util.Collection.{Collection}
+    use Interop.Util.ListZ
+    use Interop.Util.ListZ.{ListZ}
     
 
     ///
@@ -32,7 +32,7 @@ namespace Interop/Util {
         case ArrayList(Region[r], ##java.util.ArrayList)
     }
 
-    // instance Interop/Flix.MutMarshal[ArrayList] {
+    // instance Interop.Flix.MutMarshal[ArrayList] {
     //     pub def mmToJavaObject(x: ArrayList[a, r]): ##java.lang.Object =
     //         let ArrayList(x1) = x;
     //         checked_cast(x1)
@@ -42,7 +42,7 @@ namespace Interop/Util {
     // }
 
 
-    instance Interop/Util.ImpCollection[ArrayList] {
+    instance Interop.Util.ImpCollection[ArrayList] {
         pub def toCollection(t: ArrayList[a, r]): Collection[a, r] = 
             let ArrayList(rc, t1) = t;
             Collection(rc, unchecked_cast(t1 as ##java.util.Collection))
@@ -53,7 +53,7 @@ namespace Interop/Util {
     }
 
 
-    instance Interop/Util.ImpListZ[ArrayList] {
+    instance Interop.Util.ImpListZ[ArrayList] {
         pub def toListZ(t: ArrayList[a, r]): ListZ[a, r] = 
             let ArrayList(rc, t1) = t;
             ListZ(rc, unchecked_cast(t1 as ##java.util.List))
@@ -65,17 +65,17 @@ namespace Interop/Util {
 
 }
 
-namespace Interop/Util/ArrayList {
+mod Interop.Util.ArrayList {
 
-    use Interop/Util.ArrayList
-    use Interop/Util.ArrayList.{ArrayList}
-    use Interop/Util.Collection
-    use Interop/Util.Collection.{Collection}
-    use Interop/Util.Comparator
-    use Interop/Util.ImpCollection
-    use Interop/Util/Function.ConsumerZ.{ConsumerZ}    
-    use Interop/Util/Function.PredicateZ.{PredicateZ}
-    use Interop/Flix.Marshal;
+    use Interop.Util.ArrayList
+    use Interop.Util.ArrayList.{ArrayList}
+    use Interop.Util.Collection
+    use Interop.Util.Collection.{Collection}
+    use Interop.Util.Comparator
+    use Interop.Util.ImpCollection
+    use Interop.Util.Function.ConsumerZ.{ConsumerZ}    
+    use Interop.Util.Function.PredicateZ.{PredicateZ}
+    use Interop.Flix.Marshal;
 
     
     pub def getHH(l: ArrayList[a, r]): ##java.util.ArrayList = 
@@ -142,18 +142,18 @@ namespace Interop/Util/ArrayList {
     pub def get(ix: Int32, l: ArrayList[a, r]): a \ Read(r) with Marshal[a] = 
         import java.util.ArrayList.get(Int32): ##java.lang.Object \ r;
         let ArrayList(_, l1) = l;
-        get(l1, ix) |> Interop/Flix/Marshal.fromJavaObject
+        get(l1, ix) |> Interop.Flix.Marshal.fromJavaObject
 
     pub def add!(x: a, l: ArrayList[a, r]): Bool \ { Write(r) } with Marshal[a] = 
         import java.util.ArrayList.add(##java.lang.Object): Bool \ r;
         let ArrayList(_, l1) = l;
-        add(l1, Interop/Flix/Marshal.toJavaObject(x))
+        add(l1, Interop.Flix.Marshal.toJavaObject(x))
 
     pub def addAt!(ix: Int32, x: a, l: ArrayList[a, r]): Result[String, Unit] \ { Write(r) } with Marshal[a] = 
         Result.tryCatch(_ -> {
             import java.util.ArrayList.add(Int32, ##java.lang.Object): Unit \ r;
             let ArrayList(_, l1) = l;
-            add(l1, ix, Interop/Flix/Marshal.toJavaObject(x))
+            add(l1, ix, Interop.Flix.Marshal.toJavaObject(x))
         })
 
     pub def addWith!(x: a, ocast: a -> ##java.lang.Object, l: ArrayList[a, r]): Bool \ Write(r) = 
@@ -174,7 +174,7 @@ namespace Interop/Util/ArrayList {
         Result.tryCatch(_ -> {
             import java.util.ArrayList.remove(##java.lang.Object): Bool \ r; 
             let ArrayList(_, l1) = l;
-            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
             remove(l1, x1)
         })
 
@@ -191,7 +191,7 @@ namespace Interop/Util/ArrayList {
         Result.tryCatch(_ -> {
             import java.util.ArrayList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let ArrayList(_, l1) = l;
-            let PredicateZ(f1) = Interop/Util/Function/PredicateZ.makePredicateZ(f);
+            let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
             checked_ecast(removeIf(l1, f1))
         })
 
@@ -212,13 +212,13 @@ namespace Interop/Util/ArrayList {
         Result.tryCatch(_ -> {
             import java.util.ArrayList.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let ArrayList(_, l1) = l;
-            let ConsumerZ(f1) = Interop/Util/Function/ConsumerZ.makeConsumerZ(f);
+            let ConsumerZ(f1) = Interop.Util.Function.ConsumerZ.makeConsumerZ(f);
             forEach(l1, f1)
         })
 
 
     pub def sort!(f: (a, a) -> Int32, l: ArrayList[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
-        let f1 = Interop/Util/Comparator.makeComparator(f);
+        let f1 = Interop.Util.Comparator.makeComparator(f);
         sortWithComparator!(f1, l)
 
 
@@ -252,7 +252,7 @@ namespace Interop/Util/ArrayList {
     /// Returns an iterator over `l`.
     ///
     pub def iterator(rc: Region[r1], l: ArrayList[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
-        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, l)
+        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, l)
 
     ///
     /// Returns an iterator over `l`.
@@ -266,8 +266,8 @@ namespace Interop/Util/ArrayList {
             Iterator.empty(rc)
         else 
             iterator(l1) 
-                |> Interop/Util/IteratorZ.wrapHH(rc) 
-                |> Interop/Util/IteratorZ.toFlixIterator(rc, ocast)
+                |> Interop.Util.IteratorZ.wrapHH(rc) 
+                |> Interop.Util.IteratorZ.toFlixIterator(rc, ocast)
 
 
 
@@ -283,7 +283,7 @@ namespace Interop/Util/ArrayList {
         import java.util.ArrayList.add(##java.lang.Object): Bool \ r as add1;
         def loop(st1, acc) = match f(st1) {
             case None         => ArrayList(rc, acc)
-            case Some(o, st2) => {discard add1(acc, Interop/Flix/Marshal.toJavaObject(o)); loop(st2, acc)}
+            case Some(o, st2) => {discard add1(acc, Interop.Flix.Marshal.toJavaObject(o)); loop(st2, acc)}
         };
         loop(st, new1())
 

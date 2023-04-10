@@ -15,10 +15,10 @@
  */
 
 
-namespace Interop/NIO/File {
+mod Interop.NIO.File {
 
-    use Interop/NIO/File.Path
-    use Interop/NIO/File.Path.{Path}
+    use Interop.NIO.File.Path
+    use Interop.NIO.File.Path.{Path}
     
     ///
     /// Represents a FilePath.
@@ -27,26 +27,26 @@ namespace Interop/NIO/File {
 
     instance ToString[Path] {
         pub def toString(x: Path): String = 
-            Interop/NIO/File/Path.toString(x)
+            Interop.NIO.File.Path.toString(x)
     }
 
     instance Eq[Path] {
         pub def eq(x: Path, y: Path): Bool = 
-            Interop/NIO/File/Path.equals(x, y)
+            Interop.NIO.File.Path.equals(x, y)
     }
 
     instance Order[Path] {
         pub def compare(x: Path, y: Path): Comparison =
-            Interop/NIO/File/Path.compareTo(x, y) |> Comparison.fromInt32
+            Interop.NIO.File.Path.compareTo(x, y) |> Comparison.fromInt32
     }
 
     instance Hash[Path] {
         pub def hash(x: Path): Int32 = 
-            Interop/NIO/File/Path.hashCode(x)
+            Interop.NIO.File.Path.hashCode(x)
     }
 
 
-    instance Interop/Flix.Marshal[Path] {
+    instance Interop.Flix.Marshal[Path] {
         pub def toJavaObject(x: Path): ##java.lang.Object =
             let Path(x1) = x;
             checked_cast(x1)
@@ -57,14 +57,14 @@ namespace Interop/NIO/File {
 
 }
 
-namespace Interop/NIO/File/Path {
+mod Interop.NIO.File.Path {
 
 
-    use Interop/NIO/File.Path
-    use Interop/NIO/File.Path.{Path}
+    use Interop.NIO.File.Path
+    use Interop.NIO.File.Path.{Path}
 
-    use Interop/IO.File
-    use Interop/IO.File.{File}
+    use Interop.IO.File
+    use Interop.IO.File.{File}
 
     /// Note - current set of operations should be pure?
 

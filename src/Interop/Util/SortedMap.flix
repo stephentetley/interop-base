@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
-    use Interop/Util.SortedMap
-    use Interop/Util.SortedMap.{SortedMap}
-    use Interop/Util.MapZ
-    use Interop/Util.MapZ.{MapZ}
+    use Interop.Util.SortedMap
+    use Interop.Util.SortedMap.{SortedMap}
+    use Interop.Util.MapZ
+    use Interop.Util.MapZ.{MapZ}
 
     ///
     /// Represents a Java SortedMap.
@@ -30,7 +30,7 @@ namespace Interop/Util {
     }
 
 
-    instance Interop/Util.ImpMapZ[SortedMap] {
+    instance Interop.Util.ImpMapZ[SortedMap] {
         pub def toMapZ(t: SortedMap[k, v, r]): MapZ[k, v, r] = 
             let SortedMap(rc, t1) = t;
             MapZ(rc, unchecked_cast(t1 as ##java.util.Map))
@@ -43,17 +43,17 @@ namespace Interop/Util {
 
 }
 
-namespace Interop/Util/SortedMap {
+mod Interop.Util.SortedMap {
 
-    use Interop/Util.SortedMap
-    use Interop/Util.SortedMap.{SortedMap}
-    use Interop/Util/Map.Entry
-    use Interop/Util/Map.Entry.{Entry}
-    use Interop/Util.Collection
-    use Interop/Util.Collection.{Collection}
-    use Interop/Util.SetZ
-    use Interop/Util.SetZ.{SetZ}
-    use Interop/Flix.Marshal
+    use Interop.Util.SortedMap
+    use Interop.Util.SortedMap.{SortedMap}
+    use Interop.Util.Map.Entry
+    use Interop.Util.Map.Entry.{Entry}
+    use Interop.Util.Collection
+    use Interop.Util.Collection.{Collection}
+    use Interop.Util.SetZ
+    use Interop.Util.SetZ.{SetZ}
+    use Interop.Flix.Marshal
 
 
     pub def getHH(m: SortedMap[k, v, r]): ##java.util.SortedMap = 
@@ -89,16 +89,16 @@ namespace Interop/Util/SortedMap {
         Result.tryCatch(_ -> {
             import java.util.SortedMap.get(##java.lang.Object): ##java.lang.Object \ r; 
             let SortedMap(_, m1) = m;
-            let k1 = Interop/Flix/Marshal.toJavaObject(k);
-            get(m1, k1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject)
+            let k1 = Interop.Flix.Marshal.toJavaObject(k);
+            get(m1, k1) |> Object.toOption |> Option.map(Interop.Flix.Marshal.fromJavaObject)
         })
 
     pub def put!(k: k, v: v, m: SortedMap[k, v, r]): v \ Write(r) with Marshal[k], Marshal[v] =
         import java.util.SortedMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
         let SortedMap(_, m1) = m;
-        let k1 = Interop/Flix/Marshal.toJavaObject(k);
-        let v1 = Interop/Flix/Marshal.toJavaObject(v);
-        put(m1, k1, v1) |> Interop/Flix/Marshal.fromJavaObject
+        let k1 = Interop.Flix.Marshal.toJavaObject(k);
+        let v1 = Interop.Flix.Marshal.toJavaObject(v);
+        put(m1, k1, v1) |> Interop.Flix.Marshal.fromJavaObject
 
     /// Can't guarantee `Ord[k]` at this point...
     pub def entrySet(rc: Region[r1], m: SortedMap[k, v, r]): SetZ[Entry[k, v, r1], r1] \ { Read(r), Write(r1) } = 
@@ -125,7 +125,7 @@ namespace Interop/Util/SortedMap {
         import java.util.TreeMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object & r as put; 
         def loop(st1, ac) = match f(st1) {
             case None            => SortedMap(rc, unchecked_cast(ac as ##java.util.SortedMap))
-            case Some(k, v, st2) => { discard put(ac, Interop/Flix/Marshal.toJavaObject(k), Interop/Flix/Marshal.toJavaObject(v)); loop(st2, ac) }
+            case Some(k, v, st2) => { discard put(ac, Interop.Flix.Marshal.toJavaObject(k), Interop.Flix.Marshal.toJavaObject(v)); loop(st2, ac) }
         };
         loop(st, newTreeMap())
 
@@ -147,7 +147,7 @@ namespace Interop/Util/SortedMap {
     /// Returns an iterator over all key-value pairs in `m`.
     ///
     pub def iterator(rc: Region[r1], m: SortedMap[k, v, r]): Iterator[(k, v), r1, r1] \ { Read(r) } with Marshal[k], Marshal[v] =
-        toIterator(rc, Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)
+        toIterator(rc, Interop.Flix.Marshal.fromJavaObject, Interop.Flix.Marshal.fromJavaObject, m)
 
     ///
     /// Returns an iterator over all key-value pairs in `m`.
@@ -165,8 +165,8 @@ namespace Interop/Util/SortedMap {
         let iter = iterator(set1);
         let getNext = () -> match hasNext(iter) {
             case true  => {
-                let entry = next(iter) |> Interop/Util/Map/Entry.castObject(rc);
-                Interop/Util/Map/Entry.toKeyValueWith(kcast, vcast, entry) |> Some
+                let entry = next(iter) |> Interop.Util.Map.Entry.castObject(rc);
+                Interop.Util.Map.Entry.toKeyValueWith(kcast, vcast, entry) |> Some
             }
             case false => None
         };

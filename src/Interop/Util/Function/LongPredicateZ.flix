@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java LongPredicate.
@@ -27,10 +27,10 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/LongPredicateZ {
+mod Interop.Util.Function.LongPredicateZ {
     
-    use Interop/Util/Function.LongPredicateZ
-    use Interop/Util/Function.LongPredicateZ.{LongPredicateZ}
+    use Interop.Util.Function.LongPredicateZ
+    use Interop.Util.Function.LongPredicateZ.{LongPredicateZ}
 
     pub def makeLongPredicateZ(f: Int64 -> Bool \ ef): LongPredicateZ[ef] = 
         LongPredicateZ(unchecked_cast(f as ##java.util.function.LongPredicate))

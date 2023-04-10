@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-namespace Interop/Lang {
+mod Interop.Lang {
 
-    use Interop/Lang.Appendable
-    use Interop/Lang.Appendable.{Appendable}
+    use Interop.Lang.Appendable
+    use Interop.Lang.Appendable.{Appendable}
     use StringBuilder.{StringBuilder}
 
     /// Interface...
@@ -31,7 +31,7 @@ namespace Interop/Lang {
         pub def fromAppendable[r: Region](s: Appendable[r]): t[r]
     }
 
-    instance Interop/Lang.ImpAppendable[StringBuilder] {
+    instance Interop.Lang.ImpAppendable[StringBuilder] {
         pub def toAppendable(s: StringBuilder[r]): Appendable[r] = 
             let StringBuilder(s1) = s;
             Appendable(unchecked_cast(s1 as ##java.lang.Appendable))
@@ -43,14 +43,14 @@ namespace Interop/Lang {
 
 }
 
-namespace Interop/Lang/Appendable {
+mod Interop.Lang.Appendable {
 
-    use Interop/Lang.Appendable
-    use Interop/Lang.Appendable.{Appendable}
+    use Interop.Lang.Appendable
+    use Interop.Lang.Appendable.{Appendable}
 
-    use Interop/Lang.CharSequence
-    use Interop/Lang.CharSequence.{CharSequence}
-    use Interop/Lang.ImpCharSequence
+    use Interop.Lang.CharSequence
+    use Interop.Lang.CharSequence.{CharSequence}
+    use Interop.Lang.ImpCharSequence
 
     pub def getHH(ap: Appendable[r]): ##java.lang.Appendable = 
         let Appendable(ap1) = ap;
@@ -70,7 +70,7 @@ namespace Interop/Lang/Appendable {
     pub def appendCharSequence!(cs: CharSequence[r1], ap: Appendable[r]): Result[String, Appendable[r]] \ { Read(r1), Write(r) } = 
         Result.tryCatch(_ -> {
             import java.lang.Appendable.append(##java.lang.CharSequence): ##java.lang.Appendable \ { Read(r1), Write(r) };
-            let cs1 = Interop/Lang/CharSequence.getHH(cs);
+            let cs1 = Interop.Lang.CharSequence.getHH(cs);
             let Appendable(ap1) = ap;
             Appendable(append(ap1, cs1))
         })
@@ -81,7 +81,7 @@ namespace Interop/Lang/Appendable {
                                     ap: Appendable[r2]): Result[String, Appendable[r]] \ { Read(r1), Write(r2) } = 
         Result.tryCatch(_ -> {
             import java.lang.Appendable.append(##java.lang.CharSequence, Int32, Int32): ##java.lang.Appendable \ { Read(r1), Write(r2) };
-            let cs1 = Interop/Lang/CharSequence.getHH(cs);
+            let cs1 = Interop.Lang.CharSequence.getHH(cs);
             let Appendable(ap1) = ap;
             Appendable(append(ap1, cs1, start.start, end.end))
         })

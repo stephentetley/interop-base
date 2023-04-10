@@ -15,27 +15,27 @@
  */
 
 
-namespace Interop/NIO/File/Files {
+mod Interop.NIO.File.Files {
 
-    use Interop/NIO/Charset.Charset;
-    use Interop/NIO/Charset.Charset.{Charset};
-    use Interop/NIO/File.Path;
-    use Interop/NIO/File.Path.{Path};
-    use Interop/NIO/File.LinkOption;
-    use Interop/NIO/File.OpenOption;
-    use Interop/NIO/File.OpenOption.{OpenOption};
-    use Interop/Lang.CharSequence;
-    use Interop/IO.InputStream;
-    use Interop/IO.InputStream.{InputStream};
-    use Interop/IO.OutputStream;
-    use Interop/IO.OutputStream.{OutputStream};
+    use Interop.NIO.Charset.Charset
+    use Interop.NIO.Charset.Charset.{Charset}
+    use Interop.NIO.File.Path
+    use Interop.NIO.File.Path.{Path}
+    use Interop.NIO.File.LinkOption
+    use Interop.NIO.File.OpenOption
+    use Interop.NIO.File.OpenOption.{OpenOption}
+    use Interop.Lang.CharSequence
+    use Interop.IO.InputStream
+    use Interop.IO.InputStream.{InputStream}
+    use Interop.IO.OutputStream
+    use Interop.IO.OutputStream.{OutputStream}
 
     pub def newInputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, InputStream[r]] \ IO =
         Result.tryCatch(_ -> {
             region rc {
                 import static java.nio.file.Files.newInputStream(##java.nio.file.Path, Array[##java.nio.file.OpenOption, rc]): ##java.io.InputStream \ {IO, r};
                 let Path(path1) = path;
-                let opts1 = List.map(Interop/NIO/File/OpenOption.getHH, opts) |> List.toArray(rc);
+                let opts1 = List.map(Interop.NIO.File.OpenOption.getHH, opts) |> List.toArray(rc);
                 InputStream(newInputStream(path1, opts1))
             }
         })
@@ -45,7 +45,7 @@ namespace Interop/NIO/File/Files {
             region rc {
                 import static java.nio.file.Files.newOutputStream(##java.nio.file.Path, Array[##java.nio.file.OpenOption, rc]): ##java.io.OutputStream \ {IO, r};
                 let Path(path1) = path;
-                let opts1 = List.map(Interop/NIO/File/OpenOption.getHH, opts) |> List.toArray(rc);
+                let opts1 = List.map(Interop.NIO.File.OpenOption.getHH, opts) |> List.toArray(rc);
                 OutputStream(newOutputStream(path1, opts1))
             }
         })
@@ -56,7 +56,7 @@ namespace Interop/NIO/File/Files {
             region rc {
                 import static java.nio.file.Files.exists(##java.nio.file.Path, Array[##java.nio.file.LinkOption, rc]): Bool \ {IO};
                 let Path(path1) = path;
-                let opts1 = List.map(Interop/NIO/File/LinkOption.getHH, opts) |> List.toArray(rc);
+                let opts1 = List.map(Interop.NIO.File.LinkOption.getHH, opts) |> List.toArray(rc);
                 exists(path1, opts1)
             }
         })
@@ -65,7 +65,7 @@ namespace Interop/NIO/File/Files {
     pub def readStringUtf8(path: Path): Result[String, String] \ IO = 
         Result.tryCatch(_ -> {
             import static java.nio.file.Files.readString(##java.nio.file.Path): String \ IO;
-            let path1 = Interop/NIO/File/Path.getHH(path);
+            let path1 = Interop.NIO.File.Path.getHH(path);
             readString(path1)
         })
 
@@ -84,8 +84,8 @@ namespace Interop/NIO/File/Files {
                 import static java.nio.file.Files.writeString(##java.nio.file.Path, 
                         ##java.lang.CharSequence, Array[##java.nio.file.OpenOption, rc]): ##java.nio.file.Path \ IO;
                 let Path(path1) = path;
-                let s1 = Interop/Lang/CharSequence.getHH(s);
-                let opts1 = List.map(Interop/NIO/File/OpenOption.getHH, opts) |> List.toArray(rc);
+                let s1 = Interop.Lang.CharSequence.getHH(s);
+                let opts1 = List.map(Interop.NIO.File.OpenOption.getHH, opts) |> List.toArray(rc);
                 writeString(path1, s1, opts1) |> Path
             }
         })
@@ -96,9 +96,9 @@ namespace Interop/NIO/File/Files {
                 import static java.nio.file.Files.writeString(##java.nio.file.Path, 
                                 ##java.lang.CharSequence, ##java.nio.charset.Charset, Array[##java.nio.file.OpenOption, rc]): ##java.nio.file.Path \ IO;
                 let Path(path1) = path;
-                let s1 = Interop/Lang/CharSequence.getHH(s);
+                let s1 = Interop.Lang.CharSequence.getHH(s);
                 let Charset(cs1) = cs;
-                let opts1 = List.map(Interop/NIO/File/OpenOption.getHH, opts) |> List.toArray(rc);
+                let opts1 = List.map(Interop.NIO.File.OpenOption.getHH, opts) |> List.toArray(rc);
                 writeString(path1, s1, cs1, opts1) |> Path
             }
         })

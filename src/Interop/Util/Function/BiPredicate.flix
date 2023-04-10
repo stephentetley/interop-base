@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java BiPredicate.
@@ -26,16 +26,16 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/BiPredicate {
+mod Interop.Util.Function.BiPredicate {
     
-    use Interop/Util/Function.BiPredicate
-    use Interop/Flix.Marshal
+    use Interop.Util.Function.BiPredicate
+    use Interop.Flix.Marshal
 
 
     pub def makeBiPredicate(f: (a, b) -> Bool \ ef): BiPredicate[a, b, ef] with Marshal[a], Marshal[b] = 
         let f1 = (o1, o2) -> {
-            let a = Interop/Flix/Marshal.fromJavaObject(o1); 
-            let b = Interop/Flix/Marshal.fromJavaObject(o2);
+            let a = Interop.Flix.Marshal.fromJavaObject(o1); 
+            let b = Interop.Flix.Marshal.fromJavaObject(o2);
             f(a, b)
         };
         BiPredicate(unchecked_cast(new ##java.util.function.BiPredicate {
@@ -48,6 +48,6 @@ namespace Interop/Util/Function/BiPredicate {
     pub def test(t: a, u: b, f: BiPredicate[a, b, ef]): Bool \ ef with Marshal[a], Marshal[b] = 
         import java.util.function.BiPredicate.test(##java.lang.Object, ##java.lang.Object): Bool \ ef;
         let BiPredicate(f1) = f;
-        test(f1, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u))
+        test(f1, Interop.Flix.Marshal.toJavaObject(t), Interop.Flix.Marshal.toJavaObject(u))
 
 }

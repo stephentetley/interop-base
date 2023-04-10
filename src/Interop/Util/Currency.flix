@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
-    use Interop/Util.Currency
-    use Interop/Util.Currency.{Currency}
+    use Interop.Util.Currency
+    use Interop.Util.Currency.{Currency}
     
     ///
     /// Represents a Java Currency.
@@ -27,10 +27,10 @@ namespace Interop/Util {
 
     instance ToString[Currency] {
         pub def toString(x: Currency): String = 
-            Interop/Util/Currency.toString(x)
+            Interop.Util.Currency.toString(x)
     }
 
-    instance Interop/Flix.Marshal[Currency] {
+    instance Interop.Flix.Marshal[Currency] {
         pub def toJavaObject(x: Currency): ##java.lang.Object =
             let Currency(x1) = x;
             checked_cast(x1)
@@ -42,14 +42,14 @@ namespace Interop/Util {
 }
 
 
-namespace Interop/Util/Currency {
+mod Interop.Util.Currency {
     
-    use Interop/Util.Currency
-    use Interop/Util.Currency.{Currency}
-    use Interop/Util.Locale
-    use Interop/Util.Locale.{Locale}
-    use Interop/Util.SetZ
-    use Interop/Flix.Marshal
+    use Interop.Util.Currency
+    use Interop.Util.Currency.{Currency}
+    use Interop.Util.Locale
+    use Interop.Util.Locale.{Locale}
+    use Interop.Util.SetZ
+    use Interop.Flix.Marshal
 
     pub def getHH(c: Currency): ##java.util.Currency = 
         let Currency(c1) = c;
@@ -69,7 +69,7 @@ namespace Interop/Util/Currency {
 
     pub def getAvailableCurrencies(r: Region[r]): SetZ[Currency, r] \ IO =
         import static java.util.Currency.getAvailableCurrencies(): ##java.util.Set \ IO ;
-        getAvailableCurrencies() |> Interop/Util/SetZ.wrapHH(r)
+        getAvailableCurrencies() |> Interop.Util.SetZ.wrapHH(r)
         
 
 
@@ -96,7 +96,7 @@ namespace Interop/Util/Currency {
     pub def getSymbolWithLocale(loc: Locale, cur: Currency): String = 
         import java.util.Currency.getSymbol(##java.util.Locale): String \ {};
         let Currency(cur1) = cur;
-        let loc1 = Interop/Util/Locale.getHH(loc);
+        let loc1 = Interop.Util.Locale.getHH(loc);
         getSymbol(cur1, loc1)
 
 

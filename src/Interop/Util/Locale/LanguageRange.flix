@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Locale {
+mod Interop.Util.Locale {
 
-    use Interop/Util/Locale.LanguageRange
-    use Interop/Util/Locale.LanguageRange.{LanguageRange}
+    use Interop.Util.Locale.LanguageRange
+    use Interop.Util.Locale.LanguageRange.{LanguageRange}
 
     /// Class / Immutable
     pub enum LanguageRange(##java.util.Locale$LanguageRange)
 
-    instance Interop/Flix.Marshal[LanguageRange] {
+    instance Interop.Flix.Marshal[LanguageRange] {
         pub def toJavaObject(x: LanguageRange): ##java.lang.Object =
             let LanguageRange(x1) = x;
             checked_cast(x1)
@@ -34,10 +34,10 @@ namespace Interop/Util/Locale {
 }
 
 
-namespace Interop/Util/Locale/LanguageRange {
+mod Interop.Util.Locale.LanguageRange {
 
-    use Interop/Util/Locale.LanguageRange
-    use Interop/Util/Locale.LanguageRange.{LanguageRange}
+    use Interop.Util.Locale.LanguageRange
+    use Interop.Util.Locale.LanguageRange.{LanguageRange}
 
 
     pub def getHH(lr: LanguageRange): ##java.util.Locale$LanguageRange = 
@@ -93,7 +93,7 @@ namespace Interop/Util/Locale/LanguageRange {
     pub def parse(ranges: String): Result[String, List[LanguageRange]] = 
         Result.tryCatch(_ -> {
             import static java.util.Locale$LanguageRange.parse(String): ##java.util.List \ {};
-            parse(ranges) |> Interop/Util/ListZ.primListToFlixList
+            parse(ranges) |> Interop.Util.ListZ.primListToFlixList
         })
 
 
@@ -101,10 +101,10 @@ namespace Interop/Util/Locale/LanguageRange {
                                     customizations: Map[String, List[String]]): Result[String, List[LanguageRange]] =
         Result.tryCatch(_ -> {
             import static java.util.Locale$LanguageRange.parse(String, ##java.util.Map): ##java.util.List \ {};
-            let marshalKey = Interop/Flix/Marshal.toJavaObject;
-            let marshalValue = Interop/Util/ListZ.fromFoldableViaArrayListHH >> Interop/Flix/Marshal.unsafeCastToObject;
-            let cs1 = Interop/Util/MapZ.fromFlixMapViaHashMapHHWith(marshalKey, marshalValue, customizations);
-            parse(ranges, cs1) |> Interop/Util/ListZ.primListToFlixList
+            let marshalKey = Interop.Flix.Marshal.toJavaObject;
+            let marshalValue = Interop.Util.ListZ.fromFoldableViaArrayListHH >> Interop.Flix.Marshal.unsafeCastToObject;
+            let cs1 = Interop.Util.MapZ.fromFlixMapViaHashMapHHWith(marshalKey, marshalValue, customizations);
+            parse(ranges, cs1) |> Interop.Util.ListZ.primListToFlixList
         })
 
 
@@ -112,11 +112,11 @@ namespace Interop/Util/Locale/LanguageRange {
                             customizations: Map[String, List[String]]): Result[String, List[LanguageRange]] =
         Result.tryCatch(_ -> {
             import static java.util.Locale$LanguageRange.mapEquivalents(##java.util.List, ##java.util.Map): ##java.util.List \ {};
-            let ps1 = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
-            let marshalKey = Interop/Flix/Marshal.toJavaObject;
-            let marshalValue = Interop/Util/ListZ.fromFoldableViaArrayListHH >> Interop/Flix/Marshal.unsafeCastToObject;
-            let cs1 = Interop/Util/MapZ.fromFlixMapViaHashMapHHWith(marshalKey, marshalValue, customizations);
-            mapEquivalents(ps1, cs1) |> Interop/Util/ListZ.primListToFlixList
+            let ps1 = Interop.Util.ListZ.fromFoldableViaArrayListHH(priorityList);
+            let marshalKey = Interop.Flix.Marshal.toJavaObject;
+            let marshalValue = Interop.Util.ListZ.fromFoldableViaArrayListHH >> Interop.Flix.Marshal.unsafeCastToObject;
+            let cs1 = Interop.Util.MapZ.fromFlixMapViaHashMapHHWith(marshalKey, marshalValue, customizations);
+            mapEquivalents(ps1, cs1) |> Interop.Util.ListZ.primListToFlixList
         })
 
 

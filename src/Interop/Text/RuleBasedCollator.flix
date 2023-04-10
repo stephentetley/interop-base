@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-namespace Interop/Text {
+mod Interop.Text {
     
-    use Interop/Text.RuleBasedCollator
-    use Interop/Text.RuleBasedCollator.{RuleBasedCollator}
-    use Interop/Text.Collator
-    use Interop/Text.Collator.{Collator}
+    use Interop.Text.RuleBasedCollator
+    use Interop.Text.RuleBasedCollator.{RuleBasedCollator}
+    use Interop.Text.Collator
+    use Interop.Text.Collator.{Collator}
     
     ///
     /// Represents a RuleBasedCollator.
@@ -43,15 +43,15 @@ namespace Interop/Text {
 
 }
 
-namespace Interop/Text/RuleBasedCollator {
+mod Interop.Text.RuleBasedCollator {
 
-    use Interop/Text.RuleBasedCollator
-    use Interop/Text.RuleBasedCollator.{RuleBasedCollator}
-    use Interop/Text.Collator.{CollatorProperty}
-    use Interop/Util.Locale
-    use Interop/Util.Locale.{Locale}
-    use Interop/Flix.Setter
-    use Interop/Flix.Setter.Setter
+    use Interop.Text.RuleBasedCollator
+    use Interop.Text.RuleBasedCollator.{RuleBasedCollator}
+    use Interop.Text.Collator.{CollatorProperty}
+    use Interop.Util.Locale
+    use Interop.Util.Locale.{Locale}
+    use Interop.Flix.Setter
+    use Interop.Flix.Setter.Setter
 
     pub def getHH(c: RuleBasedCollator): ##java.text.RuleBasedCollator = 
         let RuleBasedCollator(c1) = c;
@@ -62,14 +62,14 @@ namespace Interop/Text/RuleBasedCollator {
         RuleBasedCollator(prim)
 
     pub def makeSetter(rc: Region[r], xs: List[CollatorProperty]): Setter[RuleBasedCollator, r] =         
-        Interop/Text/Collator.makeSetter(rc, xs) |> Interop/Flix/Setter.castSetter(Interop/Text/SubCollator.toCollator)
+        Interop.Text.Collator.makeSetter(rc, xs) |> Interop.Flix.Setter.castSetter(Interop.Text.SubCollator.toCollator)
 
     ///
     /// New RuleBasedCollator.
     ///
     pub def new(rules: String, props: List[CollatorProperty]): Result[String, RuleBasedCollator] = region rc {
         import new java.text.RuleBasedCollator(String): ##java.text.RuleBasedCollator \ {} as new1;
-        RuleBasedCollator(new1(rules)) |> Interop/Flix/Setter.apply(rc, makeSetter(rc, props))
+        RuleBasedCollator(new1(rules)) |> Interop.Flix.Setter.apply(rc, makeSetter(rc, props))
     }
 
     pub def hashCode(c: RuleBasedCollator): Int32 = 

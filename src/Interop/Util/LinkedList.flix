@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
-    use Interop/Util.LinkedList
-    use Interop/Util.LinkedList.{LinkedList}
-    use Interop/Util.Collection;
-    use Interop/Util.Collection.{Collection};
-    use Interop/Util.ListZ;
-    use Interop/Util.ListZ.{ListZ};
-    use Interop/Util/Function.ConsumerZ.{ConsumerZ};
+    use Interop.Util.LinkedList
+    use Interop.Util.LinkedList.{LinkedList}
+    use Interop.Util.Collection;
+    use Interop.Util.Collection.{Collection};
+    use Interop.Util.ListZ;
+    use Interop.Util.ListZ.{ListZ};
+    use Interop.Util.Function.ConsumerZ.{ConsumerZ};
 
     ///
     /// Represents a LinkedList.
@@ -33,7 +33,7 @@ namespace Interop/Util {
     }
 
 
-    instance Interop/Util.ImpCollection[LinkedList] {
+    instance Interop.Util.ImpCollection[LinkedList] {
         pub def toCollection(t: LinkedList[a, r]): Collection[a, r] = 
             let LinkedList(rc, t1) = t;
             Collection(rc, unchecked_cast(t1 as ##java.util.Collection))
@@ -44,7 +44,7 @@ namespace Interop/Util {
     }
 
 
-    instance Interop/Util.ImpListZ[LinkedList] {
+    instance Interop.Util.ImpListZ[LinkedList] {
         pub def toListZ(t: LinkedList[a, r]): ListZ[a, r] = 
             let LinkedList(rc, t1) = t;
             ListZ(rc, unchecked_cast(t1 as ##java.util.List))
@@ -56,17 +56,17 @@ namespace Interop/Util {
 
 }
 
-namespace Interop/Util/LinkedList {
+mod Interop.Util.LinkedList {
 
-    use Interop/Util.LinkedList
-    use Interop/Util.LinkedList.{LinkedList}
-    use Interop/Util.Collection
-    use Interop/Util.Collection.{Collection}
-    use Interop/Util.Comparator
-    use Interop/Util.ImpCollection
-    use Interop/Util/Function.ConsumerZ.{ConsumerZ}
-    use Interop/Util/Function.PredicateZ.{PredicateZ}
-    use Interop/Flix.Marshal;
+    use Interop.Util.LinkedList
+    use Interop.Util.LinkedList.{LinkedList}
+    use Interop.Util.Collection
+    use Interop.Util.Collection.{Collection}
+    use Interop.Util.Comparator
+    use Interop.Util.ImpCollection
+    use Interop.Util.Function.ConsumerZ.{ConsumerZ}
+    use Interop.Util.Function.PredicateZ.{PredicateZ}
+    use Interop.Flix.Marshal;
 
     
     pub def getHH(l: LinkedList[a, r]): ##java.util.LinkedList = 
@@ -114,18 +114,18 @@ namespace Interop/Util/LinkedList {
     pub def get(ix: Int32, l: LinkedList[a, r]): a \ Read(r) with Marshal[a] = 
         import java.util.LinkedList.get(Int32): ##java.lang.Object \ r;
         let LinkedList(_, l1) = l;
-        get(l1, ix) |> Interop/Flix/Marshal.fromJavaObject
+        get(l1, ix) |> Interop.Flix.Marshal.fromJavaObject
 
     pub def add!(x: a, l: LinkedList[a, r]): Bool \ { Write(r) } with Marshal[a] = 
         import java.util.LinkedList.add(##java.lang.Object): Bool \ r;
         let LinkedList(_, l1) = l;
-        add(l1, Interop/Flix/Marshal.toJavaObject(x))
+        add(l1, Interop.Flix.Marshal.toJavaObject(x))
 
     pub def addAt!(ix: Int32, x: a, l: LinkedList[a, r]): Result[String, Unit] \ { Write(r) } with Marshal[a] = 
         Result.tryCatch(_ -> {
             import java.util.LinkedList.add(Int32, ##java.lang.Object): Unit \ r;
             let LinkedList(_, l1) = l;
-            add(l1, ix, Interop/Flix/Marshal.toJavaObject(x))
+            add(l1, ix, Interop.Flix.Marshal.toJavaObject(x))
         })
 
     pub def addWith!(x: a, ocast: a -> ##java.lang.Object, l: LinkedList[a, r]): Bool \ Write(r) = 
@@ -147,7 +147,7 @@ namespace Interop/Util/LinkedList {
         Result.tryCatch(_ -> {
             import java.util.LinkedList.remove(##java.lang.Object): Bool \ r; 
             let LinkedList(_, l1) = l;
-            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
             remove(l1, x1)
         })
 
@@ -164,7 +164,7 @@ namespace Interop/Util/LinkedList {
         Result.tryCatch(_ -> {
             import java.util.LinkedList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let LinkedList(_, l1) = l;
-            let PredicateZ(f1) = Interop/Util/Function/PredicateZ.makePredicateZ(f);
+            let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
             checked_ecast(removeIf(l1, f1))
         })
 
@@ -184,13 +184,13 @@ namespace Interop/Util/LinkedList {
         Result.tryCatch(_ -> {
             import java.util.LinkedList.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let LinkedList(_, l1) = l;
-            let ConsumerZ(f1) = Interop/Util/Function/ConsumerZ.makeConsumerZ(f);
+            let ConsumerZ(f1) = Interop.Util.Function.ConsumerZ.makeConsumerZ(f);
             forEach(l1, f1)
         })
 
 
     pub def sort!(f: (a, a) -> Int32, l: LinkedList[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
-        let f1 = Interop/Util/Comparator.makeComparator(f);
+        let f1 = Interop.Util.Comparator.makeComparator(f);
         sortWithComparator!(f1, l)
 
 
@@ -223,7 +223,7 @@ namespace Interop/Util/LinkedList {
     /// Returns an iterator over `l`.
     ///
     pub def iterator(rc: Region[r1], l: LinkedList[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
-        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, l)
+        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, l)
 
     ///
     /// Returns an iterator over `l`.
@@ -237,8 +237,8 @@ namespace Interop/Util/LinkedList {
             Iterator.empty(rc)
         else 
             iterator(l1) 
-                |> Interop/Util/IteratorZ.wrapHH(rc) 
-                |> Interop/Util/IteratorZ.toFlixIterator(rc, ocast)
+                |> Interop.Util.IteratorZ.wrapHH(rc) 
+                |> Interop.Util.IteratorZ.toFlixIterator(rc, ocast)
 
 
 
@@ -254,7 +254,7 @@ namespace Interop/Util/LinkedList {
         import java.util.LinkedList.add(##java.lang.Object): Bool \ r as add1;
         def loop(st1, acc) = match f(st1) {
             case None         => LinkedList(rc, acc)
-            case Some(o, st2) => {discard add1(acc, Interop/Flix/Marshal.toJavaObject(o)); loop(st2, acc)}
+            case Some(o, st2) => {discard add1(acc, Interop.Flix.Marshal.toJavaObject(o)); loop(st2, acc)}
         };
         loop(st, new1())
 

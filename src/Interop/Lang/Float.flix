@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-namespace Interop/Lang {
+mod Interop.Lang {
 
-    use Interop/Lang.Float
-    use Interop/Lang.Float.{Float}
+    use Interop.Lang.Float
+    use Interop.Lang.Float.{Float}
 
     ///
     /// Represents a Java Float class.
@@ -25,7 +25,7 @@ namespace Interop/Lang {
     pub enum Float(##java.lang.Float)
 
 
-    instance Interop/Flix.Marshal[Float] {
+    instance Interop.Flix.Marshal[Float] {
         pub def toJavaObject(x: Float): ##java.lang.Object = 
             let Float(x1) = x;
             checked_cast(x1)
@@ -36,11 +36,11 @@ namespace Interop/Lang {
 
 }
 
-namespace Interop/Lang/Float {
+mod Interop.Lang.Float {
 
 
-    use Interop/Lang.Float
-    use Interop/Lang.Float.{Float}
+    use Interop.Lang.Float
+    use Interop.Lang.Float.{Float}
 
 
     pub def getHH(d: Float): ##java.lang.Float = 

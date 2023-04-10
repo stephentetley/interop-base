@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
     ///
     /// Represents a Java Comparator.
@@ -28,16 +28,16 @@ namespace Interop/Util {
 }
 
 
-namespace Interop/Util/Comparator {
+mod Interop.Util.Comparator {
     
-    use Interop/Util.Comparator;
-    use Interop/Flix.Marshal
+    use Interop.Util.Comparator;
+    use Interop.Flix.Marshal
 
 
     pub def makeComparator(f: (a, a) -> Int32 \ ef): Comparator[a] \ ef with Marshal[a] = 
         let f1 = (o1, o2) -> {
-            let a = Interop/Flix/Marshal.fromJavaObject(o1); 
-            let b = Interop/Flix/Marshal.fromJavaObject(o2); 
+            let a = Interop.Flix.Marshal.fromJavaObject(o1); 
+            let b = Interop.Flix.Marshal.fromJavaObject(o2); 
             f(a, b)
         };
         unchecked_cast((new ##java.util.Comparator {

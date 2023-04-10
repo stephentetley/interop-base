@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-namespace Interop/Lang {
+mod Interop.Lang {
 
-    use Interop/Lang.Double
-    use Interop/Lang.Double.{Double}
+    use Interop.Lang.Double
+    use Interop.Lang.Double.{Double}
 
     ///
     /// Represents a Java Double class.
@@ -25,7 +25,7 @@ namespace Interop/Lang {
     pub enum Double(##java.lang.Double)
 
 
-    instance Interop/Flix.Marshal[Double] {
+    instance Interop.Flix.Marshal[Double] {
         pub def toJavaObject(x: Double): ##java.lang.Object = 
             let Double(x1) = x;
             checked_cast(x1)
@@ -36,11 +36,11 @@ namespace Interop/Lang {
 
 }
 
-namespace Interop/Lang/Double {
+mod Interop.Lang.Double {
 
 
-    use Interop/Lang.Double
-    use Interop/Lang.Double.{Double}
+    use Interop.Lang.Double
+    use Interop.Lang.Double.{Double}
 
 
     pub def getHH(d: Double): ##java.lang.Double = 

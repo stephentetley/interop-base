@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-namespace Interop/NIO/Charset {
+mod Interop.NIO.Charset {
 
-    use Interop/NIO/Charset.Charset
-    use Interop/NIO/Charset.Charset.{Charset}
+    use Interop.NIO.Charset.Charset
+    use Interop.NIO.Charset.Charset.{Charset}
     
     /// 
     /// Charset is a wrapper over the Java class `java.nio.charset.Charset`.
@@ -27,25 +27,25 @@ namespace Interop/NIO/Charset {
 
     instance ToString[Charset] {
         pub def toString(x: Charset): String = 
-            Interop/NIO/Charset/Charset.toString(x)
+            Interop.NIO.Charset.Charset.toString(x)
     }
 
     instance Eq[Charset] {
         pub def eq(x: Charset, y: Charset): Bool = 
-            Interop/NIO/Charset/Charset.equals(x, y)
+            Interop.NIO.Charset.Charset.equals(x, y)
     }
     
     instance Order[Charset] {
         pub def compare(x: Charset, y: Charset): Comparison =
-            Interop/NIO/Charset/Charset.compareTo(x, y) |> Comparison.fromInt32
+            Interop.NIO.Charset.Charset.compareTo(x, y) |> Comparison.fromInt32
     }
 
     instance Hash[Charset] {
         pub def hash(x: Charset): Int32 = 
-            Interop/NIO/Charset/Charset.hashCode(x)
+            Interop.NIO.Charset.Charset.hashCode(x)
     }
 
-    instance Interop/Flix.Marshal[Charset] {
+    instance Interop.Flix.Marshal[Charset] {
         pub def toJavaObject(x: Charset): ##java.lang.Object =
             let Charset(x1) = x;
             checked_cast(x1)
@@ -56,13 +56,13 @@ namespace Interop/NIO/Charset {
 
 }
 
-namespace Interop/NIO/Charset/Charset {
+mod Interop.NIO.Charset.Charset {
 
-    use Interop/NIO/Charset.Charset
-    use Interop/NIO/Charset.Charset.{Charset}
+    use Interop.NIO.Charset.Charset
+    use Interop.NIO.Charset.Charset.{Charset}
 
-    use Interop/Util.Locale
-    use Interop/Util.Locale.{Locale}
+    use Interop.Util.Locale
+    use Interop.Util.Locale.{Locale}
 
     pub def getHH(cs: Charset): ##java.nio.charset.Charset = 
         let Charset(cs1) = cs;
@@ -163,11 +163,11 @@ namespace Interop/NIO/Charset/Charset {
     pub def aliases(x: Charset): Set[String] =
         import java.nio.charset.Charset.aliases(): ##java.util.Set \ {};
         let Charset(x1) = x;
-        aliases(x1) |> Interop/Util/SetZ.primSetToFlixSet
+        aliases(x1) |> Interop.Util.SetZ.primSetToFlixSet
 
     pub def availableCharsets(): Map[String, Charset] \ IO =
         import static java.nio.charset.Charset.availableCharsets(): ##java.util.SortedMap \ IO;
-        availableCharsets() |> Interop/Util/SortedMap.primSortedMapToFlixMap
+        availableCharsets() |> Interop.Util.SortedMap.primSortedMapToFlixMap
 
     /// TODO wrap ByteBuffer and CharBuffer
 

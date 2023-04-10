@@ -17,10 +17,10 @@
 
 // java.text.Normalizer is a utility class (only has static methods)
 
-namespace Interop/Text/Normalizer {
+mod Interop.Text.Normalizer {
 
-    use Interop/Text.NormalizerForm;
-    use Interop/Text.NormalizerForm.{NormalizerForm};
+    use Interop.Text.NormalizerForm;
+    use Interop.Text.NormalizerForm.{NormalizerForm};
 
     pub def normalize(nform: NormalizerForm, src: String): Result[String, String] =
         Result.tryCatch(_ -> {

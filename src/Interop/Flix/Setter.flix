@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Flix {
+mod Interop.Flix {
 
 
     /// A `Setter` with error reporting.
@@ -22,10 +22,10 @@ namespace Interop/Flix {
 
 }
 
-namespace Interop/Flix/Setter {
+mod Interop.Flix.Setter {
 
-    use Interop/Flix.Setter
-    use Interop/Flix.Setter.Setter
+    use Interop.Flix.Setter
+    use Interop.Flix.Setter.Setter
 
 
     pub def apply[r: Region, t:Type](_: Region[r], f: Setter[t, r], o: t): Result[String, t] \ Write(r) = 

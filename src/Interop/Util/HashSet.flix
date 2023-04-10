@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
-    use Interop/Util.HashSet
-    use Interop/Util.HashSet.{HashSet}
-    use Interop/Util.Collection
-    use Interop/Util.Collection.{Collection}
-    use Interop/Util.SetZ
-    use Interop/Util.SetZ.{SetZ}
+    use Interop.Util.HashSet
+    use Interop.Util.HashSet.{HashSet}
+    use Interop.Util.Collection
+    use Interop.Util.Collection.{Collection}
+    use Interop.Util.SetZ
+    use Interop.Util.SetZ.{SetZ}
 
     ///
     /// Represents a Java HashSet.
@@ -31,7 +31,7 @@ namespace Interop/Util {
         case HashSet(Region[r], ##java.util.HashSet)
     }
 
-    instance Interop/Util.ImpCollection[HashSet] {
+    instance Interop.Util.ImpCollection[HashSet] {
         pub def toCollection(t: HashSet[a, r]): Collection[a, r] = 
             let HashSet(rc, t1) = t;
             Collection(rc, unchecked_cast(t1 as ##java.util.Collection))
@@ -41,7 +41,7 @@ namespace Interop/Util {
             HashSet(rc, unchecked_cast(t1 as ##java.util.HashSet))
     }
 
-    instance Interop/Util.ImpSetZ[HashSet] {
+    instance Interop.Util.ImpSetZ[HashSet] {
         pub def toSetZ(t: HashSet[a, r]): SetZ[a, r] = 
             let HashSet(rc, t1) = t;
             SetZ(rc, unchecked_cast(t1 as ##java.util.Set))
@@ -53,15 +53,15 @@ namespace Interop/Util {
 
 }
 
-namespace Interop/Util/HashSet {
+mod Interop.Util.HashSet {
 
-    use Interop/Util.HashSet
-    use Interop/Util.HashSet.{HashSet}
-    use Interop/Util.Collection
-    use Interop/Util.Collection.{Collection}
-    use Interop/Util.ImpSetZ
-    use Interop/Util/Function.PredicateZ.{PredicateZ}
-    use Interop/Flix.Marshal
+    use Interop.Util.HashSet
+    use Interop.Util.HashSet.{HashSet}
+    use Interop.Util.Collection
+    use Interop.Util.Collection.{Collection}
+    use Interop.Util.ImpSetZ
+    use Interop.Util.Function.PredicateZ.{PredicateZ}
+    use Interop.Flix.Marshal
 
 
     pub def getHH(s: HashSet[a, r]): ##java.util.HashSet = 
@@ -109,7 +109,7 @@ namespace Interop/Util/HashSet {
     pub def add!(x: a, s: HashSet[a, r]): Bool \  Write(r) with Marshal[a] =
         import java.util.HashSet.add(##java.lang.Object): Bool \ r; 
         let HashSet(_, s1) = s;
-        let x1 = Interop/Flix/Marshal.toJavaObject(x);
+        let x1 = Interop.Flix.Marshal.toJavaObject(x);
         add(s1, x1)
 
     pub def addWith!(x: a, ocast: a -> ##java.lang.Object, s: HashSet[a, r]): Bool \ { Write(r) } = 
@@ -128,7 +128,7 @@ namespace Interop/Util/HashSet {
         Result.tryCatch(_ -> {
             import java.util.HashSet.remove(##java.lang.Object): Bool \ r; 
             let HashSet(_, s1) = s;
-            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
             remove(s1, x1)
         })
 
@@ -146,7 +146,7 @@ namespace Interop/Util/HashSet {
         Result.tryCatch(_ -> {
             import java.util.HashSet.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let HashSet(_, s1) = s;
-            let PredicateZ(f1) = Interop/Util/Function/PredicateZ.makePredicateZ(f);
+            let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
             unchecked_cast(removeIf(s1, f1) as _ \ {ef, Write(r)})
         })
 
@@ -169,11 +169,11 @@ namespace Interop/Util/HashSet {
         set1
     
     pub def iterator(rc: Region[r1], m: HashSet[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
-        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, m)
+        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, m)
 
     pub def toFlixIterator(rc: Region[r1], 
                             ocast: ##java.lang.Object -> a,
                             s: HashSet[a, r]): Iterator[a, r1, r1] \ { Read(r)} with Marshal[a] =
-        Interop/Util/SetZ.toFlixIterator(rc, ocast, ImpSetZ.toSetZ(s))
+        Interop.Util.SetZ.toFlixIterator(rc, ocast, ImpSetZ.toSetZ(s))
 
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
     ///
     /// Represents a Java DoubleSummaryStatistics.
@@ -24,11 +24,11 @@ namespace Interop/Util {
 }
 
 
-namespace Interop/Util/DoubleSummaryStatistics {
+mod Interop.Util.DoubleSummaryStatistics {
     
-    use Interop/Util.DoubleSummaryStatistics
-    use Interop/Util.DoubleSummaryStatistics.{DoubleSummaryStatistics}
-    use Interop/Flix.Marshal
+    use Interop.Util.DoubleSummaryStatistics
+    use Interop.Util.DoubleSummaryStatistics.{DoubleSummaryStatistics}
+    use Interop.Flix.Marshal
 
     pub def getHH(ss: DoubleSummaryStatistics[r]): ##java.util.DoubleSummaryStatistics = 
         let DoubleSummaryStatistics(ss1) = ss;

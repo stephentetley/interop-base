@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-namespace Interop/Lang {
+mod Interop.Lang {
 
-    use Interop/Lang.Boolean
-    use Interop/Lang.Boolean.{Boolean}
+    use Interop.Lang.Boolean
+    use Interop.Lang.Boolean.{Boolean}
 
     ///
     /// Represents a Java Boolean.
@@ -25,7 +25,7 @@ namespace Interop/Lang {
     pub enum Boolean(##java.lang.Boolean)
 
 
-    instance Interop/Flix.Marshal[Boolean] {
+    instance Interop.Flix.Marshal[Boolean] {
         pub def toJavaObject(x: Boolean): ##java.lang.Object = 
             let Boolean(x1) = x;
             checked_cast(x1)
@@ -36,11 +36,11 @@ namespace Interop/Lang {
 
 }
 
-namespace Interop/Lang/Boolean {
+mod Interop.Lang.Boolean {
 
 
-    use Interop/Lang.Boolean
-    use Interop/Lang.Boolean.{Boolean}
+    use Interop.Lang.Boolean
+    use Interop.Lang.Boolean.{Boolean}
 
     pub def getHH(b: Boolean): ##java.lang.Boolean = 
         let Boolean(b1) = b;

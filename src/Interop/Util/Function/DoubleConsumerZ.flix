@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java DoubleConsumer.
@@ -28,10 +28,10 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/DoubleConsumerZ {
+mod Interop.Util.Function.DoubleConsumerZ {
     
-    use Interop/Util/Function.DoubleConsumerZ
-    use Interop/Util/Function.DoubleConsumerZ.DoubleConsumerZ
+    use Interop.Util.Function.DoubleConsumerZ
+    use Interop.Util.Function.DoubleConsumerZ.DoubleConsumerZ
 
     pub def makeDoubleConsumerZ(f: Float64 -> Unit \ ef): DoubleConsumerZ[ef] = 
         DoubleConsumerZ(unchecked_cast(f as ##java.util.function.DoubleConsumer))

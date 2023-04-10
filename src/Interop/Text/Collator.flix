@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Text {
+mod Interop.Text {
     
     ///
     /// Class / Represents a Collator.
@@ -30,16 +30,16 @@ namespace Interop/Text {
 
 }
 
-namespace Interop/Text/Collator {
+mod Interop.Text.Collator {
 
-    use Interop/Text.Collator
-    use Interop/Text.Collator.{Collator}
-    use Interop/Text/Collator.CollatorProperty
-    use Interop/Text/Collator.CollatorProperty.{Decomposition, Strength}
-    use Interop/Util.Locale
-    use Interop/Util.Locale.{Locale}
-    use Interop/Flix.Setter
-    use Interop/Flix.Setter.Setter
+    use Interop.Text.Collator
+    use Interop.Text.Collator.{Collator}
+    use Interop.Text.Collator.CollatorProperty
+    use Interop.Text.Collator.CollatorProperty.{Decomposition, Strength}
+    use Interop.Util.Locale
+    use Interop.Util.Locale.{Locale}
+    use Interop.Flix.Setter
+    use Interop.Flix.Setter.Setter
 
     pub def getHH(c: Collator): ##java.text.Collator = 
         let Collator(c1) = c;
@@ -61,7 +61,7 @@ namespace Interop/Text/Collator {
             case Decomposition(x1) => setDecomposition!(rc, x1)
             case Strength(x1)      => setStrength!(rc, x1)
         };
-        Interop/Flix/Setter.makeSetter(rc, f, xs)
+        Interop.Flix.Setter.makeSetter(rc, f, xs)
 
 
     pub def no_decomposition(): Int32 = 
@@ -101,13 +101,13 @@ namespace Interop/Text/Collator {
     ///
     pub def getInstance(props: List[CollatorProperty]): Result[String, Collator] \ IO = region rc {
         import static java.text.Collator.getInstance(): ##java.text.Collator \ IO;
-        Collator(getInstance()) |> Interop/Flix/Setter.apply(rc, makeSetter(rc, props))
+        Collator(getInstance()) |> Interop.Flix.Setter.apply(rc, makeSetter(rc, props))
     }
 
     pub def getInstanceWithLocale(loc: Locale, props: List[CollatorProperty]): Result[String, Collator] = region rc {
         import static java.text.Collator.getInstance(##java.util.Locale): ##java.text.Collator \ {};
         let Locale(loc1) = loc;
-        Collator(getInstance(loc1)) |> Interop/Flix/Setter.apply(rc, makeSetter(rc, props))
+        Collator(getInstance(loc1)) |> Interop.Flix.Setter.apply(rc, makeSetter(rc, props))
     }
 
     /// TODO - instance with decomposition and strength?
@@ -150,14 +150,14 @@ namespace Interop/Text/Collator {
 
 
     pub def setDecomposition!(_: Region[r], mode: Int32): Setter[Collator, r] =
-        Interop/Flix/Setter.lift(c -> 
+        Interop.Flix.Setter.lift(c -> 
             import java.text.Collator.setDecomposition(Int32): Unit \ Write(r);
             let Collator(c1) = c;
             setDecomposition(c1, mode)
         )
 
     pub def setStrength!(_: Region[r], strength: Int32): Setter[Collator, r] =
-        Interop/Flix/Setter.lift(c -> 
+        Interop.Flix.Setter.lift(c -> 
             import java.text.Collator.setStrength(Int32): Unit \ Write(r);
             let Collator(c1) = c;
             setStrength(c1, strength)

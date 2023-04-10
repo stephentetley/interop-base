@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java DoublePredicate.
@@ -27,10 +27,10 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/DoublePredicateZ {
+mod Interop.Util.Function.DoublePredicateZ {
     
-    use Interop/Util/Function.DoublePredicateZ
-    use Interop/Util/Function.DoublePredicateZ.{DoublePredicateZ}
+    use Interop.Util.Function.DoublePredicateZ
+    use Interop.Util.Function.DoublePredicateZ.{DoublePredicateZ}
 
     pub def makeDoublePredicateZ(f: Float64 -> Bool \ ef): DoublePredicateZ[ef] = 
         DoublePredicateZ(unchecked_cast(f as ##java.util.function.DoublePredicate))

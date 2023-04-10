@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-namespace Interop/IO {
+mod Interop.IO {
 
-    use Interop/IO.FilterInputStream
-    use Interop/IO.FilterInputStream.{FilterInputStream}
-    use Interop/IO.InputStream
-    use Interop/IO.InputStream.{InputStream}
+    use Interop.IO.FilterInputStream
+    use Interop.IO.FilterInputStream.{FilterInputStream}
+    use Interop.IO.InputStream
+    use Interop.IO.InputStream.{InputStream}
 
     pub enum FilterInputStream[_: Region](##java.io.FilterInputStream)
 
 
-    instance Interop/IO.SubInputStream[FilterInputStream] {
+    instance Interop.IO.SubInputStream[FilterInputStream] {
         pub def toInputStream(s: FilterInputStream[r]): InputStream[r] = 
             let FilterInputStream(s1) = s;
             InputStream(unchecked_cast(s1 as ##java.io.InputStream))
@@ -37,12 +37,12 @@ namespace Interop/IO {
 
 }
 
-namespace Interop/IO/FilterInputStream {
+mod Interop.IO.FilterInputStream {
 
-    use Interop/IO.FilterInputStream
-    use Interop/IO.FilterInputStream.{FilterInputStream}
-    use Interop/IO.File
-    use Interop/IO.File.{File}
+    use Interop.IO.FilterInputStream
+    use Interop.IO.FilterInputStream.{FilterInputStream}
+    use Interop.IO.File
+    use Interop.IO.File.{File}
 
     pub def getHH(s: FilterInputStream[r]): ##java.io.FilterInputStream = 
         let FilterInputStream(s1) = s;

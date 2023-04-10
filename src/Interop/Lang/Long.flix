@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-namespace Interop/Lang {
+mod Interop.Lang {
 
-    use Interop/Lang.Long
-    use Interop/Lang.Long.{Long}
+    use Interop.Lang.Long
+    use Interop.Lang.Long.{Long}
 
     ///
     /// Represents a Java Long class.
@@ -25,7 +25,7 @@ namespace Interop/Lang {
     pub enum Long(##java.lang.Long)
 
 
-    instance Interop/Flix.Marshal[Long] {
+    instance Interop.Flix.Marshal[Long] {
         pub def toJavaObject(x: Long): ##java.lang.Object = 
             let Long(x1) = x;
             checked_cast(x1)
@@ -36,11 +36,11 @@ namespace Interop/Lang {
 
 }
 
-namespace Interop/Lang/Long {
+mod Interop.Lang.Long {
 
 
-    use Interop/Lang.Long
-    use Interop/Lang.Long.{Long}
+    use Interop.Lang.Long
+    use Interop.Lang.Long.{Long}
 
 
     pub def getHH(i: Long): ##java.lang.Long = 

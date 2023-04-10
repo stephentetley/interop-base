@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java ToDoubleBiFunction.
@@ -27,17 +27,17 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/ToDoubleBiFunction {
+mod Interop.Util.Function.ToDoubleBiFunction {
     
-    use Interop/Util/Function.ToDoubleBiFunction
-    use Interop/Util/Function.ToDoubleBiFunction.{ToDoubleBiFunction}
-    use Interop/Flix.Marshal
+    use Interop.Util.Function.ToDoubleBiFunction
+    use Interop.Util.Function.ToDoubleBiFunction.{ToDoubleBiFunction}
+    use Interop.Flix.Marshal
 
     pub def makeToDoubleBiFunction(f: (a, b) -> Float64 \ ef): ToDoubleBiFunction[a, b, ef] with Marshal[a], Marshal[b] = 
         ToDoubleBiFunction(unchecked_cast(new ##java.util.function.ToDoubleBiFunction {
             def applyAsDouble(_this: ##java.util.function.ToDoubleBiFunction, t: ##java.lang.Object, u: ##java.lang.Object): Float64 = 
-                let a1 = Interop/Flix/Marshal.fromJavaObject(t);
-                let b1 = Interop/Flix/Marshal.fromJavaObject(u);
+                let a1 = Interop.Flix.Marshal.fromJavaObject(t);
+                let b1 = Interop.Flix.Marshal.fromJavaObject(u);
                 f(a1, b1)
         } as _ \ {}))
 
@@ -45,6 +45,6 @@ namespace Interop/Util/Function/ToDoubleBiFunction {
     pub def applyAsDouble(f: ToDoubleBiFunction[a, b, ef], t: a, u: b): Float64 \ ef with Marshal[a], Marshal[b] = 
         import java.util.function.ToDoubleBiFunction.applyAsDouble(##java.lang.Object, ##java.lang.Object): Float64 \ ef;
         let ToDoubleBiFunction(f1) = f;
-        applyAsDouble(f1, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u))
+        applyAsDouble(f1, Interop.Flix.Marshal.toJavaObject(t), Interop.Flix.Marshal.toJavaObject(u))
 
 }

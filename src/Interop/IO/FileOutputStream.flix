@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-namespace Interop/IO {
+mod Interop.IO {
 
-    use Interop/IO.FileOutputStream
-    use Interop/IO.FileOutputStream.{FileOutputStream}
-    use Interop/IO.OutputStream
-    use Interop/IO.OutputStream.{OutputStream}
+    use Interop.IO.FileOutputStream
+    use Interop.IO.FileOutputStream.{FileOutputStream}
+    use Interop.IO.OutputStream
+    use Interop.IO.OutputStream.{OutputStream}
 
     pub enum FileOutputStream[_: Region](##java.io.FileOutputStream)
 
 
-    instance Interop/IO.SubOutputStream[FileOutputStream] {
+    instance Interop.IO.SubOutputStream[FileOutputStream] {
         pub def toOutputStream(s: FileOutputStream[r]): OutputStream[r] = 
             let FileOutputStream(s1) = s;
             OutputStream(unchecked_cast(s1 as ##java.io.OutputStream))
@@ -37,12 +37,12 @@ namespace Interop/IO {
 
 }
 
-namespace Interop/IO/FileOutputStream {
+mod Interop.IO.FileOutputStream {
 
-    use Interop/IO.FileOutputStream
-    use Interop/IO.FileOutputStream.{FileOutputStream}
-    use Interop/IO.File
-    use Interop/IO.File.{File}
+    use Interop.IO.FileOutputStream
+    use Interop.IO.FileOutputStream.{FileOutputStream}
+    use Interop.IO.File
+    use Interop.IO.File.{File}
 
     pub def getHH(s: FileOutputStream[r]): ##java.io.FileOutputStream = 
         let FileOutputStream(s1) = s;
@@ -55,7 +55,7 @@ namespace Interop/IO/FileOutputStream {
     pub def newWithFile(_: Region[r1], file: File[r]): Result[String, FileOutputStream[r1]] \ {Read(r), Write(r1), IO} = 
         Result.tryCatch(_ -> {
             import new java.io.FileOutputStream(##java.io.File): ##java.io.FileOutputStream \ {Read(r), Write(r1), IO} as newOutputStream;
-            let file1 = Interop/IO/File.getHH(file);
+            let file1 = Interop.IO.File.getHH(file);
             FileOutputStream(newOutputStream(file1))
         })
 

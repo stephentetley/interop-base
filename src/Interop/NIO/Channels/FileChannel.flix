@@ -15,7 +15,7 @@
  */
 
 
-namespace Interop/NIO/Channels {
+mod Interop.NIO.Channels {
 
     // Abstract Class
     pub enum FileChannel[_: Region](##java.nio.channels.FileChannel)
@@ -23,10 +23,10 @@ namespace Interop/NIO/Channels {
 
 }
 
-namespace Interop/NIO/Channels/FileChannel { 
+mod Interop.NIO.Channels.FileChannel { 
 
-    use Interop/NIO/Channels.FileChannel;
-    use Interop/NIO/Channels.FileChannel.{FileChannel};
+    use Interop.NIO.Channels.FileChannel;
+    use Interop.NIO.Channels.FileChannel.{FileChannel};
 
     pub def getHH(x: FileChannel[r]): ##java.nio.channels.FileChannel = 
         let FileChannel(x1) = x;

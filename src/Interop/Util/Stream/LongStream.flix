@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Stream {
+mod Interop.Util.Stream {
 
 
     ///
@@ -27,26 +27,26 @@ namespace Interop/Util/Stream {
 }
 
 
-namespace Interop/Util/Stream/LongStream {
+mod Interop.Util.Stream.LongStream {
     
-    use Interop/Util/Stream.LongStream
-    use Interop/Util/Stream.LongStream.{LongStream}
-    use Interop/Util/Stream.DoubleStream
-    use Interop/Util/Stream.DoubleStream.{DoubleStream}
-    use Interop/Util/Stream.Stream
-    use Interop/Util/Stream.Stream.{Stream}
-    use Interop/Util.LongSummaryStatistics
-    use Interop/Util.LongSummaryStatistics.{LongSummaryStatistics}
-    use Interop/Util.OptionalDouble
-    use Interop/Util.OptionalDouble.{OptionalDouble}
-    use Interop/Util.OptionalLong
-    use Interop/Util.OptionalLong.{OptionalLong}
-    use Interop/Util/Function.LongConsumerZ.{LongConsumerZ}
-    use Interop/Util/Function.LongFunctionZ.{LongFunctionZ}
-    use Interop/Util/Function.LongPredicateZ.{LongPredicateZ}
-    use Interop/Util/Function.LongSupplier.{LongSupplier}
-    use Interop/Util/Function.LongUnaryOperatorZ.{LongUnaryOperatorZ}
-    use Interop/Flix.Marshal
+    use Interop.Util.Stream.LongStream
+    use Interop.Util.Stream.LongStream.{LongStream}
+    use Interop.Util.Stream.DoubleStream
+    use Interop.Util.Stream.DoubleStream.{DoubleStream}
+    use Interop.Util.Stream.Stream
+    use Interop.Util.Stream.Stream.{Stream}
+    use Interop.Util.LongSummaryStatistics
+    use Interop.Util.LongSummaryStatistics.{LongSummaryStatistics}
+    use Interop.Util.OptionalDouble
+    use Interop.Util.OptionalDouble.{OptionalDouble}
+    use Interop.Util.OptionalLong
+    use Interop.Util.OptionalLong.{OptionalLong}
+    use Interop.Util.Function.LongConsumerZ.{LongConsumerZ}
+    use Interop.Util.Function.LongFunctionZ.{LongFunctionZ}
+    use Interop.Util.Function.LongPredicateZ.{LongPredicateZ}
+    use Interop.Util.Function.LongSupplier.{LongSupplier}
+    use Interop.Util.Function.LongUnaryOperatorZ.{LongUnaryOperatorZ}
+    use Interop.Flix.Marshal
 
 
     pub def getHH(x: LongStream[ef, r]): ##java.util.stream.LongStream = 
@@ -64,8 +64,8 @@ namespace Interop/Util/Stream/LongStream {
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ {} as mkIterator;
         let LongStream(_, s1) = s;
         let iter1 = mkIterator(unchecked_cast(s1 as ##java.util.stream.BaseStream));
-        let iter2 = checked_ecast(Interop/Util/IteratorZ.wrapHH(rc, iter1));
-        Interop/Util/IteratorZ.iterator(rc, iter2)
+        let iter2 = checked_ecast(Interop.Util.IteratorZ.wrapHH(rc, iter1));
+        Interop.Util.IteratorZ.iterator(rc, iter2)
 
     pub def empty(rc: Region[r]): LongStream[ef, r] = 
         import static java.util.stream.LongStream.empty(): ##java.util.stream.LongStream \ {};
@@ -81,12 +81,12 @@ namespace Interop/Util/Stream/LongStream {
 
     pub def iterate(rc: Region[r], seed: Int64, f: Int64 -> Int64 \ ef): LongStream[ef, r] = 
         import static java.util.stream.LongStream.iterate(Int64, ##java.util.function.LongUnaryOperator): ##java.util.stream.LongStream \ {};
-        let LongUnaryOperatorZ(f1) = Interop/Util/Function/LongUnaryOperatorZ.makeLongUnaryOperatorZ(f);
+        let LongUnaryOperatorZ(f1) = Interop.Util.Function.LongUnaryOperatorZ.makeLongUnaryOperatorZ(f);
         LongStream(rc, checked_ecast(iterate(seed, f1)))
 
     pub def generate(rc: Region[r], f: Unit -> Int64 \ ef): LongStream[ef, r] = 
         import static java.util.stream.LongStream.generate(##java.util.function.LongSupplier): ##java.util.stream.LongStream \ {};
-        let LongSupplier(s1) = Interop/Util/Function/LongSupplier.makeLongSupplier(f);
+        let LongSupplier(s1) = Interop.Util.Function.LongSupplier.makeLongSupplier(f);
         LongStream(rc, checked_ecast(generate(s1)))
 
 
@@ -118,13 +118,13 @@ namespace Interop/Util/Stream/LongStream {
     pub def filter(p: Int64 -> Bool \ ef1, s: LongStream[ef, r]): LongStream[ef and ef1, r] = 
         import java.util.stream.LongStream.filter(##java.util.function.LongPredicate): ##java.util.stream.LongStream \ {};
         let LongStream(rc, s1) = s;
-        let LongPredicateZ(p1) = Interop/Util/Function/LongPredicateZ.makeLongPredicateZ(p);
+        let LongPredicateZ(p1) = Interop.Util.Function.LongPredicateZ.makeLongPredicateZ(p);
         LongStream(rc, checked_ecast(filter(s1, p1)))
 
     pub def dropWhile(p: Int64 -> Bool \ ef1, s: LongStream[ef, r]): LongStream[ef and ef1, r] = 
         import java.util.stream.LongStream.dropWhile(##java.util.function.LongPredicate): ##java.util.stream.LongStream \ {};
         let LongStream(rc, s1) = s;
-        let LongPredicateZ(p1) = Interop/Util/Function/LongPredicateZ.makeLongPredicateZ(p);
+        let LongPredicateZ(p1) = Interop.Util.Function.LongPredicateZ.makeLongPredicateZ(p);
         LongStream(rc, checked_ecast(dropWhile(s1, p1)))
 
     pub def limit(size: Int64, s: LongStream[ef, r]): LongStream[ef, r] = 
@@ -135,20 +135,20 @@ namespace Interop/Util/Stream/LongStream {
     pub def map(f: Int64 -> Int64 \ ef1, s: LongStream[ef, r]): LongStream[ef and ef1, r] = 
         import java.util.stream.LongStream.map(##java.util.function.LongUnaryOperator): ##java.util.stream.LongStream \ {};
         let LongStream(rc, s1) = s;
-        let LongUnaryOperatorZ(f1) = Interop/Util/Function/LongUnaryOperatorZ.makeLongUnaryOperatorZ(f);
+        let LongUnaryOperatorZ(f1) = Interop.Util.Function.LongUnaryOperatorZ.makeLongUnaryOperatorZ(f);
         LongStream(rc, checked_ecast(map(s1, f1)))
 
     pub def flatMap(f: Int64 -> LongStream[ef1, r] \ ef2, s: LongStream[ef, r]): LongStream[ef and ef1 and ef2, r] = 
         import java.util.stream.LongStream.flatMap(##java.util.function.LongFunction): ##java.util.stream.LongStream \ {};
         let LongStream(rc, s1) = s;
-        let LongFunctionZ(f1) = Interop/Util/Function/LongFunctionZ.makeLongFunctionZWith(f, t -> {let LongStream(_, t1) = t; unchecked_cast(t1 as ##java.lang.Object)});
+        let LongFunctionZ(f1) = Interop.Util.Function.LongFunctionZ.makeLongFunctionZWith(f, t -> {let LongStream(_, t1) = t; unchecked_cast(t1 as ##java.lang.Object)});
         LongStream(rc, checked_ecast(flatMap(s1, f1)))
 
 
     pub def forEach[ef: Bool, ef1: Bool, r: Region]
                     (f: Int64 -> Unit \ ef1, s: LongStream[ef, r]): Unit \ {ef, ef1, Read(r)} = 
         import java.util.stream.LongStream.forEach(##java.util.function.LongConsumer): Unit \ {ef, ef1, r};
-        let LongConsumerZ(f1) = Interop/Util/Function/LongConsumerZ.makeLongConsumerZ(f);
+        let LongConsumerZ(f1) = Interop.Util.Function.LongConsumerZ.makeLongConsumerZ(f);
         let LongStream(_, s1) = s;
         forEach(s1, f1)
 
@@ -172,14 +172,14 @@ namespace Interop/Util/Stream/LongStream {
                     (f: Int64 -> Bool \ ef1, s: LongStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
         import java.util.stream.LongStream.anyMatch(##java.util.function.LongPredicate): Bool \ {ef, ef1, r};
         let LongStream(_, s1) = s;
-        let LongPredicateZ(f1) = Interop/Util/Function/LongPredicateZ.makeLongPredicateZ(f);
+        let LongPredicateZ(f1) = Interop.Util.Function.LongPredicateZ.makeLongPredicateZ(f);
         anyMatch(s1, f1)
 
     pub def allMatch[ef: Bool, ef1: Bool, r: Region]
                     (f: Int64 -> Bool \ ef1, s: LongStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
         import java.util.stream.LongStream.allMatch(##java.util.function.LongPredicate): Bool \ {ef, ef1, r};
         let LongStream(_, s1) = s;
-        let LongPredicateZ(f1) = Interop/Util/Function/LongPredicateZ.makeLongPredicateZ(f);
+        let LongPredicateZ(f1) = Interop.Util.Function.LongPredicateZ.makeLongPredicateZ(f);
         allMatch(s1, f1)
 
 
@@ -187,29 +187,29 @@ namespace Interop/Util/Stream/LongStream {
                         (f: Int64 -> Bool \ ef1, s: LongStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
         import java.util.stream.LongStream.noneMatch(##java.util.function.LongPredicate): Bool \ {ef, ef1, r};
         let LongStream(_, s1) = s;
-        let LongPredicateZ(f1) = Interop/Util/Function/LongPredicateZ.makeLongPredicateZ(f);
+        let LongPredicateZ(f1) = Interop.Util.Function.LongPredicateZ.makeLongPredicateZ(f);
         noneMatch(s1, f1)
 
 
     pub def findFirst(s: LongStream[ef, r]): Option[Int64] \ {ef, Read(r)} = 
         import java.util.stream.LongStream.findFirst(): ##java.util.OptionalLong \ {ef, r};
         let LongStream(_, s1) = s;
-        findFirst(s1) |> Interop/Util/OptionalLong.hhToOption
+        findFirst(s1) |> Interop.Util.OptionalLong.hhToOption
 
     pub def findAny(s: LongStream[ef, r]): Option[Int64] \ {ef, Read(r)} = 
         import java.util.stream.LongStream.findAny(): ##java.util.OptionalLong \ {ef, r};
         let LongStream(_, s1) = s;
-        findAny(s1) |> Interop/Util/OptionalLong.hhToOption
+        findAny(s1) |> Interop.Util.OptionalLong.hhToOption
 
     pub def max(s: LongStream[ef, r]): Option[Int64] \ {ef, Read(r)} = 
         import java.util.stream.LongStream.max(): ##java.util.OptionalLong \ {ef, r};
         let LongStream(_, s1) = s;
-        max(s1) |> Interop/Util/OptionalLong.hhToOption
+        max(s1) |> Interop.Util.OptionalLong.hhToOption
 
     pub def min(s: LongStream[ef, r]): Option[Int64] \ {ef, Read(r)} = 
         import java.util.stream.LongStream.min(): ##java.util.OptionalLong \ {ef, r};
         let LongStream(_, s1) = s;
-        min(s1) |> Interop/Util/OptionalLong.hhToOption
+        min(s1) |> Interop.Util.OptionalLong.hhToOption
 
     pub def sorted(s: LongStream[ef, r]): LongStream[ef, r] = 
         import java.util.stream.LongStream.sorted(): ##java.util.stream.LongStream \ {};

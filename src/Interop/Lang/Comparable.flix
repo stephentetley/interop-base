@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Lang {
+mod Interop.Lang {
 
     /// Interface...
     /// Probably not useful in practice
@@ -30,10 +30,10 @@ namespace Interop/Lang {
 
 }
 
-namespace Interop/Lang/Comparable {
+mod Interop.Lang.Comparable {
     
-    use Interop/Lang.Comparable
-    use Interop/Lang.Comparable.{Comparable}
+    use Interop.Lang.Comparable
+    use Interop.Lang.Comparable.{Comparable}
 
 
     pub def getHH(c: Comparable): ##java.lang.Comparable = 

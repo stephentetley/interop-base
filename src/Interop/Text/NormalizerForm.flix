@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-namespace Interop/Text {
+mod Interop.Text {
 
-    use Interop/Text.NormalizerForm
-    use Interop/Text.NormalizerForm.{NormalizerForm}
-    use Interop/Lang.Enum
-    use Interop/Lang.Enum.{Enum}
-    use Interop/Lang.SubEnum
+    use Interop.Text.NormalizerForm
+    use Interop.Text.NormalizerForm.{NormalizerForm}
+    use Interop.Lang.Enum
+    use Interop.Lang.Enum.{Enum}
+    use Interop.Lang.SubEnum
 
-    // Design note - Basis libraries should define enums so that constructors
-    // are in the Basis namespace.
 
     pub enum NormalizerForm(##java.text.Normalizer$Form)
 
@@ -39,10 +37,10 @@ namespace Interop/Text {
 
 }
 
-namespace Interop/Text/NormalizerForm {
+mod Interop.Text.NormalizerForm {
 
-    use Interop/Text.NormalizerForm
-    use Interop/Text.NormalizerForm.{NormalizerForm}
+    use Interop.Text.NormalizerForm
+    use Interop.Text.NormalizerForm.{NormalizerForm}
 
     pub def getHH(x: NormalizerForm): ##java.text.Normalizer$Form = 
         let NormalizerForm(x1) = x;

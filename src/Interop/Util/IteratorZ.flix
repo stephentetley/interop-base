@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
     ///
     /// Represents a Java Iterator.
@@ -28,11 +28,11 @@ namespace Interop/Util {
 
 }
 
-namespace Interop/Util/IteratorZ {
+mod Interop.Util.IteratorZ {
 
-    use Interop/Util.IteratorZ;
-    use Interop/Util.IteratorZ.{IteratorZ};
-    use Interop/Flix.Marshal;
+    use Interop.Util.IteratorZ;
+    use Interop.Util.IteratorZ.{IteratorZ};
+    use Interop.Flix.Marshal;
 
 
     pub def getHH(iter: IteratorZ[a, ef, r]): ##java.util.Iterator = 
@@ -44,10 +44,10 @@ namespace Interop/Util/IteratorZ {
 
     /// Mutable (raw) to mutable (Flix iterator) 
     pub def iterator(rc: Region[r1], iter: IteratorZ[a, ef, r]): Iterator[a, ef and r and r1, r1] with Marshal[a]  =
-        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, iter)
+        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, iter)
 
     pub def enumerator(rc: Region[r1], iter: IteratorZ[a, ef, r]): Iterator[(Int32, a), ef and r and r1, r1] \ Write(r1) with Marshal[a] =
-        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, iter) |> Iterator.enumerator        
+        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, iter) |> Iterator.enumerator        
 
     /// Cast must be Pure!
     pub def toFlixIterator(rc: Region[r1], ocast: ##java.lang.Object -> a, iter: IteratorZ[a, ef, r]): Iterator[a, ef and r and r1, r1] =

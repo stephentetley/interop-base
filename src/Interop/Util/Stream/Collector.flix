@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Stream {
+mod Interop.Util.Stream {
 
 
     ///
@@ -27,18 +27,18 @@ namespace Interop/Util/Stream {
 }
 
 
-namespace Interop/Util/Stream/Collector {
+mod Interop.Util.Stream.Collector {
     
-    use Interop/Util/Stream.Collector
-    use Interop/Util/Function.BiConsumer
-    use Interop/Util/Function.BiConsumer.{BiConsumer}
-    use Interop/Util/Function.BinaryOperator
-    use Interop/Util/Function.BinaryOperator.{BinaryOperator}
-    use Interop/Util/Function.FunctionZ
-    use Interop/Util/Function.FunctionZ.{FunctionZ}
-    use Interop/Util/Function.Supplier
-    use Interop/Util/Function.Supplier.{Supplier}
-    use Interop/Flix.Marshal
+    use Interop.Util.Stream.Collector
+    use Interop.Util.Function.BiConsumer
+    use Interop.Util.Function.BiConsumer.{BiConsumer}
+    use Interop.Util.Function.BinaryOperator
+    use Interop.Util.Function.BinaryOperator.{BinaryOperator}
+    use Interop.Util.Function.FunctionZ
+    use Interop.Util.Function.FunctionZ.{FunctionZ}
+    use Interop.Util.Function.Supplier
+    use Interop.Util.Function.Supplier.{Supplier}
+    use Interop.Flix.Marshal
 
 
     pub def of5(supplier: Supplier[a, ef1], 

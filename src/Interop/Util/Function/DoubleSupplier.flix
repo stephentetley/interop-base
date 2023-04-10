@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java DoubleSupplier.
@@ -27,10 +27,10 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/DoubleSupplier {
+mod Interop.Util.Function.DoubleSupplier {
     
-    use Interop/Util/Function.DoubleSupplier
-    use Interop/Util/Function.DoubleSupplier.{DoubleSupplier}
+    use Interop.Util.Function.DoubleSupplier
+    use Interop.Util.Function.DoubleSupplier.{DoubleSupplier}
 
     pub def makeDoubleSupplier(f: Unit -> Float64 \ ef): DoubleSupplier[ef] = 
         DoubleSupplier(unchecked_cast(new ##java.util.function.DoubleSupplier {

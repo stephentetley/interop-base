@@ -15,7 +15,7 @@
  */
 
 
-namespace Interop/NIO/Channels {
+mod Interop.NIO.Channels {
 
     // Abstract Class
     pub enum Pipe[_: Region](##java.nio.channels.Pipe)
@@ -23,14 +23,14 @@ namespace Interop/NIO/Channels {
 
 }
 
-namespace Interop/NIO/Channels/Pipe { 
+mod Interop.NIO.Channels.Pipe { 
 
-    use Interop/NIO/Channels.Pipe
-    use Interop/NIO/Channels.Pipe.{Pipe}
-    use Interop/NIO/Channels/Pipe.SinkChannel
-    use Interop/NIO/Channels/Pipe.SinkChannel.{SinkChannel}
-    use Interop/NIO/Channels/Pipe.SourceChannel
-    use Interop/NIO/Channels/Pipe.SourceChannel.{SourceChannel}
+    use Interop.NIO.Channels.Pipe
+    use Interop.NIO.Channels.Pipe.{Pipe}
+    use Interop.NIO.Channels.Pipe.SinkChannel
+    use Interop.NIO.Channels.Pipe.SinkChannel.{SinkChannel}
+    use Interop.NIO.Channels.Pipe.SourceChannel
+    use Interop.NIO.Channels.Pipe.SourceChannel.{SourceChannel}
 
     pub def getHH(x: Pipe[r]): ##java.nio.channels.Pipe = 
         let Pipe(x1) = x;

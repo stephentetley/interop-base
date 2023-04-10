@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Stream/Stream {
+mod Interop.Util.Stream.Stream {
 
 
     ///
@@ -28,13 +28,13 @@ namespace Interop/Util/Stream/Stream {
 }
 
 
-namespace Interop/Util/Stream/Stream/Builder {
+mod Interop.Util.Stream.Stream.Builder {
     
-    use Interop/Util/Stream/Stream.Builder
-    use Interop/Util/Stream/Stream.Builder.{Builder}
-    use Interop/Util/Stream.Stream
-    use Interop/Util/Stream.Stream.{Stream}
-    use Interop/Flix.Marshal;
+    use Interop.Util.Stream.Stream.Builder
+    use Interop.Util.Stream.Stream.Builder.{Builder}
+    use Interop.Util.Stream.Stream
+    use Interop.Util.Stream.Stream.{Stream}
+    use Interop.Flix.Marshal
     
     pub def getHH(x: Builder[a, r]): ##java.util.stream.Stream$Builder = 
         let Builder(_, x1) = x;
@@ -47,7 +47,7 @@ namespace Interop/Util/Stream/Stream/Builder {
         Result.tryCatch(_ -> {
             import java.util.stream.Stream$Builder.accept(##java.lang.Object): Unit \ r;
             let Builder(_, b1) = b;
-            let t1 = Interop/Flix/Marshal.toJavaObject(t);
+            let t1 = Interop.Flix.Marshal.toJavaObject(t);
             accept(b1, t1)
         })
 
@@ -55,7 +55,7 @@ namespace Interop/Util/Stream/Stream/Builder {
         Result.tryCatch(_ -> {
             import java.util.stream.Stream$Builder.add(##java.lang.Object): ##java.util.stream.Stream$Builder \ r;
             let Builder(rc, b1) = b;
-            let t1 = Interop/Flix/Marshal.toJavaObject(t);
+            let t1 = Interop.Flix.Marshal.toJavaObject(t);
             Builder(rc, add(b1, t1))
         })
 

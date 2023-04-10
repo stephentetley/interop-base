@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
     
-    use Interop/Util.SetZ
-    use Interop/Util.SetZ.{SetZ}
-    use Interop/Util.Collection
-    use Interop/Util.Collection.{Collection}
+    use Interop.Util.SetZ
+    use Interop.Util.SetZ.{SetZ}
+    use Interop.Util.Collection
+    use Interop.Util.Collection.{Collection}
 
     ///
     /// Represents a Java Set.
@@ -34,10 +34,10 @@ namespace Interop/Util {
         pub def fromSetZ(s: SetZ[a, r]): t[a, r]
         
         pub def toSetHH(s: t[a, r]): ##java.util.Set = 
-            ImpSetZ.toSetZ(s) |> Interop/Util/SetZ.getHH
+            ImpSetZ.toSetZ(s) |> Interop.Util.SetZ.getHH
     }
 
-    instance Interop/Util.ImpCollection[SetZ] {
+    instance Interop.Util.ImpCollection[SetZ] {
         pub def toCollection(t: SetZ[a, r]): Collection[a, r] = 
             let SetZ(rc, t1) = t;
             Collection(rc, unchecked_cast(t1 as ##java.util.Collection))
@@ -50,15 +50,15 @@ namespace Interop/Util {
 
 }
 
-namespace Interop/Util/SetZ {
+mod Interop.Util.SetZ {
 
-    use Interop/Util.SetZ
-    use Interop/Util.SetZ.{SetZ}
-    use Interop/Util.Collection
-    use Interop/Util.Collection.{Collection}
-    use Interop/Util.ImpSetZ
-    use Interop/Util/Function.PredicateZ.{PredicateZ}
-    use Interop/Flix.Marshal
+    use Interop.Util.SetZ
+    use Interop.Util.SetZ.{SetZ}
+    use Interop.Util.Collection
+    use Interop.Util.Collection.{Collection}
+    use Interop.Util.ImpSetZ
+    use Interop.Util.Function.PredicateZ.{PredicateZ}
+    use Interop.Flix.Marshal
 
 
     pub def getHH(s: SetZ[a, r]): ##java.util.Set = 
@@ -78,37 +78,37 @@ namespace Interop/Util/SetZ {
 
     pub def of1(rc: Region[r], e1: a): SetZ[a, r] \ Write(r) with Marshal[a] =
         import static java.util.Set.of(##java.lang.Object): ##java.util.Set \ r;
-        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
+        let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
         SetZ(rc, of(eo1))
 
     pub def of2(rc: Region[r], e1: a, e2: a): SetZ[a, r] \ Write(r) with Marshal[a] =
         import static java.util.Set.of(##java.lang.Object, ##java.lang.Object): ##java.util.Set \ r;
-        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
-        let eo2 = Interop/Flix/Marshal.toJavaObject(e2);
+        let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
+        let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
         SetZ(rc, of(eo1, eo2))
 
     pub def of3(rc: Region[r], e1: a, e2: a, e3: a): SetZ[a, r] \ Write(r) with Marshal[a] =
         import static java.util.Set.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Set \ r;
-        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
-        let eo2 = Interop/Flix/Marshal.toJavaObject(e2);
-        let eo3 = Interop/Flix/Marshal.toJavaObject(e3);
+        let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
+        let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
+        let eo3 = Interop.Flix.Marshal.toJavaObject(e3);
         SetZ(rc, of(eo1, eo2, eo3))
 
     pub def of4(rc: Region[r], e1: a, e2: a, e3: a, e4: a): SetZ[a, r] \ Write(r) with Marshal[a] =
         import static java.util.Set.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Set \ r;
-        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
-        let eo2 = Interop/Flix/Marshal.toJavaObject(e2);
-        let eo3 = Interop/Flix/Marshal.toJavaObject(e3);
-        let eo4 = Interop/Flix/Marshal.toJavaObject(e4);
+        let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
+        let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
+        let eo3 = Interop.Flix.Marshal.toJavaObject(e3);
+        let eo4 = Interop.Flix.Marshal.toJavaObject(e4);
         SetZ(rc, of(eo1, eo2, eo3, eo4))
 
     pub def of5(rc: Region[r], e1: a, e2: a, e3: a, e4: a, e5: a): SetZ[a, r] \ Write(r) with Marshal[a] =
         import static java.util.Set.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Set \ r;
-        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
-        let eo2 = Interop/Flix/Marshal.toJavaObject(e2);
-        let eo3 = Interop/Flix/Marshal.toJavaObject(e3);
-        let eo4 = Interop/Flix/Marshal.toJavaObject(e4);
-        let eo5 = Interop/Flix/Marshal.toJavaObject(e5);
+        let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
+        let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
+        let eo3 = Interop.Flix.Marshal.toJavaObject(e3);
+        let eo4 = Interop.Flix.Marshal.toJavaObject(e4);
+        let eo5 = Interop.Flix.Marshal.toJavaObject(e5);
         SetZ(rc, of(eo1, eo2, eo3, eo4, eo5))
 
 
@@ -138,7 +138,7 @@ namespace Interop/Util/SetZ {
         Result.tryCatch(_ -> {
             import java.util.Set.add(##java.lang.Object): Bool \ r; 
             let SetZ(_, s1) = s;
-            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
             add(s1, x1)
         })
 
@@ -154,7 +154,7 @@ namespace Interop/Util/SetZ {
         Result.tryCatch(_ -> {
             import java.util.Set.contains(##java.lang.Object): Bool \ r; 
             let SetZ(_, s1) = s;
-            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
             contains(s1, x1)
         })
 
@@ -177,7 +177,7 @@ namespace Interop/Util/SetZ {
         Result.tryCatch(_ -> {
             import java.util.Set.remove(##java.lang.Object): Bool \ r; 
             let SetZ(_, s1) = s;
-            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
             remove(s1, x1)
         })
 
@@ -195,7 +195,7 @@ namespace Interop/Util/SetZ {
         Result.tryCatch(_ -> {
             import java.util.Set.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let SetZ(_, s1) = s;
-            let PredicateZ(f1) = Interop/Util/Function/PredicateZ.makePredicateZ(f);
+            let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
             checked_ecast(removeIf(s1, f1))
         })
 
@@ -218,17 +218,17 @@ namespace Interop/Util/SetZ {
 
 
     pub def fromFoldableViaHashSet(rc: Region[r], t: t[a]): SetZ[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
-        Interop/Util/HashSet.fromFoldable(rc, t) |> Interop/Util/ImpSetZ.toSetZ
+        Interop.Util.HashSet.fromFoldable(rc, t) |> Interop.Util.ImpSetZ.toSetZ
 
     pub def fromFoldableViaHashSetHH(t: t[a]): ##java.util.Set with Foldable[t], Marshal[a] = region rc {
-        Interop/Util/HashSet.fromFoldable(rc, t) |> Interop/Util/ImpSetZ.toSetHH
+        Interop.Util.HashSet.fromFoldable(rc, t) |> Interop.Util.ImpSetZ.toSetHH
     }
 
     ///
     /// Returns an iterator over `s`.
     ///
     pub def iterator(rc: Region[r1], s: SetZ[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
-        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, s)
+        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, s)
 
 
     ///
@@ -242,14 +242,14 @@ namespace Interop/Util/SetZ {
         if (Object.isNull(s1))
             Iterator.empty(rc)
         else 
-            iterator(s1) |> Interop/Util/IteratorZ.primIteratorToFlixIterator(rc, ocast)
+            iterator(s1) |> Interop.Util.IteratorZ.primIteratorToFlixIterator(rc, ocast)
 
     pub def toFlixSet(s: SetZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] = region rc {
-        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, s) |> Iterator.toSet
+        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, s) |> Iterator.toSet
     }
 
     pub def toFlixList(s: SetZ[a, r]): List[a] \ { Read(r) } with Marshal[a] = region rc {
-        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, s) |> Iterator.toList
+        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, s) |> Iterator.toList
     }
 
 }

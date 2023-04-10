@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java LongConsumer.
@@ -28,10 +28,10 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/LongConsumerZ {
+mod Interop.Util.Function.LongConsumerZ {
     
-    use Interop/Util/Function.LongConsumerZ
-    use Interop/Util/Function.LongConsumerZ.{LongConsumerZ}
+    use Interop.Util.Function.LongConsumerZ
+    use Interop.Util.Function.LongConsumerZ.{LongConsumerZ}
 
     pub def makeLongConsumerZ(f: Int64 -> Unit \ ef): LongConsumerZ[ef] = 
         LongConsumerZ(unchecked_cast(f as ##java.util.function.LongConsumer))

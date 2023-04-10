@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
-    use Interop/Util.LocaleFilteringMode
-    use Interop/Util.LocaleFilteringMode.{LocaleFilteringMode}
-    use Interop/Lang.Enum
-    use Interop/Lang.Enum.{Enum}
+    use Interop.Util.LocaleFilteringMode
+    use Interop.Util.LocaleFilteringMode.{LocaleFilteringMode}
+    use Interop.Lang.Enum
+    use Interop.Lang.Enum.{Enum}
     
     /// 
     /// Enum
@@ -27,7 +27,7 @@ namespace Interop/Util {
     pub enum LocaleFilteringMode(##java.util.Locale$FilteringMode)
 
 
-    instance Interop/Lang.SubEnum[LocaleFilteringMode] {
+    instance Interop.Lang.SubEnum[LocaleFilteringMode] {
         pub def toEnum(x: LocaleFilteringMode): Enum = 
             let LocaleFilteringMode(x1) = x;
             Enum(unchecked_cast(x1 as ##java.lang.Enum))
@@ -41,10 +41,10 @@ namespace Interop/Util {
 
 
 
-namespace Interop/Util/LocaleFilteringMode {
+mod Interop.Util.LocaleFilteringMode {
 
-    use Interop/Util.LocaleFilteringMode
-    use Interop/Util.LocaleFilteringMode.{LocaleFilteringMode}
+    use Interop.Util.LocaleFilteringMode
+    use Interop.Util.LocaleFilteringMode.{LocaleFilteringMode}
 
     pub def getHH(x: LocaleFilteringMode): ##java.util.Locale$FilteringMode = 
         let LocaleFilteringMode(x1) = x;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java ObjDoubleConsumer.
@@ -30,21 +30,21 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/ObjIntConsumer {
+mod Interop.Util.Function.ObjIntConsumer {
     
-    use Interop/Util/Function.ObjIntConsumer
-    use Interop/Flix.Marshal
+    use Interop.Util.Function.ObjIntConsumer
+    use Interop.Flix.Marshal
 
     pub def makeObjIntConsumer(f: (a, Int32) -> Unit \ ef): ObjIntConsumer[a] \ ef with Marshal[a] = 
         unchecked_cast((new ##java.util.function.ObjIntConsumer {
             def accept(_this: ##java.util.function.ObjIntConsumer, t: ##java.lang.Object, u: Int32): Unit = 
-                f(Interop/Flix/Marshal.fromJavaObject(t), u)
+                f(Interop.Flix.Marshal.fromJavaObject(t), u)
         }) as _ \ ef)
 
         
     pub def accept(t: a, u: Int32, f: ObjIntConsumer[a]): Unit \ ef with Marshal[a] = 
         import java.util.function.ObjIntConsumer.accept(##java.lang.Object, Int32): Unit \ ef;        
-        accept(f, Interop/Flix/Marshal.toJavaObject(t), u)
+        accept(f, Interop.Flix.Marshal.toJavaObject(t), u)
 
 
 }

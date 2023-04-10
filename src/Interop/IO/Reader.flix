@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/IO {
+mod Interop.IO {
 
     /// Abstract class...
     /// Mutable, no alloc
@@ -30,13 +30,13 @@ namespace Interop/IO {
 }
 
 
-namespace Interop/IO/Reader {
+mod Interop.IO.Reader {
 
-    use Interop/IO.Reader
-    use Interop/IO.Reader.{Reader}
-    use Interop/IO.Writer
-    use Interop/IO.SubReader
-    use Interop/NIO.CharBuffer
+    use Interop.IO.Reader
+    use Interop.IO.Reader.{Reader}
+    use Interop.IO.Writer
+    use Interop.IO.SubReader
+    use Interop.NIO.CharBuffer
 
 
 
@@ -88,7 +88,7 @@ namespace Interop/IO/Reader {
         Result.tryCatch(_ -> {
             import java.io.Reader.read(##java.nio.CharBuffer): Int32 \ {r, r2};
             let Reader(rd1) = rd;
-            let buf1 = Interop/NIO/CharBuffer.getHH(buf);
+            let buf1 = Interop.NIO.CharBuffer.getHH(buf);
             read(rd1, buf1)
         })
 
@@ -110,7 +110,7 @@ namespace Interop/IO/Reader {
         Result.tryCatch(_ -> {
             import java.io.Reader.transferTo(##java.io.Writer): Int64 \ {r, r2};
             let Reader(rd1) = rd;
-            let outw1 = Interop/IO/Writer.getHH(outw);
+            let outw1 = Interop.IO.Writer.getHH(outw);
             transferTo(rd1, outw1)
         })
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java IntPredicate.
@@ -27,10 +27,10 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/IntPredicateZ {
+mod Interop.Util.Function.IntPredicateZ {
     
-    use Interop/Util/Function.IntPredicateZ
-    use Interop/Util/Function.IntPredicateZ.{IntPredicateZ}
+    use Interop.Util.Function.IntPredicateZ
+    use Interop.Util.Function.IntPredicateZ.{IntPredicateZ}
 
     pub def makeIntPredicateZ(f: Int32 -> Bool \ ef): IntPredicateZ[ef] = 
         IntPredicateZ(unchecked_cast(f as ##java.util.function.IntPredicate))

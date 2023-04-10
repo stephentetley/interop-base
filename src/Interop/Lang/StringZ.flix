@@ -15,12 +15,12 @@
  */
 
 
-namespace Interop/Lang/StringZ {
+mod Interop.Lang.StringZ {
 
-    use Interop/NIO/Charset.Charset
-    use Interop/NIO/Charset.Charset.{Charset}
-    use Interop/Util/Stream.IntStream
-    use Interop/Util/Stream.IntStream.{IntStream}
+    use Interop.NIO.Charset.Charset
+    use Interop.NIO.Charset.Charset.{Charset}
+    use Interop.Util.Stream.IntStream
+    use Interop.Util.Stream.IntStream.{IntStream}
 
     pub def fromArray(arr: Array[Int8, r]): String \ Read(r) = 
         import new java.lang.String(Array[Int8, r]): String \ r as newString;

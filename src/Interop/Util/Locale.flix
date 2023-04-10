@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
-    use Interop/Util.Locale
-    use Interop/Util.Locale.{Locale}
+    use Interop.Util.Locale
+    use Interop.Util.Locale.{Locale}
     
     /// 
     /// Locale is a wrapper over the Java class `java.util.Locale`.
@@ -26,20 +26,20 @@ namespace Interop/Util {
 
     instance ToString[Locale] {
         pub def toString(x: Locale): String = 
-            Interop/Util/Locale.toString(x)
+            Interop.Util.Locale.toString(x)
     }
 
     instance Eq[Locale] {
         pub def eq(x: Locale, y: Locale): Bool = 
-            Interop/Util/Locale.equals(x, y)
+            Interop.Util.Locale.equals(x, y)
     }
 
     instance Hash[Locale] {
         pub def hash(x: Locale): Int32 = 
-            Interop/Util/Locale.hashCode(x)
+            Interop.Util.Locale.hashCode(x)
     }
 
-    instance Interop/Flix.Marshal[Locale] {
+    instance Interop.Flix.Marshal[Locale] {
         pub def toJavaObject(x: Locale): ##java.lang.Object =
             let Locale(x1) = x;
             checked_cast(x1)
@@ -52,18 +52,18 @@ namespace Interop/Util {
 
 
 
-namespace Interop/Util/Locale {
+mod Interop.Util.Locale {
 
-    use Interop/Util.Locale
-    use Interop/Util.Locale.{Locale}
-    use Interop/Util.LocaleCategory
-    use Interop/Util/LocaleCategory.{LocaleCategory}
-    use Interop/Util/LocaleFilteringMode
-    use Interop/Util/LocaleFilteringMode.{LocaleFilteringMode}
-    use Interop/Util/LocaleIsoCountryCode
-    use Interop/Util/LocaleIsoCountryCode.{LocaleIsoCountryCode}
-    use Interop/Util/Locale.LanguageRange
-    use Interop/Util/Locale.LanguageRange.{LanguageRange}
+    use Interop.Util.Locale
+    use Interop.Util.Locale.{Locale}
+    use Interop.Util.LocaleCategory
+    use Interop.Util.LocaleCategory.{LocaleCategory}
+    use Interop.Util.LocaleFilteringMode
+    use Interop.Util.LocaleFilteringMode.{LocaleFilteringMode}
+    use Interop.Util.LocaleIsoCountryCode
+    use Interop.Util.LocaleIsoCountryCode.{LocaleIsoCountryCode}
+    use Interop.Util.Locale.LanguageRange
+    use Interop.Util.Locale.LanguageRange.{LanguageRange}
 
     /// TODO - move enums into Basis-Base...
 
@@ -376,7 +376,7 @@ namespace Interop/Util/Locale {
         Result.tryCatch(_ -> {
             import static java.util.Locale.getISOCountries(##java.util.Locale$IsoCountryCode): ##java.util.Set \ {};
             let LocaleIsoCountryCode(icc1) = icc;
-            getISOCountries(icc1) |> Interop/Util/SetZ.primSetToFlixSet
+            getISOCountries(icc1) |> Interop.Util.SetZ.primSetToFlixSet
         })
 
 
@@ -393,32 +393,32 @@ namespace Interop/Util/Locale {
         Result.tryCatch(_ -> {
             import java.util.Locale.getExtension(Char): String \ {};
             let Locale(x1) = x;
-            getExtension(x1, key) |> Interop/Flix/Util.getStringWithoutNull(default = "")
+            getExtension(x1, key) |> Interop.Flix.Util.getStringWithoutNull(default = "")
         })
 
     pub def getExtensionKeys(x: Locale): Set[Char] = 
         import java.util.Locale.getExtensionKeys(): ##java.util.Set \ {};
         let Locale(x1) = x;
-        getExtensionKeys(x1) |> Interop/Util/SetZ.primSetToFlixSet
+        getExtensionKeys(x1) |> Interop.Util.SetZ.primSetToFlixSet
 
 
     pub def getUnicodeLocaleAttributes(x: Locale): Set[String] =
         import java.util.Locale.getUnicodeLocaleAttributes(): ##java.util.Set \ {};
         let Locale(x1) = x;
-        getUnicodeLocaleAttributes(x1) |> Interop/Util/SetZ.primSetToFlixSet
+        getUnicodeLocaleAttributes(x1) |> Interop.Util.SetZ.primSetToFlixSet
 
 
     pub def getUnicodeLocaleKeys(x: Locale): Set[String] = 
         import java.util.Locale.getUnicodeLocaleKeys(): ##java.util.Set \ {};
         let Locale(x1) = x;
-        getUnicodeLocaleKeys(x1) |> Interop/Util/SetZ.primSetToFlixSet
+        getUnicodeLocaleKeys(x1) |> Interop.Util.SetZ.primSetToFlixSet
 
 
     pub def lookup(priorityList: List[LanguageRange], locales: List[Locale]): Result[String, Option[Locale]] =
         Result.tryCatch(_ -> {
             import static java.util.Locale.lookup(##java.util.List, ##java.util.Collection): ##java.util.Locale \ {};
-            let ls  = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
-            let col = Interop/Util/Collection.fromFoldableViaArrayListHH(locales);
+            let ls  = Interop.Util.ListZ.fromFoldableViaArrayListHH(priorityList);
+            let col = Interop.Util.Collection.fromFoldableViaArrayListHH(locales);
             lookup(ls, col) |> Object.toOption |> Option.map(Locale)
         })
 
@@ -426,8 +426,8 @@ namespace Interop/Util/Locale {
     pub def lookupTag(priorityList: List[LanguageRange], tags: List[String]): Result[String, Option[String]] =
         Result.tryCatch(_ -> {
             import static java.util.Locale.lookupTag(##java.util.List, ##java.util.Collection): String \ {};
-            let ls      = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
-            let col     = Interop/Util/Collection.fromFoldableViaArrayListHH(tags);
+            let ls      = Interop.Util.ListZ.fromFoldableViaArrayListHH(priorityList);
+            let col     = Interop.Util.Collection.fromFoldableViaArrayListHH(tags);
             lookupTag(ls, col) |> Object.toOption
         })
 
@@ -435,9 +435,9 @@ namespace Interop/Util/Locale {
     pub def filter(priorityList: List[LanguageRange], locales: List[Locale]): Result[String, List[Locale]] =         
         Result.tryCatch(_ -> {
             import static java.util.Locale.filter(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
-            let ls      = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
-            let col     = Interop/Util/Collection.fromFoldableViaArrayListHH(locales);
-            filter(ls, col) |> Interop/Util/ListZ.primListToFlixList
+            let ls      = Interop.Util.ListZ.fromFoldableViaArrayListHH(priorityList);
+            let col     = Interop.Util.Collection.fromFoldableViaArrayListHH(locales);
+            filter(ls, col) |> Interop.Util.ListZ.primListToFlixList
         })
 
 
@@ -446,18 +446,18 @@ namespace Interop/Util/Locale {
                                     locales: List[Locale]): Result[String, List[Locale]] = 
         Result.tryCatch(_ -> {
             import static java.util.Locale.filter(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};
-            let ps      = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
-            let col     = Interop/Util/Collection.fromFoldableViaArrayListHH(locales);
+            let ps      = Interop.Util.ListZ.fromFoldableViaArrayListHH(priorityList);
+            let col     = Interop.Util.Collection.fromFoldableViaArrayListHH(locales);
             let LocaleFilteringMode(mode1) = mode;
-            filter(ps, col, mode1) |> Interop/Util/ListZ.primListToFlixList
+            filter(ps, col, mode1) |> Interop.Util.ListZ.primListToFlixList
         })
 
     pub def filterTags(priorityList: List[LanguageRange], tags: List[String]): Result[String, List[String]] = 
         Result.tryCatch(_ -> {
             import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
-            let ls      = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
-            let col     = Interop/Util/Collection.fromFoldableViaArrayListHH(tags);
-            filterTags(ls, col) |> Interop/Util/ListZ.primListToFlixList
+            let ls      = Interop.Util.ListZ.fromFoldableViaArrayListHH(priorityList);
+            let col     = Interop.Util.Collection.fromFoldableViaArrayListHH(tags);
+            filterTags(ls, col) |> Interop.Util.ListZ.primListToFlixList
         })
 
     pub def filterTagsWithFilteringMode(priorityList: List[LanguageRange], 
@@ -465,9 +465,9 @@ namespace Interop/Util/Locale {
                                         tags: List[String]): Result[String, List[String]] = 
         Result.tryCatch(_ -> {
             import static java.util.Locale.filterTags(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};
-            let ls      = Interop/Util/ListZ.fromFoldableViaArrayListHH(priorityList);
-            let col     = Interop/Util/Collection.fromFoldableViaArrayListHH(tags);
+            let ls      = Interop.Util.ListZ.fromFoldableViaArrayListHH(priorityList);
+            let col     = Interop.Util.Collection.fromFoldableViaArrayListHH(tags);
             let LocaleFilteringMode(mode1) = mode;
-            filterTags(ls, col, mode1) |> Interop/Util/ListZ.primListToFlixList
+            filterTags(ls, col, mode1) |> Interop.Util.ListZ.primListToFlixList
         })
 }

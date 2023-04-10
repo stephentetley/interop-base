@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java IntBinaryOperator.
@@ -27,10 +27,10 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/IntBinaryOperator {
+mod Interop.Util.Function.IntBinaryOperator {
     
-    use Interop/Util/Function.IntBinaryOperator
-    use Interop/Util/Function.IntBinaryOperator.{IntBinaryOperator}
+    use Interop.Util.Function.IntBinaryOperator
+    use Interop.Util.Function.IntBinaryOperator.{IntBinaryOperator}
     
 
     pub def makeIntBinaryOperator(f: (Int32, Int32) -> Int32 \ ef): IntBinaryOperator[ef] = 

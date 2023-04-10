@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Lang/ProcessBuilder {
+mod Interop.Lang.ProcessBuilder {
 
     ///
     /// Represents a Redirect.
@@ -26,11 +26,11 @@ namespace Interop/Lang/ProcessBuilder {
 
 }
 
-namespace Interop/Lang/ProcessBuilder/Redirect {
+mod Interop.Lang.ProcessBuilder.Redirect {
 
 
-    use Interop/Lang/ProcessBuilder.Redirect;
-    use Interop/Lang/ProcessBuilder.Redirect.{Redirect};
+    use Interop.Lang.ProcessBuilder.Redirect;
+    use Interop.Lang.ProcessBuilder.Redirect.{Redirect};
 
 
     pub def getHH(m: Redirect): ##java.lang.ProcessBuilder$Redirect = 

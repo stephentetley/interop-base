@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
     ///
     /// Represents a Java OptionalInt.
@@ -25,11 +25,11 @@ namespace Interop/Util {
 }
 
 
-namespace Interop/Util/OptionalInt {
+mod Interop.Util.OptionalInt {
     
-    use Interop/Util.OptionalInt;
-    use Interop/Util.OptionalInt.{OptionalInt};
-    use Interop/Flix.Marshal;
+    use Interop.Util.OptionalInt;
+    use Interop.Util.OptionalInt.{OptionalInt};
+    use Interop.Flix.Marshal;
 
     pub def getHH(o: OptionalInt): ##java.util.OptionalInt = 
         let OptionalInt(o1) = o;

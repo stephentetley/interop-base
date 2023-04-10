@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-namespace Interop/Lang {
+mod Interop.Lang {
 
-    use Interop/Lang.Short
-    use Interop/Lang.Short.{Short}
+    use Interop.Lang.Short
+    use Interop.Lang.Short.{Short}
     
     ///
     /// Represents a Java Short class.
@@ -25,7 +25,7 @@ namespace Interop/Lang {
     pub enum Short(##java.lang.Short)
 
 
-    instance Interop/Flix.Marshal[Short] {
+    instance Interop.Flix.Marshal[Short] {
         pub def toJavaObject(x: Short): ##java.lang.Object = 
             let Short(x1) = x;
             checked_cast(x1)
@@ -36,11 +36,11 @@ namespace Interop/Lang {
 
 }
 
-namespace Interop/Lang/Short {
+mod Interop.Lang.Short {
 
 
-    use Interop/Lang.Short
-    use Interop/Lang.Short.{Short}
+    use Interop.Lang.Short
+    use Interop.Lang.Short.{Short}
 
     pub def getHH(i: Short): ##java.lang.Short = 
         let Short(i1) = i;

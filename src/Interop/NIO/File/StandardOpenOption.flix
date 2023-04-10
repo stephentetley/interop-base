@@ -15,18 +15,18 @@
  */
 
 
-namespace Interop/NIO/File {
+mod Interop.NIO.File {
 
-    use Interop/NIO/File.StandardOpenOption
-    use Interop/NIO/File.StandardOpenOption.{StandardOpenOption}
-    use Interop/Lang.Enum
-    use Interop/Lang.Enum.{Enum}
-    use Interop/NIO/File.OpenOption
-    use Interop/NIO/File.OpenOption.{OpenOption}
+    use Interop.NIO.File.StandardOpenOption
+    use Interop.NIO.File.StandardOpenOption.{StandardOpenOption}
+    use Interop.Lang.Enum
+    use Interop.Lang.Enum.{Enum}
+    use Interop.NIO.File.OpenOption
+    use Interop.NIO.File.OpenOption.{OpenOption}
 
     pub enum StandardOpenOption(##java.nio.file.StandardOpenOption)
 
-    instance Interop/Flix.Marshal[StandardOpenOption] {
+    instance Interop.Flix.Marshal[StandardOpenOption] {
         pub def toJavaObject(x: StandardOpenOption): ##java.lang.Object =
             let StandardOpenOption(x1) = x;
             checked_cast(x1)
@@ -36,7 +36,7 @@ namespace Interop/NIO/File {
     }
 
 
-    instance Interop/NIO/File.ImpOpenOption[StandardOpenOption] {
+    instance Interop.NIO.File.ImpOpenOption[StandardOpenOption] {
         pub def toOpenOption(x: StandardOpenOption): OpenOption = 
             let StandardOpenOption(x1) = x;
             OpenOption(unchecked_cast(x1 as ##java.nio.file.OpenOption))
@@ -46,7 +46,7 @@ namespace Interop/NIO/File {
             StandardOpenOption(unchecked_cast(x1 as ##java.nio.file.StandardOpenOption))
     }
 
-    instance Interop/Lang.SubEnum[StandardOpenOption] {
+    instance Interop.Lang.SubEnum[StandardOpenOption] {
         pub def toEnum(x: StandardOpenOption): Enum = 
             let StandardOpenOption(x1) = x;
             Enum(unchecked_cast(x1 as ##java.lang.Enum))
@@ -58,10 +58,10 @@ namespace Interop/NIO/File {
 
 }
 
-namespace Interop/NIO/File/StandardOpenOption { 
+mod Interop.NIO.File.StandardOpenOption { 
 
-    use Interop/NIO/File.StandardOpenOption
-    use Interop/NIO/File.StandardOpenOption.{StandardOpenOption}
+    use Interop.NIO.File.StandardOpenOption
+    use Interop.NIO.File.StandardOpenOption.{StandardOpenOption}
 
     pub def getHH(x: StandardOpenOption): ##java.nio.file.StandardOpenOption = 
         let StandardOpenOption(x1) = x;

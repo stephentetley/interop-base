@@ -15,21 +15,21 @@
  */
 
 
-namespace Interop/NIO/File {
+mod Interop.NIO.File {
 
-    use Interop/NIO/File.LinkOption
-    use Interop/NIO/File.LinkOption.{LinkOption}
-    use Interop/Lang.Enum
-    use Interop/Lang.Enum.{Enum}
-    use Interop/Lang.SubEnum
+    use Interop.NIO.File.LinkOption
+    use Interop.NIO.File.LinkOption.{LinkOption}
+    use Interop.Lang.Enum
+    use Interop.Lang.Enum.{Enum}
+    use Interop.Lang.SubEnum
 
-    use Interop/NIO/File.OpenOption
-    use Interop/NIO/File.OpenOption.{OpenOption}
-    use Interop/NIO/File.ImpOpenOption
+    use Interop.NIO.File.OpenOption
+    use Interop.NIO.File.OpenOption.{OpenOption}
+    use Interop.NIO.File.ImpOpenOption
 
     pub enum LinkOption(##java.nio.file.LinkOption)
 
-    instance Interop/Flix.Marshal[LinkOption] {
+    instance Interop.Flix.Marshal[LinkOption] {
         pub def toJavaObject(x: LinkOption): ##java.lang.Object =
             let LinkOption(x1) = x;
             checked_cast(x1)
@@ -61,10 +61,10 @@ namespace Interop/NIO/File {
 
 }
 
-namespace Interop/NIO/File/LinkOption { 
+mod Interop.NIO.File.LinkOption { 
 
-    use Interop/NIO/File.LinkOption
-    use Interop/NIO/File.LinkOption.{LinkOption}
+    use Interop.NIO.File.LinkOption
+    use Interop.NIO.File.LinkOption.{LinkOption}
 
     pub def getHH(x: LinkOption): ##java.nio.file.LinkOption = 
         let LinkOption(x1) = x;

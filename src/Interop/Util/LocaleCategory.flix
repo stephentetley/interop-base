@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
     
-    use Interop/Util.LocaleCategory
-    use Interop/Util.LocaleCategory.{LocaleCategory}
-    use Interop/Lang.Enum
-    use Interop/Lang.Enum.{Enum}
+    use Interop.Util.LocaleCategory
+    use Interop.Util.LocaleCategory.{LocaleCategory}
+    use Interop.Lang.Enum
+    use Interop.Lang.Enum.{Enum}
 
     /// 
     /// Enum
@@ -27,7 +27,7 @@ namespace Interop/Util {
     pub enum LocaleCategory(##java.util.Locale$Category)
 
 
-    instance Interop/Lang.SubEnum[LocaleCategory] {
+    instance Interop.Lang.SubEnum[LocaleCategory] {
         pub def toEnum(x: LocaleCategory): Enum = 
             let LocaleCategory(x1) = x;
             Enum(unchecked_cast(x1 as ##java.lang.Enum))
@@ -41,10 +41,10 @@ namespace Interop/Util {
 
 
 
-namespace Interop/Util/LocaleCategory {
+mod Interop.Util.LocaleCategory {
 
-    use Interop/Util.LocaleCategory
-    use Interop/Util.LocaleCategory.{LocaleCategory}
+    use Interop.Util.LocaleCategory
+    use Interop.Util.LocaleCategory.{LocaleCategory}
 
     pub def getHH(x: LocaleCategory): ##java.util.Locale$Category = 
         let LocaleCategory(x1) = x;

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-namespace Interop/NIO/Charset/StandardCharsets {
+mod Interop.NIO.Charset.StandardCharsets {
 
-    use Interop/NIO/Charset.Charset
-    use Interop/NIO/Charset.Charset.{Charset}
+    use Interop.NIO.Charset.Charset
+    use Interop.NIO.Charset.Charset.{Charset}
 
  
     pub def iso_8859_1(): Charset =

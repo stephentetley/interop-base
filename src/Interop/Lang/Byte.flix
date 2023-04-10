@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-namespace Interop/Lang {
+mod Interop.Lang {
 
-    use Interop/Lang.Byte
-    use Interop/Lang.Byte.{Byte}
+    use Interop.Lang.Byte
+    use Interop.Lang.Byte.{Byte}
 
     ///
     /// Represents a Java Byte class.
@@ -25,7 +25,7 @@ namespace Interop/Lang {
     pub enum Byte(##java.lang.Byte)
 
 
-    instance Interop/Flix.Marshal[Byte] {
+    instance Interop.Flix.Marshal[Byte] {
         pub def toJavaObject(x: Byte): ##java.lang.Object = 
             let Byte(x1) = x;
             checked_cast(x1)
@@ -36,11 +36,11 @@ namespace Interop/Lang {
 
 }
 
-namespace Interop/Lang/Byte {
+mod Interop.Lang.Byte {
 
 
-    use Interop/Lang.Byte
-    use Interop/Lang.Byte.{Byte}
+    use Interop.Lang.Byte
+    use Interop.Lang.Byte.{Byte}
 
 
     pub def getHH(i: Byte): ##java.lang.Byte = 

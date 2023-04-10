@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java ToDoubleFunction.
@@ -27,22 +27,22 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/ToDoubleFunction {
+mod Interop.Util.Function.ToDoubleFunction {
     
-    use Interop/Util/Function.ToDoubleFunction
-    use Interop/Util/Function.ToDoubleFunction.{ToDoubleFunction}
-    use Interop/Flix.Marshal
+    use Interop.Util.Function.ToDoubleFunction
+    use Interop.Util.Function.ToDoubleFunction.{ToDoubleFunction}
+    use Interop.Flix.Marshal
 
     pub def makeToDoubleFunction(f: a -> Float64 \ ef): ToDoubleFunction[a, ef] with Marshal[a]= 
         ToDoubleFunction(unchecked_cast(new ##java.util.function.ToDoubleFunction {
             def applyAsDouble(_this: ##java.util.function.ToDoubleFunction, t: ##java.lang.Object): Float64 = 
-                Interop/Flix/Marshal.fromJavaObject(t) |> f
+                Interop.Flix.Marshal.fromJavaObject(t) |> f
         } as _ \ {}))
 
 
     pub def applyAsDouble(f: ToDoubleFunction[a, ef], t: a): Float64 \ ef with Marshal[a]  = 
         import java.util.function.ToDoubleFunction.applyAsDouble(##java.lang.Object): Float64 \ ef;
         let ToDoubleFunction(f1) = f;
-        applyAsDouble(f1, Interop/Flix/Marshal.toJavaObject(t))
+        applyAsDouble(f1, Interop.Flix.Marshal.toJavaObject(t))
 
 }

@@ -15,16 +15,16 @@
  */
 
 
-namespace Interop/NIO {
+mod Interop.NIO {
 
     pub enum ByteOrder(##java.nio.ByteOrder)
 
 }
 
-namespace Interop/NIO/ByteOrder { 
+mod Interop.NIO.ByteOrder { 
 
-    use Interop/NIO.ByteOrder;
-    use Interop/NIO.ByteOrder.{ByteOrder};
+    use Interop.NIO.ByteOrder;
+    use Interop.NIO.ByteOrder.{ByteOrder};
 
     pub def getHH(x: ByteOrder): ##java.nio.ByteOrder = 
         let ByteOrder(x1) = x;

@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-namespace Interop/IO {
+mod Interop.IO {
 
-    use Interop/IO.BufferedReader
-    use Interop/IO.BufferedReader.{BufferedReader}
-    use Interop/IO.Reader
-    use Interop/IO.Reader.{Reader}
+    use Interop.IO.BufferedReader
+    use Interop.IO.BufferedReader.{BufferedReader}
+    use Interop.IO.Reader
+    use Interop.IO.Reader.{Reader}
 
     /// Class
 
     pub enum BufferedReader[_: Region](##java.io.BufferedReader)
 
-    instance Interop/IO.SubReader[BufferedReader] {
+    instance Interop.IO.SubReader[BufferedReader] {
         pub def toReader(s: BufferedReader[r]): Reader[r] = 
             let BufferedReader(s1) = s;
             Reader(unchecked_cast(s1 as ##java.io.Reader))
@@ -37,14 +37,14 @@ namespace Interop/IO {
 
 }
 
-namespace Interop/IO/BufferedReader {
+mod Interop.IO.BufferedReader {
 
-    use Interop/IO.BufferedReader
-    use Interop/IO.BufferedReader.{BufferedReader}
-    use Interop/IO.Reader
+    use Interop.IO.BufferedReader
+    use Interop.IO.BufferedReader.{BufferedReader}
+    use Interop.IO.Reader
 
-    use Interop/Util/Stream.Stream;
-    use Interop/Util/Stream.Stream.{Stream};
+    use Interop.Util.Stream.Stream;
+    use Interop.Util.Stream.Stream.{Stream};
 
     pub def getHH(rd: BufferedReader[r]): ##java.io.BufferedReader = 
         let BufferedReader(rd1) = rd;
@@ -56,13 +56,13 @@ namespace Interop/IO/BufferedReader {
 
     pub def newWithReader(_: Region[r1], rd: Reader[r]): BufferedReader[r1] \ { Read(r), Write(r1) } =  
         import new java.io.BufferedReader(##java.io.Reader): ##java.io.BufferedReader \ {r, r1} as newBufferedReader;
-        let rd1 = Interop/IO/Reader.getHH(rd); 
+        let rd1 = Interop.IO.Reader.getHH(rd); 
         BufferedReader(newBufferedReader(rd1))
 
 
     pub def newWithSize(_: Region[r1], rd: Reader[r], size: Int32): BufferedReader[r1] \ { Read(r), Write(r1) } = 
         import new java.io.BufferedReader(##java.io.Reader, Int32): ##java.io.BufferedReader \ {r, r1} as newBufferedReader;
-        let rd1 = Interop/IO/Reader.getHH(rd);
+        let rd1 = Interop.IO.Reader.getHH(rd);
         BufferedReader(newBufferedReader(rd1, size))
 
     // read

@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
     pub enum LocaleBuilder(##java.util.Locale$Builder)
     
 }
 
 
-namespace Interop/Util/LocaleBuilder {
+mod Interop.Util.LocaleBuilder {
 
-    use Interop/Util.LocaleBuilder
-    use Interop/Util.LocaleBuilder.{LocaleBuilder}
-    use Interop/Util/LocaleBuilder.LocaleBuilderAction
-    use Interop/Util/LocaleBuilder.LocaleBuilderAction.{
+    use Interop.Util.LocaleBuilder
+    use Interop.Util.LocaleBuilder.{LocaleBuilder}
+    use Interop.Util.LocaleBuilder.LocaleBuilderAction
+    use Interop.Util.LocaleBuilder.LocaleBuilderAction.{
         AddUnicodeLocaleAttribute, Clear, ClearExtensions,
         RemoveUnicodeLocaleAttribute, SetExtension, SetLanguage,
         SetLanguageTag, SetLocale, SetRegion,
         SetScript, SetUnicodeLocaleKeyword, SetVariant
     }
-    use Interop/Util.Locale
-    use Interop/Util.Locale.{Locale}
-    use Interop/Flix.Builder
+    use Interop.Util.Locale
+    use Interop.Util.Locale.{Locale}
+    use Interop.Flix.Builder
 
     pub def getHH(b: LocaleBuilder): ##java.util.Locale$Builder = 
         let LocaleBuilder(b1) = b;
@@ -74,11 +74,11 @@ namespace Interop/Util/LocaleBuilder {
             case SetUnicodeLocaleKeyword(x1, y1)    => setUnicodeLocaleKeyword!(rc, x1, y1)
             case SetVariant(x1)                     => setVariant!(rc, x1)
         };
-        Interop/Flix/Builder.makeBuilder(rc, f, xs)
+        Interop.Flix.Builder.makeBuilder(rc, f, xs)
 
 
     pub def buildLocale(xs: List[LocaleBuilderAction]): Result[String, Locale] = region rc {
-        new(rc) |> Interop/Flix/Builder.apply(rc, makeBuilder(rc, xs)) |> Result.map(build(rc))
+        new(rc) |> Interop.Flix.Builder.apply(rc, makeBuilder(rc, xs)) |> Result.map(build(rc))
     }
 
     pub def new(_: Region[r]): LocaleBuilder \ Write(r) =
@@ -92,7 +92,7 @@ namespace Interop/Util/LocaleBuilder {
         Locale(build(b1))
 
     pub def setLocale!(_: Region[r], loc: Locale): Builder[LocaleBuilder, r] =
-        Interop/Flix/Builder.lift(b -> {
+        Interop.Flix.Builder.lift(b -> {
             import java.util.Locale$Builder.setLocale(##java.util.Locale): ##java.util.Locale$Builder \ r;
             let LocaleBuilder(b1) = b;
             let Locale(loc1) = loc;
@@ -100,28 +100,28 @@ namespace Interop/Util/LocaleBuilder {
         })
 
     pub def setLanguageTag!(_: Region[r], tag: String): Builder[LocaleBuilder, r] =
-        Interop/Flix/Builder.lift(b -> {
+        Interop.Flix.Builder.lift(b -> {
             import java.util.Locale$Builder.setLanguageTag(String): ##java.util.Locale$Builder \ r;
             let LocaleBuilder(b1) = b;
             setLanguageTag(b1, tag) |> LocaleBuilder
         })
 
     pub def setLanguage!(_: Region[r], lang: String): Builder[LocaleBuilder, r] =
-        Interop/Flix/Builder.lift(b -> {
+        Interop.Flix.Builder.lift(b -> {
             import java.util.Locale$Builder.setLanguage(String): ##java.util.Locale$Builder \ r;
             let LocaleBuilder(b1) = b;
             setLanguage(b1, lang) |> LocaleBuilder
         })
 
     pub def setScript!(_: Region[r], scr: String): Builder[LocaleBuilder, r] =
-        Interop/Flix/Builder.lift(b -> {
+        Interop.Flix.Builder.lift(b -> {
             import java.util.Locale$Builder.setScript(String): ##java.util.Locale$Builder \ r;
             let LocaleBuilder(b1) = b;
             setScript(b1, scr) |> LocaleBuilder
         })
 
     pub def setRegion!(_: Region[r], rgn: String): Builder[LocaleBuilder, r] =
-        Interop/Flix/Builder.lift(b -> {
+        Interop.Flix.Builder.lift(b -> {
             import java.util.Locale$Builder.setRegion(String): ##java.util.Locale$Builder \ r;
             let LocaleBuilder(b1) = b;
             setRegion(b1, rgn) |> LocaleBuilder
@@ -129,7 +129,7 @@ namespace Interop/Util/LocaleBuilder {
 
 
     pub def setVariant!(_: Region[r], vnt: String): Builder[LocaleBuilder, r] =
-        Interop/Flix/Builder.lift(b -> {
+        Interop.Flix.Builder.lift(b -> {
             import java.util.Locale$Builder.setVariant(String): ##java.util.Locale$Builder \ r;
             let LocaleBuilder(b1) = b;
             setVariant(b1, vnt) |> LocaleBuilder
@@ -137,14 +137,14 @@ namespace Interop/Util/LocaleBuilder {
 
 
     pub def setExtension!(_: Region[r], k: Char, v: String): Builder[LocaleBuilder, r] =
-        Interop/Flix/Builder.lift(b -> {
+        Interop.Flix.Builder.lift(b -> {
             import java.util.Locale$Builder.setExtension(Char, String): ##java.util.Locale$Builder \ r;
             let LocaleBuilder(b1) = b;
             setExtension(b1, k, v) |> LocaleBuilder
         })
 
     pub def setUnicodeLocaleKeyword!(_: Region[r], k: String, ty: String): Builder[LocaleBuilder, r] =
-        Interop/Flix/Builder.lift(b -> {
+        Interop.Flix.Builder.lift(b -> {
             import java.util.Locale$Builder.setUnicodeLocaleKeyword(String, String): ##java.util.Locale$Builder \ r;
             let LocaleBuilder(b1) = b;
             setUnicodeLocaleKeyword(b1, k, ty) |> LocaleBuilder
@@ -152,7 +152,7 @@ namespace Interop/Util/LocaleBuilder {
 
 
     pub def addUnicodeLocaleAttribute!(_: Region[r], attrib: String): Builder[LocaleBuilder, r] =
-        Interop/Flix/Builder.lift(b -> {
+        Interop.Flix.Builder.lift(b -> {
             import java.util.Locale$Builder.addUnicodeLocaleAttribute(String): ##java.util.Locale$Builder \ r;
             let LocaleBuilder(b1) = b;
             addUnicodeLocaleAttribute(b1, attrib) |> LocaleBuilder
@@ -160,7 +160,7 @@ namespace Interop/Util/LocaleBuilder {
 
 
     pub def removeUnicodeLocaleAttribute!(_: Region[r], attrib: String): Builder[LocaleBuilder, r] =
-        Interop/Flix/Builder.lift(b -> {
+        Interop.Flix.Builder.lift(b -> {
             import java.util.Locale$Builder.removeUnicodeLocaleAttribute(String): ##java.util.Locale$Builder \ r;
             let LocaleBuilder(b1) = b;
             removeUnicodeLocaleAttribute(b1, attrib) |> LocaleBuilder
@@ -168,14 +168,14 @@ namespace Interop/Util/LocaleBuilder {
         
 
     pub def clear!(_: Region[r]): Builder[LocaleBuilder, r] =
-        Interop/Flix/Builder.lift(b -> {
+        Interop.Flix.Builder.lift(b -> {
             import java.util.Locale$Builder.clear(): ##java.util.Locale$Builder \ r;
             let LocaleBuilder(b1) = b;
             clear(b1) |> LocaleBuilder
         })
 
     pub def clearExtensions!(_: Region[r]): Builder[LocaleBuilder, r] =
-        Interop/Flix/Builder.lift(b -> {
+        Interop.Flix.Builder.lift(b -> {
             import java.util.Locale$Builder.clearExtensions(): ##java.util.Locale$Builder \ r;
             let LocaleBuilder(b1) = b;
             clearExtensions(b1) |> LocaleBuilder

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
     ///
     /// Represents a Java VectorZ.
@@ -27,7 +27,7 @@ namespace Interop/Util {
     }
 
 
-    // instance Interop/Util.ImpCollection[VectorZ] {
+    // instance Interop.Util.ImpCollection[VectorZ] {
     //     pub def toCollection(t: VectorZ[a, r]): Collection[a, r] = 
     //         let VectorZ(_, t1) = t;
     //         Collection(unchecked_cast(t1 as ##java.util.Collection))
@@ -40,12 +40,12 @@ namespace Interop/Util {
 
 }
 
-namespace Interop/Util/VectorZ {
+mod Interop.Util.VectorZ {
 
-    use Interop/Util.VectorZ;
-    use Interop/Util.VectorZ.{VectorZ};
-    use Interop/Util.Comparator;
-    use Interop/Flix.Marshal;
+    use Interop.Util.VectorZ;
+    use Interop.Util.VectorZ.{VectorZ};
+    use Interop.Util.Comparator;
+    use Interop.Flix.Marshal;
 
 
     pub def getHH(v: VectorZ[a, r]): ##java.util.Vector = 
@@ -88,11 +88,11 @@ namespace Interop/Util/VectorZ {
     pub def add!(x: a, v: VectorZ[a, r]): Bool \ { Write(r) } with Marshal[a] = 
         import java.util.Vector.add(##java.lang.Object): Bool & r;
         let VectorZ(_, v1) = v;
-        add(v1, Interop/Flix/Marshal.toJavaObject(x))
+        add(v1, Interop.Flix.Marshal.toJavaObject(x))
 
 
     pub def sort!(f: (a, a) -> Int32, v: VectorZ[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
-        let f1 = Interop/Util/Comparator.makeComparator(f);
+        let f1 = Interop.Util.Comparator.makeComparator(f);
         sortWithComparator!(f1, v)
 
 
@@ -108,7 +108,7 @@ namespace Interop/Util/VectorZ {
     /// Returns an iterator over `s`.
     ///
     pub def iterator(rc: Region[r1], v: VectorZ[a, r]): Iterator[a, r1, r1] \ Read(r) with Marshal[a] =
-        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, v)
+        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, v)
 
 
     ///
@@ -123,17 +123,17 @@ namespace Interop/Util/VectorZ {
             Iterator.empty(rc)
         else 
             iterator(v1) 
-                |> Interop/Util/IteratorZ.wrapHH(rc)
-                |> Interop/Util/IteratorZ.toFlixIterator(rc, ocast)
+                |> Interop.Util.IteratorZ.wrapHH(rc)
+                |> Interop.Util.IteratorZ.toFlixIterator(rc, ocast)
 
     pub def toFlixSet(v: VectorZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] =
         region r2 {
-            toFlixIterator(r2, Interop/Flix/Marshal.fromJavaObject, v) |> Iterator.toSet
+            toFlixIterator(r2, Interop.Flix.Marshal.fromJavaObject, v) |> Iterator.toSet
         }
 
     pub def toFlixList(v: VectorZ[a, r]): List[a] \ { Read(r) } with Marshal[a] =
         region r2 {
-            toFlixIterator(r2, Interop/Flix/Marshal.fromJavaObject, v) |> Iterator.toList
+            toFlixIterator(r2, Interop.Flix.Marshal.fromJavaObject, v) |> Iterator.toList
         }
 
 }

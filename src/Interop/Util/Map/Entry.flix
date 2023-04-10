@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Map {
+mod Interop.Util.Map {
 
 
     /// Interface 
@@ -24,11 +24,11 @@ namespace Interop/Util/Map {
 
 }
 
-namespace Interop/Util/Map/Entry {
+mod Interop.Util.Map.Entry {
 
-    use Interop/Util/Map.Entry;
-    use Interop/Util/Map.Entry.{Entry};
-    use Interop/Flix.Marshal;
+    use Interop.Util.Map.Entry;
+    use Interop.Util.Map.Entry.{Entry};
+    use Interop.Flix.Marshal;
 
     pub def getHH(e: Entry[k, v, r]): ##java.util.Map$Entry = 
         let Entry(e1) = e;
@@ -56,12 +56,12 @@ namespace Interop/Util/Map/Entry {
     pub def getKey(e: Entry[k, v, r]): k \ Read(r) with Marshal[k] = 
         import java.util.Map$Entry.getKey(): ##java.lang.Object \ r;
         let Entry(e1) = e;
-        getKey(e1) |> Interop/Flix/Marshal.fromJavaObject
+        getKey(e1) |> Interop.Flix.Marshal.fromJavaObject
 
     pub def getValue(e: Entry[k, v, r]): v \ Read(r) with Marshal[v] = 
         import java.util.Map$Entry.getValue(): ##java.lang.Object \ r;
         let Entry(e1) = e;
-        getValue(e1) |> Interop/Flix/Marshal.fromJavaObject
+        getValue(e1) |> Interop.Flix.Marshal.fromJavaObject
 
     pub def copyOf(_: Region[r1], e: Entry[k, v, r]): Result[String, Entry[k, v, r1]] \ { Read(r), Write(r1) } = 
         Result.tryCatch(_ -> {
@@ -69,12 +69,13 @@ namespace Interop/Util/Map/Entry {
             let Entry(e1) = e;
             Entry(copyOf(e1))
         })
+
     ///
     /// We don't need the inverse function "Entry from (k,v)" because Java's API for building maps is `m.put(k, v)`
     /// so we never need to create a MapEntry.
     ///
     pub def toKeyValue(e: Entry[k, v, r]): (k, v) \ Read(r) with Marshal[k], Marshal[v] =
-        toKeyValueWith(Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, e)
+        toKeyValueWith(Interop.Flix.Marshal.fromJavaObject, Interop.Flix.Marshal.fromJavaObject, e)
 
     pub def toKeyValueWith(kcast:  ##java.lang.Object -> k, 
                                     vcast: ##java.lang.Object -> v,

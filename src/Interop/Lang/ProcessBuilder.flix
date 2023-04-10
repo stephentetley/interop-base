@@ -15,7 +15,7 @@
  */
 
 
-namespace Interop/Lang {
+mod Interop.Lang {
 
     pub enum ProcessBuilder[_: Region](##java.lang.ProcessBuilder)
 
@@ -23,19 +23,19 @@ namespace Interop/Lang {
 }
 
 
-namespace Interop/Lang/ProcessBuilder {
+mod Interop.Lang.ProcessBuilder {
 
-    use Interop/Lang.ProcessBuilder;
-    use Interop/Lang.ProcessBuilder.{ProcessBuilder};
+    use Interop.Lang.ProcessBuilder;
+    use Interop.Lang.ProcessBuilder.{ProcessBuilder};
 
-    use Interop/IO.File;
-    use Interop/IO.File.{File};
-    use Interop/Lang.Process;
-    use Interop/Lang.Process.{Process};
-    use Interop/Lang/ProcessBuilder.Redirect;
-    use Interop/Lang/ProcessBuilder.Redirect.{Redirect};
-    use Interop/NIO/File.Path;
-    use Interop/NIO/File.Path.{Path};
+    use Interop.IO.File;
+    use Interop.IO.File.{File};
+    use Interop.Lang.Process;
+    use Interop.Lang.Process.{Process};
+    use Interop.Lang.ProcessBuilder.Redirect;
+    use Interop.Lang.ProcessBuilder.Redirect.{Redirect};
+    use Interop.NIO.File.Path;
+    use Interop.NIO.File.Path.{Path};
     
 
     pub def getHH(pb: ProcessBuilder[r]): ##java.lang.ProcessBuilder = 
@@ -45,23 +45,27 @@ namespace Interop/Lang/ProcessBuilder {
     pub def wrapHH(_: Region[r], prim: ##java.lang.ProcessBuilder): ProcessBuilder[r] = 
         ProcessBuilder(prim)
 
+    // ProcessBuilder has both getters and setters this implies "interactive" use 
+    // rather than simply a list of commands...
+    // ... this seems like a job for a monad.
+
 
     pub def new(_: Region[r], l: List[String]): ProcessBuilder[r] \ Write(r) = 
         import new java.lang.ProcessBuilder(##java.util.List): ##java.lang.ProcessBuilder \ r as newProcessBuilder;
-        let ls1 = Interop/Util/ListZ.fromFoldableViaArrayListHH(l);
+        let ls1 = Interop.Util.ListZ.fromFoldableViaArrayListHH(l);
         ProcessBuilder(newProcessBuilder(ls1))
 
     pub def command!(l: List[String], pb: ProcessBuilder[r]): ProcessBuilder[r] \ Write(r) = 
         import java.lang.ProcessBuilder.command(##java.util.List): ##java.lang.ProcessBuilder \ Write(r);
         let ProcessBuilder(pb1) = pb;
-        let ls1 = Interop/Util/ListZ.fromFoldableViaArrayListHH(l);
+        let ls1 = Interop.Util.ListZ.fromFoldableViaArrayListHH(l);
         ProcessBuilder(command(pb1, ls1))
 
 
     pub def getCommand(pb: ProcessBuilder[r]): List[String] \ Read(r) =
         import java.lang.ProcessBuilder.command(): ##java.util.List \ r;
         let ProcessBuilder(pb1) = pb;
-        command(pb1) |> Interop/Util/ListZ.primListToFlixList
+        command(pb1) |> Interop.Util.ListZ.primListToFlixList
 
 
     pub def directory!(f: File[r1], pb: ProcessBuilder[r]): ProcessBuilder[r] \ { Write(r), Read(r1) } = 
@@ -79,7 +83,7 @@ namespace Interop/Lang/ProcessBuilder {
         Result.tryCatch(_ -> {
             import java.lang.ProcessBuilder.environment(): ##java.util.Map \ {r, IO};
             let ProcessBuilder(pb1) = pb;
-            environment(pb1) |> Interop/Util/MapZ.primMapToFlixMap
+            environment(pb1) |> Interop.Util.MapZ.primMapToFlixMap
         })
 
 

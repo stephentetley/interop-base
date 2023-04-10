@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java Supplier.
@@ -27,17 +27,17 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/Supplier {
+mod Interop.Util.Function.Supplier {
     
-    use Interop/Util/Function.Supplier
-    use Interop/Util/Function.Supplier.{Supplier}
-    use Interop/Flix.Marshal
-    use Interop/Flix.MutMarshal
+    use Interop.Util.Function.Supplier
+    use Interop.Util.Function.Supplier.{Supplier}
+    use Interop.Flix.Marshal
+    use Interop.Flix.MutMarshal
 
     pub def makeSupplier(f: Unit -> a \ ef): Supplier[a, ef] with Marshal[a] = 
         Supplier(unchecked_cast(new ##java.util.function.Supplier {
             def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 
-                f() |> Interop/Flix/Marshal.toJavaObject
+                f() |> Interop.Flix.Marshal.toJavaObject
         } as _ \ {}))
 
 
@@ -45,7 +45,7 @@ namespace Interop/Util/Function/Supplier {
                                 (_: Region[r], f: Unit -> t[a, r] \ ef): Supplier[t[a, r], ef] with MutMarshal[t] = 
         Supplier(unchecked_cast(new ##java.util.function.Supplier {
             def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 
-                f() |> Interop/Flix/MutMarshal.mmToJavaObject
+                f() |> Interop.Flix.MutMarshal.mmToJavaObject
         } as _ \ {}))
 
 
@@ -58,7 +58,7 @@ namespace Interop/Util/Function/Supplier {
     pub def get(f: Supplier[a, ef]): a \ ef with Marshal[a] = 
         import java.util.function.Supplier.get(): ##java.lang.Object \ ef;
         let Supplier(f1) = f;
-        get(f1) |> Interop/Flix/Marshal.fromJavaObject
+        get(f1) |> Interop.Flix.Marshal.fromJavaObject
 
 
 }

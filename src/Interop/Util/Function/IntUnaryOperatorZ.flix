@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java IntUnaryOperator.
@@ -27,9 +27,9 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/IntUnaryOperatorZ {
+mod Interop.Util.Function.IntUnaryOperatorZ {
     
-    use Interop/Util/Function.IntUnaryOperatorZ;
+    use Interop.Util.Function.IntUnaryOperatorZ;
     
 
     pub def makeIntUnaryOperatorZ(f: Int32 -> Int32 \ ef): IntUnaryOperatorZ[ef] = 

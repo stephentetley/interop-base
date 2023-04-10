@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java IntFunction.
@@ -26,15 +26,15 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/IntFunctionZ {
+mod Interop.Util.Function.IntFunctionZ {
     
-    use Interop/Util/Function.IntFunctionZ
-    use Interop/Util/Function.IntFunctionZ.{IntFunctionZ}
-    use Interop/Flix.Marshal
+    use Interop.Util.Function.IntFunctionZ
+    use Interop.Util.Function.IntFunctionZ.{IntFunctionZ}
+    use Interop.Flix.Marshal
 
 
     pub def makeIntFunctionZ(f: Int32 -> a \ ef): IntFunctionZ[a, ef] with Marshal[a] = 
-        IntFunctionZ(unchecked_cast((i -> f(i) |> Interop/Flix/Marshal.toJavaObject) as ##java.util.function.IntFunction))
+        IntFunctionZ(unchecked_cast((i -> f(i) |> Interop.Flix.Marshal.toJavaObject) as ##java.util.function.IntFunction))
 
     pub def makeIntFunctionZWith(f: Int32 -> a \ ef, castToObj: a -> ##java.lang.Object): IntFunctionZ[a, ef] = 
         IntFunctionZ(unchecked_cast((i -> f(i) |> castToObj) as ##java.util.function.IntFunction))

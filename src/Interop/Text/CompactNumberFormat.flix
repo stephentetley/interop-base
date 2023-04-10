@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-namespace Interop/Text {
+mod Interop.Text {
     
-    use Interop/Text.CompactNumberFormat
-    use Interop/Text.CompactNumberFormat.{CompactNumberFormat}
-    use Interop/Text.NumberFormat
-    use Interop/Text.NumberFormat.{NumberFormat}
+    use Interop.Text.CompactNumberFormat
+    use Interop.Text.CompactNumberFormat.{CompactNumberFormat}
+    use Interop.Text.NumberFormat
+    use Interop.Text.NumberFormat.{NumberFormat}
 
     ///
     /// Represents a CompactNumberFormat.
@@ -44,12 +44,12 @@ namespace Interop/Text {
 }
 
 
-namespace Interop/Text/CompactNumberFormat {
+mod Interop.Text.CompactNumberFormat {
 
-    use Interop/Text.CompactNumberFormat
-    use Interop/Text.CompactNumberFormat.{CompactNumberFormat}
-    use Interop/Text/CompactNumberFormat.CompactNumberFormatProperty
-    use Interop/Text/CompactNumberFormat.CompactNumberFormatProperty.{
+    use Interop.Text.CompactNumberFormat
+    use Interop.Text.CompactNumberFormat.{CompactNumberFormat}
+    use Interop.Text.CompactNumberFormat.CompactNumberFormatProperty
+    use Interop.Text.CompactNumberFormat.CompactNumberFormatProperty.{
         CurrencyP, GroupingSize, 
         GroupingUsed, MaximumFractionDigits,
         MaximumIntegerDigits, MinimumFractionDigits, 
@@ -57,11 +57,11 @@ namespace Interop/Text/CompactNumberFormat {
         ParseIntegerOnly, RoundingModeP
     }
 
-    use Interop/Math.RoundingMode
-    use Interop/Math.RoundingMode.{RoundingMode}
-    use Interop/Util.Currency
-    use Interop/Flix.Setter
-    use Interop/Flix.Setter.Setter
+    use Interop.Math.RoundingMode
+    use Interop.Math.RoundingMode.{RoundingMode}
+    use Interop.Util.Currency
+    use Interop.Flix.Setter
+    use Interop.Flix.Setter.Setter
 
     pub def getHH(cf: CompactNumberFormat): ##java.text.CompactNumberFormat = 
         let CompactNumberFormat(cf1) = cf;
@@ -85,9 +85,9 @@ namespace Interop/Text/CompactNumberFormat {
     }
 
     pub def makeSetter(rc: Region[r], xs: List[CompactNumberFormatProperty]): Setter[CompactNumberFormat, r] = 
-        use Interop/Flix/Setter.{castSetter};
+        use Interop.Flix.Setter.{castSetter};
         def f(x) = match x {
-            case CurrencyP(x1)                  => castSetter(Interop/Text/SubNumberFormat.toNumberFormat, Interop/Text/NumberFormat.setCurrency!(rc, x1))
+            case CurrencyP(x1)                  => castSetter(Interop.Text.SubNumberFormat.toNumberFormat, Interop.Text.NumberFormat.setCurrency!(rc, x1))
             case GroupingSize(x1)               => setGroupingSize!(rc, x1)
             case GroupingUsed(x1)               => setGroupingUsed!(rc, x1)
             case MaximumFractionDigits(x1)      => setMaximumFractionDigits!(rc, x1)
@@ -98,7 +98,7 @@ namespace Interop/Text/CompactNumberFormat {
             case ParseIntegerOnly(x1)           => setParseIntegerOnly!(rc, x1)
             case RoundingModeP(x1)              => setRoundingMode!(rc, x1)
         };
-        Interop/Flix/Setter.makeSetter(rc, f, xs)
+        Interop.Flix.Setter.makeSetter(rc, f, xs)
 
 
 
@@ -115,13 +115,13 @@ namespace Interop/Text/CompactNumberFormat {
 
 
     pub def formatInt64(n: Int64, nf: CompactNumberFormat): Result[String, String] =
-        Interop/Text/SubNumberFormat.toNumberFormat(nf)
-            |> Interop/Text/NumberFormat.formatInt64(n)
+        Interop.Text.SubNumberFormat.toNumberFormat(nf)
+            |> Interop.Text.NumberFormat.formatInt64(n)
 
     
     pub def formatFloat64(d: Float64, nf: CompactNumberFormat): Result[String, String] = 
-        Interop/Text/SubNumberFormat.toNumberFormat(nf)
-            |> Interop/Text/NumberFormat.formatFloat64(d)
+        Interop.Text.SubNumberFormat.toNumberFormat(nf)
+            |> Interop.Text.NumberFormat.formatFloat64(d)
 
 
     pub def getGroupingSize(nf: CompactNumberFormat): Int32 =
@@ -131,7 +131,7 @@ namespace Interop/Text/CompactNumberFormat {
 
 
     pub def setGroupingSize!(_: Region[r], n: Int32): Setter[CompactNumberFormat, r] =
-        Interop/Flix/Setter.lift(nf ->
+        Interop.Flix.Setter.lift(nf ->
             import java.text.CompactNumberFormat.setGroupingSize(Int32): Unit \ r;
             let CompactNumberFormat(nf1) = nf;
             setGroupingSize(nf1, n)
@@ -139,35 +139,35 @@ namespace Interop/Text/CompactNumberFormat {
 
 
     pub def setGroupingUsed!(_: Region[r], used: Bool): Setter[CompactNumberFormat, r] =
-        Interop/Flix/Setter.lift(nf ->
+        Interop.Flix.Setter.lift(nf ->
             import java.text.CompactNumberFormat.setGroupingUsed(Bool): Unit \ r;
             let CompactNumberFormat(nf1) = nf;
             setGroupingUsed(nf1, used)
         )
 
     pub def setMaximumFractionDigits!(_: Region[r], n: Int32): Setter[CompactNumberFormat, r] =
-        Interop/Flix/Setter.lift(nf ->
+        Interop.Flix.Setter.lift(nf ->
             import java.text.CompactNumberFormat.setMaximumFractionDigits(Int32): Unit \ r;
             let CompactNumberFormat(nf1) = nf;
             setMaximumFractionDigits(nf1, n)
         )
 
     pub def setMaximumIntegerDigits!(_: Region[r], n: Int32): Setter[CompactNumberFormat, r] =
-        Interop/Flix/Setter.lift(nf ->
+        Interop.Flix.Setter.lift(nf ->
             import java.text.CompactNumberFormat.setMaximumIntegerDigits(Int32): Unit \ r;
             let CompactNumberFormat(nf1) = nf;
             setMaximumIntegerDigits(nf1, n)
         )
 
     pub def setMinimumFractionDigits!(_: Region[r], n: Int32): Setter[CompactNumberFormat, r] =
-        Interop/Flix/Setter.lift(nf ->
+        Interop.Flix.Setter.lift(nf ->
             import java.text.CompactNumberFormat.setMinimumFractionDigits(Int32): Unit \ r;
             let CompactNumberFormat(nf1) = nf;
             setMinimumFractionDigits(nf1, n)
         )
 
     pub def setMinimumIntegerDigits!(_: Region[r], n: Int32): Setter[CompactNumberFormat, r] =
-        Interop/Flix/Setter.lift(nf ->
+        Interop.Flix.Setter.lift(nf ->
             import java.text.CompactNumberFormat.setMinimumIntegerDigits(Int32): Unit \ r;
             let CompactNumberFormat(nf1) = nf;
             setMinimumIntegerDigits(nf1, n)
@@ -175,7 +175,7 @@ namespace Interop/Text/CompactNumberFormat {
 
 
     pub def setParseBigDecimal!(_: Region[r], value: Bool): Setter[CompactNumberFormat, r] =
-        Interop/Flix/Setter.lift(nf ->
+        Interop.Flix.Setter.lift(nf ->
             import java.text.CompactNumberFormat.setParseBigDecimal(Bool): Unit \ r;
             let CompactNumberFormat(nf1) = nf;
             setParseBigDecimal(nf1, value)
@@ -183,7 +183,7 @@ namespace Interop/Text/CompactNumberFormat {
 
 
     pub def setParseIntegerOnly!(_: Region[r], value: Bool): Setter[CompactNumberFormat, r] =
-        Interop/Flix/Setter.lift(nf ->
+        Interop.Flix.Setter.lift(nf ->
             import java.text.CompactNumberFormat.setParseIntegerOnly(Bool): Unit \ r;
             let CompactNumberFormat(nf1) = nf;
             setParseIntegerOnly(nf1, value)
@@ -196,7 +196,7 @@ namespace Interop/Text/CompactNumberFormat {
         getRoundingMode(nf1) |> RoundingMode
 
     pub def setRoundingMode!(_: Region[r], mode: RoundingMode): Setter[CompactNumberFormat, r] =
-        Interop/Flix/Setter.lift(nf ->
+        Interop.Flix.Setter.lift(nf ->
             import java.text.CompactNumberFormat.setRoundingMode(##java.math.RoundingMode): Unit \ r;
             let CompactNumberFormat(nf1) = nf;
             let RoundingMode(mode1) = mode;

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-namespace Interop/Lang {
+mod Interop.Lang {
     
-    use Interop/Lang.Number
-    use Interop/Lang.Number.{Number}
+    use Interop.Lang.Number
+    use Interop.Lang.Number.{Number}
     
     /// Abstract Class
     /// Represents a Number.
@@ -29,7 +29,7 @@ namespace Interop/Lang {
         pub def fromNumber(s: Number): x
     }
 
-    instance Interop/Flix.Marshal[Number] {
+    instance Interop.Flix.Marshal[Number] {
         pub def toJavaObject(x: Number): ##java.lang.Object = 
             let Number(x1) = x;
             checked_cast(x1)
@@ -41,11 +41,11 @@ namespace Interop/Lang {
 }
 
 
-namespace Interop/Lang/Number {
+mod Interop.Lang.Number {
 
 
-    use Interop/Lang.Number
-    use Interop/Lang.Number.{Number}
+    use Interop.Lang.Number
+    use Interop.Lang.Number.{Number}
 
     pub def getHH(x: Number): ##java.lang.Number = 
         let Number(x1) = x;

@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-namespace Interop/IO {
+mod Interop.IO {
 
-    use Interop/IO.InputStreamReader
-    use Interop/IO.InputStreamReader.{InputStreamReader}
-    use Interop/IO.Reader
-    use Interop/IO.Reader.{Reader}
+    use Interop.IO.InputStreamReader
+    use Interop.IO.InputStreamReader.{InputStreamReader}
+    use Interop.IO.Reader
+    use Interop.IO.Reader.{Reader}
 
     pub enum InputStreamReader[_: Region](##java.io.InputStreamReader)
 
 
-    instance Interop/IO.SubReader[InputStreamReader] {
+    instance Interop.IO.SubReader[InputStreamReader] {
         pub def toReader(s: InputStreamReader[r]): Reader[r] = 
             let InputStreamReader(s1) = s;
             Reader(unchecked_cast(s1 as ##java.io.Reader))
@@ -36,13 +36,13 @@ namespace Interop/IO {
 
 }
 
-namespace Interop/IO/InputStreamReader {
+mod Interop.IO.InputStreamReader {
 
-    use Interop/IO.InputStreamReader
-    use Interop/IO.InputStreamReader.{InputStreamReader}
-    use Interop/IO.InputStream
-    use Interop/NIO/Charset.Charset
-    use Interop/NIO/Charset.Charset.{Charset}
+    use Interop.IO.InputStreamReader
+    use Interop.IO.InputStreamReader.{InputStreamReader}
+    use Interop.IO.InputStream
+    use Interop.NIO.Charset.Charset
+    use Interop.NIO.Charset.Charset.{Charset}
 
     pub def getHH(rd: InputStreamReader[r]): ##java.io.InputStreamReader = 
         let InputStreamReader(rd1) = rd;
@@ -54,7 +54,7 @@ namespace Interop/IO/InputStreamReader {
     pub def newInputStreamReader(_: Region[r1], ins: InputStream[r], cs: Charset): InputStreamReader[r1] \ { Read(r), Write(r1) }= 
         import new java.io.InputStreamReader(##java.io.InputStream, ##java.nio.charset.Charset): ##java.io.InputStreamReader \ {r, r1} as newInputStreamReader;
         let Charset(cs1) = cs;
-        let ins1 = Interop/IO/InputStream.getHH(ins);
+        let ins1 = Interop.IO.InputStream.getHH(ins);
         InputStreamReader(newInputStreamReader(ins1, cs1))
 
     /// None indicates end-of-stream.

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java ToLongFunction.
@@ -27,22 +27,22 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/ToLongFunction {
+mod Interop.Util.Function.ToLongFunction {
     
-    use Interop/Util/Function.ToLongFunction
-    use Interop/Util/Function.ToLongFunction.{ToLongFunction}
-    use Interop/Flix.Marshal
+    use Interop.Util.Function.ToLongFunction
+    use Interop.Util.Function.ToLongFunction.{ToLongFunction}
+    use Interop.Flix.Marshal
 
     pub def makeToLongFunction(f: a -> Int64 \ ef): ToLongFunction[a, ef] with Marshal[a]= 
         ToLongFunction(unchecked_cast(new ##java.util.function.ToLongFunction {
             def applyAsLong(_this: ##java.util.function.ToLongFunction, t: ##java.lang.Object): Int64 = 
-                Interop/Flix/Marshal.fromJavaObject(t) |> f
+                Interop.Flix.Marshal.fromJavaObject(t) |> f
         } as _ \ {}))
 
 
     pub def applyAsLong(f: ToLongFunction[a, ef], t: a): Int64 \ ef with Marshal[a]  = 
         import java.util.function.ToLongFunction.applyAsLong(##java.lang.Object): Int64 \ ef;
         let ToLongFunction(f1) = f;
-        applyAsLong(f1, Interop/Flix/Marshal.toJavaObject(t))
+        applyAsLong(f1, Interop.Flix.Marshal.toJavaObject(t))
 
 }

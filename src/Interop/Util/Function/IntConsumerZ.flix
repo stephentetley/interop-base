@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java IntConsumer.
@@ -28,9 +28,9 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/IntConsumerZ {
+mod Interop.Util.Function.IntConsumerZ {
     
-    use Interop/Util/Function.IntConsumerZ
+    use Interop.Util.Function.IntConsumerZ
 
 
     pub def makeIntConsumerZ(f: Int32 -> Unit \ ef): IntConsumerZ[ef] = 

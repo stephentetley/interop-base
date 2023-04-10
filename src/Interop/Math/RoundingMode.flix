@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace Interop/Math {
 
-    use Interop/Math.RoundingMode
-    use Interop/Math.RoundingMode.{RoundingMode}
-    use Interop/Lang.Enum
-    use Interop/Lang.Enum.{Enum}
-    use Interop/Lang.SubEnum
+mod Interop.Math {
 
-    // Design note - Basis libraries should define enums so that constructors
-    // are in the Basis namespace.
+    use Interop.Math.RoundingMode
+    use Interop.Math.RoundingMode.{RoundingMode}
+    use Interop.Lang.Enum
+    use Interop.Lang.Enum.{Enum}
+    use Interop.Lang.SubEnum
 
     pub enum RoundingMode(##java.math.RoundingMode)
 
@@ -38,10 +36,10 @@ namespace Interop/Math {
 
 }
 
-namespace Interop/Math/RoundingMode {
+mod Interop.Math.RoundingMode {
 
-    use Interop/Math.RoundingMode
-    use Interop/Math.RoundingMode.{RoundingMode}
+    use Interop.Math.RoundingMode
+    use Interop.Math.RoundingMode.{RoundingMode}
 
     pub def getHH(x: RoundingMode): ##java.math.RoundingMode = 
         let RoundingMode(x1) = x;

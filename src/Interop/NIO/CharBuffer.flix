@@ -15,19 +15,19 @@
  */
 
 
-namespace Interop/NIO {
+mod Interop.NIO {
 
     pub enum CharBuffer[_: Region](##java.nio.CharBuffer)
 
 }
 
-namespace Interop/NIO/CharBuffer { 
+mod Interop.NIO.CharBuffer { 
 
-    use Interop/NIO.CharBuffer;
-    use Interop/NIO.CharBuffer.{CharBuffer};
-    use Interop/NIO.ByteOrder;
-    use Interop/NIO.ByteOrder.{ByteOrder};
-    use Interop/Lang.CharSequence;
+    use Interop.NIO.CharBuffer;
+    use Interop.NIO.CharBuffer.{CharBuffer};
+    use Interop.NIO.ByteOrder;
+    use Interop.NIO.ByteOrder.{ByteOrder};
+    use Interop.Lang.CharSequence;
 
     pub def getHH(x: CharBuffer[r]): ##java.nio.CharBuffer = 
         let CharBuffer(x1) = x;
@@ -55,7 +55,7 @@ namespace Interop/NIO/CharBuffer {
         Result.tryCatch(_ -> {
             import java.nio.CharBuffer.append(##java.lang.CharSequence): ##java.nio.CharBuffer \ {r, r2};
             let CharBuffer(cb1) = cb;
-            let cs1 = Interop/Lang/CharSequence.getHH(cs);
+            let cs1 = Interop.Lang.CharSequence.getHH(cs);
             append(cb1, cs1) |> CharBuffer
         })
 
@@ -67,7 +67,7 @@ namespace Interop/NIO/CharBuffer {
         Result.tryCatch(_ -> {
             import java.nio.CharBuffer.append(##java.lang.CharSequence, Int32, Int32): ##java.nio.CharBuffer \ {r, r2};
             let CharBuffer(cb1) = cb;
-            let cs1 = Interop/Lang/CharSequence.getHH(cs);
+            let cs1 = Interop.Lang.CharSequence.getHH(cs);
             append(cb1, cs1, offset.offset, len.len) |> CharBuffer
         })
 

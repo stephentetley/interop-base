@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java Consumer.
@@ -28,15 +28,15 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/ConsumerZ {
+mod Interop.Util.Function.ConsumerZ {
     
-    use Interop/Util/Function.ConsumerZ
-    use Interop/Util/Function.ConsumerZ.{ConsumerZ}
-    use Interop/Flix.Marshal
+    use Interop.Util.Function.ConsumerZ
+    use Interop.Util.Function.ConsumerZ.{ConsumerZ}
+    use Interop.Flix.Marshal
 
 
     pub def makeConsumerZ(f: a -> Unit \ ef): ConsumerZ[a, ef] with Marshal[a] = 
-        ConsumerZ(unchecked_cast((Interop/Flix/Marshal.fromJavaObject >> f) as ##java.util.function.Consumer))
+        ConsumerZ(unchecked_cast((Interop.Flix.Marshal.fromJavaObject >> f) as ##java.util.function.Consumer))
 
 
     // /// Result?

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java ToLongBiFunction.
@@ -27,17 +27,17 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/ToLongBiFunction {
+mod Interop.Util.Function.ToLongBiFunction {
     
-    use Interop/Util/Function.ToLongBiFunction
-    use Interop/Util/Function.ToLongBiFunction.{ToLongBiFunction}
-    use Interop/Flix.Marshal
+    use Interop.Util.Function.ToLongBiFunction
+    use Interop.Util.Function.ToLongBiFunction.{ToLongBiFunction}
+    use Interop.Flix.Marshal
 
     pub def makeToLongBiFunction(f: (a, b) -> Int64 \ ef): ToLongBiFunction[a, b, ef] with Marshal[a], Marshal[b] = 
         ToLongBiFunction(unchecked_cast(new ##java.util.function.ToLongBiFunction {
             def applyAsLong(_this: ##java.util.function.ToLongBiFunction, t: ##java.lang.Object, u: ##java.lang.Object): Int64 = 
-                let a1 = Interop/Flix/Marshal.fromJavaObject(t);
-                let b1 = Interop/Flix/Marshal.fromJavaObject(u);
+                let a1 = Interop.Flix.Marshal.fromJavaObject(t);
+                let b1 = Interop.Flix.Marshal.fromJavaObject(u);
                 f(a1, b1)
         } as _ \ {}))
 
@@ -45,6 +45,6 @@ namespace Interop/Util/Function/ToLongBiFunction {
     pub def applyAsInt(f: ToLongBiFunction[a, b, ef], t: a, u: b): Int64 \ ef with Marshal[a], Marshal[b] = 
         import java.util.function.ToLongBiFunction.applyAsLong(##java.lang.Object, ##java.lang.Object): Int64 \ ef;
         let ToLongBiFunction(f1) = f;
-        applyAsLong(f1, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u))
+        applyAsLong(f1, Interop.Flix.Marshal.toJavaObject(t), Interop.Flix.Marshal.toJavaObject(u))
 
 }

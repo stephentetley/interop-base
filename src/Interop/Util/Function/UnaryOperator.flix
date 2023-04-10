@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java UnaryOperator.
@@ -28,18 +28,18 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/UnaryOperator {
+mod Interop.Util.Function.UnaryOperator {
     
-    use Interop/Util/Function.UnaryOperator
-    use Interop/Util/Function.UnaryOperator.{UnaryOperator}
-    use Interop/Flix.Marshal
+    use Interop.Util.Function.UnaryOperator
+    use Interop.Util.Function.UnaryOperator.{UnaryOperator}
+    use Interop.Flix.Marshal
     
 
     pub def makeUnaryOperator(f: a -> a \ ef): UnaryOperator[a, ef] with Marshal[a] = 
         let f1 = o1 -> {
-            let a = Interop/Flix/Marshal.fromJavaObject(o1); 
+            let a = Interop.Flix.Marshal.fromJavaObject(o1); 
             let ans = f(a);
-            Interop/Flix/Marshal.toJavaObject(ans)
+            Interop.Flix.Marshal.toJavaObject(ans)
         };
         UnaryOperator(unchecked_cast(new ##java.util.function.UnaryOperator {
             def apply(_this: ##java.util.function.UnaryOperator, t: ##java.lang.Object): ##java.lang.Object = 
@@ -50,7 +50,7 @@ namespace Interop/Util/Function/UnaryOperator {
     pub def apply(t: a, f: UnaryOperator[a, ef]): a \ ef with Marshal[a] = 
         import java.util.function.UnaryOperator.apply(##java.lang.Object): ##java.lang.Object \ ef;
         let UnaryOperator(f1) = f;
-        apply(f1, Interop/Flix/Marshal.toJavaObject(t)) |> Interop/Flix/Marshal.fromJavaObject
+        apply(f1, Interop.Flix.Marshal.toJavaObject(t)) |> Interop.Flix.Marshal.fromJavaObject
 
     pub def identity(): UnaryOperator[a, ef] = 
         import static java.util.function.UnaryOperator.identity(): ##java.util.function.UnaryOperator \ {};

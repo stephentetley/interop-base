@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
-    use Interop/Util.ListZ
-    use Interop/Util.ListZ.{ListZ}
-    use Interop/Util.Collection
-    use Interop/Util.Collection.{Collection}
-    use Interop/Util/Function.ConsumerZ.{ConsumerZ}
+    use Interop.Util.ListZ
+    use Interop.Util.ListZ.{ListZ}
+    use Interop.Util.Collection
+    use Interop.Util.Collection.{Collection}
+    use Interop.Util.Function.ConsumerZ.{ConsumerZ}
 
     ///
     /// Represents a Java List.
@@ -35,11 +35,11 @@ namespace Interop/Util {
         pub def fromListZ(s: ListZ[a, r]): t[a, r]
 
         pub def toListHH(s: t[a, r]): ##java.util.List = 
-           ImpListZ.toListZ(s) |> Interop/Util/ListZ.getHH        
+           ImpListZ.toListZ(s) |> Interop.Util.ListZ.getHH        
     }
 
 
-    instance Interop/Util.ImpCollection[ListZ] {
+    instance Interop.Util.ImpCollection[ListZ] {
         pub def toCollection(t: ListZ[a, r]): Collection[a, r] = 
             let ListZ(rc, t1) = t;
             Collection(rc, unchecked_cast(t1 as ##java.util.Collection))
@@ -51,17 +51,17 @@ namespace Interop/Util {
 
 }
 
-namespace Interop/Util/ListZ {
+mod Interop.Util.ListZ {
 
-    use Interop/Util.ListZ
-    use Interop/Util.ListZ.{ListZ}
-    use Interop/Util.Collection
-    use Interop/Util.Collection.{Collection}
-    use Interop/Util.Comparator
-    use Interop/Util.ImpListZ
-    use Interop/Util/Function.ConsumerZ.{ConsumerZ}
-    use Interop/Util/Function.PredicateZ.{PredicateZ}
-    use Interop/Flix.Marshal
+    use Interop.Util.ListZ
+    use Interop.Util.ListZ.{ListZ}
+    use Interop.Util.Collection
+    use Interop.Util.Collection.{Collection}
+    use Interop.Util.Comparator
+    use Interop.Util.ImpListZ
+    use Interop.Util.Function.ConsumerZ.{ConsumerZ}
+    use Interop.Util.Function.PredicateZ.{PredicateZ}
+    use Interop.Flix.Marshal
 
 
     pub def getHH(l: ListZ[a, r]): ##java.util.List = 
@@ -78,37 +78,37 @@ namespace Interop/Util/ListZ {
 
     pub def of1(rc: Region[r], e1: a): ListZ[a, r] \ Write(r) with Marshal[a] =
         import static java.util.List.of(##java.lang.Object): ##java.util.List \ r;
-        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
+        let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
         ListZ(rc, of(eo1))
 
     pub def of2(rc: Region[r], e1: a, e2: a): ListZ[a, r] \ Write(r) with Marshal[a] =
         import static java.util.List.of(##java.lang.Object, ##java.lang.Object): ##java.util.List \ r;
-        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
-        let eo2 = Interop/Flix/Marshal.toJavaObject(e2);
+        let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
+        let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
         ListZ(rc, of(eo1, eo2))
 
     pub def of3(rc: Region[r], e1: a, e2: a, e3: a): ListZ[a, r] \ Write(r) with Marshal[a] =
         import static java.util.List.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.List \ r;
-        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
-        let eo2 = Interop/Flix/Marshal.toJavaObject(e2);
-        let eo3 = Interop/Flix/Marshal.toJavaObject(e3);
+        let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
+        let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
+        let eo3 = Interop.Flix.Marshal.toJavaObject(e3);
         ListZ(rc, of(eo1, eo2, eo3))
 
     pub def of4(rc: Region[r], e1: a, e2: a, e3: a, e4: a): ListZ[a, r] \ Write(r) with Marshal[a] =
         import static java.util.List.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.List \ r;
-        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
-        let eo2 = Interop/Flix/Marshal.toJavaObject(e2);
-        let eo3 = Interop/Flix/Marshal.toJavaObject(e3);
-        let eo4 = Interop/Flix/Marshal.toJavaObject(e4);
+        let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
+        let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
+        let eo3 = Interop.Flix.Marshal.toJavaObject(e3);
+        let eo4 = Interop.Flix.Marshal.toJavaObject(e4);
         ListZ(rc, of(eo1, eo2, eo3, eo4))
 
     pub def of5(rc: Region[r], e1: a, e2: a, e3: a, e4: a, e5: a): ListZ[a, r] \ Write(r) with Marshal[a] =
         import static java.util.List.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.List \ r;
-        let eo1 = Interop/Flix/Marshal.toJavaObject(e1);
-        let eo2 = Interop/Flix/Marshal.toJavaObject(e2);
-        let eo3 = Interop/Flix/Marshal.toJavaObject(e3);
-        let eo4 = Interop/Flix/Marshal.toJavaObject(e4);
-        let eo5 = Interop/Flix/Marshal.toJavaObject(e5);
+        let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
+        let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
+        let eo3 = Interop.Flix.Marshal.toJavaObject(e3);
+        let eo4 = Interop.Flix.Marshal.toJavaObject(e4);
+        let eo5 = Interop.Flix.Marshal.toJavaObject(e5);
         ListZ(rc, of(eo1, eo2, eo3, eo4, eo5))
 
     pub def equals(l1: ListZ[a, r], l2: ListZ[a, r]): Bool \  Read(r) with Marshal[a] =
@@ -137,7 +137,7 @@ namespace Interop/Util/ListZ {
         Result.tryCatch(_ -> {
             import java.util.List.add(##java.lang.Object): Bool \ r;
             let ListZ(_, l1) = l;
-            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
             add(l1, x1)
         })
 
@@ -153,7 +153,7 @@ namespace Interop/Util/ListZ {
         Result.tryCatch(_ -> {
             import java.util.List.contains(##java.lang.Object): Bool \ r; 
             let ListZ(_, l1) = l;
-            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
             contains(l1, x1)
         })
 
@@ -177,7 +177,7 @@ namespace Interop/Util/ListZ {
         Result.tryCatch(_ -> {
             import java.util.List.remove(##java.lang.Object): Bool \ r; 
             let ListZ(_, l1) = l;
-            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
             remove(l1, x1)
         })
 
@@ -194,7 +194,7 @@ namespace Interop/Util/ListZ {
         Result.tryCatch(_ -> {
             import java.util.List.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let ListZ(_, l1) = l;
-            let PredicateZ(f1) = Interop/Util/Function/PredicateZ.makePredicateZ(f);
+            let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
             checked_ecast(removeIf(l1, f1))
         })
 
@@ -211,13 +211,13 @@ namespace Interop/Util/ListZ {
         Result.tryCatch(_ -> {
             import java.util.List.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let ListZ(_, l1) = l;
-            let ConsumerZ(f1) = Interop/Util/Function/ConsumerZ.makeConsumerZ(f);
+            let ConsumerZ(f1) = Interop.Util.Function.ConsumerZ.makeConsumerZ(f);
             forEach(l1, f1)
         })
 
 
     pub def sort!(f: (a, a) -> Int32, l: ListZ[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
-        let f1 = Interop/Util/Comparator.makeComparator(f);
+        let f1 = Interop.Util.Comparator.makeComparator(f);
         sortWithComparator!(f1, l)
 
 
@@ -229,17 +229,17 @@ namespace Interop/Util/ListZ {
         })
 
     pub def fromFoldableViaArrayList(rc: Region[r], t: t[a]): ListZ[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
-        Interop/Util/ArrayList.fromFoldable(rc, t) |> Interop/Util/ImpListZ.toListZ
+        Interop.Util.ArrayList.fromFoldable(rc, t) |> Interop.Util.ImpListZ.toListZ
 
     pub def fromFoldableViaArrayListHH(t: t[a]): ##java.util.List with Foldable[t], Marshal[a] = region rc {
-        Interop/Util/ArrayList.fromFoldable(rc, t) |> Interop/Util/ImpListZ.toListHH
+        Interop.Util.ArrayList.fromFoldable(rc, t) |> Interop.Util.ImpListZ.toListHH
     }
 
     pub def fromFoldableViaLinkedList(rc: Region[r], t: t[a]): ListZ[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
-        Interop/Util/LinkedList.fromFoldable(rc, t) |> Interop/Util/ImpListZ.toListZ
+        Interop.Util.LinkedList.fromFoldable(rc, t) |> Interop.Util.ImpListZ.toListZ
 
     pub def fromFoldableViaLinkedListHH(t: t[a]): ##java.util.List with Foldable[t], Marshal[a] = region rc {
-        Interop/Util/LinkedList.fromFoldable(rc, t) |> Interop/Util/ImpListZ.toListHH
+        Interop.Util.LinkedList.fromFoldable(rc, t) |> Interop.Util.ImpListZ.toListHH
     }
 
     pub def primListToFlixList(prim: ##java.util.List): List[a] with Marshal[a] = region rc {
@@ -250,7 +250,7 @@ namespace Interop/Util/ListZ {
     /// Returns an iterator over `l`.
     ///
     pub def iterator(rc: Region[r1], l: ListZ[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
-        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, l)
+        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, l)
 
     ///
     /// Returns an iterator over `l`.
@@ -262,17 +262,17 @@ namespace Interop/Util/ListZ {
             Iterator.empty(rc)
         else 
             iterator(l1) 
-                |> Interop/Util/IteratorZ.wrapHH(rc)
-                |> Interop/Util/IteratorZ.toFlixIterator(rc, ocast)
+                |> Interop.Util.IteratorZ.wrapHH(rc)
+                |> Interop.Util.IteratorZ.toFlixIterator(rc, ocast)
 
 
 
     pub def toFlixList(l: ListZ[a, r]): List[a] \ { Read(r) } with Marshal[a] = region r {
-        toFlixIterator(r, Interop/Flix/Marshal.fromJavaObject, l) |> Iterator.toList
+        toFlixIterator(r, Interop.Flix.Marshal.fromJavaObject, l) |> Iterator.toList
     }
 
     pub def toSet(l: ListZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] = region r {
-        toFlixIterator(r, Interop/Flix/Marshal.fromJavaObject, l) |> Iterator.toSet
+        toFlixIterator(r, Interop.Flix.Marshal.fromJavaObject, l) |> Iterator.toSet
     }
 
 

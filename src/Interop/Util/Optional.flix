@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
     ///
     /// Represents a Java Optional.
@@ -28,11 +28,11 @@ namespace Interop/Util {
 }
 
 
-namespace Interop/Util/Optional {
+mod Interop.Util.Optional {
     
-    use Interop/Util.Optional;
-    use Interop/Util.Optional.{Optional};
-    use Interop/Flix.Marshal;
+    use Interop.Util.Optional;
+    use Interop.Util.Optional.{Optional};
+    use Interop.Flix.Marshal;
 
     pub def getHH(o: Optional[a]): ##java.util.Optional = 
         let Optional(o1) = o;
@@ -57,14 +57,14 @@ namespace Interop/Util/Optional {
 
     pub def toOption(o: Optional[a]): Option[a] with Marshal[a] =
         let Optional(o1) = o;
-        o1 |> hhToOption(Interop/Flix/Marshal.fromJavaObject)
+        o1 |> hhToOption(Interop.Flix.Marshal.fromJavaObject)
     
     pub def fromOption(o: Option[a]): Optional[a] with Marshal[a] =
         import static java.util.Optional.empty(): ##java.util.Optional & Pure;
         import static java.util.Optional.of(##java.lang.Object): ##java.util.Optional & Pure;
         match o { 
             case None    => empty() |> Optional
-            case Some(a) => Interop/Flix/Marshal.toJavaObject(a) |> of |> Optional
+            case Some(a) => Interop.Flix.Marshal.toJavaObject(a) |> of |> Optional
         }
 
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
     ///
     /// Represents a Java LongSummaryStatistics.
@@ -26,11 +26,11 @@ namespace Interop/Util {
 }
 
 
-namespace Interop/Util/LongSummaryStatistics {
+mod Interop.Util.LongSummaryStatistics {
     
-    use Interop/Util.LongSummaryStatistics
-    use Interop/Util.LongSummaryStatistics.{LongSummaryStatistics}
-    use Interop/Flix.Marshal
+    use Interop.Util.LongSummaryStatistics
+    use Interop.Util.LongSummaryStatistics.{LongSummaryStatistics}
+    use Interop.Flix.Marshal
 
     pub def getHH(ss: LongSummaryStatistics[r]): ##java.util.LongSummaryStatistics = 
         let LongSummaryStatistics(ss1) = ss;

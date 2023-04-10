@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java DoubleBinaryOperator.
@@ -28,10 +28,10 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/DoubleBinaryOperator {
+mod Interop.Util.Function.DoubleBinaryOperator {
     
-    use Interop/Util/Function.DoubleBinaryOperator
-    use Interop/Util/Function.DoubleBinaryOperator.{DoubleBinaryOperator}
+    use Interop.Util.Function.DoubleBinaryOperator
+    use Interop.Util.Function.DoubleBinaryOperator.{DoubleBinaryOperator}
 
     pub def makeDoubleBinaryOperator(f: (Float64, Float64) -> Float64 \ ef): DoubleBinaryOperator[ef] = 
         DoubleBinaryOperator(unchecked_cast(new ##java.util.function.DoubleBinaryOperator {

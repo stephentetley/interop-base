@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-namespace Interop/Lang {
+mod Interop.Lang {
 
-    use Interop/Lang.Character
-    use Interop/Lang.Character.{Character}
+    use Interop.Lang.Character
+    use Interop.Lang.Character.{Character}
 
     ///
     /// Represents a Java Boolean.
@@ -25,7 +25,7 @@ namespace Interop/Lang {
     pub enum Character(##java.lang.Character)
 
 
-    instance Interop/Flix.Marshal[Character] {
+    instance Interop.Flix.Marshal[Character] {
         pub def toJavaObject(x: Character): ##java.lang.Object = 
             let Character(x1) = x;
             checked_cast(x1)
@@ -37,11 +37,11 @@ namespace Interop/Lang {
 
 }
 
-namespace Interop/Lang/Character {
+mod Interop.Lang.Character {
 
 
-    use Interop/Lang.Character
-    use Interop/Lang.Character.{Character}
+    use Interop.Lang.Character
+    use Interop.Lang.Character.{Character}
 
 
     pub def getHH(c: Character): ##java.lang.Character = 

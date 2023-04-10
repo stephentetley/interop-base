@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Flix {
+mod Interop.Flix {
 
 
     /// A `Builder` with error reporting.
@@ -22,10 +22,10 @@ namespace Interop/Flix {
 
 }
 
-namespace Interop/Flix/Builder {
+mod Interop.Flix.Builder {
 
-    use Interop/Flix.Builder
-    use Interop/Flix.Builder.Builder
+    use Interop.Flix.Builder
+    use Interop.Flix.Builder.Builder
 
 
     pub def apply[r: Region, t:Type](_: Region[r], f: Builder[t, r], o: t): Result[String, t] \ Write(r) = 

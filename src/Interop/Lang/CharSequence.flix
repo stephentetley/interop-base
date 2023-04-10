@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-namespace Interop/Lang {
+mod Interop.Lang {
 
     /// Interface...
     /// Read-only (not pure) - in Java handles both String and StringBuilder[r]
 
-    use Interop/Lang.CharSequence
-    use Interop/Lang.CharSequence.{CharSequence}
+    use Interop.Lang.CharSequence
+    use Interop.Lang.CharSequence.{CharSequence}
     use StringBuilder.{StringBuilder}
 
     pub enum CharSequence[_: Region](##java.lang.CharSequence)
@@ -31,7 +31,7 @@ namespace Interop/Lang {
         pub def fromCharSequence(s: CharSequence[r]): t[r]
     }
 
-    instance Interop/Lang.ImpCharSequence[StringBuilder] {
+    instance Interop.Lang.ImpCharSequence[StringBuilder] {
         pub def toCharSequence(s: StringBuilder[r]): CharSequence[r] =             
             let StringBuilder(s1) = s;
             let cs: ##java.lang.CharSequence = checked_cast(s1);
@@ -46,11 +46,11 @@ namespace Interop/Lang {
 
 
 
-namespace Interop/Lang/CharSequence {
+mod Interop.Lang.CharSequence {
 
-    use Interop/Lang.CharSequence
-    use Interop/Lang.CharSequence.{CharSequence}
-    use Interop/Lang.ImpCharSequence
+    use Interop.Lang.CharSequence
+    use Interop.Lang.CharSequence.{CharSequence}
+    use Interop.Lang.ImpCharSequence
 
     pub def getHH(cs: CharSequence[r]): ##java.lang.CharSequence = 
         let CharSequence(cs1) = cs;
@@ -60,7 +60,7 @@ namespace Interop/Lang/CharSequence {
         CharSequence(prim)
 
     pub def toCharSequenceHH[t: Region -> Type, r: Region](s: t[r]): ##java.lang.CharSequence with ImpCharSequence[t] = 
-        Interop/Lang/ImpCharSequence.toCharSequence(s) |> getHH
+        Interop.Lang.ImpCharSequence.toCharSequence(s) |> getHH
 
 
     pub def toString(cs: CharSequence[r]): String \ Read(r) = 
@@ -99,7 +99,7 @@ namespace Interop/Lang/CharSequence {
         CharSequence(cs)
 
     pub def fromStringBuilder(sb: StringBuilder[r]): CharSequence[r] = 
-        Interop/Lang/ImpCharSequence.toCharSequence(sb)
+        Interop.Lang.ImpCharSequence.toCharSequence(sb)
 
 
 }

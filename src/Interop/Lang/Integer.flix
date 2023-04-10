@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-namespace Interop/Lang {
+mod Interop.Lang {
 
-    use Interop/Lang.Integer
-    use Interop/Lang.Integer.{Integer}
+    use Interop.Lang.Integer
+    use Interop.Lang.Integer.{Integer}
 
     ///
     /// Represents a Java Integer class.
@@ -25,7 +25,7 @@ namespace Interop/Lang {
     pub enum Integer(##java.lang.Integer)
 
 
-    instance Interop/Flix.Marshal[Integer] {
+    instance Interop.Flix.Marshal[Integer] {
         pub def toJavaObject(x: Integer): ##java.lang.Object = 
             let Integer(x1) = x;
             checked_cast(x1)
@@ -36,11 +36,11 @@ namespace Interop/Lang {
 
 }
 
-namespace Interop/Lang/Integer {
+mod Interop.Lang.Integer {
 
 
-    use Interop/Lang.Integer
-    use Interop/Lang.Integer.{Integer}
+    use Interop.Lang.Integer
+    use Interop.Lang.Integer.{Integer}
 
     pub def getHH(i: Integer): ##java.lang.Integer = 
         let Integer(i1) = i;

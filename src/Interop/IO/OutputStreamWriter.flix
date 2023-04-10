@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-namespace Interop/IO {
+mod Interop.IO {
 
-    use Interop/IO.OutputStreamWriter
-    use Interop/IO.OutputStreamWriter.{OutputStreamWriter}
-    use Interop/IO.Writer
-    use Interop/IO.Writer.{Writer}
-    use Interop/Lang.Appendable
-    use Interop/Lang.Appendable.{Appendable}
+    use Interop.IO.OutputStreamWriter
+    use Interop.IO.OutputStreamWriter.{OutputStreamWriter}
+    use Interop.IO.Writer
+    use Interop.IO.Writer.{Writer}
+    use Interop.Lang.Appendable
+    use Interop.Lang.Appendable.{Appendable}
 
     pub enum OutputStreamWriter[_: Region](##java.io.OutputStreamWriter)
 
@@ -31,7 +31,7 @@ namespace Interop/IO {
     /// ... Probably not, could FileWriter use casting internally?
 
 
-    instance Interop/IO.SubWriter[OutputStreamWriter] {
+    instance Interop.IO.SubWriter[OutputStreamWriter] {
         pub def toWriter(s: OutputStreamWriter[r]): Writer[r] = 
             let OutputStreamWriter(s1) = s;
             Writer(unchecked_cast(s1 as ##java.io.Writer))
@@ -41,7 +41,7 @@ namespace Interop/IO {
             OutputStreamWriter(unchecked_cast(s1 as ##java.io.OutputStreamWriter))
     }
 
-    instance Interop/Lang.ImpAppendable[OutputStreamWriter] {
+    instance Interop.Lang.ImpAppendable[OutputStreamWriter] {
         pub def toAppendable(s: OutputStreamWriter[r]): Appendable[r] = 
             let OutputStreamWriter(s1) = s;
             Appendable(unchecked_cast(s1 as ##java.lang.Appendable))
@@ -53,14 +53,14 @@ namespace Interop/IO {
 
 }
 
-namespace Interop/IO/OutputStreamWriter {
+mod Interop.IO.OutputStreamWriter {
 
-    use Interop/IO.OutputStreamWriter
-    use Interop/IO.OutputStreamWriter.{OutputStreamWriter}
-    use Interop/IO.OutputStream
+    use Interop.IO.OutputStreamWriter
+    use Interop.IO.OutputStreamWriter.{OutputStreamWriter}
+    use Interop.IO.OutputStream
 
-    use Interop/NIO/Charset.Charset
-    use Interop/NIO/Charset.Charset.{Charset}
+    use Interop.NIO.Charset.Charset
+    use Interop.NIO.Charset.Charset.{Charset}
 
     pub def getHH(w: OutputStreamWriter[r]): ##java.io.OutputStreamWriter = 
         let OutputStreamWriter(w1) = w;
@@ -72,7 +72,7 @@ namespace Interop/IO/OutputStreamWriter {
     pub def newOutputStreamWriter(_: Region[r1], outs: OutputStream[r], cs: Charset): OutputStreamWriter[r1] \ { Read(r), Write(r1) } = 
         import new java.io.OutputStreamWriter(##java.io.OutputStream, ##java.nio.charset.Charset): ##java.io.OutputStreamWriter \ {r, r1} as newOutputStreamWriter;
         let Charset(cs1) = cs;
-        let outs1 = Interop/IO/OutputStream.getHH(outs);
+        let outs1 = Interop.IO.OutputStream.getHH(outs);
         OutputStreamWriter(newOutputStreamWriter(outs1, cs1))
 
     pub def flush!(w: OutputStreamWriter[r]): Result[String, Unit] \ Write(r) =

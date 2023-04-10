@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/IO {
+mod Interop.IO {
 
 
     /// Abstract class...
@@ -29,10 +29,10 @@ namespace Interop/IO {
 
 }
 
-namespace Interop/IO/OutputStream {
+mod Interop.IO.OutputStream {
 
-    use Interop/IO.OutputStream;
-    use Interop/IO.OutputStream.{OutputStream};
+    use Interop.IO.OutputStream;
+    use Interop.IO.OutputStream.{OutputStream};
 
     pub def getHH(s: OutputStream[r]): ##java.io.OutputStream = 
         let OutputStream(s1) = s;

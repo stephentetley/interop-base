@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
     ///
     /// Represents a Java OptionalDouble.
@@ -25,11 +25,11 @@ namespace Interop/Util {
 }
 
 
-namespace Interop/Util/OptionalDouble {
+mod Interop.Util.OptionalDouble {
     
-    use Interop/Util.OptionalDouble;
-    use Interop/Util.OptionalDouble.{OptionalDouble};
-    use Interop/Flix.Marshal;
+    use Interop.Util.OptionalDouble;
+    use Interop.Util.OptionalDouble.{OptionalDouble};
+    use Interop.Flix.Marshal;
 
     pub def getHH(o: OptionalDouble): ##java.util.OptionalDouble = 
         let OptionalDouble(o1) = o;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java DoubleFunction.
@@ -29,15 +29,15 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/DoubleFunctionZ {
+mod Interop.Util.Function.DoubleFunctionZ {
     
-    use Interop/Util/Function.DoubleFunctionZ
-    use Interop/Util/Function.DoubleFunctionZ.{DoubleFunctionZ}
-    use Interop/Flix.Marshal
+    use Interop.Util.Function.DoubleFunctionZ
+    use Interop.Util.Function.DoubleFunctionZ.{DoubleFunctionZ}
+    use Interop.Flix.Marshal
 
 
     pub def makeDoubleFunctionZ(f: Float64 -> a \ ef): DoubleFunctionZ[a, ef] with Marshal[a] = 
-        DoubleFunctionZ(unchecked_cast((d -> f(d) |> Interop/Flix/Marshal.toJavaObject) as ##java.util.function.DoubleFunction))
+        DoubleFunctionZ(unchecked_cast((d -> f(d) |> Interop.Flix.Marshal.toJavaObject) as ##java.util.function.DoubleFunction))
 
 
     pub def makeDoubleFunctionZWith(f: Float64 -> a \ ef, castToObj: a -> ##java.lang.Object): DoubleFunctionZ[a, ef] = 

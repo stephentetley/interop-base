@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java LongSupplier.
@@ -27,10 +27,10 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/LongSupplier {
+mod Interop.Util.Function.LongSupplier {
     
-    use Interop/Util/Function.LongSupplier
-    use Interop/Util/Function.LongSupplier.{LongSupplier}
+    use Interop.Util.Function.LongSupplier
+    use Interop.Util.Function.LongSupplier.{LongSupplier}
 
     pub def makeLongSupplier(f: Unit -> Int64 \ ef): LongSupplier[ef] = 
         LongSupplier(unchecked_cast((new ##java.util.function.LongSupplier {

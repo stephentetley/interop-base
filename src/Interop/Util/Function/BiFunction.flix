@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java BiFunction.
@@ -27,23 +27,23 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/BiFunction {
+mod Interop.Util.Function.BiFunction {
     
-    use Interop/Util/Function.BiFunction
-    use Interop/Util/Function.BiFunction.{BiFunction}
-    use Interop/Util/Function.FunctionZ
-    use Interop/Util/Function.FunctionZ.{FunctionZ}
-    use Interop/Flix.Marshal
+    use Interop.Util.Function.BiFunction
+    use Interop.Util.Function.BiFunction.{BiFunction}
+    use Interop.Util.Function.FunctionZ
+    use Interop.Util.Function.FunctionZ.{FunctionZ}
+    use Interop.Flix.Marshal
 
 
 
     pub def makeBiFunction[a: Type, b: Type, c: Type, ef: Bool]
                             (f: (a, b) -> c \ ef): BiFunction[a, b, c, ef] with Marshal[a], Marshal[b], Marshal[c] = 
         let f1 = (o1, o2) -> {
-            let a = Interop/Flix/Marshal.fromJavaObject(o1); 
-            let b = Interop/Flix/Marshal.fromJavaObject(o2);
+            let a = Interop.Flix.Marshal.fromJavaObject(o1); 
+            let b = Interop.Flix.Marshal.fromJavaObject(o2);
             let ans = f(a, b);
-            Interop/Flix/Marshal.toJavaObject(ans)
+            Interop.Flix.Marshal.toJavaObject(ans)
         };
         BiFunction(unchecked_cast(new ##java.util.function.BiFunction {
             def apply(_this: ##java.util.function.BiFunction, t: ##java.lang.Object, u: ##java.lang.Object): ##java.lang.Object = 
@@ -54,7 +54,7 @@ namespace Interop/Util/Function/BiFunction {
     pub def apply(f: BiFunction[a, b, c, ef], t: a, u: b): c \ ef with Marshal[a], Marshal[b], Marshal[c]  = 
         import java.util.function.BiFunction.apply(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ ef;
         let BiFunction(f1) = f;
-        apply(f1, Interop/Flix/Marshal.toJavaObject(t), Interop/Flix/Marshal.toJavaObject(u)) |> Interop/Flix/Marshal.fromJavaObject
+        apply(f1, Interop.Flix.Marshal.toJavaObject(t), Interop.Flix.Marshal.toJavaObject(u)) |> Interop.Flix.Marshal.fromJavaObject
 
     pub def andThen[a: Type, b: Type, c: Type, d: Type, ef1: Bool, ef2: Bool]
                     (f: BiFunction[a, b, c, ef1], g: FunctionZ[c, d, ef2]): BiFunction[a, b, d, ef1 and ef2] = 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java LongUnaryOperator.
@@ -27,10 +27,10 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/LongUnaryOperatorZ {
+mod Interop.Util.Function.LongUnaryOperatorZ {
     
-    use Interop/Util/Function.LongUnaryOperatorZ
-    use Interop/Util/Function.LongUnaryOperatorZ.{LongUnaryOperatorZ}
+    use Interop.Util.Function.LongUnaryOperatorZ
+    use Interop.Util.Function.LongUnaryOperatorZ.{LongUnaryOperatorZ}
 
     pub def makeLongUnaryOperatorZ(f: Int64 -> Int64 \ ef): LongUnaryOperatorZ[ef] = 
         LongUnaryOperatorZ(unchecked_cast(f as ##java.util.function.LongUnaryOperator))

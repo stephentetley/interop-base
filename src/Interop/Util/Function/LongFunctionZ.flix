@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java LongFunction.
@@ -23,21 +23,18 @@ namespace Interop/Util/Function {
     ///
     pub enum LongFunctionZ[_: Type, _: Bool](##java.util.function.LongFunction)
 
-
-    
-
 }
 
 
-namespace Interop/Util/Function/LongFunctionZ {
+mod Interop.Util.Function.LongFunctionZ {
     
-    use Interop/Util/Function.LongFunctionZ
-    use Interop/Util/Function.LongFunctionZ.{LongFunctionZ}
-    use Interop/Flix.Marshal;
+    use Interop.Util.Function.LongFunctionZ
+    use Interop.Util.Function.LongFunctionZ.{LongFunctionZ}
+    use Interop.Flix.Marshal;
 
 
     pub def makeLongFunctionZ(f: Int64 -> a \ ef): LongFunctionZ[a, ef] with Marshal[a] = 
-        LongFunctionZ(unchecked_cast((i -> f(i) |> Interop/Flix/Marshal.toJavaObject) as ##java.util.function.LongFunction))
+        LongFunctionZ(unchecked_cast((i -> f(i) |> Interop.Flix.Marshal.toJavaObject) as ##java.util.function.LongFunction))
 
 
     pub def makeLongFunctionZWith(f: Int64 -> a \ ef, castToObj: a -> ##java.lang.Object): LongFunctionZ[a, ef] = 

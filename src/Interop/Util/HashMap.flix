@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
-    use Interop/Util.HashMap
-    use Interop/Util.HashMap.{HashMap}    
-    use Interop/Util.MapZ
-    use Interop/Util.MapZ.{MapZ}
+    use Interop.Util.HashMap
+    use Interop.Util.HashMap.{HashMap}    
+    use Interop.Util.MapZ
+    use Interop.Util.MapZ.{MapZ}
 
     ///
     /// Represents a Java HashMap.
@@ -30,7 +30,7 @@ namespace Interop/Util {
     }
 
 
-    instance Interop/Util.ImpMapZ[HashMap] {
+    instance Interop.Util.ImpMapZ[HashMap] {
         pub def toMapZ(t: HashMap[k, v, r]): MapZ[k, v, r] = 
             let HashMap(rc, t1) = t;
             MapZ(rc, unchecked_cast(t1 as ##java.util.Map))
@@ -42,17 +42,17 @@ namespace Interop/Util {
 
 }
 
-namespace Interop/Util/HashMap {
+mod Interop.Util.HashMap {
 
-    use Interop/Util.HashMap
-    use Interop/Util.HashMap.{HashMap}
-    use Interop/Util.ImpMapZ
-    use Interop/Util/Map.Entry
-    use Interop/Util.Collection
-    use Interop/Util.Collection.{Collection}
-    use Interop/Util.SetZ
-    use Interop/Util.SetZ.{SetZ}
-    use Interop/Flix.Marshal
+    use Interop.Util.HashMap
+    use Interop.Util.HashMap.{HashMap}
+    use Interop.Util.ImpMapZ
+    use Interop.Util.Map.Entry
+    use Interop.Util.Collection
+    use Interop.Util.Collection.{Collection}
+    use Interop.Util.SetZ
+    use Interop.Util.SetZ.{SetZ}
+    use Interop.Flix.Marshal
 
 
     pub def getHH(m: HashMap[k, v, r]): ##java.util.HashMap = 
@@ -95,16 +95,16 @@ namespace Interop/Util/HashMap {
         Result.tryCatch(_ -> {
             import java.util.HashMap.get(##java.lang.Object): ##java.lang.Object \ r; 
             let HashMap(_, m1) = m;
-            let k1 = Interop/Flix/Marshal.toJavaObject(k);
-            get(m1, k1) |> Object.toOption |> Option.map(Interop/Flix/Marshal.fromJavaObject)
+            let k1 = Interop.Flix.Marshal.toJavaObject(k);
+            get(m1, k1) |> Object.toOption |> Option.map(Interop.Flix.Marshal.fromJavaObject)
         })
 
     pub def put!(k: k, v: v, m: HashMap[k, v, r]): v \ Write(r) with Marshal[k], Marshal[v] =
         import java.util.HashMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
         let HashMap(_, m1) = m;
-        let k1 = Interop/Flix/Marshal.toJavaObject(k);
-        let v1 = Interop/Flix/Marshal.toJavaObject(v);
-        put(m1, k1, v1) |> Interop/Flix/Marshal.fromJavaObject
+        let k1 = Interop.Flix.Marshal.toJavaObject(k);
+        let v1 = Interop.Flix.Marshal.toJavaObject(v);
+        put(m1, k1, v1) |> Interop.Flix.Marshal.fromJavaObject
 
     pub def putWith!(k: k, v: v, 
                         kcast: k -> ##java.lang.Object, 
@@ -142,8 +142,8 @@ namespace Interop/Util/HashMap {
     pub def remove!(k: k, m: HashMap[k, v, r]): Option[v] \  Write(r) with Marshal[k], Marshal[v] =
         import java.util.HashMap.remove(##java.lang.Object): ##java.lang.Object \ r; 
         let HashMap(_, m1) = m;
-        let k1 = Interop/Flix/Marshal.toJavaObject(k);        
-        remove(m1, k1) |> Object.toOption |>  Option.map(Interop/Flix/Marshal.fromJavaObject)
+        let k1 = Interop.Flix.Marshal.toJavaObject(k);        
+        remove(m1, k1) |> Object.toOption |>  Option.map(Interop.Flix.Marshal.fromJavaObject)
 
 
     pub def fromFlixMap(r: Region[r], t: Map[k, v]): HashMap[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
@@ -182,18 +182,18 @@ namespace Interop/Util/HashMap {
     /// Returns an iterator over all key-value pairs in `m`.
     ///
     pub def iterator(rc: Region[r1], m: HashMap[k, v, r]): Iterator[(k, v), r1, r1] \ { Read(r) } with Marshal[k], Marshal[v] =
-        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, Interop/Flix/Marshal.fromJavaObject, m)
+        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, Interop.Flix.Marshal.fromJavaObject, m)
 
     pub def toFlixIterator(rc: Region[r1], 
                             kcast: ##java.lang.Object -> k, 
                             vcast: ##java.lang.Object -> v, 
                             m: HashMap[k, v, r]): Iterator[(k, v), r1, r1] \ { Read(r)} with Marshal[k], Marshal[v] =
-        Interop/Util/MapZ.toFlixIterator(rc, kcast, vcast, ImpMapZ.toMapZ(m))
+        Interop.Util.MapZ.toFlixIterator(rc, kcast, vcast, ImpMapZ.toMapZ(m))
 
     pub def toFlixMap(m: HashMap[k, v, r]): Map[k, v] \ { Read(r) } with Order[k], Marshal[k], Marshal[v] =
-        Interop/Util/MapZ.toFlixMap(ImpMapZ.toMapZ(m))
+        Interop.Util.MapZ.toFlixMap(ImpMapZ.toMapZ(m))
 
     pub def toFlixList(m: HashMap[k, v, r]): List[(k, v)] \ { Read(r) } with Marshal[k], Marshal[v] =
-        Interop/Util/MapZ.toFlixList(ImpMapZ.toMapZ(m))
+        Interop.Util.MapZ.toFlixList(ImpMapZ.toMapZ(m))
 
 }

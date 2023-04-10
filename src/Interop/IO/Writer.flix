@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-namespace Interop/IO {
+mod Interop.IO {
 
-    use Interop/IO.Writer
-    use Interop/IO.Writer.{Writer}
-    use Interop/Lang.Appendable
-    use Interop/Lang.Appendable.{Appendable}
+    use Interop.IO.Writer
+    use Interop.IO.Writer.{Writer}
+    use Interop.Lang.Appendable
+    use Interop.Lang.Appendable.{Appendable}
     
     /// Abstract class...
 
@@ -31,7 +31,7 @@ namespace Interop/IO {
     }
 
 
-    instance Interop/Lang.ImpAppendable[Writer] {
+    instance Interop.Lang.ImpAppendable[Writer] {
         pub def toAppendable(s: Writer[r]): Appendable[r] = 
             let Writer(s1) = s;
             Appendable(unchecked_cast(s1 as ##java.lang.Appendable))
@@ -44,12 +44,12 @@ namespace Interop/IO {
 }
 
 
-namespace Interop/IO/Writer {
+mod Interop.IO.Writer {
 
-    use Interop/IO.Writer
-    use Interop/IO.Writer.{Writer}
-    use Interop/IO.SubWriter
-    use Interop/Lang.CharSequence
+    use Interop.IO.Writer
+    use Interop.IO.Writer.{Writer}
+    use Interop.IO.SubWriter
+    use Interop.Lang.CharSequence
 
 
     pub def getHH(w: Writer[r]): ##java.io.Writer = 
@@ -79,7 +79,7 @@ namespace Interop/IO/Writer {
         Result.tryCatch(_ -> {
             import java.io.Writer.append(##java.lang.CharSequence): ##java.io.Writer \ {r, r1};
             let Writer(w1) = w;
-            let cs1 = Interop/Lang/CharSequence.getHH(cs);
+            let cs1 = Interop.Lang.CharSequence.getHH(cs);
             Writer(append(w1, cs1))
         })
 
@@ -90,7 +90,7 @@ namespace Interop/IO/Writer {
         Result.tryCatch(_ -> {
             import java.io.Writer.append(##java.lang.CharSequence, Int32, Int32): ##java.io.Writer \ {r, r1};
             let Writer(w1) = w;
-            let cs1 = Interop/Lang/CharSequence.getHH(cs);
+            let cs1 = Interop.Lang.CharSequence.getHH(cs);
             Writer(append(w1, cs1, start.start, end.end))
         })
 

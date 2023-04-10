@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
     ///
     /// Represents a Java IntSummaryStatistics.
@@ -25,11 +25,11 @@ namespace Interop/Util {
 }
 
 
-namespace Interop/Util/IntSummaryStatistics {
+mod Interop.Util.IntSummaryStatistics {
     
-    use Interop/Util.IntSummaryStatistics
-    use Interop/Util.IntSummaryStatistics.{IntSummaryStatistics}
-    use Interop/Flix.Marshal
+    use Interop.Util.IntSummaryStatistics
+    use Interop.Util.IntSummaryStatistics.{IntSummaryStatistics}
+    use Interop.Flix.Marshal
 
     pub def getHH(ss: IntSummaryStatistics[r]): ##java.util.IntSummaryStatistics = 
         let IntSummaryStatistics(ss1) = ss;

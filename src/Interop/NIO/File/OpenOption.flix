@@ -15,10 +15,10 @@
  */
 
 
-namespace Interop/NIO/File {
+mod Interop.NIO.File {
 
-    use Interop/NIO/File.OpenOption
-    use Interop/NIO/File.OpenOption.{OpenOption}
+    use Interop.NIO.File.OpenOption
+    use Interop.NIO.File.OpenOption.{OpenOption}
 
     ///
     /// Interface
@@ -30,7 +30,7 @@ namespace Interop/NIO/File {
         pub def fromOpenOption(s: OpenOption): t
     }
 
-    instance Interop/Flix.Marshal[OpenOption] {
+    instance Interop.Flix.Marshal[OpenOption] {
         pub def toJavaObject(x: OpenOption): ##java.lang.Object =
             let OpenOption(x1) = x;
             checked_cast(x1)
@@ -41,11 +41,11 @@ namespace Interop/NIO/File {
 
 }
 
-namespace Interop/NIO/File/OpenOption {
+mod Interop.NIO.File.OpenOption {
 
 
-    use Interop/NIO/File.OpenOption
-    use Interop/NIO/File.OpenOption.{OpenOption}
+    use Interop.NIO.File.OpenOption
+    use Interop.NIO.File.OpenOption.{OpenOption}
 
 
     /// Unwrap

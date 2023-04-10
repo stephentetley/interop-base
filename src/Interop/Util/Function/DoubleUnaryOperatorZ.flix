@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java DoubleUnaryOperator.
@@ -27,10 +27,10 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/DoubleUnaryOperatorZ {
+mod Interop.Util.Function.DoubleUnaryOperatorZ {
     
-    use Interop/Util/Function.DoubleUnaryOperatorZ
-    use Interop/Util/Function.DoubleUnaryOperatorZ.{DoubleUnaryOperatorZ}
+    use Interop.Util.Function.DoubleUnaryOperatorZ
+    use Interop.Util.Function.DoubleUnaryOperatorZ.{DoubleUnaryOperatorZ}
 
     pub def makeDoubleUnaryOperatorZ(f: Float64 -> Float64 \ ef): DoubleUnaryOperatorZ[ef] = 
         DoubleUnaryOperatorZ(unchecked_cast(f as ##java.util.function.DoubleUnaryOperator))

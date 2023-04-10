@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-namespace Interop/IO {
+mod Interop.IO {
 
-    use Interop/IO.FileInputStream
-    use Interop/IO.FileInputStream.{FileInputStream}
-    use Interop/IO.InputStream;
-    use Interop/IO.InputStream.{InputStream};
+    use Interop.IO.FileInputStream
+    use Interop.IO.FileInputStream.{FileInputStream}
+    use Interop.IO.InputStream;
+    use Interop.IO.InputStream.{InputStream};
 
 
     // "read pointer"
@@ -27,7 +27,7 @@ namespace Interop/IO {
     
 
 
-    instance Interop/IO.SubInputStream[FileInputStream] {
+    instance Interop.IO.SubInputStream[FileInputStream] {
         pub def toInputStream(s: FileInputStream[r]): InputStream[r] = 
             let FileInputStream(s1) = s;
             InputStream(unchecked_cast(s1 as ##java.io.InputStream))
@@ -40,12 +40,12 @@ namespace Interop/IO {
 
 }
 
-namespace Interop/IO/FileInputStream {
+mod Interop.IO.FileInputStream {
 
-    use Interop/IO.FileInputStream
-    use Interop/IO.FileInputStream.{FileInputStream}
-    use Interop/IO.File
-    use Interop/IO.File.{File}
+    use Interop.IO.FileInputStream
+    use Interop.IO.FileInputStream.{FileInputStream}
+    use Interop.IO.File
+    use Interop.IO.File.{File}
 
     pub def getHH(s: FileInputStream[r]): ##java.io.FileInputStream = 
         let FileInputStream(s1) = s;
@@ -57,7 +57,7 @@ namespace Interop/IO/FileInputStream {
     pub def newWithFile(_: Region[r1], file: File[r]): Result[String, FileInputStream[r1]] \ { Read(r), Write(r), IO} = 
         Result.tryCatch(_ -> {
             import new java.io.FileInputStream(##java.io.File): ##java.io.FileInputStream \ {r, r1, IO} as newFileInputStream;
-            let file1 = Interop/IO/File.getHH(file);
+            let file1 = Interop.IO.File.getHH(file);
             FileInputStream(newFileInputStream(file1))
         })
 

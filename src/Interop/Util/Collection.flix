@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util {
+mod Interop.Util {
 
     ///
     /// Represents a Java Collection.
@@ -30,23 +30,23 @@ namespace Interop/Util {
         pub def fromCollection(s: Collection[a, r]): t[a, r]
 
         pub def toCollectionHH(s: t[a, r]): ##java.util.Collection = 
-           ImpCollection.toCollection(s) |> Interop/Util/Collection.getHH
+           ImpCollection.toCollection(s) |> Interop.Util.Collection.getHH
 
     }
 
 
 }
 
-namespace Interop/Util/Collection {
+mod Interop.Util.Collection {
 
-    use Interop/Util.Collection
-    use Interop/Util.Collection.{Collection}
-    use Interop/Util.ImpCollection
-    use Interop/Util/Stream.Stream
-    use Interop/Util/Stream.Stream.{Stream}
-    use Interop/Util/Function.ConsumerZ.{ConsumerZ}
-    use Interop/Util/Function.PredicateZ.{PredicateZ}
-    use Interop/Flix.Marshal
+    use Interop.Util.Collection
+    use Interop.Util.Collection.{Collection}
+    use Interop.Util.ImpCollection
+    use Interop.Util.Stream.Stream
+    use Interop.Util.Stream.Stream.{Stream}
+    use Interop.Util.Function.ConsumerZ.{ConsumerZ}
+    use Interop.Util.Function.PredicateZ.{PredicateZ}
+    use Interop.Flix.Marshal
 
 
     pub def getHH(c: Collection[a, r]): ##java.util.Collection = 
@@ -85,7 +85,7 @@ namespace Interop/Util/Collection {
         Result.tryCatch(_ -> {
             import java.util.Collection.add(##java.lang.Object): Bool \ r; 
             let Collection(_, c1) = c;
-            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
             add(c1, x1)
         })
 
@@ -93,7 +93,7 @@ namespace Interop/Util/Collection {
         Result.tryCatch(_ -> {
             import java.util.Collection.remove(##java.lang.Object): Bool \ r; 
             let Collection(_, c1) = c;
-            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
             remove(c1, x1)
         })
 
@@ -103,7 +103,7 @@ namespace Interop/Util/Collection {
         Result.tryCatch(_ -> {
             import java.util.Collection.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let Collection(_, c1) = c;
-            let PredicateZ(f1) = Interop/Util/Function/PredicateZ.makePredicateZ(f);
+            let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
             checked_ecast(removeIf(c1, f1))
         })
 
@@ -112,7 +112,7 @@ namespace Interop/Util/Collection {
         Result.tryCatch(_ -> {
             import java.util.Collection.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let Collection(_, c1) = c;
-            let ConsumerZ(f1) = Interop/Util/Function/ConsumerZ.makeConsumerZ(f);
+            let ConsumerZ(f1) = Interop.Util.Function.ConsumerZ.makeConsumerZ(f);
             forEach(c1, f1)
         })
 
@@ -122,7 +122,7 @@ namespace Interop/Util/Collection {
         Result.tryCatch(_ -> {
             import java.util.Collection.contains(##java.lang.Object): Bool \ r; 
             let Collection(_, c1) = c;
-            let x1 = Interop/Flix/Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
             contains(c1, x1)
         })
 
@@ -133,21 +133,21 @@ namespace Interop/Util/Collection {
 
 
     pub def fromFoldableViaArrayList(rc: Region[r], t: t[a]): Collection[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
-        Interop/Util/ArrayList.fromFoldable(rc, t) |> Interop/Util/ImpCollection.toCollection
+        Interop.Util.ArrayList.fromFoldable(rc, t) |> Interop.Util.ImpCollection.toCollection
 
     pub def fromFoldableViaArrayListHH(t: t[a]): ##java.util.Collection with Foldable[t], Marshal[a] = region rc {
-        Interop/Util/ArrayList.fromFoldable(rc, t) |> Interop/Util/ImpCollection.toCollectionHH
+        Interop.Util.ArrayList.fromFoldable(rc, t) |> Interop.Util.ImpCollection.toCollectionHH
     }
 
     pub def fromFoldableViaLinkedList(rc: Region[r], t: t[a]): Collection[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
-        Interop/Util/LinkedList.fromFoldable(rc, t) |> Interop/Util/ImpCollection.toCollection
+        Interop.Util.LinkedList.fromFoldable(rc, t) |> Interop.Util.ImpCollection.toCollection
 
     pub def fromFoldableViaLinkedListHH(t: t[a]): ##java.util.Collection with Foldable[t], Marshal[a] = region rc {
-        Interop/Util/LinkedList.fromFoldable(rc, t) |> Interop/Util/ImpCollection.toCollectionHH
+        Interop.Util.LinkedList.fromFoldable(rc, t) |> Interop.Util.ImpCollection.toCollectionHH
     }
 
     pub def iterator(rc: Region[r1], c: Collection[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
-        toFlixIterator(rc, Interop/Flix/Marshal.fromJavaObject, c)
+        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, c)
         
 
     pub def toFlixIterator(rc: Region[r1], 
@@ -159,8 +159,8 @@ namespace Interop/Util/Collection {
             Iterator.empty(rc)
         else 
             iterator(c1) 
-                |> Interop/Util/IteratorZ.wrapHH(rc)
-                |> Interop/Util/IteratorZ.toFlixIterator(rc, ocast)
+                |> Interop.Util.IteratorZ.wrapHH(rc)
+                |> Interop.Util.IteratorZ.toFlixIterator(rc, ocast)
 
     /// pub def enumerator(r: Region[r1], c: Collection[a, r2]): Iterator[(a, Int32), r] \ { Read(r2), Write(r1) }  with Marshal[a] =
     ///     iterator(r, c) |> Iterator.enumerator
@@ -171,7 +171,7 @@ namespace Interop/Util/Collection {
         import java.util.LinkedList.add(##java.lang.Object): Bool & r as add1;
         def loop(st1, acc) = match f(st1) {
             case None         => Collection(rc, unchecked_cast(acc as ##java.util.Collection))
-            case Some(o, st2) => {discard add1(acc, Interop/Flix/Marshal.toJavaObject(o)); loop(st2, acc)}
+            case Some(o, st2) => {discard add1(acc, Interop.Flix.Marshal.toJavaObject(o)); loop(st2, acc)}
         };
         loop(st, new1())
 

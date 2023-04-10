@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Flix {
+mod Interop.Flix {
 
 
     // Is this worthwhile... ?

@@ -15,13 +15,13 @@
  */
 
 
-namespace Interop/NIO/Channels/Pipe {
+mod Interop.NIO.Channels.Pipe {
 
-    use Interop/NIO/Channels/Pipe.SourceChannel
-    use Interop/NIO/Channels/Pipe.SourceChannel.{SourceChannel}
-    use Interop/NIO/Channels.ChannelZ
-    use Interop/NIO/Channels.ChannelZ.{ChannelZ}
-    use Interop/NIO/Channels.SubChannel
+    use Interop.NIO.Channels.Pipe.SourceChannel
+    use Interop.NIO.Channels.Pipe.SourceChannel.{SourceChannel}
+    use Interop.NIO.Channels.ChannelZ
+    use Interop.NIO.Channels.ChannelZ.{ChannelZ}
+    use Interop.NIO.Channels.SubChannel
 
     // Abstract Class
     pub enum SourceChannel[_: Region](##java.nio.channels.Pipe$SourceChannel)
@@ -37,10 +37,10 @@ namespace Interop/NIO/Channels/Pipe {
     }
 }
 
-namespace Interop/NIO/Channels/Pipe/SourceChannel { 
+mod Interop.NIO.Channels.Pipe.SourceChannel { 
 
-    use Interop/NIO/Channels/Pipe.SourceChannel
-    use Interop/NIO/Channels/Pipe.SourceChannel.{SourceChannel}
+    use Interop.NIO.Channels.Pipe.SourceChannel
+    use Interop.NIO.Channels.Pipe.SourceChannel.{SourceChannel}
 
     pub def getHH(x: SourceChannel[r]): ##java.nio.channels.Pipe$SourceChannel = 
         let SourceChannel(x1) = x;

@@ -15,7 +15,7 @@
  */
 
 
-namespace Interop/NIO/Channels {
+mod Interop.NIO.Channels {
 
     // Interface
     pub enum ChannelZ[_: Region](##java.nio.channels.Channel)
@@ -28,10 +28,10 @@ namespace Interop/NIO/Channels {
 
 }
 
-namespace Interop/NIO/Channels/ChannelZ { 
+mod Interop.NIO.Channels.ChannelZ { 
 
-    use Interop/NIO/Channels.ChannelZ;
-    use Interop/NIO/Channels.ChannelZ.{ChannelZ};
+    use Interop.NIO.Channels.ChannelZ;
+    use Interop.NIO.Channels.ChannelZ.{ChannelZ};
 
     pub def getHH(x: ChannelZ[r]): ##java.nio.channels.Channel = 
         let ChannelZ(x1) = x;

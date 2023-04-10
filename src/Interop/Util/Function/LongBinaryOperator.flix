@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java LongBinaryOperator.
@@ -28,10 +28,10 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/LongBinaryOperator {
+mod Interop.Util.Function.LongBinaryOperator {
     
-    use Interop/Util/Function.LongBinaryOperator
-    use Interop/Util/Function.LongBinaryOperator.{LongBinaryOperator}
+    use Interop.Util.Function.LongBinaryOperator
+    use Interop.Util.Function.LongBinaryOperator.{LongBinaryOperator}
 
     pub def makeLongBinaryOperator(f: (Int64, Int64) -> Int64 \ ef): LongBinaryOperator[ef] = 
         LongBinaryOperator(unchecked_cast((new ##java.util.function.LongBinaryOperator {

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-namespace Interop/IO {
+mod Interop.IO {
 
-    use Interop/IO.StringWriter
-    use Interop/IO.StringWriter.{StringWriter}
-    use Interop/IO.Writer
-    use Interop/IO.Writer.{Writer}
-    use Interop/Lang.Appendable
-    use Interop/Lang.Appendable.{Appendable}
+    use Interop.IO.StringWriter
+    use Interop.IO.StringWriter.{StringWriter}
+    use Interop.IO.Writer
+    use Interop.IO.Writer.{Writer}
+    use Interop.Lang.Appendable
+    use Interop.Lang.Appendable.{Appendable}
     
     /// Abstract class...
 
@@ -39,7 +39,7 @@ namespace Interop/IO {
     }
 
 
-    instance Interop/Lang.ImpAppendable[StringWriter] {
+    instance Interop.Lang.ImpAppendable[StringWriter] {
         pub def toAppendable(s: StringWriter[r]): Appendable[r] = 
             let StringWriter(s1) = s;
             Appendable(unchecked_cast(s1 as ##java.lang.Appendable))
@@ -52,12 +52,12 @@ namespace Interop/IO {
 }
 
 
-namespace Interop/IO/StringWriter {
+mod Interop.IO.StringWriter {
 
-    use Interop/IO.StringWriter
-    use Interop/IO.StringWriter.{StringWriter}
-    use Interop/IO.SubWriter
-    use Interop/Lang.CharSequence
+    use Interop.IO.StringWriter
+    use Interop.IO.StringWriter.{StringWriter}
+    use Interop.IO.SubWriter
+    use Interop.Lang.CharSequence
 
 
     pub def getHH(w: StringWriter[r]): ##java.io.StringWriter = 
@@ -92,7 +92,7 @@ namespace Interop/IO/StringWriter {
     pub def appendCharSequence!(cs: CharSequence[r2], w: StringWriter[r]): StringWriter[r] \ {Write(r), Read(r2)} =
         import java.io.StringWriter.append(##java.lang.CharSequence): ##java.io.StringWriter \ {r, r2};
         let StringWriter(w1) = w;
-        let cs1 = Interop/Lang/CharSequence.getHH(cs);
+        let cs1 = Interop.Lang.CharSequence.getHH(cs);
         StringWriter(append(w1, cs1))
 
 
@@ -103,7 +103,7 @@ namespace Interop/IO/StringWriter {
         Result.tryCatch(_ -> {
             import java.io.StringWriter.append(##java.lang.CharSequence, Int32, Int32): ##java.io.StringWriter \ r;
             let StringWriter(w1) = w;
-            let cs1 = Interop/Lang/CharSequence.getHH(cs);
+            let cs1 = Interop.Lang.CharSequence.getHH(cs);
             StringWriter(append(w1, cs1, start.start, end.end))
         })
 

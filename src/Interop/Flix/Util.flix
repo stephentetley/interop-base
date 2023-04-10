@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Flix/Util {
+mod Interop.Flix.Util {
 
     pub def getStringWithoutNull(default: {default = String}, s: String): String = 
         if (Object.isNull(s)) 

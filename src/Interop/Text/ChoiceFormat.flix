@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-namespace Interop/Text {
+mod Interop.Text {
     
-    use Interop/Text.ChoiceFormat
-    use Interop/Text.ChoiceFormat.{ChoiceFormat}
-    use Interop/Text.NumberFormat
-    use Interop/Text.NumberFormat.{NumberFormat}
+    use Interop.Text.ChoiceFormat
+    use Interop.Text.ChoiceFormat.{ChoiceFormat}
+    use Interop.Text.NumberFormat
+    use Interop.Text.NumberFormat.{NumberFormat}
 
     ///
     /// Represents a ChoiceFormat.
@@ -40,11 +40,11 @@ namespace Interop/Text {
 }
 
 
-namespace Interop/Text/ChoiceFormat {
+mod Interop.Text.ChoiceFormat {
 
-    use Interop/Text.ChoiceFormat
-    use Interop/Text.ChoiceFormat.{ChoiceFormat}
-    use Interop/Math.RoundingMode
+    use Interop.Text.ChoiceFormat
+    use Interop.Text.ChoiceFormat.{ChoiceFormat}
+    use Interop.Math.RoundingMode
    
     pub def getHH(cf: ChoiceFormat): ##java.text.ChoiceFormat = 
         let ChoiceFormat(cf1) = cf;

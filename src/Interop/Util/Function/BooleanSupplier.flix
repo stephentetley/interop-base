@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace Interop/Util/Function {
+mod Interop.Util.Function {
 
     ///
     /// Represents a Java BooleanSupplier.
@@ -27,10 +27,10 @@ namespace Interop/Util/Function {
 }
 
 
-namespace Interop/Util/Function/BooleanSupplier {
+mod Interop.Util.Function.BooleanSupplier {
     
-    use Interop/Util/Function.BooleanSupplier
-    use Interop/Util/Function.BooleanSupplier.{BooleanSupplier}
+    use Interop.Util.Function.BooleanSupplier
+    use Interop.Util.Function.BooleanSupplier.{BooleanSupplier}
 
     pub def makeBooleanSupplier(f: Unit -> Bool \ ef): BooleanSupplier[ef] = 
         BooleanSupplier(unchecked_cast(new ##java.util.function.BooleanSupplier {
