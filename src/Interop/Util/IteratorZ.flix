@@ -73,7 +73,7 @@ mod Interop.Util.IteratorZ {
     ///
     /// Apply the effectful function `f` to all the elements in the array `a`.
     ///
-    pub def forEach(f: a -> Unit & ef1, iter: IteratorZ[a, ef, r]): Unit \ { ef, ef1, Read(r) } with Marshal[a] = region r {
+    pub def forEach(f: a -> Unit \ ef1, iter: IteratorZ[a, ef, r]): Unit \ { ef, ef1, Read(r) } with Marshal[a] = region r {
         iterator(r, iter) |> Iterator.forEach(f)
     }
 

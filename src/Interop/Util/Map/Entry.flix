@@ -80,8 +80,8 @@ mod Interop.Util.Map.Entry {
     pub def toKeyValueWith(kcast:  ##java.lang.Object -> k, 
                                     vcast: ##java.lang.Object -> v,
                                     e: Entry[k, v, r]): (k, v) \ Read(r) =
-        import java.util.Map$Entry.getKey(): ##java.lang.Object & r;
-        import java.util.Map$Entry.getValue(): ##java.lang.Object & r;
+        import java.util.Map$Entry.getKey(): ##java.lang.Object \ r;
+        import java.util.Map$Entry.getValue(): ##java.lang.Object \ r;
         let Entry(e1) = e;
         let k = getKey(e1);
         let v = getValue(e1);                

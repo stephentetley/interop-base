@@ -114,15 +114,15 @@ mod Interop.Util.SortedMap {
         Collection(rc, values(m1))
 
 
-    pub def foldMap(f: (b, (k, v)) -> b & ef, s: b, m: SortedMap[k, v, r]): b \ { Read(r), ef} with Order[k], Marshal[k], Marshal[v] = region r {
+    pub def foldMap(f: (b, (k, v)) -> b \ ef, s: b, m: SortedMap[k, v, r]): b \ { r, ef} with Order[k], Marshal[k], Marshal[v] = region r {
         iterator(r, m) |> Iterator.foldLeft(f, s)
     }
         
 
 
-    pub def unfoldViaTreeMap(rc: Region[r], f: s -> Option[(k, v, s)] & ef, st: s): SortedMap[k, v, r] \ { Write(r), ef } with Marshal[k], Marshal[v] =
-        import new java.util.TreeMap(): ##java.util.TreeMap & r as newTreeMap;
-        import java.util.TreeMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object & r as put; 
+    pub def unfoldViaTreeMap(rc: Region[r], f: s -> Option[(k, v, s)] \ ef, st: s): SortedMap[k, v, r] \ { r, ef } with Marshal[k], Marshal[v] =
+        import new java.util.TreeMap(): ##java.util.TreeMap \ r as newTreeMap;
+        import java.util.TreeMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r as put; 
         def loop(st1, ac) = match f(st1) {
             case None            => SortedMap(rc, unchecked_cast(ac as ##java.util.SortedMap))
             case Some(k, v, st2) => { discard put(ac, Interop.Flix.Marshal.toJavaObject(k), Interop.Flix.Marshal.toJavaObject(v)); loop(st2, ac) }
@@ -131,7 +131,7 @@ mod Interop.Util.SortedMap {
 
 
     /// TODO - remove and add TreeMap module...
-    pub def fromMapViaTreeMap(r: Region[r], m: Map[k, v]): SortedMap[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
+    pub def fromMapViaTreeMap(r: Region[r], m: Map[k, v]): SortedMap[k, v, r] \ r with Marshal[k], Marshal[v] =
         let step = iter -> match Iterator.next(iter) {
             case Some(k, v)   => Some((k, v, iter))
             case None         => None

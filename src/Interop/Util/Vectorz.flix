@@ -85,8 +85,8 @@ mod Interop.Util.VectorZ {
         let VectorZ(_, v1) = v;
         size(v1)
 
-    pub def add!(x: a, v: VectorZ[a, r]): Bool \ { Write(r) } with Marshal[a] = 
-        import java.util.Vector.add(##java.lang.Object): Bool & r;
+    pub def add!(x: a, v: VectorZ[a, r]): Bool \ r with Marshal[a] = 
+        import java.util.Vector.add(##java.lang.Object): Bool \ r;
         let VectorZ(_, v1) = v;
         add(v1, Interop.Flix.Marshal.toJavaObject(x))
 
