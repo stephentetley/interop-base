@@ -58,27 +58,27 @@ mod Interop.Lang.Number {
     ///
     ///
     pub def byteValue(x: Number): Int8 =
-        import java.lang.Number.byteValue(): Int8 & Pure;
+        import java.lang.Number.byteValue(): Int8 \ {};
         let Number(x1) = x;
         byteValue(x1)
 
     pub def shortValue(x: Number): Int16 =
-        import java.lang.Number.shortValue(): Int16 & Pure;
+        import java.lang.Number.shortValue(): Int16 \ {};
         let Number(x1) = x;
         shortValue(x1)
 
     pub def intValue(x: Number): Int32 =
-        import java.lang.Number.intValue(): Int32 & Pure;
+        import java.lang.Number.intValue(): Int32 \ {};
         let Number(x1) = x;
         intValue(x1)
 
     pub def longValue(x: Number): Int64 =
-        import java.lang.Number.longValue(): Int64 & Pure;
+        import java.lang.Number.longValue(): Int64 \ {};
         let Number(x1) = x;
         longValue(x1)
 
     pub def floatValue(x: Number): Float32 =
-        import java.lang.Number.floatValue(): Float32 & Pure;
+        import java.lang.Number.floatValue(): Float32 \ {};
         let Number(x1) = x;
         floatValue(x1)
 
@@ -86,7 +86,7 @@ mod Interop.Lang.Number {
     ///
     ///
     pub def doubleValue(x: Number): Float64 =
-        import java.lang.Number.doubleValue(): Float64 & Pure;
+        import java.lang.Number.doubleValue(): Float64 \ {};
         let Number(x1) = x;
         doubleValue(x1)
 

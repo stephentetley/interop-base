@@ -82,7 +82,7 @@ mod Interop.Util.Locale {
     /// Returns a new Locale for the supplied language.
     ///
     pub def newLocale(lang: String): Locale =
-        import new java.util.Locale(String): ##java.util.Locale & Pure as new1;
+        import new java.util.Locale(String): ##java.util.Locale \ {} as new1;
         Locale(new1(lang))
 
     ///

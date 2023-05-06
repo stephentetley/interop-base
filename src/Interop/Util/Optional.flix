@@ -40,8 +40,8 @@ mod Interop.Util.Optional {
 
     /// cast must be Pure
     pub def hhToOption(ocast: ##java.lang.Object -> a, o: ##java.util.Optional): Option[a] = 
-        import java.util.Optional.isPresent(): Bool & Pure;
-        import java.util.Optional.get(): ##java.lang.Object & Pure;
+        import java.util.Optional.isPresent(): Bool \ {};
+        import java.util.Optional.get(): ##java.lang.Object \ {};
         if (isPresent(o))
             get(o) |> ocast |> Some
         else 
@@ -60,8 +60,8 @@ mod Interop.Util.Optional {
         o1 |> hhToOption(Interop.Flix.Marshal.fromJavaObject)
     
     pub def fromOption(o: Option[a]): Optional[a] with Marshal[a] =
-        import static java.util.Optional.empty(): ##java.util.Optional & Pure;
-        import static java.util.Optional.of(##java.lang.Object): ##java.util.Optional & Pure;
+        import static java.util.Optional.empty(): ##java.util.Optional \ {};
+        import static java.util.Optional.of(##java.lang.Object): ##java.util.Optional \ {};
         match o { 
             case None    => empty() |> Optional
             case Some(a) => Interop.Flix.Marshal.toJavaObject(a) |> of |> Optional

@@ -31,7 +31,7 @@ mod Interop.Text.Normalizer {
 
     pub def isNormalized(nform: NormalizerForm, src: String): Result[String, Bool] =
         Result.tryCatch(_ -> {
-            import static java.text.Normalizer.isNormalized(##java.lang.CharSequence, ##java.text.Normalizer$Form): Bool & Pure;            
+            import static java.text.Normalizer.isNormalized(##java.lang.CharSequence, ##java.text.Normalizer$Form): Bool \ {};            
             let NormalizerForm(nform1) = nform;
             isNormalized(unchecked_cast(src as ##java.lang.CharSequence), nform1)
         })

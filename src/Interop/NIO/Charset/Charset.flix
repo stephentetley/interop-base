@@ -172,17 +172,17 @@ mod Interop.NIO.Charset.Charset {
     /// TODO wrap ByteBuffer and CharBuffer
 
     pub def encode(cs: Charset, s: String): ##java.nio.ByteBuffer = 
-        import java.nio.charset.Charset.encode(String): ##java.nio.ByteBuffer & Pure;
+        import java.nio.charset.Charset.encode(String): ##java.nio.ByteBuffer \ {};
         let Charset(cs1) = cs;
         encode(cs1, s)
 
     pub def encodeCharBuffer(cs: Charset, cb: ##java.nio.CharBuffer): ##java.nio.ByteBuffer = 
-        import java.nio.charset.Charset.encode(##java.nio.CharBuffer): ##java.nio.ByteBuffer & Pure;
+        import java.nio.charset.Charset.encode(##java.nio.CharBuffer): ##java.nio.ByteBuffer \ {};
         let Charset(cs1) = cs;
         encode(cs1, cb)
     
     pub def decode(cs: Charset, cb: ##java.nio.ByteBuffer): ##java.nio.CharBuffer = 
-        import java.nio.charset.Charset.decode(##java.nio.ByteBuffer): ##java.nio.CharBuffer & Pure;
+        import java.nio.charset.Charset.decode(##java.nio.ByteBuffer): ##java.nio.CharBuffer \ {};
         let Charset(cs1) = cs;
         decode(cs1, cb)
     
