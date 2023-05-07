@@ -1,3 +1,6 @@
+### v0.3.1
+   Removed uses of & in effects signatures.
+
 ### v0.3.0
    Changed to use `mod` rather than `mod`.
 
