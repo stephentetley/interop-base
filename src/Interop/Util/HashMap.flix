@@ -47,7 +47,7 @@ mod Interop.Util.HashMap {
     use Interop.Util.HashMap
     use Interop.Util.HashMap.{HashMap}
     use Interop.Util.ImpMapZ
-    use Interop.Util.Map.Entry
+    use Interop.Util.MapEntry
     use Interop.Util.Collection
     use Interop.Util.Collection.{Collection}
     use Interop.Util.SetZ
@@ -122,7 +122,7 @@ mod Interop.Util.HashMap {
         let HashMap(_, m1) = m;
         clear(m1)
 
-    pub def entrySet(rc: Region[r1], m: HashMap[k, v, r]): SetZ[Entry[k, v, r], r1] \ {Write(r)}= 
+    pub def entrySet(rc: Region[r1], m: HashMap[k, v, r]): SetZ[MapEntry[k, v, r], r1] \ {Write(r)}= 
         import java.util.HashMap.entrySet(): ##java.util.Set \ Write(r);
         let HashMap(_, m1) = m;
         SetZ(rc, entrySet(m1))

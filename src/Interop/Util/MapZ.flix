@@ -42,8 +42,8 @@ mod Interop.Util.MapZ {
 
     use Interop.Util.MapZ
     use Interop.Util.MapZ.{MapZ}
-    use Interop.Util.Map.Entry
-    use Interop.Util.Map.Entry.{Entry}
+    use Interop.Util.MapEntry
+    use Interop.Util.MapEntry.{MapEntry}
     use Interop.Util.Collection
     use Interop.Util.Collection.{Collection}
     use Interop.Util.SetZ
@@ -182,7 +182,7 @@ mod Interop.Util.MapZ {
         })
 
     /// Can't guarantee `Ord[k]` at this point...
-    pub def entrySet(rc: Region[r1], m: MapZ[k, v, r]): SetZ[Entry[k, v, r], r1] \ { Read(r), Write(r1) }= 
+    pub def entrySet(rc: Region[r1], m: MapZ[k, v, r]): SetZ[MapEntry[k, v, r], r1] \ { Read(r), Write(r1) }= 
         import java.util.Map.entrySet(): ##java.util.Set \ { r, r1 };
         let MapZ(_, m1) = m;
         let sz = entrySet(m1);
@@ -267,8 +267,8 @@ mod Interop.Util.MapZ {
         let iter = iterator(set1);
         let getNext = () -> match hasNext(iter) {
             case true  => {
-                let entry = next(iter) |> Interop.Util.Map.Entry.castObject(rc);
-                Interop.Util.Map.Entry.toKeyValueWith(kcast, vcast, entry) |> Some
+                let entry = next(iter) |> Interop.Util.MapEntry.castObject(rc);
+                Interop.Util.MapEntry.toKeyValueWith(kcast, vcast, entry) |> Some
             }
             case false => None
         };

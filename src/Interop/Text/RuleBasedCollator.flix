@@ -24,7 +24,7 @@ mod Interop.Text {
     ///
     /// Represents a RuleBasedCollator.
     /// Subclass of Collator
-    /// "Immutable with Setter"
+    /// "Immutable after init"
     ///
     pub enum RuleBasedCollator(##java.text.RuleBasedCollator)
 
@@ -47,7 +47,10 @@ mod Interop.Text.RuleBasedCollator {
 
     use Interop.Text.RuleBasedCollator
     use Interop.Text.RuleBasedCollator.{RuleBasedCollator}
-    use Interop.Text.Collator.{CollatorProperty}
+    use Interop.Text.Collator.{Collator}
+    use Interop.Text.MutCollator
+    use Interop.Text.MutCollator.{MutCollator}
+    use Interop.Text.CollatorInit
     use Interop.Util.Locale
     use Interop.Util.Locale.{Locale}
     use Interop.Flix.Setter
@@ -61,16 +64,17 @@ mod Interop.Text.RuleBasedCollator {
     pub def wrapHH(prim: ##java.text.RuleBasedCollator): RuleBasedCollator = 
         RuleBasedCollator(prim)
 
-    pub def makeSetter(rc: Region[r], xs: List[CollatorProperty]): Setter[RuleBasedCollator, r] =         
-        Interop.Text.Collator.makeSetter(rc, xs) |> Interop.Flix.Setter.castSetter(Interop.Text.SubCollator.toCollator)
-
     ///
     /// New RuleBasedCollator.
     ///
-    pub def new(rules: String, props: List[CollatorProperty]): Result[String, RuleBasedCollator] = region rc {
-        import new java.text.RuleBasedCollator(String): ##java.text.RuleBasedCollator \ {} as new1;
-        RuleBasedCollator(new1(rules)) |> Interop.Flix.Setter.apply(rc, makeSetter(rc, props))
-    }
+    pub def new(_: Region[r], rules: String, init: CollatorInit[r]): Result[String, RuleBasedCollator] \ r = 
+        Result.tryCatch(_ -> {
+            import new java.text.RuleBasedCollator(String): ##java.text.RuleBasedCollator \ {} as new1;
+            let rbc1 = new1(rules);
+            let c1   = unchecked_cast(rbc1 as ##java.text.Collator); 
+            let _    = MutCollator(c1) |> init;
+            RuleBasedCollator(rbc1)
+        })
 
     pub def hashCode(c: RuleBasedCollator): Int32 = 
         import java.text.RuleBasedCollator.hashCode(): Int32 \ {};
