@@ -189,7 +189,7 @@ mod Interop.Util.ListZ {
             removeAll(l1, c1)
         })
     
-    pub def removeIf![a: Type, ef: Bool, r: Region]
+    pub def removeIf![a: Type, ef: Eff, r: Region]
                         (f: a -> Bool \ ef, l: ListZ[a, r]): Result[String, Bool] \ { ef, Write(r) } with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.List.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
@@ -206,7 +206,7 @@ mod Interop.Util.ListZ {
             retainAll(l1, c1)
         })
 
-    pub def forEach[a: Type, ef: Bool, r: Region]
+    pub def forEach[a: Type, ef: Eff, r: Region]
                     (f: a -> Unit \ ef, l: ListZ[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.List.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 

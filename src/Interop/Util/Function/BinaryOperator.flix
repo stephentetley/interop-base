@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// BinaryOperator is not a builtin functional Interface so it is created as a new object.
     ///
-    pub enum BinaryOperator[_: Type, _: Bool](##java.util.function.BinaryOperator)
+    pub enum BinaryOperator[_: Type, _: Eff](##java.util.function.BinaryOperator)
 
 
 
@@ -49,7 +49,7 @@ mod Interop.Util.Function.BinaryOperator {
         } as _ \ {}))
 
 
-    pub def makeCombiner[a: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
+    pub def makeCombiner[a: Type, r: Region, t: Type -> Region -> Type, ef: Eff]
                         (r: Region[r], f: (t[a, r], t[a, r]) -> t[a, r] \ef): BinaryOperator[t[a, r], ef] with MutMarshal[t] = 
         let f1 = (o1, o2) -> {
             let a = Interop.Flix.MutMarshal.mmFromJavaObject(r, o1); 

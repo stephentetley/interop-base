@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// BiPredicate is not a builtin functional Interface so it is created as a new object.
     ///
-    pub enum BiPredicate[_: Type, _: Type, _: Bool](##java.util.function.BiPredicate)
+    pub enum BiPredicate[_: Type, _: Type, _: Eff](##java.util.function.BiPredicate)
 
 }
 

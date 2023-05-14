@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// IntFunction is a builtin functional Interface.
     ///
-    pub enum IntFunctionZ[_: Type, _: Bool](##java.util.function.IntFunction)
+    pub enum IntFunctionZ[_: Type, _: Eff](##java.util.function.IntFunction)
 
 }
 

@@ -98,7 +98,7 @@ mod Interop.Util.Collection {
         })
 
 
-    pub def removeIf![a: Type, ef: Bool, r: Region]
+    pub def removeIf![a: Type, ef: Eff, r: Region]
                         (f: a -> Bool \ ef, c: Collection[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Collection.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
@@ -107,7 +107,7 @@ mod Interop.Util.Collection {
             checked_ecast(removeIf(c1, f1))
         })
 
-    pub def forEach[a: Type, ef: Bool, r: Region]
+    pub def forEach[a: Type, ef: Eff, r: Region]
                     (f: a -> Unit \ ef, c: Collection[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Collection.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
@@ -126,7 +126,7 @@ mod Interop.Util.Collection {
             contains(c1, x1)
         })
 
-    pub def stream(rc: Region[r1], c: Collection[a, r]): Stream[a, ef and r, r1] with Marshal[a] =
+    pub def stream(rc: Region[r1], c: Collection[a, r]): Stream[a, ef + r, r1] with Marshal[a] =
         import java.util.Collection.stream(): ##java.util.stream.Stream \ {}; 
         let Collection(_, c1) = c;
         Stream(rc, checked_ecast(stream(c1)))

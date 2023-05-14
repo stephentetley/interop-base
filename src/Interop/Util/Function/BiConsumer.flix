@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// BiConsumer is not a builtin functional Interface so it is created as a new object.
     ///
-    pub enum BiConsumer[_: Type, _: Type, _: Bool](##java.util.function.BiConsumer)
+    pub enum BiConsumer[_: Type, _: Type, _: Eff](##java.util.function.BiConsumer)
 
 }
 
@@ -48,7 +48,7 @@ mod Interop.Util.Function.BiConsumer {
 
 
     /// Collector imposes arg order: collection * element
-    pub def makeAccumulator[a: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
+    pub def makeAccumulator[a: Type, r: Region, t: Type -> Region -> Type, ef: Eff]
                             (r: Region[r], f: (t[a, r], a) -> Unit \ ef): BiConsumer[t[a, r], a, ef] with Marshal[a], MutMarshal[t] = 
         let f1 = (o1, o2) -> {
             let t = Interop.Flix.MutMarshal.mmFromJavaObject(r, o1); 

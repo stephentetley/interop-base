@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// DoubleConsumer is a builtin functional Interface.
     ///
-    pub enum DoubleConsumerZ[_: Bool](##java.util.function.DoubleConsumer)
+    pub enum DoubleConsumerZ[_: Eff](##java.util.function.DoubleConsumer)
 
 
 

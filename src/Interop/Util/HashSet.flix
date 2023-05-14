@@ -141,7 +141,7 @@ mod Interop.Util.HashSet {
         })
 
     
-    pub def removeIf![a: Type, ef: Bool, r: Region]
+    pub def removeIf![a: Type, ef: Eff, r: Region]
                         (f: a -> Bool \ ef, s: HashSet[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.HashSet.removeIf(##java.util.function.Predicate): Bool \ {ef, r};

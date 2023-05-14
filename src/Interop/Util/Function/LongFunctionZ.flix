@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// LongFunction is a builtin functional Interface.
     ///
-    pub enum LongFunctionZ[_: Type, _: Bool](##java.util.function.LongFunction)
+    pub enum LongFunctionZ[_: Type, _: Eff](##java.util.function.LongFunction)
 
 }
 

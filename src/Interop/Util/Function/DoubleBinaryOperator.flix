@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// DoubleBinaryOperator is not a builtin functional Interface so it is created as a new object.
     ///
-    pub enum DoubleBinaryOperator[_: Bool](##java.util.function.DoubleBinaryOperator)
+    pub enum DoubleBinaryOperator[_: Eff](##java.util.function.DoubleBinaryOperator)
 
 
 

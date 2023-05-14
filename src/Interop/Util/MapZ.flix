@@ -203,7 +203,7 @@ mod Interop.Util.MapZ {
         })
 
     /// Note - needs kinds specifying...
-    pub def forEach[k: Type, v: Type, ef: Bool, r: Region]
+    pub def forEach[k: Type, v: Type, ef: Eff, r: Region]
                     (f: (k, v) -> Unit \ ef, m: MapZ[k, v, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[k], Marshal[v] =
         Result.tryCatch(_ -> {
             import java.util.Map.forEach(##java.util.function.BiConsumer): Unit \ {ef, r}; 

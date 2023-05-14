@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// DoubleUnaryOperator is a builtin functional Interface.
     ///
-    pub enum DoubleUnaryOperatorZ[_: Bool](##java.util.function.DoubleUnaryOperator)
+    pub enum DoubleUnaryOperatorZ[_: Eff](##java.util.function.DoubleUnaryOperator)
 
 
 }

@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// DoubleSupplier is not a builtin functional Interface so it is created as a new object.
     ///
-    pub enum DoubleSupplier[_: Bool](##java.util.function.DoubleSupplier)
+    pub enum DoubleSupplier[_: Eff](##java.util.function.DoubleSupplier)
 
 
 }

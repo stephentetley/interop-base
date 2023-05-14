@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// LongPredicate is a builtin functional Interface.
     ///
-    pub enum LongPredicateZ[_: Bool](##java.util.function.LongPredicate)
+    pub enum LongPredicateZ[_: Eff](##java.util.function.LongPredicate)
 
 
 }

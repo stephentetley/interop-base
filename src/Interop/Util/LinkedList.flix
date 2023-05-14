@@ -159,7 +159,7 @@ mod Interop.Util.LinkedList {
             removeAll(l1, c1)
         })
 
-    pub def removeIf![a: Type, ef: Bool, r: Region]
+    pub def removeIf![a: Type, ef: Eff, r: Region]
                         (f: a -> Bool \ ef, l: LinkedList[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.LinkedList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
@@ -179,7 +179,7 @@ mod Interop.Util.LinkedList {
         })
 
 
-    pub def forEach[a: Type, ef: Bool, r: Region]
+    pub def forEach[a: Type, ef: Eff, r: Region]
                     (f: a -> Unit \ ef, l: LinkedList[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.LinkedList.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 

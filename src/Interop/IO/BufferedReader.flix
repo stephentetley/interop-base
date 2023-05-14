@@ -131,7 +131,7 @@ mod Interop.IO.BufferedReader {
             close(rd1)
         })
 
-    pub def lines!(rc: Region[r1], rd: BufferedReader[r]): Result[String, Stream[String, ef and r, r1]] = 
+    pub def lines!(rc: Region[r1], rd: BufferedReader[r]): Result[String, Stream[String, ef + r, r1]] = 
         Result.tryCatch(_ -> {
             import java.io.BufferedReader.lines(): ##java.util.stream.Stream \ {};
             let BufferedReader(rd1) = rd;

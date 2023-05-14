@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// Predicate is a builtin functional Interface.
     ///
-    pub enum PredicateZ[_: Type, _: Bool](##java.util.function.Predicate)
+    pub enum PredicateZ[_: Type, _: Eff](##java.util.function.Predicate)
 
 
 }

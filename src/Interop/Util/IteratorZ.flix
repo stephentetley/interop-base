@@ -21,7 +21,7 @@ mod Interop.Util {
     ///
     /// TODO should probably include an effect param
     ///
-    pub enum IteratorZ[_a: Type, _ef: Bool, r: Region] {
+    pub enum IteratorZ[_a: Type, _ef: Eff, r: Region] {
         case IteratorZ(Region[r], ##java.util.Iterator)
     }
 
@@ -43,14 +43,14 @@ mod Interop.Util.IteratorZ {
         IteratorZ(rc, iter)
 
     /// Mutable (raw) to mutable (Flix iterator) 
-    pub def iterator(rc: Region[r1], iter: IteratorZ[a, ef, r]): Iterator[a, ef and r and r1, r1] with Marshal[a]  =
+    pub def iterator(rc: Region[r1], iter: IteratorZ[a, ef, r]): Iterator[a, ef + r + r1, r1] with Marshal[a]  =
         toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, iter)
 
-    pub def enumerator(rc: Region[r1], iter: IteratorZ[a, ef, r]): Iterator[(Int32, a), ef and r and r1, r1] \ Write(r1) with Marshal[a] =
+    pub def enumerator(rc: Region[r1], iter: IteratorZ[a, ef, r]): Iterator[(Int32, a), ef + r + r1, r1] \ Write(r1) with Marshal[a] =
         toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, iter) |> Iterator.enumerator        
 
     /// Cast must be Pure!
-    pub def toFlixIterator(rc: Region[r1], ocast: ##java.lang.Object -> a, iter: IteratorZ[a, ef, r]): Iterator[a, ef and r and r1, r1] =
+    pub def toFlixIterator(rc: Region[r1], ocast: ##java.lang.Object -> a, iter: IteratorZ[a, ef, r]): Iterator[a, ef + r + r1, r1] =
         import java.util.Iterator.hasNext(): Bool \ Read(r);
         import java.util.Iterator.next(): ##java.lang.Object \ { ef, Write(r) }; // "destructive read" == write
         let IteratorZ(_, iter1) = iter;

@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// ToIntFunction is not a builtin functional Interface so it is created as a new object.
     ///
-    pub enum ToIntFunction[_: Type, _: Bool](##java.util.function.ToIntFunction)
+    pub enum ToIntFunction[_: Type, _: Eff](##java.util.function.ToIntFunction)
 
 
 }

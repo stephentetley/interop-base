@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// LongBinaryOperator is not a builtin functional Interface so it is created as a new object.
     ///
-    pub enum LongBinaryOperator[_: Bool](##java.util.function.LongBinaryOperator)
+    pub enum LongBinaryOperator[_: Eff](##java.util.function.LongBinaryOperator)
 
 
 

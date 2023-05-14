@@ -19,7 +19,7 @@ mod Interop.Util.Stream {
     ///
     /// Represents a Java IntStream.
     ///
-    pub enum IntStream[_: Bool, r: Region] { 
+    pub enum IntStream[_: Eff, r: Region] { 
         case IntStream(Region[r], ##java.util.stream.IntStream)
     }
 
@@ -57,7 +57,7 @@ mod Interop.Util.Stream.IntStream {
     pub def wrapHH(rc: Region[r], prim: ##java.util.stream.IntStream): IntStream[ef, r] = 
         IntStream(rc, prim)
 
-    pub def intStreamIterator(rc: Region[r1], s: IntStream[ef, r]): Iterator[Int32, ef and r and r1, r1] =
+    pub def intStreamIterator(rc: Region[r1], s: IntStream[ef, r]): Iterator[Int32, ef + r + r1, r1] =
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ {} as mkIterator;
         let IntStream(_, s1) = s;
         let iter1 = mkIterator(unchecked_cast(s1 as ##java.util.stream.BaseStream));
@@ -72,7 +72,7 @@ mod Interop.Util.Stream.IntStream {
         import static java.util.stream.IntStream.of(Int32): ##java.util.stream.IntStream \ {};
         IntStream(rc, checked_ecast(of(i)))
 
-    pub def ofArray(rc: Region[r1], arr: Array[Int32, r]): IntStream[ef and r, r1] = 
+    pub def ofArray(rc: Region[r1], arr: Array[Int32, r]): IntStream[ef + r, r1] = 
         import static java.util.stream.IntStream.of(Array[Int32, r]): ##java.util.stream.IntStream \ {};
         IntStream(rc, checked_ecast(of(arr)))
 
@@ -104,22 +104,22 @@ mod Interop.Util.Stream.IntStream {
         let IntStream(_, s1) = s;
         count(s1)
 
-    pub def concat(s: IntStream[ef1, r], t: IntStream[ef2, r]): IntStream[ef1 and ef2, r] = 
+    pub def concat(s: IntStream[ef1, r], t: IntStream[ef2, r]): IntStream[ef1 + ef2, r] = 
         import static java.util.stream.IntStream.concat(##java.util.stream.IntStream, ##java.util.stream.IntStream): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
         let IntStream(_, t1) = t;
         IntStream(rc, checked_ecast(concat(s1, t1)))
 
 
-    pub def filter[ef: Bool, ef1: Bool, r: Region]
-                    (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): IntStream[ef and ef1, r] = 
+    pub def filter[ef: Eff, ef1: Eff, r: Region]
+                    (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): IntStream[ef + ef1, r] = 
         import java.util.stream.IntStream.filter(##java.util.function.IntPredicate): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
         let IntPredicateZ(p1) = Interop.Util.Function.IntPredicateZ.makeIntPredicateZ(p);
         IntStream(rc, filter(s1, p1))
 
-    pub def dropWhile[ef: Bool, ef1: Bool, r: Region]
-                        (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): IntStream[ef and ef1, r] = 
+    pub def dropWhile[ef: Eff, ef1: Eff, r: Region]
+                        (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): IntStream[ef + ef1, r] = 
         import java.util.stream.IntStream.dropWhile(##java.util.function.IntPredicate): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
         let IntPredicateZ(p1) = Interop.Util.Function.IntPredicateZ.makeIntPredicateZ(p);
@@ -132,7 +132,7 @@ mod Interop.Util.Stream.IntStream {
         IntStream(rc, checked_ecast(limit(s1, size)))
 
 
-    pub def map(f: Int32 -> Int32 \ ef1, s: IntStream[ef, r]): IntStream[ef and ef1, r] = 
+    pub def map(f: Int32 -> Int32 \ ef1, s: IntStream[ef, r]): IntStream[ef + ef1, r] = 
         import java.util.stream.IntStream.map(##java.util.function.IntUnaryOperator): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
         let IntUnaryOperatorZ(f1) = Interop.Util.Function.IntUnaryOperatorZ.makeIntUnaryOperatorZ(f);
@@ -140,14 +140,14 @@ mod Interop.Util.Stream.IntStream {
 
 
     /// 
-    pub def flatMap(f: Int32 -> IntStream[ef1, r] \ ef2, s: IntStream[ef, r]): IntStream[ef and ef1 and ef2, r] = 
+    pub def flatMap(f: Int32 -> IntStream[ef1, r] \ ef2, s: IntStream[ef, r]): IntStream[ef + ef1 + ef2, r] = 
         import java.util.stream.IntStream.flatMap(##java.util.function.IntFunction): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
         let IntFunctionZ(f1) = Interop.Util.Function.IntFunctionZ.makeIntFunctionZWith(f, t -> {let IntStream(_, t1) = t; unchecked_cast(t1 as ##java.lang.Object)});
         IntStream(rc, checked_ecast(flatMap(s1, f1)))
 
 
-    pub def forEach[ef: Bool, ef1: Bool, r: Region]
+    pub def forEach[ef: Eff, ef1: Eff, r: Region]
                     (f: Int32 -> Unit \ ef1, s: IntStream[ef, r]): Unit \ {ef, ef1, Read(r)} = 
         import java.util.stream.IntStream.forEach(##java.util.function.IntConsumer): Unit \ {ef, ef1, r};
         let IntConsumerZ(f1) = Interop.Util.Function.IntConsumerZ.makeIntConsumerZ(f);
@@ -170,14 +170,14 @@ mod Interop.Util.Stream.IntStream {
         let IntStream(_, s1) = s;
         IntSummaryStatistics(summaryStatistics(s1))
 
-    pub def anyMatch[ef: Bool, ef1: Bool, r: Region]
+    pub def anyMatch[ef: Eff, ef1: Eff, r: Region]
                     (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
         import java.util.stream.IntStream.anyMatch(##java.util.function.IntPredicate): Bool \ {ef, ef1, r};
         let IntStream(_, s1) = s;
         let IntPredicateZ(p1) = Interop.Util.Function.IntPredicateZ.makeIntPredicateZ(p);
         anyMatch(s1, p1)
 
-    pub def allMatch[ef: Bool, ef1: Bool, r: Region]
+    pub def allMatch[ef: Eff, ef1: Eff, r: Region]
                     (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
         import java.util.stream.IntStream.allMatch(##java.util.function.IntPredicate): Bool \ {ef, ef1, r};
         let IntStream(_, s1) = s;
@@ -185,7 +185,7 @@ mod Interop.Util.Stream.IntStream {
         allMatch(s1, p1)
 
 
-    pub def noneMatch[ef: Bool, ef1: Bool, r: Region]
+    pub def noneMatch[ef: Eff, ef1: Eff, r: Region]
                         (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
         import java.util.stream.IntStream.noneMatch(##java.util.function.IntPredicate): Bool \ {ef, ef1, r};
         let IntStream(_, s1) = s;

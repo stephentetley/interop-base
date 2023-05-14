@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// IntUnaryOperator is a builtin functional Interface.
     ///
-    pub enum IntUnaryOperatorZ[_: Bool](##java.util.function.IntUnaryOperator)
+    pub enum IntUnaryOperatorZ[_: Eff](##java.util.function.IntUnaryOperator)
 
 
 }

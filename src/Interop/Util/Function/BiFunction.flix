@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// BiFunction is not a builtin functional Interface so it is created as a new object.
     ///
-    pub enum BiFunction[_: Type, _: Type, _: Type, _: Bool](##java.util.function.BiFunction)
+    pub enum BiFunction[_: Type, _: Type, _: Type, _: Eff](##java.util.function.BiFunction)
 
 
 }
@@ -37,7 +37,7 @@ mod Interop.Util.Function.BiFunction {
 
 
 
-    pub def makeBiFunction[a: Type, b: Type, c: Type, ef: Bool]
+    pub def makeBiFunction[a: Type, b: Type, c: Type, ef: Eff]
                             (f: (a, b) -> c \ ef): BiFunction[a, b, c, ef] with Marshal[a], Marshal[b], Marshal[c] = 
         let f1 = (o1, o2) -> {
             let a = Interop.Flix.Marshal.fromJavaObject(o1); 
@@ -56,8 +56,8 @@ mod Interop.Util.Function.BiFunction {
         let BiFunction(f1) = f;
         apply(f1, Interop.Flix.Marshal.toJavaObject(t), Interop.Flix.Marshal.toJavaObject(u)) |> Interop.Flix.Marshal.fromJavaObject
 
-    pub def andThen[a: Type, b: Type, c: Type, d: Type, ef1: Bool, ef2: Bool]
-                    (f: BiFunction[a, b, c, ef1], g: FunctionZ[c, d, ef2]): BiFunction[a, b, d, ef1 and ef2] = 
+    pub def andThen[a: Type, b: Type, c: Type, d: Type, ef1: Eff, ef2: Eff]
+                    (f: BiFunction[a, b, c, ef1], g: FunctionZ[c, d, ef2]): BiFunction[a, b, d, ef1 + ef2] = 
         import java.util.function.BiFunction.andThen(##java.util.function.Function): ##java.util.function.BiFunction \ {};
         let BiFunction(f1) = f;
         let FunctionZ(g1) = g;

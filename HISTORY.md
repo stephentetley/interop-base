@@ -1,3 +1,6 @@
+### v0.5.0
+   Updated to use new efefct naming convention (`Eff` not `Bool`, `+` not `and`).
+
 ### v0.4.0
    Experiment with Collator using a new pattern for "immutable after init".
    Renamed `Entry` to `MapEntry` and moved it up a level to the `Interop.Util` namespace.

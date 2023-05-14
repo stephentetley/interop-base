@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// DoublePredicate is a builtin functional Interface.
     ///
-    pub enum DoublePredicateZ[_: Bool](##java.util.function.DoublePredicate)
+    pub enum DoublePredicateZ[_: Eff](##java.util.function.DoublePredicate)
 
 
 }

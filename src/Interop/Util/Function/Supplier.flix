@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// Supplier is not a builtin functional Interface so it is created as a new object.
     ///
-    pub enum Supplier[_: Type, _: Bool](##java.util.function.Supplier)
+    pub enum Supplier[_: Type, _: Eff](##java.util.function.Supplier)
 
 
 }
@@ -41,7 +41,7 @@ mod Interop.Util.Function.Supplier {
         } as _ \ {}))
 
 
-    pub def makeInitialSupplier[a: Type, r: Region, t: Type -> Region -> Type, ef: Bool]
+    pub def makeInitialSupplier[a: Type, r: Region, t: Type -> Region -> Type, ef: Eff]
                                 (_: Region[r], f: Unit -> t[a, r] \ ef): Supplier[t[a, r], ef] with MutMarshal[t] = 
         Supplier(unchecked_cast(new ##java.util.function.Supplier {
             def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 

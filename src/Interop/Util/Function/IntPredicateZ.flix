@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// IntPredicate is a builtin functional Interface.
     ///
-    pub enum IntPredicateZ[_: Bool](##java.util.function.IntPredicate)
+    pub enum IntPredicateZ[_: Eff](##java.util.function.IntPredicate)
 
 
 }

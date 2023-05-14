@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// BooleanSupplier is not a builtin functional Interface so it is created as a new object.
     ///
-    pub enum BooleanSupplier[_: Bool](##java.util.function.BooleanSupplier)
+    pub enum BooleanSupplier[_: Eff](##java.util.function.BooleanSupplier)
 
 
 }

@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// IntSupplier is not a builtin functional Interface so it is created as a new object.
     ///
-    pub enum IntSupplier[_: Bool](##java.util.function.IntSupplier)
+    pub enum IntSupplier[_: Eff](##java.util.function.IntSupplier)
 
 
 }

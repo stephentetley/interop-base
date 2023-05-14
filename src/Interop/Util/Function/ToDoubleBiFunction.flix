@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// ToDoubleBiFunction is not a builtin functional Interface so it is created as a new object.
     ///
-    pub enum ToDoubleBiFunction[_: Type, _: Type, _: Bool](##java.util.function.ToDoubleBiFunction)
+    pub enum ToDoubleBiFunction[_: Type, _: Type, _: Eff](##java.util.function.ToDoubleBiFunction)
 
 
 }

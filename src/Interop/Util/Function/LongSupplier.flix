@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// LongSupplier is not a builtin functional Interface so it is created as a new object.
     ///
-    pub enum LongSupplier[_: Bool](##java.util.function.LongSupplier)
+    pub enum LongSupplier[_: Eff](##java.util.function.LongSupplier)
 
 
 }

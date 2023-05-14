@@ -19,7 +19,7 @@ mod Interop.Util.Stream {
     ///
     /// Represents a Java DoubleStream.
     ///
-    pub enum DoubleStream[_: Bool, r: Region] { 
+    pub enum DoubleStream[_: Eff, r: Region] { 
         case DoubleStream(Region[r], ##java.util.stream.DoubleStream)
     }
 
@@ -51,7 +51,7 @@ mod Interop.Util.Stream.DoubleStream {
     pub def wrapHH(rc: Region[r], prim: ##java.util.stream.DoubleStream): DoubleStream[ef, r] = DoubleStream(rc, prim)
 
 
-    pub def doubleStreamIterator(rc: Region[r1], s: DoubleStream[ef, r]): Iterator[Int64, ef and r and r1, r1] =
+    pub def doubleStreamIterator(rc: Region[r1], s: DoubleStream[ef, r]): Iterator[Int64, ef + r + r1, r1] =
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ {} as mkIterator;
         let DoubleStream(_, s1) = s;
         let iter1 = mkIterator(unchecked_cast(s1 as ##java.util.stream.BaseStream));
@@ -91,22 +91,22 @@ mod Interop.Util.Stream.DoubleStream {
         let DoubleStream(_, s1) = s;
         count(s1)
 
-    pub def concat(s: DoubleStream[ef1, r], t: DoubleStream[ef2, r]): DoubleStream[ef1 and ef2, r] = 
+    pub def concat(s: DoubleStream[ef1, r], t: DoubleStream[ef2, r]): DoubleStream[ef1 + ef2, r] = 
         import static java.util.stream.DoubleStream.concat(##java.util.stream.DoubleStream, ##java.util.stream.DoubleStream): ##java.util.stream.DoubleStream \ {};
         let DoubleStream(rc, s1) = s;
         let DoubleStream(_, t1) = t;
         DoubleStream(rc, checked_ecast(concat(s1, t1)))
 
 
-    pub def filter[ef: Bool, ef1: Bool, r: Region]
-                    (p: Float64 -> Bool \ ef1, s: DoubleStream[ef, r]): DoubleStream[ef and ef1, r] = 
+    pub def filter[ef: Eff, ef1: Eff, r: Region]
+                    (p: Float64 -> Bool \ ef1, s: DoubleStream[ef, r]): DoubleStream[ef + ef1, r] = 
         import java.util.stream.DoubleStream.filter(##java.util.function.DoublePredicate): ##java.util.stream.DoubleStream \ {};
         let DoubleStream(rc, s1) = s;
         let DoublePredicateZ(p1) = Interop.Util.Function.DoublePredicateZ.makeDoublePredicateZ(p);
         DoubleStream(rc, filter(s1, p1))
 
-    pub def dropWhile[ef: Bool, ef1: Bool, r: Region]
-                        (p: Float64 -> Bool \ ef1, s: DoubleStream[ef, r]): DoubleStream[ef and ef1, r] = 
+    pub def dropWhile[ef: Eff, ef1: Eff, r: Region]
+                        (p: Float64 -> Bool \ ef1, s: DoubleStream[ef, r]): DoubleStream[ef + ef1, r] = 
         import java.util.stream.DoubleStream.dropWhile(##java.util.function.DoublePredicate): ##java.util.stream.DoubleStream \ {};
         let DoubleStream(rc, s1) = s;
         let DoublePredicateZ(p1) = Interop.Util.Function.DoublePredicateZ.makeDoublePredicateZ(p);
@@ -117,7 +117,7 @@ mod Interop.Util.Stream.DoubleStream {
         let DoubleStream(rc, s1) = s;
         DoubleStream(rc, checked_ecast(limit(s1, size)))
 
-    pub def map(f: Float64 -> Float64 \ ef1, s: DoubleStream[ef, r]): DoubleStream[ef and ef1, r] = 
+    pub def map(f: Float64 -> Float64 \ ef1, s: DoubleStream[ef, r]): DoubleStream[ef + ef1, r] = 
         import java.util.stream.DoubleStream.map(##java.util.function.DoubleUnaryOperator): ##java.util.stream.DoubleStream \ {};
         let DoubleStream(rc, s1) = s;
         let DoubleUnaryOperatorZ(f1) = Interop.Util.Function.DoubleUnaryOperatorZ.makeDoubleUnaryOperatorZ(f);
@@ -130,7 +130,7 @@ mod Interop.Util.Stream.DoubleStream {
         DoubleStream(rc, checked_ecast(flatMap(s1, f1)))
 
 
-    pub def forEach[ef: Bool, ef1: Region, r: Region]
+    pub def forEach[ef: Eff, ef1: Region, r: Region]
                     (f: Float64 -> Unit \ ef1, s: DoubleStream[ef, r]): Unit \ {ef, ef1, Read(r)} = 
         import java.util.stream.DoubleStream.forEach(##java.util.function.DoubleConsumer): Unit \ {ef, ef1, r};
         let DoubleConsumerZ(f1) = Interop.Util.Function.DoubleConsumerZ.makeDoubleConsumerZ(f);
@@ -153,14 +153,14 @@ mod Interop.Util.Stream.DoubleStream {
         let DoubleStream(_, s1) = s;
         DoubleSummaryStatistics(summaryStatistics(s1))
 
-    pub def anyMatch[ef: Bool, ef1: Bool, r: Region]
+    pub def anyMatch[ef: Eff, ef1: Eff, r: Region]
                     (f: Float64 -> Bool \ ef1, s: DoubleStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
         import java.util.stream.DoubleStream.anyMatch(##java.util.function.DoublePredicate): Bool \ {ef, ef1, r};
         let DoubleStream(_, s1) = s;
         let DoublePredicateZ(f1) = Interop.Util.Function.DoublePredicateZ.makeDoublePredicateZ(f);
         anyMatch(s1, f1)
 
-    pub def allMatch[ef: Bool, ef1: Bool, r: Region]
+    pub def allMatch[ef: Eff, ef1: Eff, r: Region]
                     (f: Float64 -> Bool \ ef1, s: DoubleStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
         import java.util.stream.DoubleStream.allMatch(##java.util.function.DoublePredicate): Bool \ {ef, ef1, r};
         let DoubleStream(_, s1) = s;
@@ -168,7 +168,7 @@ mod Interop.Util.Stream.DoubleStream {
         allMatch(s1, f1)
 
 
-    pub def noneMatch[ef: Bool, ef1: Bool, r: Region]
+    pub def noneMatch[ef: Eff, ef1: Eff, r: Region]
                         (f: Float64 -> Bool \ ef1, s: DoubleStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
         import java.util.stream.DoubleStream.noneMatch(##java.util.function.DoublePredicate): Bool \ {ef, ef1, r};
         let DoubleStream(_, s1) = s;

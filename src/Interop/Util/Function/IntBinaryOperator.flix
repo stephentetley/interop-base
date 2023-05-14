@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// IntBinaryOperator is not a builtin functional Interface so it is created as a new object.
     ///
-    pub enum IntBinaryOperator[_: Bool](##java.util.function.IntBinaryOperator)
+    pub enum IntBinaryOperator[_: Eff](##java.util.function.IntBinaryOperator)
 
 
 }

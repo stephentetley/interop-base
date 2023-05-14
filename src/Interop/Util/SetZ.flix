@@ -190,7 +190,7 @@ mod Interop.Util.SetZ {
         })
 
     
-    pub def removeIf![a: Type, ef: Bool, r: Region]
+    pub def removeIf![a: Type, ef: Eff, r: Region]
                         (f: a -> Bool \ ef, s: SetZ[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Set.removeIf(##java.util.function.Predicate): Bool \ {ef, r};

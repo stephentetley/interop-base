@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// LongUnaryOperator is a builtin functional Interface.
     ///
-    pub enum LongUnaryOperatorZ[_: Bool](##java.util.function.LongUnaryOperator)
+    pub enum LongUnaryOperatorZ[_: Eff](##java.util.function.LongUnaryOperator)
 
 
 }

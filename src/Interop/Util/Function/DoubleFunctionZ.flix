@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// DoubleFunction is a builtin functional Interface.
     ///
-    pub enum DoubleFunctionZ[_: Type, _: Bool](##java.util.function.DoubleFunction)
+    pub enum DoubleFunctionZ[_: Type, _: Eff](##java.util.function.DoubleFunction)
 
 
     

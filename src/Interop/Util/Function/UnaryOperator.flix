@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// UnaryOperator is not a builtin functional Interface so it is created as a new object.
     ///  
-    pub enum UnaryOperator[_: Type, _: Bool](##java.util.function.UnaryOperator)
+    pub enum UnaryOperator[_: Type, _: Eff](##java.util.function.UnaryOperator)
 
 
 

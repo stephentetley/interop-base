@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// LongConsumer is a builtin functional Interface.
     ///
-    pub enum LongConsumerZ[_: Bool](##java.util.function.LongConsumer)
+    pub enum LongConsumerZ[_: Eff](##java.util.function.LongConsumer)
 
 
 

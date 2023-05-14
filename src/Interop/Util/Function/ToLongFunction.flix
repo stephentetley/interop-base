@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// ToLongFunction is not a builtin functional Interface so it is created as a new object.
     ///
-    pub enum ToLongFunction[_: Type, _: Bool](##java.util.function.ToLongFunction)
+    pub enum ToLongFunction[_: Type, _: Eff](##java.util.function.ToLongFunction)
 
 
 }

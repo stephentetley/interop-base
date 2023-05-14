@@ -21,7 +21,7 @@ mod Interop.Util.Function {
     ///
     /// Consumer is a builtin functional Interface.
     ///
-    pub enum ConsumerZ[_: Type, _: Bool](##java.util.function.Consumer)
+    pub enum ConsumerZ[_: Type, _: Eff](##java.util.function.Consumer)
 
 
 
