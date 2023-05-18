@@ -96,7 +96,7 @@ mod Interop.Util.VectorZ {
         sortWithComparator!(f1, v)
 
 
-    pub def sortWithComparator!(c: Comparator[a], v: VectorZ[a, r]): Result[String, Unit] \ rarshal[a] =
+    pub def sortWithComparator!(c: Comparator[a], v: VectorZ[a, r]): Result[String, Unit] \ r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Vector.sort(##java.util.Comparator): Unit \ r; 
             let VectorZ(_, v1) = v;

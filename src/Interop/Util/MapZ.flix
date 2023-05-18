@@ -173,7 +173,7 @@ mod Interop.Util.MapZ {
             containsKey(m1, k1)
         })
 
-    pub def containsValue(v: v, m: MapZ[k, v, r]): Result[String, Bool] \ rMarshal[v] =
+    pub def containsValue(v: v, m: MapZ[k, v, r]): Result[String, Bool] \ r with Marshal[v] =
         Result.tryCatch(_ -> {
             import java.util.Map.containsValue(##java.lang.Object): Bool \ r; 
             let MapZ(_, m1) = m;
