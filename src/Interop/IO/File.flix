@@ -40,12 +40,12 @@ mod Interop.IO.File {
         File(prim)
 
 
-    pub def new(_: Region[r], path: String): File[r] \ { Write(r), IO } = 
-        import new java.io.File(String): ##java.io.File \ { Write(r), IO } as newFile;
+    pub def new(_: Region[r], path: String): File[r] \ { IO, r } = 
+        import new java.io.File(String): ##java.io.File \ { IO, r } as newFile;
         File(newFile(path))
 
 
-    pub def toPath(f: File[r]): Result[String, Path] \ Read(r) =
+    pub def toPath(f: File[r]): Result[String, Path] \ r =
         Result.tryCatch(_ -> {
             import java.io.File.toPath(): ##java.nio.file.Path \ r;
             let File(f1) = f;

@@ -18,7 +18,7 @@ mod Interop.Flix {
 
 
     /// A `Setter` with error reporting.
-    pub enum Setter[t: Type, r: Region](t -> Result[String, Unit] \ Write(r))
+    pub enum Setter[t: Type, r: Region](t -> Result[String, Unit] \ r)
 
 }
 
@@ -28,7 +28,7 @@ mod Interop.Flix.Setter {
     use Interop.Flix.Setter.Setter
 
 
-    pub def apply[r: Region, t:Type](_: Region[r], f: Setter[t, r], o: t): Result[String, t] \ Write(r) = 
+    pub def apply[r: Region, t:Type](_: Region[r], f: Setter[t, r], o: t): Result[String, t] \ r = 
         let Setter(f1) = f;
         match f1(o) { 
             case Ok()   => Ok(o)
@@ -36,7 +36,7 @@ mod Interop.Flix.Setter {
         }
 
     /// 
-    pub def lift(f: t -> Unit \ Write(r)): Setter[t, r] =
+    pub def lift(f: t -> Unit \ r): Setter[t, r] =
         Setter(o -> 
             Result.tryCatch(_ -> f(o))            
         )

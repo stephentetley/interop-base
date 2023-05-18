@@ -86,7 +86,7 @@ mod Interop.Util.Stream.DoubleStream {
         let DoubleStream(_, s1) = s;
         Stream(rc, checked_ecast(boxed(s1)))
 
-    pub def count(s: DoubleStream[ef, r]): Int64 \ {ef, Read(r)} = 
+    pub def count(s: DoubleStream[ef, r]): Int64 \ {ef, r} = 
         import java.util.stream.DoubleStream.count(): Int64 \ {ef, r};
         let DoubleStream(_, s1) = s;
         count(s1)
@@ -131,37 +131,37 @@ mod Interop.Util.Stream.DoubleStream {
 
 
     pub def forEach[ef: Eff, ef1: Region, r: Region]
-                    (f: Float64 -> Unit \ ef1, s: DoubleStream[ef, r]): Unit \ {ef, ef1, Read(r)} = 
+                    (f: Float64 -> Unit \ ef1, s: DoubleStream[ef, r]): Unit \ {ef, ef1, r} = 
         import java.util.stream.DoubleStream.forEach(##java.util.function.DoubleConsumer): Unit \ {ef, ef1, r};
         let DoubleConsumerZ(f1) = Interop.Util.Function.DoubleConsumerZ.makeDoubleConsumerZ(f);
         let DoubleStream(_, s1) = s;
         forEach(s1, f1)
 
-    pub def toArray(s: DoubleStream[ef, r]): Array[Float64, r] \ Write(r) = 
+    pub def toArray(s: DoubleStream[ef, r]): Array[Float64, r] \ r = 
         import java.util.stream.DoubleStream.toArray(): Array[Float64, r] \ r;
         let DoubleStream(_, s1) = s;
         toArray(s1)
 
 
-    pub def average(s: DoubleStream[ef, r]): OptionalDouble \ Read(r) = 
+    pub def average(s: DoubleStream[ef, r]): OptionalDouble \ r = 
         import java.util.stream.DoubleStream.average(): ##java.util.OptionalDouble \ r;
         let DoubleStream(_, s1) = s;
         average(s1) |> OptionalDouble
 
-    pub def summaryStatistics(_: Region[r1], s: DoubleStream[ef, r]): DoubleSummaryStatistics[r1] \ { ef, Read(r), Write(r1) } = 
-        import java.util.stream.DoubleStream.summaryStatistics(): ##java.util.DoubleSummaryStatistics \ { ef, Read(r), Write(r1) };
+    pub def summaryStatistics(_: Region[r1], s: DoubleStream[ef, r]): DoubleSummaryStatistics[r1] \ { ef, r, r1 } = 
+        import java.util.stream.DoubleStream.summaryStatistics(): ##java.util.DoubleSummaryStatistics \ { ef, r, r1 };
         let DoubleStream(_, s1) = s;
         DoubleSummaryStatistics(summaryStatistics(s1))
 
     pub def anyMatch[ef: Eff, ef1: Eff, r: Region]
-                    (f: Float64 -> Bool \ ef1, s: DoubleStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
+                    (f: Float64 -> Bool \ ef1, s: DoubleStream[ef, r]): Bool \ {ef, ef1, r} = 
         import java.util.stream.DoubleStream.anyMatch(##java.util.function.DoublePredicate): Bool \ {ef, ef1, r};
         let DoubleStream(_, s1) = s;
         let DoublePredicateZ(f1) = Interop.Util.Function.DoublePredicateZ.makeDoublePredicateZ(f);
         anyMatch(s1, f1)
 
     pub def allMatch[ef: Eff, ef1: Eff, r: Region]
-                    (f: Float64 -> Bool \ ef1, s: DoubleStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
+                    (f: Float64 -> Bool \ ef1, s: DoubleStream[ef, r]): Bool \ {ef, ef1, r} = 
         import java.util.stream.DoubleStream.allMatch(##java.util.function.DoublePredicate): Bool \ {ef, ef1, r};
         let DoubleStream(_, s1) = s;
         let DoublePredicateZ(f1) = Interop.Util.Function.DoublePredicateZ.makeDoublePredicateZ(f);
@@ -169,29 +169,29 @@ mod Interop.Util.Stream.DoubleStream {
 
 
     pub def noneMatch[ef: Eff, ef1: Eff, r: Region]
-                        (f: Float64 -> Bool \ ef1, s: DoubleStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
+                        (f: Float64 -> Bool \ ef1, s: DoubleStream[ef, r]): Bool \ {ef, ef1, r} = 
         import java.util.stream.DoubleStream.noneMatch(##java.util.function.DoublePredicate): Bool \ {ef, ef1, r};
         let DoubleStream(_, s1) = s;
         let DoublePredicateZ(f1) = Interop.Util.Function.DoublePredicateZ.makeDoublePredicateZ(f);
         noneMatch(s1, f1)
 
 
-    pub def findFirst(s: DoubleStream[ef, r]): Option[Float64] \ {ef, Read(r)} = 
+    pub def findFirst(s: DoubleStream[ef, r]): Option[Float64] \ {ef, r} = 
         import java.util.stream.DoubleStream.findFirst(): ##java.util.OptionalDouble \ {ef, r};
         let DoubleStream(_, s1) = s;
         findFirst(s1) |> Interop.Util.OptionalDouble.hhToOption
 
-    pub def findAny(s: DoubleStream[ef, r]): Option[Float64] \ {ef, Read(r)} = 
+    pub def findAny(s: DoubleStream[ef, r]): Option[Float64] \ {ef, r} = 
         import java.util.stream.DoubleStream.findAny(): ##java.util.OptionalDouble \ {ef, r};
         let DoubleStream(_, s1) = s;
         findAny(s1) |> Interop.Util.OptionalDouble.hhToOption
 
-    pub def max(s: DoubleStream[ef, r]): Option[Float64] \ {ef, Read(r)} = 
+    pub def max(s: DoubleStream[ef, r]): Option[Float64] \ {ef, r} = 
         import java.util.stream.DoubleStream.max(): ##java.util.OptionalDouble \ {ef, r};
         let DoubleStream(_, s1) = s;
         max(s1) |> Interop.Util.OptionalDouble.hhToOption
 
-    pub def min(s: DoubleStream[ef, r]): Option[Float64] \ {ef, Read(r)} = 
+    pub def min(s: DoubleStream[ef, r]): Option[Float64] \ {ef, r} = 
         import java.util.stream.DoubleStream.min(): ##java.util.OptionalDouble \ {ef, r};
         let DoubleStream(_, s1) = s;
         min(s1) |> Interop.Util.OptionalDouble.hhToOption

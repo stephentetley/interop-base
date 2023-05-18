@@ -63,29 +63,29 @@ mod Interop.Lang.CharSequence {
         Interop.Lang.ImpCharSequence.toCharSequence(s) |> getHH
 
 
-    pub def toString(cs: CharSequence[r]): String \ Read(r) = 
+    pub def toString(cs: CharSequence[r]): String \ r = 
         import java.lang.CharSequence.toString(): String \ r;
         let CharSequence(cs1) = cs;
         toString(cs1)
 
-    pub def isEmpty(cs: CharSequence[r]): Bool \ Read(r) = 
+    pub def isEmpty(cs: CharSequence[r]): Bool \ r = 
         import java.lang.CharSequence.isEmpty(): Bool \ r;
         let CharSequence(cs1) = cs;
         isEmpty(cs1)
 
-    pub def length(cs: CharSequence[r]): Int32 \ Read(r) = 
+    pub def length(cs: CharSequence[r]): Int32 \ r = 
         import java.lang.CharSequence.length(): Int32 \ r;
         let CharSequence(cs1) = cs;
         length(cs1)
 
-    pub def charAt(ix: Int32, cs: CharSequence[r]): Result[String, Char] \ Read(r) = 
+    pub def charAt(ix: Int32, cs: CharSequence[r]): Result[String, Char] \ r = 
         Result.tryCatch(_ -> {
             import java.lang.CharSequence.charAt(Int32): Char \ r;
             let CharSequence(cs1) = cs;
             charAt(cs1, ix)
         })
 
-    pub def subSequence(start: {start = Int32}, end: {end = Int32}, cs: CharSequence[r]): Result[String, CharSequence[r]] \ {Read(r), Write(r)} = 
+    pub def subSequence(start: {start = Int32}, end: {end = Int32}, cs: CharSequence[r]): Result[String, CharSequence[r]] \ r = 
         Result.tryCatch(_ -> {
             import java.lang.CharSequence.subSequence(Int32, Int32): ##java.lang.CharSequence \ r;
             let CharSequence(cs1) = cs;

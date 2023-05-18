@@ -68,29 +68,29 @@ mod Interop.IO.StringWriter {
     pub def wrapHH(_: Region[r], prim: ##java.io.StringWriter): StringWriter[r] =
         StringWriter(prim)
 
-    pub def new(_: Region[r]): StringWriter[r] \ Write(r) =
+    pub def new(_: Region[r]): StringWriter[r] \ r =
         import new java.io.StringWriter(): ##java.io.StringWriter \ r as newStringWriter;
         StringWriter(newStringWriter())
 
-    pub def newWithSize(_: Region[r], initSize: Int32): StringWriter[r] \ Write(r) =
+    pub def newWithSize(_: Region[r], initSize: Int32): StringWriter[r] \ r =
         import new java.io.StringWriter(Int32): ##java.io.StringWriter \ r as newStringWriter;
         StringWriter(newStringWriter(initSize))
 
-    pub def toString(w: StringWriter[r]): String \ Read(r)=
+    pub def toString(w: StringWriter[r]): String \ r=
         import java.io.StringWriter.toString(): String \ r;
         let StringWriter(w1) = w;
         toString(w1)
 
     /// TODO - getBuffer
 
-    pub def appendChar!(c: Char, w: StringWriter[r]): StringWriter[r] \ Write(r)=
+    pub def appendChar!(c: Char, w: StringWriter[r]): StringWriter[r] \ r=
         import java.io.StringWriter.append(Char): ##java.io.StringWriter \ r;
         let StringWriter(w1) = w;
         StringWriter(append(w1, c))
 
 
-    pub def appendCharSequence!(cs: CharSequence[r2], w: StringWriter[r]): StringWriter[r] \ {Write(r), Read(r2)} =
-        import java.io.StringWriter.append(##java.lang.CharSequence): ##java.io.StringWriter \ {r, r2};
+    pub def appendCharSequence!(cs: CharSequence[r1], w: StringWriter[r]): StringWriter[r] \ {r, r1} =
+        import java.io.StringWriter.append(##java.lang.CharSequence): ##java.io.StringWriter \ {r, r1};
         let StringWriter(w1) = w;
         let cs1 = Interop.Lang.CharSequence.getHH(cs);
         StringWriter(append(w1, cs1))
@@ -99,7 +99,7 @@ mod Interop.IO.StringWriter {
     pub def appendSubCharSequence!(cs: CharSequence[r2], 
                                     start: {start = Int32}, 
                                     end: {end = Int32}, 
-                                    w: StringWriter[r]): Result[String, StringWriter[r]] \ Write(r) =
+                                    w: StringWriter[r]): Result[String, StringWriter[r]] \ r =
         Result.tryCatch(_ -> {
             import java.io.StringWriter.append(##java.lang.CharSequence, Int32, Int32): ##java.io.StringWriter \ r;
             let StringWriter(w1) = w;
@@ -108,13 +108,13 @@ mod Interop.IO.StringWriter {
         })
 
 
-    pub def flush!(w: StringWriter[r]): Unit \ Write(r)  =
+    pub def flush!(w: StringWriter[r]): Unit \ r  =
         import java.io.StringWriter.flush(): Unit \ r;
         let StringWriter(w1) = w;
         flush(w1) 
 
 
-    pub def close!(w: StringWriter[r]): Result[String, Unit] \ Write(r) =
+    pub def close!(w: StringWriter[r]): Result[String, Unit] \ r =
         Result.tryCatch(_ -> {
             import java.io.StringWriter.close(): Unit \ r;
             let StringWriter(w1) = w;
@@ -122,24 +122,24 @@ mod Interop.IO.StringWriter {
         })
 
 
-    pub def writeSubCharArray!(arr: Array[Char, r2], 
+    pub def writeSubCharArray!(arr: Array[Char, r1], 
                                 offset: {offset = Int32}, 
                                 len: {len = Int32}, 
-                                w: StringWriter[r]): Result[String, Unit] \ {Read(r2), Write(r)} =
+                                w: StringWriter[r]): Result[String, Unit] \ {r, r1} =
         Result.tryCatch(_ -> {
-            import java.io.StringWriter.write(Array[Char, r2], Int32, Int32): Unit \ {r, r2};
+            import java.io.StringWriter.write(Array[Char, r2], Int32, Int32): Unit \ {r, r1};
             let StringWriter(w1) = w;
             write(w1, arr, offset.offset, len.len)
         })
 
 
-    pub def writeCharacter!(i: Int32, w: StringWriter[r]): Unit \ Write(r) =
+    pub def writeCharacter!(i: Int32, w: StringWriter[r]): Unit \ r =
         import java.io.StringWriter.write(Int32): Unit \ r;
         let StringWriter(w1) = w;
         write(w1, i)
 
 
-    pub def writeString!(s: String, w: StringWriter[r]): Unit \ Write(r)=
+    pub def writeString!(s: String, w: StringWriter[r]): Unit \ r =
         import java.io.StringWriter.write(String): Unit \ r;
         let StringWriter(w1) = w;
         write(w1, s)
@@ -148,7 +148,7 @@ mod Interop.IO.StringWriter {
     pub def writeSubstring!(s: String, 
                             offset: {offset = Int32}, 
                             len: {len = Int32}, 
-                            w: StringWriter[r]): Result[String, Unit] \ Write(r) =
+                            w: StringWriter[r]): Result[String, Unit] \ r =
         Result.tryCatch(_ -> {
             import java.io.StringWriter.write(String, Int32, Int32): Unit \ r;
             let StringWriter(w1) = w;

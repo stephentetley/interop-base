@@ -40,7 +40,7 @@ mod Interop.NIO.File.Files {
             }
         })
 
-    pub def newOutputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, OutputStream[r]] \ {IO, Write(r)} =
+    pub def newOutputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, OutputStream[r]] \ {IO, r} =
         Result.tryCatch(_ -> {
             region rc {
                 import static java.nio.file.Files.newOutputStream(##java.nio.file.Path, Array[##java.nio.file.OpenOption, rc]): ##java.io.OutputStream \ {IO, r};

@@ -72,29 +72,29 @@ mod Interop.Util.ListZ {
         ListZ(rc, prim)
 
 
-    pub def of0(rc: Region[r]): ListZ[a, r] \ Write(r) with Marshal[a] =
+    pub def of0(rc: Region[r]): ListZ[a, r] \ r with Marshal[a] =
         import static java.util.List.of(): ##java.util.List \ r;
         ListZ(rc, of())
 
-    pub def of1(rc: Region[r], e1: a): ListZ[a, r] \ Write(r) with Marshal[a] =
+    pub def of1(rc: Region[r], e1: a): ListZ[a, r] \ r with Marshal[a] =
         import static java.util.List.of(##java.lang.Object): ##java.util.List \ r;
         let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
         ListZ(rc, of(eo1))
 
-    pub def of2(rc: Region[r], e1: a, e2: a): ListZ[a, r] \ Write(r) with Marshal[a] =
+    pub def of2(rc: Region[r], e1: a, e2: a): ListZ[a, r] \ r with Marshal[a] =
         import static java.util.List.of(##java.lang.Object, ##java.lang.Object): ##java.util.List \ r;
         let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
         let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
         ListZ(rc, of(eo1, eo2))
 
-    pub def of3(rc: Region[r], e1: a, e2: a, e3: a): ListZ[a, r] \ Write(r) with Marshal[a] =
+    pub def of3(rc: Region[r], e1: a, e2: a, e3: a): ListZ[a, r] \ r with Marshal[a] =
         import static java.util.List.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.List \ r;
         let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
         let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
         let eo3 = Interop.Flix.Marshal.toJavaObject(e3);
         ListZ(rc, of(eo1, eo2, eo3))
 
-    pub def of4(rc: Region[r], e1: a, e2: a, e3: a, e4: a): ListZ[a, r] \ Write(r) with Marshal[a] =
+    pub def of4(rc: Region[r], e1: a, e2: a, e3: a, e4: a): ListZ[a, r] \ r with Marshal[a] =
         import static java.util.List.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.List \ r;
         let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
         let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
@@ -102,7 +102,7 @@ mod Interop.Util.ListZ {
         let eo4 = Interop.Flix.Marshal.toJavaObject(e4);
         ListZ(rc, of(eo1, eo2, eo3, eo4))
 
-    pub def of5(rc: Region[r], e1: a, e2: a, e3: a, e4: a, e5: a): ListZ[a, r] \ Write(r) with Marshal[a] =
+    pub def of5(rc: Region[r], e1: a, e2: a, e3: a, e4: a, e5: a): ListZ[a, r] \ r with Marshal[a] =
         import static java.util.List.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.List \ r;
         let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
         let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
@@ -111,29 +111,29 @@ mod Interop.Util.ListZ {
         let eo5 = Interop.Flix.Marshal.toJavaObject(e5);
         ListZ(rc, of(eo1, eo2, eo3, eo4, eo5))
 
-    pub def equals(l1: ListZ[a, r], l2: ListZ[a, r]): Bool \  Read(r) with Marshal[a] =
+    pub def equals(l1: ListZ[a, r], l2: ListZ[a, r]): Bool \  r with Marshal[a] =
         import java.util.List.equals(##java.lang.Object): Bool \ r; 
         let ListZ(_, ll1) = l1;
         let ListZ(_, ll2) = l2;
         equals(ll1, checked_cast(ll2))
 
 
-    pub def hashCode(l: ListZ[a, r]): Int32 \ Read(r) = 
+    pub def hashCode(l: ListZ[a, r]): Int32 \ r =
         import java.util.List.hashCode(): Int32 \ r;
         let ListZ(_, l1) = l;
         hashCode(l1)
 
-    pub def isEmpty(l: ListZ[a, r]): Bool \ Read(r) = 
+    pub def isEmpty(l: ListZ[a, r]): Bool \ r = 
         import java.util.List.isEmpty(): Bool \ r;
         let ListZ(_, l1) = l;
         isEmpty(l1)
 
-    pub def size(l: ListZ[a, r]): Int32 \ Read(r) = 
+    pub def size(l: ListZ[a, r]): Int32 \ r = 
         import java.util.List.size(): Int32 \ r;
         let ListZ(_, l1) = l;
         size(l1)
 
-    pub def add!(x: a, l: ListZ[a, r]): Result[String, Bool] \ Write(r) with Marshal[a] =
+    pub def add!(x: a, l: ListZ[a, r]): Result[String, Bool] \ r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.List.add(##java.lang.Object): Bool \ r;
             let ListZ(_, l1) = l;
@@ -141,15 +141,15 @@ mod Interop.Util.ListZ {
             add(l1, x1)
         })
 
-    pub def addAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
+    pub def addAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ {r, r1} with Marshal[a] =
         Result.tryCatch(_ -> {
-            import java.util.List.addAll(##java.util.Collection): Bool \ {r1, r}; 
+            import java.util.List.addAll(##java.util.Collection): Bool \ {r, r1}; 
             let ListZ(_, l1) = l;
             let Collection(_, c1) = c;
             addAll(l1, c1)
         })
 
-    pub def contains(x: a, l: ListZ[a, r]): Result[String, Bool] \  Read(r) with Marshal[a] =
+    pub def contains(x: a, l: ListZ[a, r]): Result[String, Bool] \  r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.List.contains(##java.lang.Object): Bool \ r; 
             let ListZ(_, l1) = l;
@@ -157,15 +157,15 @@ mod Interop.Util.ListZ {
             contains(l1, x1)
         })
 
-    pub def containsAll(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ { Read(r1), Read(r) } with Marshal[a] =
+    pub def containsAll(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ {r, r1} with Marshal[a] =
         Result.tryCatch(_ -> {
-            import java.util.List.containsAll(##java.util.Collection): Bool \ {r1, r}; 
+            import java.util.List.containsAll(##java.util.Collection): Bool \ {r, r1}; 
             let ListZ(_, l1) = l;
             let Collection(_, c1) = c;
             containsAll(l1, c1)
         })
 
-    pub def clear!(l: ListZ[a, r]): Result[String, Unit] \ Read(r) = 
+    pub def clear!(l: ListZ[a, r]): Result[String, Unit] \ r = 
         Result.tryCatch(_ -> {
             import java.util.List.clear(): Unit \ r;
             let ListZ(_, l1) = l;
@@ -173,7 +173,7 @@ mod Interop.Util.ListZ {
         })
 
 
-    pub def remove!(x: a, l: ListZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
+    pub def remove!(x: a, l: ListZ[a, r]): Result[String, Bool] \  r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.List.remove(##java.lang.Object): Bool \ r; 
             let ListZ(_, l1) = l;
@@ -181,16 +181,16 @@ mod Interop.Util.ListZ {
             remove(l1, x1)
         })
 
-    pub def removeAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
+    pub def removeAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ {r, r1} with Marshal[a] =
         Result.tryCatch(_ -> {
-            import java.util.List.removeAll(##java.util.Collection): Bool \ { Read(r1), Write(r) }; 
+            import java.util.List.removeAll(##java.util.Collection): Bool \ {r, r1}; 
             let ListZ(_, l1) = l;
             let Collection(_, c1) = c;
             removeAll(l1, c1)
         })
     
     pub def removeIf![a: Type, ef: Eff, r: Region]
-                        (f: a -> Bool \ ef, l: ListZ[a, r]): Result[String, Bool] \ { ef, Write(r) } with Marshal[a] =
+                        (f: a -> Bool \ ef, l: ListZ[a, r]): Result[String, Bool] \ {ef, r} with  Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.List.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let ListZ(_, l1) = l;
@@ -198,16 +198,16 @@ mod Interop.Util.ListZ {
             checked_ecast(removeIf(l1, f1))
         })
 
-    pub def retainAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
+    pub def retainAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ {r, r1} with Marshal[a] =
         Result.tryCatch(_ -> {
-            import java.util.List.retainAll(##java.util.Collection): Bool \ { Read(r1), Write(r) }; 
+            import java.util.List.retainAll(##java.util.Collection): Bool \ {r, r1}; 
             let ListZ(_, l1) = l;
             let Collection(_, c1) = c;
             retainAll(l1, c1)
         })
 
     pub def forEach[a: Type, ef: Eff, r: Region]
-                    (f: a -> Unit \ ef, l: ListZ[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
+                    (f: a -> Unit \ ef, l: ListZ[a, r]): Result[String, Unit] \  {ef, r} with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.List.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let ListZ(_, l1) = l;
@@ -216,26 +216,26 @@ mod Interop.Util.ListZ {
         })
 
 
-    pub def sort!(f: (a, a) -> Int32, l: ListZ[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
+    pub def sort!(f: (a, a) -> Int32, l: ListZ[a, r]): Result[String, Unit] \ r with Marshal[a] =
         let f1 = Interop.Util.Comparator.makeComparator(f);
         sortWithComparator!(f1, l)
 
 
-    pub def sortWithComparator!(c: Comparator[a], l: ListZ[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
+    pub def sortWithComparator!(c: Comparator[a], l: ListZ[a, r]): Result[String, Unit] \ r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.List.sort(##java.util.Comparator): Unit \ r; 
             let ListZ(_, l1) = l;
             sort(l1, c)
         })
 
-    pub def fromFoldableViaArrayList(rc: Region[r], t: t[a]): ListZ[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
+    pub def fromFoldableViaArrayList(rc: Region[r], t: t[a]): ListZ[a, r] \ { r } with Foldable[t], Marshal[a] =
         Interop.Util.ArrayList.fromFoldable(rc, t) |> Interop.Util.ImpListZ.toListZ
 
     pub def fromFoldableViaArrayListHH(t: t[a]): ##java.util.List with Foldable[t], Marshal[a] = region rc {
         Interop.Util.ArrayList.fromFoldable(rc, t) |> Interop.Util.ImpListZ.toListHH
     }
 
-    pub def fromFoldableViaLinkedList(rc: Region[r], t: t[a]): ListZ[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
+    pub def fromFoldableViaLinkedList(rc: Region[r], t: t[a]): ListZ[a, r] \ r with Foldable[t], Marshal[a] =
         Interop.Util.LinkedList.fromFoldable(rc, t) |> Interop.Util.ImpListZ.toListZ
 
     pub def fromFoldableViaLinkedListHH(t: t[a]): ##java.util.List with Foldable[t], Marshal[a] = region rc {
@@ -249,14 +249,14 @@ mod Interop.Util.ListZ {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def iterator(rc: Region[r1], l: ListZ[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
+    pub def iterator(rc: Region[r1], l: ListZ[a, r]): Iterator[a, r1, r1] \ { r } with Marshal[a] =
         toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, l)
 
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def toFlixIterator(rc: Region[r1], ocast: ##java.lang.Object -> a, l: ListZ[a, r]): Iterator[a, r1, r1] \ { Read(r)} =
-        import java.util.List.iterator(): ##java.util.Iterator \ { Read(r) };
+    pub def toFlixIterator(rc: Region[r1], ocast: ##java.lang.Object -> a, l: ListZ[a, r]): Iterator[a, r1, r1] \ { r} =
+        import java.util.List.iterator(): ##java.util.Iterator \ r;
         let ListZ(_, l1) = l;
         if (Object.isNull(l1))
             Iterator.empty(rc)
@@ -267,26 +267,26 @@ mod Interop.Util.ListZ {
 
 
 
-    pub def toFlixList(l: ListZ[a, r]): List[a] \ { Read(r) } with Marshal[a] = region r {
-        toFlixIterator(r, Interop.Flix.Marshal.fromJavaObject, l) |> Iterator.toList
+    pub def toFlixList(l: ListZ[a, r]): List[a] \ r with Marshal[a] = region rc {
+        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, l) |> Iterator.toList
     }
 
-    pub def toSet(l: ListZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] = region r {
-        toFlixIterator(r, Interop.Flix.Marshal.fromJavaObject, l) |> Iterator.toSet
+    pub def toSet(l: ListZ[a, r]): Set[a] \ r with Order[a], Marshal[a] = region rc {
+        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, l) |> Iterator.toSet
     }
 
 
     /// TEMP ...
 
-    pub def fromArrayOfObject(rc: Region[r1], arr: Array[##java.lang.Object, r]): Result[String, ListZ[##java.lang.Object, r1]] \ { Read(r), Write(r1) } =
+    pub def fromArrayOfObject(rc: Region[r1], arr: Array[##java.lang.Object, r]): Result[String, ListZ[##java.lang.Object, r1]] \ { r, r1 } =
         Result.tryCatch(_ -> {
-            import static java.util.Arrays.asList(Array[##java.lang.Object, r]): ##java.util.List \ { Read(r), Write(r1) };
+            import static java.util.Arrays.asList(Array[##java.lang.Object, r]): ##java.util.List \ { r, r1 };
             ListZ(rc, asList(arr))
         })
 
-    pub def toArrayOfString(rc: Region[r1], l: ListZ[String, r]): Result[String, Array[String, r1]] \ { Read(r), Write(r1) } =
+    pub def toArrayOfString(rc: Region[r1], l: ListZ[String, r]): Result[String, Array[String, r1]] \ { r, r1 } =
         Result.tryCatch(_ -> {
-            import java.util.List.toArray(): Array[String, r1] \ { Read(r), Write(r1) };
+            import java.util.List.toArray(): Array[String, r1] \ { r, r1 };
             let _ = Array#{} @ rc;
             let ListZ(_, l1) = l;
             toArray(l1)

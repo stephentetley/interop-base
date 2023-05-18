@@ -39,18 +39,18 @@ mod Interop.NIO.Channels.Pipe {
     pub def wrapHH(_: Region[r], prim: ##java.nio.channels.Pipe): Pipe[r] =
         Pipe(prim)
 
-    pub def open(): Result[String, Pipe[r]] \ Write(r) =
+    pub def open(): Result[String, Pipe[r]] \ r =
         Result.tryCatch(_ -> {
             import static java.nio.channels.Pipe.open(): ##java.nio.channels.Pipe \ r;
             open() |> Pipe
         })
 
-    pub def sink(p: Pipe[r]): SinkChannel[r] \ Read(r) = 
+    pub def sink(p: Pipe[r]): SinkChannel[r] \ r = 
         import java.nio.channels.Pipe.sink(): ##java.nio.channels.Pipe$SinkChannel \ r;
         let Pipe(p1) = p;
         sink(p1) |> SinkChannel 
 
-    pub def source(p: Pipe[r]): SourceChannel[r] \ Read(r) = 
+    pub def source(p: Pipe[r]): SourceChannel[r] \ r = 
         import java.nio.channels.Pipe.source(): ##java.nio.channels.Pipe$SourceChannel \ r;
         let Pipe(p1) = p;
         source(p1) |> SourceChannel 

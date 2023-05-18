@@ -52,9 +52,9 @@ mod Interop.IO.FilterInputStream {
         FilterInputStream(prim)
 
 
-    pub def read!(s: FilterInputStream[r]): Result[String, Option[Int32]] \ Read(r) = 
+    pub def read!(s: FilterInputStream[r]): Result[String, Option[Int32]] \ r = 
         Result.tryCatch(_ -> {
-            import java.io.FilterInputStream.read(): Int32 \ { r };
+            import java.io.FilterInputStream.read(): Int32 \ r;
             let FilterInputStream(s1) = s;
             match read(s1) { 
                 case i if i < 0 => None
@@ -63,9 +63,9 @@ mod Interop.IO.FilterInputStream {
         })
 
     // read (into-array) to figure out...
-    pub def readIntoArray!(buf: Array[Int8, r1], s: FilterInputStream[r]): Result[String, Int32] \ { Read(r), Write(r1)} = 
+    pub def readIntoArray!(buf: Array[Int8, r1], s: FilterInputStream[r]): Result[String, Int32] \ {r, r1} = 
         Result.tryCatch(_ -> {
-            import java.io.FilterInputStream.read(Array[Int8, r1]): Int32 \ { r, r1 };
+            import java.io.FilterInputStream.read(Array[Int8, r1]): Int32 \ {r, r1};
             let FilterInputStream(s1) = s;
             read(s1, buf)
         })
@@ -75,16 +75,16 @@ mod Interop.IO.FilterInputStream {
     pub def readIntoArrayWith!(buf: Array[Int8, r2], 
                                 offset: {offset = Int32}, 
                                 len: {len = Int32}, 
-                                s: FilterInputStream[r]): Result[String, Int32] \ { Write(r2), IO } = 
+                                s: FilterInputStream[r]): Result[String, Int32] \ {IO, r, r2} = 
         Result.tryCatch(_ -> {
-            import java.io.FilterInputStream.read(Array[Int8, r2], Int32, Int32): Int32 \ { IO };
+            import java.io.FilterInputStream.read(Array[Int8, r2], Int32, Int32): Int32 \ IO;
             let FilterInputStream(s1) = s;
             read(s1, buf, offset.offset, len.len)
         })
 
-    pub def skip!(n: Int64, s: FilterInputStream[r]): Result[String, Int64] \ IO = 
+    pub def skip!(n: Int64, s: FilterInputStream[r]): Result[String, Int64] \ r = 
         Result.tryCatch(_ -> {
-            import java.io.FilterInputStream.skip(Int64): Int64 \ { IO };
+            import java.io.FilterInputStream.skip(Int64): Int64 \ r;
             let FilterInputStream(s1) = s;
             skip(s1, n)
         })

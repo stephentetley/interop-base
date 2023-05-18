@@ -150,7 +150,7 @@ mod Interop.Text.Collator {
         setDecomposition(c1, mode)
 
     pub def setStrength!(strength: Int32, c: MutCollator[r]): Unit \ r =
-        import java.text.Collator.setStrength(Int32): Unit \ Write(r);
+        import java.text.Collator.setStrength(Int32): Unit \ r;
         let MutCollator(c1) = c;
         setStrength(c1, strength)
 

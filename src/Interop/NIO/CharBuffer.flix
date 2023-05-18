@@ -38,20 +38,20 @@ mod Interop.NIO.CharBuffer {
 
 
 
-    pub def allocate(_: Region[r], capacity: Int32): Result[String, CharBuffer[r]] \ Write(r) = 
+    pub def allocate(_: Region[r], capacity: Int32): Result[String, CharBuffer[r]] \ r = 
         Result.tryCatch(_ -> {
             import static java.nio.CharBuffer.allocate(Int32): ##java.nio.CharBuffer \ r;
             allocate(capacity) |> CharBuffer
         })
 
-    pub def append!(c: Char, cb: CharBuffer[r]): Result[String, CharBuffer[r]] \ Write(r) = 
+    pub def append!(c: Char, cb: CharBuffer[r]): Result[String, CharBuffer[r]] \ r = 
         Result.tryCatch(_ -> {
             import java.nio.CharBuffer.append(Char): ##java.nio.CharBuffer \ r;
             let CharBuffer(cb1) = cb;
             append(cb1, c) |> CharBuffer
         })
 
-    pub def appendCharSequence!(cs: CharSequence[r2], cb: CharBuffer[r]): Result[String, CharBuffer[r]] \ {Write(r), Read(r2)} = 
+    pub def appendCharSequence!(cs: CharSequence[r2], cb: CharBuffer[r]): Result[String, CharBuffer[r]] \ {r, r2} = 
         Result.tryCatch(_ -> {
             import java.nio.CharBuffer.append(##java.lang.CharSequence): ##java.nio.CharBuffer \ {r, r2};
             let CharBuffer(cb1) = cb;
@@ -63,7 +63,7 @@ mod Interop.NIO.CharBuffer {
     pub def appendSubCharSequence!(cs: CharSequence[r2], 
                                     offset: {offset = Int32}, 
                                     len: {len = Int32}, 
-                                    cb: CharBuffer[r]): Result[String, CharBuffer[r]] \ {Write(r), Read(r2)} = 
+                                    cb: CharBuffer[r]): Result[String, CharBuffer[r]] \ {r, r2} = 
         Result.tryCatch(_ -> {
             import java.nio.CharBuffer.append(##java.lang.CharSequence, Int32, Int32): ##java.nio.CharBuffer \ {r, r2};
             let CharBuffer(cb1) = cb;
@@ -72,24 +72,24 @@ mod Interop.NIO.CharBuffer {
         })
 
     /// returns `this` not a copy
-    pub def clear!(cb: CharBuffer[r]): CharBuffer[r] \ Write(r) = 
+    pub def clear!(cb: CharBuffer[r]): CharBuffer[r] \ r = 
         import java.nio.CharBuffer.clear(): ##java.nio.CharBuffer \ r;
         let CharBuffer(cb1) = cb;
         clear(cb1) |> CharBuffer
 
     /// returns `this` not a copy
-    pub def flip!(cb: CharBuffer[r]): CharBuffer[r] \ Write(r) = 
+    pub def flip!(cb: CharBuffer[r]): CharBuffer[r] \ r = 
         import java.nio.CharBuffer.flip(): ##java.nio.CharBuffer \ r;
         let CharBuffer(cb1) = cb;
         flip(cb1) |> CharBuffer
 
 
-    pub def order(cb: CharBuffer[r]): ByteOrder \ Read(r) = 
+    pub def order(cb: CharBuffer[r]): ByteOrder \ r = 
         import java.nio.CharBuffer.order(): ##java.nio.ByteOrder \ r;
         let CharBuffer(cb1) = cb;
         order(cb1) |> ByteOrder
 
-    pub def toString(cb: CharBuffer[r]): String \ Read(r) = 
+    pub def toString(cb: CharBuffer[r]): String \ r = 
         import java.nio.CharBuffer.toString(): String \ r;
         let CharBuffer(cb1) = cb;
         toString(cb1)

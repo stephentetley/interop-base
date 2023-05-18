@@ -45,7 +45,7 @@ mod Interop.IO.InputStream {
 
 
 
-    pub def readAllBytes(rc: Region[r1], s: InputStream[r]): Result[String, Array[Int8, r1]] \ { Read(r), Write(r1) } = 
+    pub def readAllBytes(rc: Region[r1], s: InputStream[r]): Result[String, Array[Int8, r1]] \ { r, r1 } = 
         Result.tryCatch(_ -> {
             import java.io.InputStream.readAllBytes(): Array[Int8, r1] \ {r, r1};
             let InputStream(s1) = s;

@@ -1,5 +1,8 @@
+### v0.6.0
+   Removed `Read` and `Write` annotations from region signatures.  
+
 ### v0.5.0
-   Updated to use new efefct naming convention (`Eff` not `Bool`, `+` not `and`).
+   Updated to use new effect naming convention (`Eff` not `Bool`, `+` not `and`).
 
 ### v0.4.0
    Experiment with Collator using a new pattern for "immutable after init".

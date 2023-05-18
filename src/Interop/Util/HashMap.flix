@@ -70,28 +70,28 @@ mod Interop.Util.HashMap {
         HashMap(rc, newHashMap())
 
 
-    pub def equals(m1: HashMap[k, v, r], m2: HashMap[k, v, r]): Bool \ Read(r) =
+    pub def equals(m1: HashMap[k, v, r], m2: HashMap[k, v, r]): Bool \ r =
         import java.util.HashMap.equals(##java.lang.Object): Bool \ r; 
         let HashMap(_, mm1) = m1;
         let HashMap(_, mm2) = m2;
         equals(mm1, checked_cast(mm2))
 
-    pub def size(m: HashMap[k, v, r]): Int32 \ Read(r) =
+    pub def size(m: HashMap[k, v, r]): Int32 \ r =
         import java.util.HashMap.size(): Int32 \ r;
         let HashMap(_, m1) = m;
         size(m1)
 
-    pub def isEmpty(m: HashMap[k, v, r]): Bool \ Write(r) =
+    pub def isEmpty(m: HashMap[k, v, r]): Bool \ r =
         import java.util.HashMap.isEmpty(): Bool \ r; 
         let HashMap(_, m1) = m;
         isEmpty(m1)
 
-    pub def hashCode(m: HashMap[k, v, r]): Int32 \ Read(r) =
+    pub def hashCode(m: HashMap[k, v, r]): Int32 \ r =
         import java.util.HashMap.hashCode(): Int32 \ r;
         let HashMap(_, m1) = m;
         hashCode(m1)
 
-    pub def get(k: k, m: HashMap[k, v, r]): Result[String, Option[v]] \ Write(r) with Marshal[k], Marshal[v] =
+    pub def get(k: k, m: HashMap[k, v, r]): Result[String, Option[v]] \ r =
         Result.tryCatch(_ -> {
             import java.util.HashMap.get(##java.lang.Object): ##java.lang.Object \ r; 
             let HashMap(_, m1) = m;
@@ -99,7 +99,7 @@ mod Interop.Util.HashMap {
             get(m1, k1) |> Object.toOption |> Option.map(Interop.Flix.Marshal.fromJavaObject)
         })
 
-    pub def put!(k: k, v: v, m: HashMap[k, v, r]): v \ Write(r) with Marshal[k], Marshal[v] =
+    pub def put!(k: k, v: v, m: HashMap[k, v, r]): v \ r with Marshal[k], Marshal[v] =
         import java.util.HashMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
         let HashMap(_, m1) = m;
         let k1 = Interop.Flix.Marshal.toJavaObject(k);
@@ -109,7 +109,7 @@ mod Interop.Util.HashMap {
     pub def putWith!(k: k, v: v, 
                         kcast: k -> ##java.lang.Object, 
                         vcast: v -> ##java.lang.Object, 
-                        m: HashMap[k, v, r]): Unit \  Write(r) =
+                        m: HashMap[k, v, r]): Unit \  r =
         import java.util.HashMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
         let HashMap(_, m1) = m;
         let k1 = kcast(k);
@@ -117,36 +117,36 @@ mod Interop.Util.HashMap {
         discard put(m1, k1, v1)
 
 
-    pub def clear!(m: HashMap[k, v, r]): Unit \ Write(r) =
+    pub def clear!(m: HashMap[k, v, r]): Unit \ r =
         import java.util.HashMap.clear(): Unit \ r; 
         let HashMap(_, m1) = m;
         clear(m1)
 
-    pub def entrySet(rc: Region[r1], m: HashMap[k, v, r]): SetZ[MapEntry[k, v, r], r1] \ {Write(r)}= 
-        import java.util.HashMap.entrySet(): ##java.util.Set \ Write(r);
+    pub def entrySet(rc: Region[r1], m: HashMap[k, v, r]): SetZ[MapEntry[k, v, r], r1] \ {r}= 
+        import java.util.HashMap.entrySet(): ##java.util.Set \ r;
         let HashMap(_, m1) = m;
         SetZ(rc, entrySet(m1))
 
 
-    pub def keySet(rc: Region[r1], m: HashMap[k, v, r]): SetZ[k, r1] \ {Write(r)}= 
-        import java.util.HashMap.keySet(): ##java.util.Set \ Write(r);
+    pub def keySet(rc: Region[r1], m: HashMap[k, v, r]): SetZ[k, r1] \ {r}= 
+        import java.util.HashMap.keySet(): ##java.util.Set \ r;
         let HashMap(_, m1) = m;
         SetZ(rc, keySet(m1))
 
-    pub def values(rc: Region[r1], m: HashMap[k, v, r]): Collection[k, r1] \ { Read(r), Write(r1) } = 
+    pub def values(rc: Region[r1], m: HashMap[k, v, r]): Collection[k, r1] \ {r, r1} = 
         import java.util.HashMap.values(): ##java.util.Collection \ {r1, r};
         let HashMap(_, m1) = m;
         Collection(rc, values(m1))
 
 
-    pub def remove!(k: k, m: HashMap[k, v, r]): Option[v] \  Write(r) with Marshal[k], Marshal[v] =
+    pub def remove!(k: k, m: HashMap[k, v, r]): Option[v] \  r with Marshal[k], Marshal[v] =
         import java.util.HashMap.remove(##java.lang.Object): ##java.lang.Object \ r; 
         let HashMap(_, m1) = m;
         let k1 = Interop.Flix.Marshal.toJavaObject(k);        
         remove(m1, k1) |> Object.toOption |>  Option.map(Interop.Flix.Marshal.fromJavaObject)
 
 
-    pub def fromFlixMap(r: Region[r], t: Map[k, v]): HashMap[k, v, r] \ Write(r) with Marshal[k], Marshal[v] =
+    pub def fromFlixMap(r: Region[r], t: Map[k, v]): HashMap[k, v, r] \ r with Marshal[k], Marshal[v] =
         let map1 = new(r);
         Map.forEach((k, v) -> discard put!(k, v, map1), t);
         map1
@@ -154,12 +154,12 @@ mod Interop.Util.HashMap {
     pub def fromFlixMapWith(r: Region[r], 
                             kcast: k -> ##java.lang.Object, 
                             vcast: v -> ##java.lang.Object, 
-                            t: Map[k, v]): HashMap[k, v, r] \ Write(r) =
+                            t: Map[k, v]): HashMap[k, v, r] \ r =
         let map1 = new(r);
         Map.forEach((k, v) -> putWith!(k, v, kcast, vcast, map1), t);
         map1
 
-    pub def fromFoldable(r: Region[r], t: t[(k, v)]): HashMap[k, v, r] \ Write(r) with Foldable[t], Marshal[k], Marshal[v] =
+    pub def fromFoldable(r: Region[r], t: t[(k, v)]): HashMap[k, v, r] \ r with Foldable[t], Marshal[k], Marshal[v] =
         let map1 = new(r);
         Foldable.forEach(match (k, v) -> discard put!(k, v, map1), t);
         map1
@@ -167,7 +167,7 @@ mod Interop.Util.HashMap {
     pub def fromFoldableWith(r: Region[r], 
                                 kcast: k -> ##java.lang.Object, 
                                 vcast: v -> ##java.lang.Object, 
-                                t: t[(k, v)]): HashMap[k, v, r] \ { Write(r) } with Foldable[t] =
+                                t: t[(k, v)]): HashMap[k, v, r] \ { r} with Foldable[t] =
         let map1 = new(r);
         Foldable.forEach(match (k, v) -> putWith!(k, v, kcast, vcast, map1), t);
         map1
@@ -181,19 +181,19 @@ mod Interop.Util.HashMap {
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     ///
-    pub def iterator(rc: Region[r1], m: HashMap[k, v, r]): Iterator[(k, v), r1, r1] \ { Read(r) } with Marshal[k], Marshal[v] =
+    pub def iterator(rc: Region[r1], m: HashMap[k, v, r]): Iterator[(k, v), r1, r1] \ { r } with Marshal[k], Marshal[v] =
         toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, Interop.Flix.Marshal.fromJavaObject, m)
 
     pub def toFlixIterator(rc: Region[r1], 
                             kcast: ##java.lang.Object -> k, 
                             vcast: ##java.lang.Object -> v, 
-                            m: HashMap[k, v, r]): Iterator[(k, v), r1, r1] \ { Read(r)} with Marshal[k], Marshal[v] =
+                            m: HashMap[k, v, r]): Iterator[(k, v), r1, r1] \ { r} with Marshal[k], Marshal[v] =
         Interop.Util.MapZ.toFlixIterator(rc, kcast, vcast, ImpMapZ.toMapZ(m))
 
-    pub def toFlixMap(m: HashMap[k, v, r]): Map[k, v] \ { Read(r) } with Order[k], Marshal[k], Marshal[v] =
+    pub def toFlixMap(m: HashMap[k, v, r]): Map[k, v] \ { r } with Order[k], Marshal[k], Marshal[v] =
         Interop.Util.MapZ.toFlixMap(ImpMapZ.toMapZ(m))
 
-    pub def toFlixList(m: HashMap[k, v, r]): List[(k, v)] \ { Read(r) } with Marshal[k], Marshal[v] =
+    pub def toFlixList(m: HashMap[k, v, r]): List[(k, v)] \ r = 
         Interop.Util.MapZ.toFlixList(ImpMapZ.toMapZ(m))
 
 }

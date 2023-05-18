@@ -51,18 +51,18 @@ mod Interop.Lang.Process {
             waitFor(p1)
         })
 
-    pub def getOutputStream(rc: Region[r1], p: Process[r]): OutputStream[r1] \ { Read(r), Write(r1), IO } =
-        import java.lang.Process.getOutputStream(): ##java.io.OutputStream \ { Read(r), Write(r1), IO };
+    pub def getOutputStream(rc: Region[r1], p: Process[r]): OutputStream[r1] \ { r, r1, IO } =
+        import java.lang.Process.getOutputStream(): ##java.io.OutputStream \ { r, r1, IO };
         let Process(p1) = p;
         getOutputStream(p1) |> Interop.IO.OutputStream.wrapHH(rc)
 
-    pub def getInputStream(rc: Region[r1], p: Process[r]): InputStream[r1] \ { Read(r), Write(r1), IO } = 
-        import java.lang.Process.getInputStream(): ##java.io.InputStream \ { Read(r), Write(r1), IO };
+    pub def getInputStream(rc: Region[r1], p: Process[r]): InputStream[r1] \ { r, r1, IO } = 
+        import java.lang.Process.getInputStream(): ##java.io.InputStream \ { r, r1, IO };
         let Process(p1) = p;
         getInputStream(p1) |> Interop.IO.InputStream.wrapHH(rc)
     
-    pub def getErrorStream(rc: Region[r1], p: Process[r]): InputStream[r1] \ { Read(r), Write(r1), IO } =
-        import java.lang.Process.getErrorStream(): ##java.io.InputStream \ { Read(r), Write(r1), IO };
+    pub def getErrorStream(rc: Region[r1], p: Process[r]): InputStream[r1] \ { r, r1, IO } =
+        import java.lang.Process.getErrorStream(): ##java.io.InputStream \ { r, r1, IO };
         let Process(p1) = p;
         getErrorStream(p1) |> Interop.IO.InputStream.wrapHH(rc)
 

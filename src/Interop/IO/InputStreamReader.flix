@@ -51,14 +51,14 @@ mod Interop.IO.InputStreamReader {
     pub def wrapHH(_: Region[r], prim: ##java.io.InputStreamReader): InputStreamReader[r] =
         InputStreamReader(prim)
 
-    pub def newInputStreamReader(_: Region[r1], ins: InputStream[r], cs: Charset): InputStreamReader[r1] \ { Read(r), Write(r1) }= 
+    pub def newInputStreamReader(_: Region[r1], ins: InputStream[r], cs: Charset): InputStreamReader[r1] \ { r, r1 }= 
         import new java.io.InputStreamReader(##java.io.InputStream, ##java.nio.charset.Charset): ##java.io.InputStreamReader \ {r, r1} as newInputStreamReader;
         let Charset(cs1) = cs;
         let ins1 = Interop.IO.InputStream.getHH(ins);
         InputStreamReader(newInputStreamReader(ins1, cs1))
 
     /// None indicates end-of-stream.
-    pub def read!(rd: InputStreamReader[r]): Result[String, Option[Int32]] \ Read(r) = 
+    pub def read!(rd: InputStreamReader[r]): Result[String, Option[Int32]] \ r = 
         Result.tryCatch(_ -> {
             import java.io.InputStreamReader.read(): Int32 \ r;
             let InputStreamReader(rd1) = rd;
@@ -69,29 +69,29 @@ mod Interop.IO.InputStreamReader {
         })
 
     // read (into-array)
-    pub def readSubArray!(buf: Array[Char, r2], 
+    pub def readSubArray!(buf: Array[Char, r1], 
                         offset: {offset = Int32}, 
                         len: {len = Int32}, 
-                        rd: InputStreamReader[r]): Result[String, Int32] \ { Write(r2), Read(r) } = 
+                        rd: InputStreamReader[r]): Result[String, Int32] \ {r, r1} = 
         Result.tryCatch(_ -> {
-            import java.io.InputStreamReader.read(Array[Char, r2], Int32, Int32): Int32 \ {r, r2};
+            import java.io.InputStreamReader.read(Array[Char, r2], Int32, Int32): Int32 \ {r, r1};
             let InputStreamReader(rd1) = rd;
             read(rd1, buf, offset.offset, len.len)
         })
 
-    pub def getEncoding(rd: InputStreamReader[r]): String \ Read(r) = 
+    pub def getEncoding(rd: InputStreamReader[r]): String \ r = 
         import java.io.InputStreamReader.getEncoding(): String \ r;
         let InputStreamReader(rd1) = rd;
         getEncoding(rd1)
 
-    pub def ready(rd: InputStreamReader[r]): Result[String, Bool] \ Read(r) = 
+    pub def ready(rd: InputStreamReader[r]): Result[String, Bool] \ r = 
         Result.tryCatch(_ -> {
             import java.io.InputStreamReader.ready(): Bool \ r;
             let InputStreamReader(rd1) = rd;
             ready(rd1)
         })
 
-    pub def close!(rd: InputStreamReader[r]): Result[String, Unit] \ Write(r) = 
+    pub def close!(rd: InputStreamReader[r]): Result[String, Unit] \ r = 
         Result.tryCatch(_ -> {
             import java.io.InputStreamReader.close(): Unit \ r;
             let InputStreamReader(rd1) = rd;

@@ -81,12 +81,12 @@ mod Interop.Util.LocaleBuilder {
         new(rc) |> Interop.Flix.Builder.apply(rc, makeBuilder(rc, xs)) |> Result.map(build(rc))
     }
 
-    pub def new(_: Region[r]): LocaleBuilder \ Write(r) =
+    pub def new(_: Region[r]): LocaleBuilder \ r =
         import new java.util.Locale$Builder(): ##java.util.Locale$Builder \ r as new1;
         LocaleBuilder(new1())
 
 
-    pub def build(_: Region[r], b: LocaleBuilder): Locale \ Write(r) =
+    pub def build(_: Region[r], b: LocaleBuilder): Locale \ r =
         import java.util.Locale$Builder.build(): ##java.util.Locale \ r;
         let LocaleBuilder(b1) = b;
         Locale(build(b1))

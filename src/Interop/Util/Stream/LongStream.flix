@@ -103,7 +103,7 @@ mod Interop.Util.Stream.LongStream {
         let LongStream(rc, s1) = s;
         Stream(rc, checked_ecast(boxed(s1)))
 
-    pub def count(s: LongStream[ef, r]): Int64 \ { ef, Read(r) } = 
+    pub def count(s: LongStream[ef, r]): Int64 \ { ef, r } = 
         import java.util.stream.LongStream.count(): Int64 \ {ef, r};
         let LongStream(_, s1) = s;
         count(s1)
@@ -146,37 +146,37 @@ mod Interop.Util.Stream.LongStream {
 
 
     pub def forEach[ef: Eff, ef1: Eff, r: Region]
-                    (f: Int64 -> Unit \ ef1, s: LongStream[ef, r]): Unit \ {ef, ef1, Read(r)} = 
+                    (f: Int64 -> Unit \ ef1, s: LongStream[ef, r]): Unit \ {ef, ef1, r} = 
         import java.util.stream.LongStream.forEach(##java.util.function.LongConsumer): Unit \ {ef, ef1, r};
         let LongConsumerZ(f1) = Interop.Util.Function.LongConsumerZ.makeLongConsumerZ(f);
         let LongStream(_, s1) = s;
         forEach(s1, f1)
 
-    pub def toArray(_: Region[r1], s: LongStream[ef, r]): Array[Int64, r1] \ { ef, Read(r), Write(r1) } = 
+    pub def toArray(_: Region[r1], s: LongStream[ef, r]): Array[Int64, r1] \ { ef, r, r1} = 
         import java.util.stream.LongStream.toArray(): Array[Int64, r1] \ {};
         let LongStream(_, s1) = s;
         checked_ecast(toArray(s1))
 
 
-    pub def average(s: LongStream[ef, r]): OptionalDouble \ {ef, Read(r)}= 
+    pub def average(s: LongStream[ef, r]): OptionalDouble \ {ef, r}= 
         import java.util.stream.LongStream.average(): ##java.util.OptionalDouble \ {ef, r};
         let LongStream(_, s1) = s;
         average(s1) |> OptionalDouble
 
-    pub def summaryStatistics(_: Region[r1], s: LongStream[ef, r]): LongSummaryStatistics[r1] \ {ef, Read(r), Write(r1)} = 
-        import java.util.stream.LongStream.summaryStatistics(): ##java.util.LongSummaryStatistics \ { ef, Read(r), Write(r1) };
+    pub def summaryStatistics(_: Region[r1], s: LongStream[ef, r]): LongSummaryStatistics[r1] \ {ef, r, r1} = 
+        import java.util.stream.LongStream.summaryStatistics(): ##java.util.LongSummaryStatistics \ { ef, r, r1};
         let LongStream(_, s1) = s;
         LongSummaryStatistics(summaryStatistics(s1))
 
     pub def anyMatch[ef: Eff, ef1: Eff, r: Region]
-                    (f: Int64 -> Bool \ ef1, s: LongStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
+                    (f: Int64 -> Bool \ ef1, s: LongStream[ef, r]): Bool \ {ef, ef1, r} = 
         import java.util.stream.LongStream.anyMatch(##java.util.function.LongPredicate): Bool \ {ef, ef1, r};
         let LongStream(_, s1) = s;
         let LongPredicateZ(f1) = Interop.Util.Function.LongPredicateZ.makeLongPredicateZ(f);
         anyMatch(s1, f1)
 
     pub def allMatch[ef: Eff, ef1: Eff, r: Region]
-                    (f: Int64 -> Bool \ ef1, s: LongStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
+                    (f: Int64 -> Bool \ ef1, s: LongStream[ef, r]): Bool \ {ef, ef1, r} = 
         import java.util.stream.LongStream.allMatch(##java.util.function.LongPredicate): Bool \ {ef, ef1, r};
         let LongStream(_, s1) = s;
         let LongPredicateZ(f1) = Interop.Util.Function.LongPredicateZ.makeLongPredicateZ(f);
@@ -184,29 +184,29 @@ mod Interop.Util.Stream.LongStream {
 
 
     pub def noneMatch[ef: Eff, ef1: Eff, r: Region]
-                        (f: Int64 -> Bool \ ef1, s: LongStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
+                        (f: Int64 -> Bool \ ef1, s: LongStream[ef, r]): Bool \ {ef, ef1, r} = 
         import java.util.stream.LongStream.noneMatch(##java.util.function.LongPredicate): Bool \ {ef, ef1, r};
         let LongStream(_, s1) = s;
         let LongPredicateZ(f1) = Interop.Util.Function.LongPredicateZ.makeLongPredicateZ(f);
         noneMatch(s1, f1)
 
 
-    pub def findFirst(s: LongStream[ef, r]): Option[Int64] \ {ef, Read(r)} = 
+    pub def findFirst(s: LongStream[ef, r]): Option[Int64] \ {ef, r} = 
         import java.util.stream.LongStream.findFirst(): ##java.util.OptionalLong \ {ef, r};
         let LongStream(_, s1) = s;
         findFirst(s1) |> Interop.Util.OptionalLong.hhToOption
 
-    pub def findAny(s: LongStream[ef, r]): Option[Int64] \ {ef, Read(r)} = 
+    pub def findAny(s: LongStream[ef, r]): Option[Int64] \ {ef, r} = 
         import java.util.stream.LongStream.findAny(): ##java.util.OptionalLong \ {ef, r};
         let LongStream(_, s1) = s;
         findAny(s1) |> Interop.Util.OptionalLong.hhToOption
 
-    pub def max(s: LongStream[ef, r]): Option[Int64] \ {ef, Read(r)} = 
+    pub def max(s: LongStream[ef, r]): Option[Int64] \ {ef, r} = 
         import java.util.stream.LongStream.max(): ##java.util.OptionalLong \ {ef, r};
         let LongStream(_, s1) = s;
         max(s1) |> Interop.Util.OptionalLong.hhToOption
 
-    pub def min(s: LongStream[ef, r]): Option[Int64] \ {ef, Read(r)} = 
+    pub def min(s: LongStream[ef, r]): Option[Int64] \ {ef, r} = 
         import java.util.stream.LongStream.min(): ##java.util.OptionalLong \ {ef, r};
         let LongStream(_, s1) = s;
         min(s1) |> Interop.Util.OptionalLong.hhToOption

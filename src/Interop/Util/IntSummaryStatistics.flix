@@ -38,12 +38,12 @@ mod Interop.Util.IntSummaryStatistics {
     pub def wrapHH(_: Region[r], prim: ##java.util.IntSummaryStatistics): IntSummaryStatistics[r] = 
         IntSummaryStatistics(prim)
 
-    pub def toString(ss: IntSummaryStatistics[r]): String \ { Read(r) } =
+    pub def toString(ss: IntSummaryStatistics[r]): String \ { r } =
         import java.util.IntSummaryStatistics.toString(): String \ r;
         let IntSummaryStatistics(ss1) = ss;
         ss1 |> toString
 
-    pub def combine!(i: IntSummaryStatistics[r], j: IntSummaryStatistics[r]): Result[String, Unit] \ {Read(r), Write(r)} =
+    pub def combine!(i: IntSummaryStatistics[r], j: IntSummaryStatistics[r]): Result[String, Unit] \ {r, r} =
         Result.tryCatch(_ -> {
             import java.util.IntSummaryStatistics.combine(##java.util.IntSummaryStatistics): Unit \ r;
             let IntSummaryStatistics(i1) = i;
@@ -51,27 +51,27 @@ mod Interop.Util.IntSummaryStatistics {
             combine(i1, j1)
         })
 
-    pub def getCount(ss: IntSummaryStatistics[r]): Int64 \ { Read(r) } =
+    pub def getCount(ss: IntSummaryStatistics[r]): Int64 \ { r } =
         import java.util.IntSummaryStatistics.getCount(): Int64 \ r;
         let IntSummaryStatistics(ss1) = ss;
         ss1 |> getCount
     
-    pub def getSum(ss: IntSummaryStatistics[r]): Int64 \ { Read(r) } =
+    pub def getSum(ss: IntSummaryStatistics[r]): Int64 \ { r } =
         import java.util.IntSummaryStatistics.getSum(): Int64 \ r;
         let IntSummaryStatistics(ss1) = ss;
         ss1 |> getSum    
 
-    pub def getMin(ss: IntSummaryStatistics[r]): Int32 \ { Read(r) } =
+    pub def getMin(ss: IntSummaryStatistics[r]): Int32 \ { r } =
         import java.util.IntSummaryStatistics.getMin(): Int32 \ r;
         let IntSummaryStatistics(ss1) = ss;
         ss1 |> getMin
 
-    pub def getMax(ss: IntSummaryStatistics[r]): Int32 \ { Read(r) } =
+    pub def getMax(ss: IntSummaryStatistics[r]): Int32 \ { r } =
         import java.util.IntSummaryStatistics.getMax(): Int32 \ r;
         let IntSummaryStatistics(ss1) = ss;
         ss1 |> getMax
 
-    pub def getAverage(ss: IntSummaryStatistics[r]): Float64 \ { Read(r) } =
+    pub def getAverage(ss: IntSummaryStatistics[r]): Float64 \ { r } =
         import java.util.IntSummaryStatistics.getAverage(): Float64 \ r;
         let IntSummaryStatistics(ss1) = ss;
         ss1 |> getAverage

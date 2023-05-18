@@ -45,7 +45,7 @@ mod Interop.Util.Stream.Collector {
                 accumulator: BiConsumer[a, t, ef2],
                 combiner: BinaryOperator[a, ef3],
                 finisher: FunctionZ[a, ans, ef4], 
-                characteristics: Array[##java.util.stream.Collector$Characteristics, r]): Collector[t, a, ans] \ {ef1, ef2, ef3, ef4, Read(r)} = 
+                characteristics: Array[##java.util.stream.Collector$Characteristics, r]): Collector[t, a, ans] \ {ef1, ef2, ef3, ef4, r} = 
         import static java.util.stream.Collector.of(##java.util.function.Supplier, 
                                                     ##java.util.function.BiConsumer,
                                                     ##java.util.function.BinaryOperator, 
@@ -58,7 +58,7 @@ mod Interop.Util.Stream.Collector {
         of(supplier1, accumulator1, combiner1, finisher1, characteristics)
 
     // /// TODO Supplier should be mutable...
-    // pub def supplier(c: Collector[t, a, ans]): Supplier[a] \ Read(r) =
+    // pub def supplier(c: Collector[t, a, ans]): Supplier[a] \ r =
     //     import java.util.stream.Collector.supplier(): ##java.util.function.Supplier \ r;
     //     let Collector(c1) = c;
     //     supplier(c1)

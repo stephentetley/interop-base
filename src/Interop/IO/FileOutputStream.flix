@@ -52,32 +52,32 @@ mod Interop.IO.FileOutputStream {
         FileOutputStream(prim)
 
 
-    pub def newWithFile(_: Region[r1], file: File[r]): Result[String, FileOutputStream[r1]] \ {Read(r), Write(r1), IO} = 
+    pub def newWithFile(_: Region[r1], file: File[r]): Result[String, FileOutputStream[r1]] \ {IO, r, r1} = 
         Result.tryCatch(_ -> {
-            import new java.io.FileOutputStream(##java.io.File): ##java.io.FileOutputStream \ {Read(r), Write(r1), IO} as newOutputStream;
+            import new java.io.FileOutputStream(##java.io.File): ##java.io.FileOutputStream \ {IO, r, r1} as newOutputStream;
             let file1 = Interop.IO.File.getHH(file);
             FileOutputStream(newOutputStream(file1))
         })
 
-    pub def newWithPath(_: Region[r], path: String): Result[String, FileOutputStream[r]] \ { Write(r), IO } = 
+    pub def newWithPath(_: Region[r], path: String): Result[String, FileOutputStream[r]] \ {IO, r} = 
         Result.tryCatch(_ -> {
-            import new java.io.FileOutputStream(String): ##java.io.FileOutputStream \ {r, IO} as newOutputStream;
+            import new java.io.FileOutputStream(String): ##java.io.FileOutputStream \ {IO, r} as newOutputStream;
             FileOutputStream(newOutputStream(path))
         })
 
 
 
-    pub def write!(b: Int32, s: FileOutputStream[r]): Result[String, Unit] \ { Write(r), IO } = 
+    pub def write!(b: Int32, s: FileOutputStream[r]): Result[String, Unit] \ {IO, r} = 
         Result.tryCatch(_ -> {
-            import java.io.FileOutputStream.write(Int32): Unit \ { r, IO };
+            import java.io.FileOutputStream.write(Int32): Unit \ {IO, r};
             let FileOutputStream(s1) = s;
             write(s1, b)
         })
 
 
-    pub def close!(s: FileOutputStream[r]): Result[String, Unit] \ { Write(r), IO } = 
+    pub def close!(s: FileOutputStream[r]): Result[String, Unit] \ {IO, r} = 
         Result.tryCatch(_ -> {
-            import java.io.FileOutputStream.close(): Unit \ { r, IO };
+            import java.io.FileOutputStream.close(): Unit \ {IO, r};
             let FileOutputStream(s1) = s;
             close(s1)
         })

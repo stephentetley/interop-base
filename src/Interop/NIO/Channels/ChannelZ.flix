@@ -40,13 +40,13 @@ mod Interop.NIO.Channels.ChannelZ {
     pub def wrapHH(_: Region[r], prim: ##java.nio.channels.Channel): ChannelZ[r] =
         ChannelZ(prim)
 
-    pub def isOpen(c: ChannelZ[r]): Bool \ Read(r) =
+    pub def isOpen(c: ChannelZ[r]): Bool \ r =
         import java.nio.channels.Channel.isOpen(): Bool \ r;
         let ChannelZ(c1) = c;
         isOpen(c1)
         
         
-    pub def close!(c: ChannelZ[r]): Result[String, Unit] \ Write(r) =
+    pub def close!(c: ChannelZ[r]): Result[String, Unit] \ r =
         Result.tryCatch(_ -> {
             import java.nio.channels.Channel.close(): Unit \ r;
             let ChannelZ(c1) = c;

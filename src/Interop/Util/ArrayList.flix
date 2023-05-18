@@ -88,14 +88,14 @@ mod Interop.Util.ArrayList {
     ///
     /// Returns a new mutable ArrayList.
     ///
-    pub def new(rc: Region[r]): ArrayList[a, r] \ Write(r) =
+    pub def new(rc: Region[r]): ArrayList[a, r] \ r =
         import new java.util.ArrayList(): ##java.util.ArrayList \ r as newArrayList;
         ArrayList(rc, newArrayList())
 
     ///
     /// Returns a new mutable ArrayList.
     ///
-    pub def newWithCapacity(rc: Region[r], initialCapacity: Int32): Result[String, ArrayList[a, r]] \ Write(r) =
+    pub def newWithCapacity(rc: Region[r], initialCapacity: Int32): Result[String, ArrayList[a, r]] \ r =
         Result.tryCatch(_ -> {
             import new java.util.ArrayList(Int32): ##java.util.ArrayList \ r as newArrayList;
             ArrayList(rc, newArrayList(initialCapacity))
@@ -104,7 +104,7 @@ mod Interop.Util.ArrayList {
     ///
     /// Returns a new mutable ArrayList.
     ///
-    pub def newWithCollection(rc: Region[r1], c: Collection[a, r]): Result[String, ArrayList[a, r1]] \ {Read(r), Write(r1) } =
+    pub def newWithCollection(rc: Region[r1], c: Collection[a, r]): Result[String, ArrayList[a, r1]] \ {r, r1 } =
         Result.tryCatch(_ -> {
             import new java.util.ArrayList(##java.util.Collection): ##java.util.ArrayList \ {r, r1} as newArrayList;
             let Collection(_, c1) = c;
@@ -112,56 +112,56 @@ mod Interop.Util.ArrayList {
         })
 
 
-    pub def toString(l: ArrayList[a, r]): String \ Read(r) = 
+    pub def toString(l: ArrayList[a, r]): String \ r = 
         import java.util.ArrayList.toString(): String \ r;
         let ArrayList(_, l1) = l;
         toString(l1)
 
-    pub def hashCode(l: ArrayList[a, r]): Int32 \ Read(r) = 
+    pub def hashCode(l: ArrayList[a, r]): Int32 \ r = 
         import java.util.ArrayList.hashCode(): Int32 \ r;
         let ArrayList(_, l1) = l;
         hashCode(l1)
 
-    pub def equals(l1: ArrayList[a, r], l2: ArrayList[a, r]): Bool \  Read(r) with Marshal[a] =
+    pub def equals(l1: ArrayList[a, r], l2: ArrayList[a, r]): Bool \  r with Marshal[a] =
         import java.util.ArrayList.equals(##java.lang.Object): Bool \ r; 
         let ArrayList(_, ll1) = l1;
         let ArrayList(_, ll2) = l2;
         equals(ll1, checked_cast(ll2))
 
-    pub def isEmpty(l: ArrayList[a, r]): Bool \ Read(r) = 
+    pub def isEmpty(l: ArrayList[a, r]): Bool \ r = 
         import java.util.ArrayList.isEmpty(): Bool \ r;
         let ArrayList(_, l1) = l;
         isEmpty(l1)
 
-    pub def size(l: ArrayList[a, r]): Int32 \ Read(r) = 
+    pub def size(l: ArrayList[a, r]): Int32 \ r = 
         import java.util.ArrayList.size(): Int32 \ r;
         let ArrayList(_, l1) = l;
         size(l1)
 
 
-    pub def get(ix: Int32, l: ArrayList[a, r]): a \ Read(r) with Marshal[a] = 
+    pub def get(ix: Int32, l: ArrayList[a, r]): a \ r with Marshal[a] = 
         import java.util.ArrayList.get(Int32): ##java.lang.Object \ r;
         let ArrayList(_, l1) = l;
         get(l1, ix) |> Interop.Flix.Marshal.fromJavaObject
 
-    pub def add!(x: a, l: ArrayList[a, r]): Bool \ { Write(r) } with Marshal[a] = 
+    pub def add!(x: a, l: ArrayList[a, r]): Bool \ { r } with Marshal[a] = 
         import java.util.ArrayList.add(##java.lang.Object): Bool \ r;
         let ArrayList(_, l1) = l;
         add(l1, Interop.Flix.Marshal.toJavaObject(x))
 
-    pub def addAt!(ix: Int32, x: a, l: ArrayList[a, r]): Result[String, Unit] \ { Write(r) } with Marshal[a] = 
+    pub def addAt!(ix: Int32, x: a, l: ArrayList[a, r]): Result[String, Unit] \ { r } with Marshal[a] = 
         Result.tryCatch(_ -> {
             import java.util.ArrayList.add(Int32, ##java.lang.Object): Unit \ r;
             let ArrayList(_, l1) = l;
             add(l1, ix, Interop.Flix.Marshal.toJavaObject(x))
         })
 
-    pub def addWith!(x: a, ocast: a -> ##java.lang.Object, l: ArrayList[a, r]): Bool \ Write(r) = 
+    pub def addWith!(x: a, ocast: a -> ##java.lang.Object, l: ArrayList[a, r]): Bool \ r = 
         import java.util.ArrayList.add(##java.lang.Object): Bool \ r;
         let ArrayList(_, l1) = l;
         add(l1, ocast(x))
 
-    pub def addAll!(c: Collection[a, r1], l: ArrayList[a, r]): Result[String, Bool] \ { Read(r1), Write(r) }= 
+    pub def addAll!(c: Collection[a, r1], l: ArrayList[a, r]): Result[String, Bool] \ {r, r1} = 
         Result.tryCatch(_ -> {
             import java.util.ArrayList.addAll(##java.util.Collection): Bool \ {r, r1};
             let ArrayList(_, l1) = l;
@@ -170,7 +170,7 @@ mod Interop.Util.ArrayList {
         })
 
 
-    pub def remove!(x: a, l: ArrayList[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
+    pub def remove!(x: a, l: ArrayList[a, r]): Result[String, Bool] \  r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.ArrayList.remove(##java.lang.Object): Bool \ r; 
             let ArrayList(_, l1) = l;
@@ -178,7 +178,7 @@ mod Interop.Util.ArrayList {
             remove(l1, x1)
         })
 
-    pub def removeAll!(c: Collection[a, r1], l: ArrayList[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
+    pub def removeAll!(c: Collection[a, r1], l: ArrayList[a, r]): Result[String, Bool] \ { r1, r } with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.ArrayList.removeAll(##java.util.Collection): Bool \ {r, r1}; 
             let ArrayList(_, l1) = l;
@@ -187,7 +187,7 @@ mod Interop.Util.ArrayList {
         })
 
     pub def removeIf![a: Type, ef: Eff, r: Region]
-                        (f: a -> Bool \ ef, l: ArrayList[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
+                        (f: a -> Bool \ ef, l: ArrayList[a, r]): Result[String, Bool] \  {ef, r} with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.ArrayList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let ArrayList(_, l1) = l;
@@ -197,7 +197,7 @@ mod Interop.Util.ArrayList {
 
 
 
-    pub def retainAll!(c: Collection[a, r1], l: ArrayList[a, r]): Result[String, Bool] \ { Read(r1), Write(r) } with Marshal[a] =
+    pub def retainAll!(c: Collection[a, r1], l: ArrayList[a, r]): Result[String, Bool] \ { r1, r } with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.ArrayList.retainAll(##java.util.Collection): Bool \ {r, r1}; 
             let ArrayList(_, l1) = l;
@@ -208,7 +208,7 @@ mod Interop.Util.ArrayList {
 
 
     pub def forEach[a: Type, ef: Eff, r: Region]
-                    (f: a -> Unit \ ef, l: ArrayList[a, r]): Result[String, Unit] \  {ef, Read(r)} with Marshal[a] =
+                    (f: a -> Unit \ ef, l: ArrayList[a, r]): Result[String, Unit] \  {ef, r} with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.ArrayList.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let ArrayList(_, l1) = l;
@@ -217,12 +217,12 @@ mod Interop.Util.ArrayList {
         })
 
 
-    pub def sort!(f: (a, a) -> Int32, l: ArrayList[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
+    pub def sort!(f: (a, a) -> Int32, l: ArrayList[a, r]): Result[String, Unit] \ r with Marshal[a] =
         let f1 = Interop.Util.Comparator.makeComparator(f);
         sortWithComparator!(f1, l)
 
 
-    pub def sortWithComparator!(c: Comparator[a], l: ArrayList[a, r]): Result[String, Unit] \ Write(r) with Marshal[a] =
+    pub def sortWithComparator!(c: Comparator[a], l: ArrayList[a, r]): Result[String, Unit] \ r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.ArrayList.sort(##java.util.Comparator): Unit \ r; 
             let ArrayList(_, l1) = l;
@@ -231,18 +231,18 @@ mod Interop.Util.ArrayList {
 
 
     // pub def fromIterable[a: Type, t: Type -> Region -> Type, r: Region, r2: Region]
-    //                     (r: Region[r2], t: t[a, r]): ArrayList[a, r2] \ { Read(r), Write(r2) } with Iterable[t], Marshal[a] =
+    //                     (r: Region[r2], t: t[a, r]): ArrayList[a, r2] \ { r, Write(r2) } with Iterable[t], Marshal[a] =
     //     let als = new(r);
     //     let iter1 = Iterable.iterator(t);
     //     Iterator.forEach(x -> discard add!(x, als), iter1);
     //     als
 
-    pub def fromFoldable(rc: Region[r], t: t[a]): ArrayList[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
+    pub def fromFoldable(rc: Region[r], t: t[a]): ArrayList[a, r] \ r with Foldable[t], Marshal[a] =
         let als = new(rc);
         Foldable.forEach(x -> discard add!(x, als), t);
         als
 
-    pub def fromFoldableWith(rc: Region[r], ocast: a -> ##java.lang.Object, t: t[a]): ArrayList[a, r] \ { Write(r) } with Foldable[t] =
+    pub def fromFoldableWith(rc: Region[r], ocast: a -> ##java.lang.Object, t: t[a]): ArrayList[a, r] \ r  with Foldable[t] =
         let als = new(rc);
         Foldable.forEach(x -> discard addWith!(x, ocast, als), t);
         als
@@ -251,7 +251,7 @@ mod Interop.Util.ArrayList {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def iterator(rc: Region[r1], l: ArrayList[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
+    pub def iterator(rc: Region[r1], l: ArrayList[a, r]): Iterator[a, r1, r1] \ { r } with Marshal[a] =
         toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, l)
 
     ///
@@ -259,8 +259,8 @@ mod Interop.Util.ArrayList {
     ///
     pub def toFlixIterator(rc: Region[r1], 
                             ocast: ##java.lang.Object -> a, 
-                            l: ArrayList[a, r]): Iterator[a, r1, r1] \ { Read(r) } =
-        import java.util.ArrayList.iterator(): ##java.util.Iterator \ { Read(r) } as iterator;
+                            l: ArrayList[a, r]): Iterator[a, r1, r1] \ { r } =
+        import java.util.ArrayList.iterator(): ##java.util.Iterator \ { r } as iterator;
         let ArrayList(_, l1) = l;
         if (Object.isNull(l1))
             Iterator.empty(rc)
@@ -274,11 +274,11 @@ mod Interop.Util.ArrayList {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def enumerator(rc: Region[r1], l: ArrayList[a, r]): Iterator[(Int32, a), r1, r1] \ { Read(r), Write(r1) } with Marshal[a] =
+    pub def enumerator(rc: Region[r1], l: ArrayList[a, r]): Iterator[(Int32, a), r1, r1] \ {r, r1} with Marshal[a] =
         iterator(rc, l) |> Iterator.enumerator
 
 
-    pub def unfoldArrayList(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): ArrayList[a, r] \ { Write(r),  ef } with Marshal[a] =
+    pub def unfoldArrayList(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): ArrayList[a, r] \ r with Marshal[a] =
         import new java.util.ArrayList(): ##java.util.ArrayList \ r as new1;
         import java.util.ArrayList.add(##java.lang.Object): Bool \ r as add1;
         def loop(st1, acc) = match f(st1) {
@@ -287,20 +287,20 @@ mod Interop.Util.ArrayList {
         };
         loop(st, new1())
 
-    pub def foldArrayList(f: (b, a) -> b \ ef, s: b, l: ArrayList[a, r]): b \ { Read(r), ef } with Marshal[a] = region r {
+    pub def foldArrayList(f: (b, a) -> b \ ef, s: b, l: ArrayList[a, r]): b \ { r, ef } with Marshal[a] = region r {
         iterator(r, l) |> Iterator.foldLeft(f, s)
     }
 
-    pub def toFlixList(l: ArrayList[a, r]): List[a] \ { Read(r) } with Marshal[a] = region r {
+    pub def toFlixList(l: ArrayList[a, r]): List[a] \ { r } with Marshal[a] = region r {
         iterator(r, l) |> Iterator.toList
     }
 
-    pub def toFlixSet(l: ArrayList[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] = region r1 {
+    pub def toFlixSet(l: ArrayList[a, r]): Set[a] \ { r } with Order[a], Marshal[a] = region r1 {
         let step = (acc, a) -> Set.insert(a, acc);
         iterator(r1, l) |> Iterator.foldLeft(step, Set.empty())
     }
 
-    pub def toArray(r1: Region[r1], l: ArrayList[a, r2]): Array[a, r1] \ { Read(r2), Write(r1) } with Marshal[a] =
+    pub def toArray(r1: Region[r1], l: ArrayList[a, r]): Array[a, r1] \ {r, r1} with Marshal[a] =
         let len = size(l);
         if (len < 1) 
             Array#{} @ r1

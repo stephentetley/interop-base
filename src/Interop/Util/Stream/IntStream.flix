@@ -99,7 +99,7 @@ mod Interop.Util.Stream.IntStream {
         let IntStream(_, s1) = s;
         Stream(rc, checked_ecast(boxed(s1)))
 
-    pub def count(s: IntStream[ef, r]): Int64 \ { ef, Read(r) } = 
+    pub def count(s: IntStream[ef, r]): Int64 \ { ef, r } = 
         import java.util.stream.IntStream.count(): Int64 \ {ef, r};
         let IntStream(_, s1) = s;
         count(s1)
@@ -148,37 +148,37 @@ mod Interop.Util.Stream.IntStream {
 
 
     pub def forEach[ef: Eff, ef1: Eff, r: Region]
-                    (f: Int32 -> Unit \ ef1, s: IntStream[ef, r]): Unit \ {ef, ef1, Read(r)} = 
+                    (f: Int32 -> Unit \ ef1, s: IntStream[ef, r]): Unit \ {ef, ef1, r} = 
         import java.util.stream.IntStream.forEach(##java.util.function.IntConsumer): Unit \ {ef, ef1, r};
         let IntConsumerZ(f1) = Interop.Util.Function.IntConsumerZ.makeIntConsumerZ(f);
         let IntStream(_, s1) = s;
         forEach(s1, f1)
 
-    pub def toArray(_: Region[r1], s: IntStream[ef, r]): Array[Int32, r1] \ {ef, Read(r), Write(r1)} = 
+    pub def toArray(_: Region[r1], s: IntStream[ef, r]): Array[Int32, r1] \ {ef, r, r1} = 
         import java.util.stream.IntStream.toArray(): Array[Int32, r1] \ {};
         let IntStream(_, s1) = s;
         checked_ecast(toArray(s1))
 
 
-    pub def average(s: IntStream[ef, r]): OptionalDouble \ {Read(r), ef} = 
+    pub def average(s: IntStream[ef, r]): OptionalDouble \ {r, ef} = 
         import java.util.stream.IntStream.average(): ##java.util.OptionalDouble \ {ef, r};
         let IntStream(_, s1) = s;
         average(s1) |> OptionalDouble
 
-    pub def summaryStatistics(_: Region[r1], s: IntStream[ef, r]): IntSummaryStatistics[r1] \ { ef, Read(r), Write(r1) } = 
-        import java.util.stream.IntStream.summaryStatistics(): ##java.util.IntSummaryStatistics \ { ef, Read(r), Write(r1) };
+    pub def summaryStatistics(_: Region[r1], s: IntStream[ef, r]): IntSummaryStatistics[r1] \ { ef, r, r1 } = 
+        import java.util.stream.IntStream.summaryStatistics(): ##java.util.IntSummaryStatistics \ { ef, r, r1 };
         let IntStream(_, s1) = s;
         IntSummaryStatistics(summaryStatistics(s1))
 
     pub def anyMatch[ef: Eff, ef1: Eff, r: Region]
-                    (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
+                    (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {ef, ef1, r} = 
         import java.util.stream.IntStream.anyMatch(##java.util.function.IntPredicate): Bool \ {ef, ef1, r};
         let IntStream(_, s1) = s;
         let IntPredicateZ(p1) = Interop.Util.Function.IntPredicateZ.makeIntPredicateZ(p);
         anyMatch(s1, p1)
 
     pub def allMatch[ef: Eff, ef1: Eff, r: Region]
-                    (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
+                    (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {ef, ef1, r} = 
         import java.util.stream.IntStream.allMatch(##java.util.function.IntPredicate): Bool \ {ef, ef1, r};
         let IntStream(_, s1) = s;
         let IntPredicateZ(p1) = Interop.Util.Function.IntPredicateZ.makeIntPredicateZ(p);
@@ -186,28 +186,28 @@ mod Interop.Util.Stream.IntStream {
 
 
     pub def noneMatch[ef: Eff, ef1: Eff, r: Region]
-                        (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {ef, ef1, Read(r)} = 
+                        (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {ef, ef1, r} = 
         import java.util.stream.IntStream.noneMatch(##java.util.function.IntPredicate): Bool \ {ef, ef1, r};
         let IntStream(_, s1) = s;
         let IntPredicateZ(p1) = Interop.Util.Function.IntPredicateZ.makeIntPredicateZ(p);
         noneMatch(s1, p1)
 
-    pub def findFirst(s: IntStream[ef, r]): Option[Int32] \ {ef, Read(r)} = 
+    pub def findFirst(s: IntStream[ef, r]): Option[Int32] \ {ef, r} = 
         import java.util.stream.IntStream.findFirst(): ##java.util.OptionalInt \ { ef, r };
         let IntStream(_, s1) = s;
         findFirst(s1) |> Interop.Util.OptionalInt.hhToOption
 
-    pub def findAny(s: IntStream[ef, r]): Option[Int32] \ {ef, Read(r)} = 
+    pub def findAny(s: IntStream[ef, r]): Option[Int32] \ {ef, r} = 
         import java.util.stream.IntStream.findAny(): ##java.util.OptionalInt \ {ef, r};
         let IntStream(_, s1) = s;
         findAny(s1) |> Interop.Util.OptionalInt.hhToOption
 
-    pub def max(s: IntStream[ef, r]): Option[Int32] \ {ef, Read(r)} = 
+    pub def max(s: IntStream[ef, r]): Option[Int32] \ {ef, r} = 
         import java.util.stream.IntStream.max(): ##java.util.OptionalInt \ {ef, r};
         let IntStream(_, s1) = s;
         max(s1) |> Interop.Util.OptionalInt.hhToOption
 
-    pub def min(s: IntStream[ef, r]): Option[Int32] \ {ef, Read(r)} = 
+    pub def min(s: IntStream[ef, r]): Option[Int32] \ {ef, r} = 
         import java.util.stream.IntStream.min(): ##java.util.OptionalInt \ {ef, r};
         let IntStream(_, s1) = s;
         min(s1) |> Interop.Util.OptionalInt.hhToOption

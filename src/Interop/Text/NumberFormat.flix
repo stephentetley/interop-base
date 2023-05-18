@@ -135,7 +135,7 @@ mod Interop.Text.NumberFormat {
 
 
     pub def getAvailableLocales(): List[Locale] \ IO = region rc {
-        import static java.text.NumberFormat.getAvailableLocales(): Array[##java.util.Locale, rc] \ { Write(rc), IO } ;
+        import static java.text.NumberFormat.getAvailableLocales(): Array[##java.util.Locale, rc] \ {rc, IO } ;
         let _ = Array#{} @ rc;
         getAvailableLocales() |> Array.toList |> List.map(Locale)
     }

@@ -51,7 +51,7 @@ mod Interop.NIO.Channels.Pipe.SourceChannel {
 
 
 
-    pub def validOps(c: SourceChannel[r]): Int32 \ Read(r) =
+    pub def validOps(c: SourceChannel[r]): Int32 \ r =
         import java.nio.channels.Pipe$SourceChannel.validOps(): Int32 \ r;
         let SourceChannel(c1) = c;
         validOps(c1)

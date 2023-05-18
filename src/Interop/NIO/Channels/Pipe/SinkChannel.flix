@@ -51,7 +51,7 @@ mod Interop.NIO.Channels.Pipe.SinkChannel {
         SinkChannel(prim)
 
 
-    pub def validOps(c: SinkChannel[r]): Int32 \ Read(r) =
+    pub def validOps(c: SinkChannel[r]): Int32 \ r =
         import java.nio.channels.Pipe$SinkChannel.validOps(): Int32 \ r;
         let SinkChannel(c1) = c;
         validOps(c1)

@@ -69,49 +69,49 @@ mod Interop.IO.OutputStreamWriter {
     pub def wrapHH(_: Region[r], prim: ##java.io.OutputStreamWriter): OutputStreamWriter[r] =
         OutputStreamWriter(prim)
 
-    pub def newOutputStreamWriter(_: Region[r1], outs: OutputStream[r], cs: Charset): OutputStreamWriter[r1] \ { Read(r), Write(r1) } = 
+    pub def newOutputStreamWriter(_: Region[r1], outs: OutputStream[r], cs: Charset): OutputStreamWriter[r1] \ { r, r1 } = 
         import new java.io.OutputStreamWriter(##java.io.OutputStream, ##java.nio.charset.Charset): ##java.io.OutputStreamWriter \ {r, r1} as newOutputStreamWriter;
         let Charset(cs1) = cs;
         let outs1 = Interop.IO.OutputStream.getHH(outs);
         OutputStreamWriter(newOutputStreamWriter(outs1, cs1))
 
-    pub def flush!(w: OutputStreamWriter[r]): Result[String, Unit] \ Write(r) =
+    pub def flush!(w: OutputStreamWriter[r]): Result[String, Unit] \ r =
         Result.tryCatch(_ -> {
             import java.io.OutputStreamWriter.flush(): Unit \ r;
             let OutputStreamWriter(w1) = w;
             flush(w1)
         })
 
-    pub def close!(w: OutputStreamWriter[r]): Result[String, Unit] \ Write(r) =
+    pub def close!(w: OutputStreamWriter[r]): Result[String, Unit] \ r =
         Result.tryCatch(_ -> {
             import java.io.OutputStreamWriter.close(): Unit \ r;
             let OutputStreamWriter(w1) = w;
             close(w1)
         })
 
-    pub def getEncoding(w: OutputStreamWriter[r]): Option[String] \ Read(r) =
+    pub def getEncoding(w: OutputStreamWriter[r]): Option[String] \ r =
         import java.io.OutputStreamWriter.getEncoding(): String\ r;
         let OutputStreamWriter(w1) = w;
         getEncoding(w1) |> Object.toOption
 
-    pub def writeSubCharArray!(arr: Array[Char, r2], 
+    pub def writeSubCharArray!(arr: Array[Char, r1], 
                                 offset: {offset = Int32}, 
                                 len: {len = Int32}, 
-                                w: OutputStreamWriter[r]): Result[String, Unit] \ {Read(r2), Write(r)} =
+                                w: OutputStreamWriter[r]): Result[String, Unit] \ {r, r1} =
         Result.tryCatch(_ -> {
-            import java.io.OutputStreamWriter.write(Array[Char, r2], Int32, Int32): Unit \ {r, r2};
+            import java.io.OutputStreamWriter.write(Array[Char, r2], Int32, Int32): Unit \ {r, r1};
             let OutputStreamWriter(w1) = w;
             write(w1, arr, offset.offset, len.len)
         })
 
-    pub def writeCharacter!(i: Int32, w: OutputStreamWriter[r]): Result[String, Unit] \ Write(r) =
+    pub def writeCharacter!(i: Int32, w: OutputStreamWriter[r]): Result[String, Unit] \ r =
         Result.tryCatch(_ -> {
             import java.io.OutputStreamWriter.write(Int32): Unit \ r;
             let OutputStreamWriter(w1) = w;
             write(w1, i)
         })
 
-    pub def writeSubstring!(s: String, offset: {offset = Int32}, len: {len = Int32}, w: OutputStreamWriter[r]): Result[String, Unit] \ Write(r) =
+    pub def writeSubstring!(s: String, offset: {offset = Int32}, len: {len = Int32}, w: OutputStreamWriter[r]): Result[String, Unit] \ r =
         Result.tryCatch(_ -> {
             import java.io.OutputStreamWriter.write(String, Int32, Int32): Unit \ r;
             let OutputStreamWriter(w1) = w;

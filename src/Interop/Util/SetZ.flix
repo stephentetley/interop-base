@@ -72,29 +72,29 @@ mod Interop.Util.SetZ {
 
 
 
-    pub def of0(rc: Region[r]): SetZ[a, r] \ Write(r) with Marshal[a] =
+    pub def of0(rc: Region[r]): SetZ[a, r] \ r with Marshal[a] =
         import static java.util.Set.of(): ##java.util.Set \ r;
         SetZ(rc, of())
 
-    pub def of1(rc: Region[r], e1: a): SetZ[a, r] \ Write(r) with Marshal[a] =
+    pub def of1(rc: Region[r], e1: a): SetZ[a, r] \ r with Marshal[a] =
         import static java.util.Set.of(##java.lang.Object): ##java.util.Set \ r;
         let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
         SetZ(rc, of(eo1))
 
-    pub def of2(rc: Region[r], e1: a, e2: a): SetZ[a, r] \ Write(r) with Marshal[a] =
+    pub def of2(rc: Region[r], e1: a, e2: a): SetZ[a, r] \ r with Marshal[a] =
         import static java.util.Set.of(##java.lang.Object, ##java.lang.Object): ##java.util.Set \ r;
         let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
         let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
         SetZ(rc, of(eo1, eo2))
 
-    pub def of3(rc: Region[r], e1: a, e2: a, e3: a): SetZ[a, r] \ Write(r) with Marshal[a] =
+    pub def of3(rc: Region[r], e1: a, e2: a, e3: a): SetZ[a, r] \ r with Marshal[a] =
         import static java.util.Set.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Set \ r;
         let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
         let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
         let eo3 = Interop.Flix.Marshal.toJavaObject(e3);
         SetZ(rc, of(eo1, eo2, eo3))
 
-    pub def of4(rc: Region[r], e1: a, e2: a, e3: a, e4: a): SetZ[a, r] \ Write(r) with Marshal[a] =
+    pub def of4(rc: Region[r], e1: a, e2: a, e3: a, e4: a): SetZ[a, r] \ r with Marshal[a] =
         import static java.util.Set.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Set \ r;
         let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
         let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
@@ -102,7 +102,7 @@ mod Interop.Util.SetZ {
         let eo4 = Interop.Flix.Marshal.toJavaObject(e4);
         SetZ(rc, of(eo1, eo2, eo3, eo4))
 
-    pub def of5(rc: Region[r], e1: a, e2: a, e3: a, e4: a, e5: a): SetZ[a, r] \ Write(r) with Marshal[a] =
+    pub def of5(rc: Region[r], e1: a, e2: a, e3: a, e4: a, e5: a): SetZ[a, r] \ r with Marshal[a] =
         import static java.util.Set.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Set \ r;
         let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
         let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
@@ -112,29 +112,29 @@ mod Interop.Util.SetZ {
         SetZ(rc, of(eo1, eo2, eo3, eo4, eo5))
 
 
-    pub def equals(s1: SetZ[a, r], s2: SetZ[a, r]): Bool \ Read(r) =
+    pub def equals(s1: SetZ[a, r], s2: SetZ[a, r]): Bool \ r =
         import java.util.Set.equals(##java.lang.Object): Bool \ r; 
         let SetZ(_, ss1) = s1;
         let SetZ(_, ss2) = s2;
         equals(ss1, checked_cast(ss2))
 
 
-    pub def hashCode(s: SetZ[a, r]): Int32 \ Read(r) = 
+    pub def hashCode(s: SetZ[a, r]): Int32 \ r = 
         import java.util.Set.hashCode(): Int32 \ r;
         let SetZ(_, s1) = s;
         hashCode(s1)
 
-    pub def isEmpty(s: SetZ[a, r]): Bool \ Read(r) = 
+    pub def isEmpty(s: SetZ[a, r]): Bool \ r = 
         import java.util.Set.isEmpty(): Bool \ r;
         let SetZ(_, s1) = s;
         isEmpty(s1)
 
-    pub def size(s: SetZ[a, r]): Int32 \ Read(r) = 
+    pub def size(s: SetZ[a, r]): Int32 \ r = 
         import java.util.Set.size(): Int32 \ r;
         let SetZ(_, s1) = s;
         size(s1)
 
-    pub def add!(x: a, s: SetZ[a, r]): Result[String, Bool] \  Read(r) with Marshal[a] =
+    pub def add!(x: a, s: SetZ[a, r]): Result[String, Bool] \  r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Set.add(##java.lang.Object): Bool \ r; 
             let SetZ(_, s1) = s;
@@ -142,7 +142,7 @@ mod Interop.Util.SetZ {
             add(s1, x1)
         })
 
-    pub def addAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
+    pub def addAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Set.addAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;
@@ -150,7 +150,7 @@ mod Interop.Util.SetZ {
             addAll(s1, c1)
         })
 
-    pub def contains(x: a, s: SetZ[a, r]): Result[String, Bool] \  Read(r) with Marshal[a] =
+    pub def contains(x: a, s: SetZ[a, r]): Result[String, Bool] \  r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Set.contains(##java.lang.Object): Bool \ r; 
             let SetZ(_, s1) = s;
@@ -158,7 +158,7 @@ mod Interop.Util.SetZ {
             contains(s1, x1)
         })
 
-    pub def containsAll(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
+    pub def containsAll(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Set.containsAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;
@@ -166,14 +166,14 @@ mod Interop.Util.SetZ {
             containsAll(s1, c1)
         })
 
-    pub def clear!(s: SetZ[a, r]): Result[String, Unit] \ Read(r) = 
+    pub def clear!(s: SetZ[a, r]): Result[String, Unit] \ r = 
         Result.tryCatch(_ -> {
             import java.util.Set.clear(): Unit \ r;
             let SetZ(_, s1) = s;
             clear(s1)
         })
 
-    pub def remove!(x: a, s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
+    pub def remove!(x: a, s: SetZ[a, r]): Result[String, Bool] \  r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Set.remove(##java.lang.Object): Bool \ r; 
             let SetZ(_, s1) = s;
@@ -181,7 +181,7 @@ mod Interop.Util.SetZ {
             remove(s1, x1)
         })
 
-    pub def removeAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
+    pub def removeAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Set.removeAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;
@@ -191,7 +191,7 @@ mod Interop.Util.SetZ {
 
     
     pub def removeIf![a: Type, ef: Eff, r: Region]
-                        (f: a -> Bool \ ef, s: SetZ[a, r]): Result[String, Bool] \  {ef, Write(r)} with Marshal[a] =
+                        (f: a -> Bool \ ef, s: SetZ[a, r]): Result[String, Bool] \  {ef, r} with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Set.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let SetZ(_, s1) = s;
@@ -199,7 +199,7 @@ mod Interop.Util.SetZ {
             checked_ecast(removeIf(s1, f1))
         })
 
-    pub def retainAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  Write(r) with Marshal[a] =
+    pub def retainAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Set.retainAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;
@@ -217,7 +217,7 @@ mod Interop.Util.SetZ {
     }
 
 
-    pub def fromFoldableViaHashSet(rc: Region[r], t: t[a]): SetZ[a, r] \ { Write(r) } with Foldable[t], Marshal[a] =
+    pub def fromFoldableViaHashSet(rc: Region[r], t: t[a]): SetZ[a, r] \ { r } with Foldable[t], Marshal[a] =
         Interop.Util.HashSet.fromFoldable(rc, t) |> Interop.Util.ImpSetZ.toSetZ
 
     pub def fromFoldableViaHashSetHH(t: t[a]): ##java.util.Set with Foldable[t], Marshal[a] = region rc {
@@ -227,7 +227,7 @@ mod Interop.Util.SetZ {
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def iterator(rc: Region[r1], s: SetZ[a, r]): Iterator[a, r1, r1] \ { Read(r) } with Marshal[a] =
+    pub def iterator(rc: Region[r1], s: SetZ[a, r]): Iterator[a, r1, r1] \ { r } with Marshal[a] =
         toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, s)
 
 
@@ -236,19 +236,19 @@ mod Interop.Util.SetZ {
     ///
     pub def toFlixIterator(rc: Region[r1], 
                             ocast: ##java.lang.Object -> a, 
-                            s: SetZ[a, r]): Iterator[a, r1, r1] \ { Read(r) } =
-        import java.util.Set.iterator(): ##java.util.Iterator \ { Read(r) };
+                            s: SetZ[a, r]): Iterator[a, r1, r1] \ { r } =
+        import java.util.Set.iterator(): ##java.util.Iterator \ { r };
         let SetZ(_, s1) = s;
         if (Object.isNull(s1))
             Iterator.empty(rc)
         else 
             iterator(s1) |> Interop.Util.IteratorZ.primIteratorToFlixIterator(rc, ocast)
 
-    pub def toFlixSet(s: SetZ[a, r]): Set[a] \ { Read(r) } with Order[a], Marshal[a] = region rc {
+    pub def toFlixSet(s: SetZ[a, r]): Set[a] \ { r } with Order[a], Marshal[a] = region rc {
         toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, s) |> Iterator.toSet
     }
 
-    pub def toFlixList(s: SetZ[a, r]): List[a] \ { Read(r) } with Marshal[a] = region rc {
+    pub def toFlixList(s: SetZ[a, r]): List[a] \ { r } with Marshal[a] = region rc {
         toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, s) |> Iterator.toList
     }
 

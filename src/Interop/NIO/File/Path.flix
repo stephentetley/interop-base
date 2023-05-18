@@ -196,7 +196,7 @@ mod Interop.NIO.File.Path {
             getName(path1, ix) |> Path
         })
 
-    pub def toFile(_: Region[r], path: Path): Result[String, File[r]] \ Write(r) =
+    pub def toFile(_: Region[r], path: Path): Result[String, File[r]] \ r =
         Result.tryCatch(_ -> {
             import java.nio.file.Path.toFile(): ##java.io.File \ r;
             let Path(path1) = path;

@@ -54,13 +54,13 @@ mod Interop.IO.BufferedReader {
         BufferedReader(prim)
 
 
-    pub def newWithReader(_: Region[r1], rd: Reader[r]): BufferedReader[r1] \ { Read(r), Write(r1) } =  
+    pub def newWithReader(_: Region[r1], rd: Reader[r]): BufferedReader[r1] \ { r, r1 } =  
         import new java.io.BufferedReader(##java.io.Reader): ##java.io.BufferedReader \ {r, r1} as newBufferedReader;
         let rd1 = Interop.IO.Reader.getHH(rd); 
         BufferedReader(newBufferedReader(rd1))
 
 
-    pub def newWithSize(_: Region[r1], rd: Reader[r], size: Int32): BufferedReader[r1] \ { Read(r), Write(r1) } = 
+    pub def newWithSize(_: Region[r1], rd: Reader[r], size: Int32): BufferedReader[r1] \ { r, r1 } = 
         import new java.io.BufferedReader(##java.io.Reader, Int32): ##java.io.BufferedReader \ {r, r1} as newBufferedReader;
         let rd1 = Interop.IO.Reader.getHH(rd);
         BufferedReader(newBufferedReader(rd1, size))
@@ -68,7 +68,7 @@ mod Interop.IO.BufferedReader {
     // read
 
     /// None indicates end-of-stream.
-    pub def read!(rd: BufferedReader[r]): Result[String, Option[Int32]] \ Read(r) = 
+    pub def read!(rd: BufferedReader[r]): Result[String, Option[Int32]] \ r = 
         Result.tryCatch(_ -> {
             import java.io.BufferedReader.read(): Int32 \ r;
             let BufferedReader(rd1) = rd;
@@ -82,7 +82,7 @@ mod Interop.IO.BufferedReader {
     pub def readSubArray!(buf: Array[Char, r2], 
                             offset: {offset = Int32}, 
                             len: {len = Int32}, 
-                            rd: BufferedReader[r]): Result[String, Int32] \ { Write(r2), Read(r) } = 
+                            rd: BufferedReader[r]): Result[String, Int32] \ { r, r2 } = 
         Result.tryCatch(_ -> {
             import java.io.BufferedReader.read(Array[Char, r2], Int32, Int32): Int32 \ {r, r2};
             let BufferedReader(rd1) = rd;
@@ -90,41 +90,41 @@ mod Interop.IO.BufferedReader {
         })
 
     
-    pub def readLine!(rd: BufferedReader[r]): Result[String, String] \ Read(r) = 
+    pub def readLine!(rd: BufferedReader[r]): Result[String, String] \ r = 
         Result.tryCatch(_ -> {
             import java.io.BufferedReader.readLine(): String \ r;
             let BufferedReader(rd1) = rd;
             readLine(rd1)
         })
 
-    pub def ready(rd: BufferedReader[r]): Result[String, Bool] \ Read(r) = 
+    pub def ready(rd: BufferedReader[r]): Result[String, Bool] \ r = 
         Result.tryCatch(_ -> {
             import java.io.BufferedReader.ready(): Bool \ r;
             let BufferedReader(rd1) = rd;
             ready(rd1)
         })
 
-    pub def markSupported(rd: BufferedReader[r]): Bool \ Read(r) = 
+    pub def markSupported(rd: BufferedReader[r]): Bool \ r = 
         import java.io.BufferedReader.markSupported(): Bool \ r;
         let BufferedReader(rd1) = rd;
         markSupported(rd1)
 
 
-    pub def mark!(readAheadLimit: Int32, rd: BufferedReader[r]): Result[String, Unit] \ Write(r) = 
+    pub def mark!(readAheadLimit: Int32, rd: BufferedReader[r]): Result[String, Unit] \ r = 
         Result.tryCatch(_ -> {
             import java.io.BufferedReader.mark(Int32): Unit \ r;
             let BufferedReader(rd1) = rd;
             mark(rd1, readAheadLimit)
         })
 
-    pub def reset!(rd: BufferedReader[r]): Result[String, Unit] \ Write(r) = 
+    pub def reset!(rd: BufferedReader[r]): Result[String, Unit] \ r = 
         Result.tryCatch(_ -> {
             import java.io.BufferedReader.reset(): Unit \ r;
             let BufferedReader(rd1) = rd;
             reset(rd1)
         })
 
-    pub def close!(rd: BufferedReader[r]): Result[String, Unit] \ Write(r) = 
+    pub def close!(rd: BufferedReader[r]): Result[String, Unit] \ r = 
         Result.tryCatch(_ -> {
             import java.io.BufferedReader.close(): Unit \ r;
             let BufferedReader(rd1) = rd;

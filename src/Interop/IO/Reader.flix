@@ -48,14 +48,14 @@ mod Interop.IO.Reader {
         Reader(prim)
 
 
-    pub def close!(rd: Reader[r]): Result[String, Unit] \ Write(r) =
+    pub def close!(rd: Reader[r]): Result[String, Unit] \ r =
         Result.tryCatch(_ -> {
             import java.io.Reader.close(): Unit \ r;
             let Reader(rd1) = rd;
             close(rd1)
         })
     
-    pub def mark!(limit: Int32, rd: Reader[r]): Result[String, Unit] \ Write(r) =
+    pub def mark!(limit: Int32, rd: Reader[r]): Result[String, Unit] \ r =
         Result.tryCatch(_ -> {
             import java.io.Reader.mark(Int32): Unit \ r;
             let Reader(rd1) = rd;
@@ -65,50 +65,50 @@ mod Interop.IO.Reader {
     // Dont'provide `markSupported` should be overwritten by subclasses
     
     // read (into-array)
-    pub def readArray(buf: Array[Char, r2], rd: Reader[r]): Result[String, Int32] \ { Write(r2), Read(r) } = 
+    pub def readArray(buf: Array[Char, r1], rd: Reader[r]): Result[String, Int32] \ {r, r1} = 
         Result.tryCatch(_ -> {
-            import java.io.Reader.read(Array[Char, r2]): Int32 \ {r, r2};
+            import java.io.Reader.read(Array[Char, r2]): Int32 \ {r, r1};
             let Reader(rd1) = rd;
             read(rd1, buf)
         })
 
     // read (into-array)
-    pub def readSubArray(buf: Array[Char, r2], 
+    pub def readSubArray(buf: Array[Char, r1], 
                             offset: {offset = Int32}, 
                             len: {len = Int32}, 
-                            rd: Reader[r]): Result[String, Int32] \ { Write(r2), Read(r) } = 
+                            rd: Reader[r]): Result[String, Int32] \ {r, r1} = 
         Result.tryCatch(_ -> {
-            import java.io.Reader.read(Array[Char, r2], Int32, Int32): Int32 \ {r, r2};
+            import java.io.Reader.read(Array[Char, r2], Int32, Int32): Int32 \ {r, r1};
             let Reader(rd1) = rd;
             read(rd1, buf, offset.offset, len.len)
         })
 
     // read into CharBuffer
-    pub def readCharBuffer(buf: CharBuffer[r2], rd: Reader[r]): Result[String, Int32] \ { Write(r2), Read(r) } = 
+    pub def readCharBuffer(buf: CharBuffer[r1], rd: Reader[r]): Result[String, Int32] \ {r, r1} = 
         Result.tryCatch(_ -> {
-            import java.io.Reader.read(##java.nio.CharBuffer): Int32 \ {r, r2};
+            import java.io.Reader.read(##java.nio.CharBuffer): Int32 \ {r, r1};
             let Reader(rd1) = rd;
             let buf1 = Interop.NIO.CharBuffer.getHH(buf);
             read(rd1, buf1)
         })
 
-    pub def reset!(rd: Reader[r]): Result[String, Unit] \ Write(r) =
+    pub def reset!(rd: Reader[r]): Result[String, Unit] \ r =
         Result.tryCatch(_ -> {
             import java.io.Reader.reset(): Unit \ r;
             let Reader(rd1) = rd;
             reset(rd1)
         })
 
-    pub def skip!(n: Int64, rd: Reader[r]): Result[String, Int64] \ Read(r) =
+    pub def skip!(n: Int64, rd: Reader[r]): Result[String, Int64] \ r =
         Result.tryCatch(_ -> {
             import java.io.Reader.skip(Int64): Int64 \ r;
             let Reader(rd1) = rd;
             skip(rd1, n)
         })
 
-    pub def transferTo!(outw: Writer[r2], rd: Reader[r]): Result[String, Int64] \ {Read(r), Write(r2)} =
+    pub def transferTo!(outw: Writer[r1], rd: Reader[r]): Result[String, Int64] \ {r, r1} =
         Result.tryCatch(_ -> {
-            import java.io.Reader.transferTo(##java.io.Writer): Int64 \ {r, r2};
+            import java.io.Reader.transferTo(##java.io.Writer): Int64 \ {r, r1};
             let Reader(rd1) = rd;
             let outw1 = Interop.IO.Writer.getHH(outw);
             transferTo(rd1, outw1)

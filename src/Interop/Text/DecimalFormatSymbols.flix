@@ -120,19 +120,19 @@ mod Interop.Text.DecimalFormatSymbols {
 
     /// This marshals okay...
     pub def getAvailableLocales(): List[Locale] \ IO = region rc {
-        import static java.text.DecimalFormatSymbols.getAvailableLocales(): Array[##java.util.Locale, rc] \ { Write(rc), IO } ;
+        import static java.text.DecimalFormatSymbols.getAvailableLocales(): Array[##java.util.Locale, rc] \ {IO, rc} ;
         let _ = Array#{} @ rc;
         let xs = getAvailableLocales() |> Array.toList;
         List.map(Locale, xs)
     }
 
 
-    pub def getInstance(rc: Region[r], fs: Setter[DecimalFormatSymbols, r]): Result[String, DecimalFormatSymbols] \ {IO, Write(r)} = 
+    pub def getInstance(rc: Region[r], fs: Setter[DecimalFormatSymbols, r]): Result[String, DecimalFormatSymbols] \ {IO, r} = 
         import static java.text.DecimalFormatSymbols.getInstance(): ##java.text.DecimalFormatSymbols \ IO;
         DecimalFormatSymbols(getInstance()) |> Interop.Flix.Setter.apply(rc, fs)
 
 
-    pub def getInstanceWithLocale(rc: Region[r], loc: Locale, fs: Setter[DecimalFormatSymbols, r]): Result[String, DecimalFormatSymbols] \ {IO, Write(r)} = 
+    pub def getInstanceWithLocale(rc: Region[r], loc: Locale, fs: Setter[DecimalFormatSymbols, r]): Result[String, DecimalFormatSymbols] \ {IO, r} = 
         import static java.text.DecimalFormatSymbols.getInstance(##java.util.Locale): ##java.text.DecimalFormatSymbols \ {IO, r};
         let Locale(loc1) = loc;
         DecimalFormatSymbols(getInstance(loc1))  |> Interop.Flix.Setter.apply(rc, fs)

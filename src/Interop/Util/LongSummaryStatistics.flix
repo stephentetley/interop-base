@@ -39,12 +39,12 @@ mod Interop.Util.LongSummaryStatistics {
     pub def wrapHH(_: Region[r], prim: ##java.util.LongSummaryStatistics): LongSummaryStatistics[r] = 
         LongSummaryStatistics(prim)
 
-    pub def toString(ss: LongSummaryStatistics[r]): String \ { Read(r) } =
+    pub def toString(ss: LongSummaryStatistics[r]): String \ { r } =
         import java.util.LongSummaryStatistics.toString(): String \ r;
         let LongSummaryStatistics(ss1) = ss;
         ss1 |> toString
 
-    pub def combine!(i: LongSummaryStatistics[r], j: LongSummaryStatistics[r]): Result[String, Unit] \ { Read(r), Write(r) } =
+    pub def combine!(i: LongSummaryStatistics[r], j: LongSummaryStatistics[r]): Result[String, Unit] \ r = 
         Result.tryCatch(_ -> {
             import java.util.LongSummaryStatistics.combine(##java.util.LongSummaryStatistics): Unit \ r;
             let LongSummaryStatistics(i1) = i;
@@ -52,27 +52,27 @@ mod Interop.Util.LongSummaryStatistics {
             combine(i1, j1)
         })
 
-    pub def getCount(ss: LongSummaryStatistics[r]): Int64 \ { Read(r) } =
+    pub def getCount(ss: LongSummaryStatistics[r]): Int64 \ { r } =
         import java.util.LongSummaryStatistics.getCount(): Int64 \ r;
         let LongSummaryStatistics(ss1) = ss;
         ss1 |> getCount
     
-    pub def getSum(ss: LongSummaryStatistics[r]): Int64 \ { Read(r) } =
+    pub def getSum(ss: LongSummaryStatistics[r]): Int64 \ { r } =
         import java.util.LongSummaryStatistics.getSum(): Int64 \ r;
         let LongSummaryStatistics(ss1) = ss;
         ss1 |> getSum    
 
-    pub def getMin(ss: LongSummaryStatistics[r]): Int64 \ { Read(r) } =
+    pub def getMin(ss: LongSummaryStatistics[r]): Int64 \ { r } =
         import java.util.LongSummaryStatistics.getMin(): Int64 \ r;
         let LongSummaryStatistics(ss1) = ss;
         ss1 |> getMin
 
-    pub def getMax(ss: LongSummaryStatistics[r]): Int64 \ { Read(r) } =
+    pub def getMax(ss: LongSummaryStatistics[r]): Int64 \ r = 
         import java.util.LongSummaryStatistics.getMax(): Int64 \ r;
         let LongSummaryStatistics(ss1) = ss;
         ss1 |> getMax
 
-    pub def getAverage(ss: LongSummaryStatistics[r]): Float64 \ { Read(r) } =
+    pub def getAverage(ss: LongSummaryStatistics[r]): Float64 \ { r } =
         import java.util.LongSummaryStatistics.getAverage(): Float64 \ r;
         let LongSummaryStatistics(ss1) = ss;
         ss1 |> getAverage

@@ -18,7 +18,7 @@ mod Interop.Flix {
 
 
     /// A `Builder` with error reporting.
-    pub enum Builder[t: Type, r: Region](t -> Result[String, t] \ Write(r))
+    pub enum Builder[t: Type, r: Region](t -> Result[String, t] \ r)
 
 }
 
@@ -28,12 +28,12 @@ mod Interop.Flix.Builder {
     use Interop.Flix.Builder.Builder
 
 
-    pub def apply[r: Region, t:Type](_: Region[r], f: Builder[t, r], o: t): Result[String, t] \ Write(r) = 
+    pub def apply[r: Region, t:Type](_: Region[r], f: Builder[t, r], o: t): Result[String, t] \ r = 
         let Builder(f1) = f;
         f1(o)
 
     /// 
-    pub def lift(f: t -> t \ Write(r)): Builder[t, r] =
+    pub def lift(f: t -> t \ r): Builder[t, r] =
         Builder(o -> 
             Result.tryCatch(_ -> f(o))
         )

@@ -46,13 +46,13 @@ mod Interop.Util.IteratorZ {
     pub def iterator(rc: Region[r1], iter: IteratorZ[a, ef, r]): Iterator[a, ef + r + r1, r1] with Marshal[a]  =
         toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, iter)
 
-    pub def enumerator(rc: Region[r1], iter: IteratorZ[a, ef, r]): Iterator[(Int32, a), ef + r + r1, r1] \ Write(r1) with Marshal[a] =
+    pub def enumerator(rc: Region[r1], iter: IteratorZ[a, ef, r]): Iterator[(Int32, a), ef + r + r1, r1] \ r1 with Marshal[a] =
         toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, iter) |> Iterator.enumerator        
 
     /// Cast must be Pure!
     pub def toFlixIterator(rc: Region[r1], ocast: ##java.lang.Object -> a, iter: IteratorZ[a, ef, r]): Iterator[a, ef + r + r1, r1] =
-        import java.util.Iterator.hasNext(): Bool \ Read(r);
-        import java.util.Iterator.next(): ##java.lang.Object \ { ef, Write(r) }; // "destructive read" == write
+        import java.util.Iterator.hasNext(): Bool \ r;
+        import java.util.Iterator.next(): ##java.lang.Object \ { ef, r }; // "destructive read" == write
         let IteratorZ(_, iter1) = iter;
         let step = () -> { 
             match hasNext(iter1) {
@@ -73,19 +73,19 @@ mod Interop.Util.IteratorZ {
     ///
     /// Apply the effectful function `f` to all the elements in the array `a`.
     ///
-    pub def forEach(f: a -> Unit \ ef1, iter: IteratorZ[a, ef, r]): Unit \ { ef, ef1, Read(r) } with Marshal[a] = region r {
+    pub def forEach(f: a -> Unit \ ef1, iter: IteratorZ[a, ef, r]): Unit \ { ef, ef1, r } with Marshal[a] = region r {
         iterator(r, iter) |> Iterator.forEach(f)
     }
 
-    pub def toList(iter: IteratorZ[a, ef, r]): List[a] \ { ef, Read(r) } with Marshal[a] = region r {
+    pub def toList(iter: IteratorZ[a, ef, r]): List[a] \ { ef, r } with Marshal[a] = region r {
         iterator(r, iter) |> Iterator.toList
     }
 
-    pub def toNel(iter: IteratorZ[a, ef, r]): Option[Nel[a]] \ { ef, Read(r) } with Marshal[a] = region r {
+    pub def toNel(iter: IteratorZ[a, ef, r]): Option[Nel[a]] \ { ef, r } with Marshal[a] = region r {
         iterator(r, iter) |> Iterator.toNel
     }
 
-    pub def toMapWith(f: a -> (k, v) \ ef1, iter: IteratorZ[a, ef, r]): Map[k, v] \ { Read(r), ef, ef1 } with Order[k], Marshal[a] = region r {
+    pub def toMapWith(f: a -> (k, v) \ ef1, iter: IteratorZ[a, ef, r]): Map[k, v] \ { ref1 } with Order[k], Marshal[a] = region r {
         iterator(r, iter) |> Iterator.foldLeft((acc, a) -> let (k,v) = f(a); Map.insert(k, v, acc), Map.empty())
     }
 

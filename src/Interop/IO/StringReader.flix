@@ -54,12 +54,12 @@ mod Interop.IO.StringReader {
     pub def wrapHH(_: Region[r], prim: ##java.io.StringReader): StringReader[r] =
         StringReader(prim)
 
-    pub def newStringReader(_: Region[r], s: String): StringReader[r] \ Write(r) =
+    pub def newStringReader(_: Region[r], s: String): StringReader[r] \ r =
         import new java.io.StringReader(String): ##java.io.StringReader \ r as newStringReader;
         StringReader(newStringReader(s))
 
 
-    pub def close!(rd: StringReader[r]): Result[String, Unit] \ Write(r) = 
+    pub def close!(rd: StringReader[r]): Result[String, Unit] \ r = 
         Result.tryCatch(_ -> {
             import java.io.StringReader.close(): Unit \ r;
             let StringReader(rd1) = rd;
@@ -67,14 +67,14 @@ mod Interop.IO.StringReader {
         })
 
 
-    pub def mark!(limit: Int32, rd: StringReader[r]): Result[String, Unit] \ Write(r) = 
+    pub def mark!(limit: Int32, rd: StringReader[r]): Result[String, Unit] \ r = 
         Result.tryCatch(_ -> {
             import java.io.StringReader.mark(Int32): Unit \ r;
             let StringReader(rd1) = rd;
             mark(rd1, limit)
         })
 
-    pub def markSupported(rd: StringReader[r]): Bool \ Read(r) = 
+    pub def markSupported(rd: StringReader[r]): Bool \ r = 
         import java.io.StringReader.markSupported(): Bool \ r;
         let StringReader(rd1) = rd;
         markSupported(rd1)
@@ -82,7 +82,7 @@ mod Interop.IO.StringReader {
 
 
     /// None indicates end-of-stream.
-    pub def read!(rd: StringReader[r]): Result[String, Option[Int32]] \ Read(r) = 
+    pub def read!(rd: StringReader[r]): Result[String, Option[Int32]] \ r = 
         Result.tryCatch(_ -> {
             import java.io.StringReader.read(): Int32 \ r;
             let StringReader(rd1) = rd;

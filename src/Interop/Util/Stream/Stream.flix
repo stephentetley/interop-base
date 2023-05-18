@@ -50,7 +50,7 @@ mod Interop.Util.Stream.Stream {
         import static java.util.stream.Stream.empty(): ##java.util.stream.Stream \ {};
         Stream(rc, checked_ecast(empty()))
 
-    pub def builder(rc: Region[r]): Builder[a, r] \ Write(r) = 
+    pub def builder(rc: Region[r]): Builder[a, r] \ r = 
         import static java.util.stream.Stream.builder(): ##java.util.stream.Stream$Builder \ r;
         Builder(rc, builder())
 
@@ -82,8 +82,8 @@ mod Interop.Util.Stream.Stream {
 
     pub def iteratorWith(rc: Region[r1], ocast: ##java.lang.Object -> a, s: Stream[a, ef, r]): Iterator[a, ef + r + r1, r1] with Marshal[a] =
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ {} as mkIterator;
-        import java.util.Iterator.hasNext(): Bool \ Read(r);
-        import java.util.Iterator.next(): ##java.lang.Object \ Read(r);
+        import java.util.Iterator.hasNext(): Bool \ r;
+        import java.util.Iterator.next(): ##java.lang.Object \ r;
         let Stream(_, s1) = s;
         let iter1 = mkIterator(unchecked_cast(s1 as ##java.util.stream.BaseStream));
         let step = () -> checked_ecast(match hasNext(iter1) {
@@ -98,7 +98,7 @@ mod Interop.Util.Stream.Stream {
         let Stream(rc, s1) = s;
         Stream(rc, distinct(s1))
 
-    pub def count(s: Stream[a, ef, r]): Int64 \ {ef, Write(r)} = 
+    pub def count(s: Stream[a, ef, r]): Int64 \ {ef, r} = 
         import java.util.stream.Stream.count(): Int64 \ {ef, r};
         let Stream(_, s1) = s;
         count(s1)
@@ -140,56 +140,56 @@ mod Interop.Util.Stream.Stream {
         Stream(rc, checked_ecast(flatMap(s1, f1)))
 
     pub def forEach[a: Type, ef: Eff, ef1: Region, r: Region]
-                    (f: a -> Unit \ ef1, s: Stream[a, ef, r]): Unit \ {ef, ef1, Read(r)} with Marshal[a] = 
+                    (f: a -> Unit \ ef1, s: Stream[a, ef, r]): Unit \ {ef, ef1, r} with Marshal[a] = 
         import java.util.stream.Stream.forEach(##java.util.function.Consumer): Unit \ {ef, ef1, r};
         let ConsumerZ(f1) = Interop.Util.Function.ConsumerZ.makeConsumerZ(f);
         let Stream(_, s1) = s;
         forEach(s1, f1)
 
-    pub def toArray(_: Region[r1], s: Stream[a, ef, r]): Array[a, r1] \ { ef, Read(r), Write(r1) } =  
+    pub def toArray(_: Region[r1], s: Stream[a, ef, r]): Array[a, r1] \ { ef, r, r1} =  
         import java.util.stream.Stream.toArray(): Array[a, r1] \ {};
         let Stream(_, s1) = s;
         checked_ecast(toArray(s1))
 
     pub def anyMatch[a: Type, ef: Eff, ef1: Eff, r: Region]
-                    (f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, Read(r)} with Marshal[a] = 
+                    (f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, r} with Marshal[a] = 
         import java.util.stream.Stream.anyMatch(##java.util.function.Predicate): Bool \ {r, ef, ef1};
         let Stream(_, s1) = s;
         let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
         anyMatch(s1, f1)
 
     pub def allMatch[a: Type, ef: Eff, ef1: Eff, r: Region]
-                    (f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, Read(r)} with Marshal[a] = 
+                    (f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, r} with Marshal[a] = 
         import java.util.stream.Stream.allMatch(##java.util.function.Predicate): Bool \ {r, ef, ef1};
         let Stream(_, s1) = s;
         let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
         allMatch(s1, f1)
 
     pub def noneMatch[a: Type, ef: Eff, ef1: Eff, r: Region]
-                        (f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, Read(r)} with Marshal[a] = 
+                        (f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, r} with Marshal[a] = 
         import java.util.stream.Stream.noneMatch(##java.util.function.Predicate): Bool \ {r, ef, ef1};
         let Stream(_, s1) = s;
         let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
         noneMatch(s1, f1)
 
 
-    pub def findFirst(s: Stream[a, ef, r]): Option[a] \ {ef, Read(r)} with Marshal[a] = 
+    pub def findFirst(s: Stream[a, ef, r]): Option[a] \ {ef, r} with Marshal[a] = 
         import java.util.stream.Stream.findFirst(): ##java.util.Optional \ {ef, r};
         let Stream(_, s1) = s;
         findFirst(s1) |> Interop.Util.Optional.hhToOption(Interop.Flix.Marshal.fromJavaObject)
 
-    pub def findAny(s: Stream[a, ef, r]): Option[a] \ {ef, Read(r)} with Marshal[a] = 
+    pub def findAny(s: Stream[a, ef, r]): Option[a] \ {ef, r} with Marshal[a] = 
         import java.util.stream.Stream.findAny(): ##java.util.Optional \ {ef, r};
         let Stream(_, s1) = s;
         findAny(s1) |> Interop.Util.Optional.hhToOption(Interop.Flix.Marshal.fromJavaObject)
 
 
-    pub def collect(c: Collector[t, a, ans], s: Stream[a, ef, r]): ans \ {ef, Read(r)} with Marshal[ans] = 
+    pub def collect(c: Collector[t, a, ans], s: Stream[a, ef, r]): ans \ {ef, r} with Marshal[ans] = 
         import java.util.stream.Stream.collect(##java.util.stream.Collector): ##java.lang.Object \ {ef, r};
         let Stream(_, s1) = s;
         collect(s1, c) |> Interop.Flix.Marshal.fromJavaObject
 
-    pub def collectWith(c: Collector[t, a, ans], s: Stream[a, ef, r], ocast: ##java.lang.Object -> ans): ans \ {ef, Read(r)} = 
+    pub def collectWith(c: Collector[t, a, ans], s: Stream[a, ef, r], ocast: ##java.lang.Object -> ans): ans \ {ef, r} = 
         import java.util.stream.Stream.collect(##java.util.stream.Collector): ##java.lang.Object \ {ef, r};
         let Stream(_, s1) = s;
         collect(s1, c) |> ocast

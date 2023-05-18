@@ -64,28 +64,28 @@ mod Interop.Util.SortedMap {
         SortedMap(rc, prim)
         
 
-    pub def equals(m1: SortedMap[k, v, r], m2: SortedMap[k, v, r]): Bool \ Read(r) =
+    pub def equals(m1: SortedMap[k, v, r], m2: SortedMap[k, v, r]): Bool \ r =
         import java.util.SortedMap.equals(##java.lang.Object): Bool \ r; 
         let SortedMap(_, mm1) = m1;
         let SortedMap(_, mm2) = m2;
         equals(mm1, checked_cast(mm2))
 
-    pub def size(m: SortedMap[k, v, r]): Int32 \ Read(r) =
+    pub def size(m: SortedMap[k, v, r]): Int32 \ r =
         import java.util.SortedMap.size(): Int32 \ r;
         let SortedMap(_, m1) = m;
         size(m1)
 
-    pub def isEmpty(m: SortedMap[k, v, r]): Bool \ Read(r) =
+    pub def isEmpty(m: SortedMap[k, v, r]): Bool \ r =
         import java.util.SortedMap.isEmpty(): Bool \ r;
         let SortedMap(_, m1) = m;
         isEmpty(m1)
 
-    pub def hashCode(m: SortedMap[k, v, r]): Int32 \ Read(r) =
+    pub def hashCode(m: SortedMap[k, v, r]): Int32 \ r =
         import java.util.SortedMap.hashCode(): Int32 \ r;
         let SortedMap(_, m1) = m;
         hashCode(m1)
 
-    pub def get(k: k, m: SortedMap[k, v, r]): Result[String, Option[v]] \ Write(r) with Marshal[k], Marshal[v] =
+    pub def get(k: k, m: SortedMap[k, v, r]): Result[String, Option[v]] \ r with Marshal[k], Marshal[v] =
         Result.tryCatch(_ -> {
             import java.util.SortedMap.get(##java.lang.Object): ##java.lang.Object \ r; 
             let SortedMap(_, m1) = m;
@@ -93,7 +93,7 @@ mod Interop.Util.SortedMap {
             get(m1, k1) |> Object.toOption |> Option.map(Interop.Flix.Marshal.fromJavaObject)
         })
 
-    pub def put!(k: k, v: v, m: SortedMap[k, v, r]): v \ Write(r) with Marshal[k], Marshal[v] =
+    pub def put!(k: k, v: v, m: SortedMap[k, v, r]): v \ r with Marshal[k], Marshal[v] =
         import java.util.SortedMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
         let SortedMap(_, m1) = m;
         let k1 = Interop.Flix.Marshal.toJavaObject(k);
@@ -101,15 +101,15 @@ mod Interop.Util.SortedMap {
         put(m1, k1, v1) |> Interop.Flix.Marshal.fromJavaObject
 
     /// Can't guarantee `Ord[k]` at this point...
-    pub def entrySet(rc: Region[r1], m: SortedMap[k, v, r]): SetZ[MapEntry[k, v, r1], r1] \ { Read(r), Write(r1) } = 
-        import java.util.SortedMap.entrySet(): ##java.util.Set \ { Read(r), Write(r1) };
+    pub def entrySet(rc: Region[r1], m: SortedMap[k, v, r]): SetZ[MapEntry[k, v, r1], r1] \ { r, r1 } = 
+        import java.util.SortedMap.entrySet(): ##java.util.Set \ { r, r1 };
         let SortedMap(_, m1) = m;
         let sz = entrySet(m1);
         SetZ(rc, sz)
 
 
-    pub def values(rc: Region[r1], m: SortedMap[k, v, r]): Collection[k, r1] \ { Read(r), Write(r1) } = 
-        import java.util.SortedMap.values(): ##java.util.Collection \ { Read(r), Write(r1) };
+    pub def values(rc: Region[r1], m: SortedMap[k, v, r]): Collection[k, r1] \ { r, r1 } = 
+        import java.util.SortedMap.values(): ##java.util.Collection \ { r, r1 };
         let SortedMap(_, m1) = m;
         Collection(rc, values(m1))
 
@@ -146,7 +146,7 @@ mod Interop.Util.SortedMap {
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     ///
-    pub def iterator(rc: Region[r1], m: SortedMap[k, v, r]): Iterator[(k, v), r1, r1] \ { Read(r) } with Marshal[k], Marshal[v] =
+    pub def iterator(rc: Region[r1], m: SortedMap[k, v, r]): Iterator[(k, v), r1, r1] \ { r } with Marshal[k], Marshal[v] =
         toIterator(rc, Interop.Flix.Marshal.fromJavaObject, Interop.Flix.Marshal.fromJavaObject, m)
 
     ///
@@ -156,7 +156,7 @@ mod Interop.Util.SortedMap {
     pub def toIterator(rc: Region[r1],
                         kcast: ##java.lang.Object -> k, 
                         vcast: ##java.lang.Object -> v,  
-                        m: SortedMap[k, v, r]): Iterator[(k, v), r1, r1] \ { Read(r) } =
+                        m: SortedMap[k, v, r]): Iterator[(k, v), r1, r1] \ { r } =
         import java.util.SortedMap.entrySet(): ##java.util.Set \ r;
         import java.util.Set.iterator(): ##java.util.Iterator \ r;
         import java.util.Iterator.hasNext(): Bool \ r1;
@@ -174,7 +174,7 @@ mod Interop.Util.SortedMap {
 
     
     
-    pub def toFlixMap(m: SortedMap[k, v, r]): Map[k, v] \ { Read(r) } with Order[k], Marshal[k], Marshal[v] = region r {
+    pub def toFlixMap(m: SortedMap[k, v, r]): Map[k, v] \ { r } with Order[k], Marshal[k], Marshal[v] = region r {
         let step = (acc, entry) -> {
             let (k, v) = entry;
             Map.insert(k, v, acc)
@@ -182,7 +182,7 @@ mod Interop.Util.SortedMap {
         iterator(r, m) |> Iterator.foldLeft(step, Map.empty())
     }
 
-    pub def toFlixList(m: SortedMap[k, v, r]): List[(k, v)] \ { Read(r) } with Marshal[k], Marshal[v] = region r {
+    pub def toFlixList(m: SortedMap[k, v, r]): List[(k, v)] \ { r } with Marshal[k], Marshal[v] = region r {
         iterator(r, m) |> Iterator.toList
     }
 

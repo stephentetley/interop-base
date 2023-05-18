@@ -360,14 +360,14 @@ mod Interop.Util.Locale {
 
     /// This marshals okay...
     pub def getAvailableLocales(): List[Locale] \ IO = region rc {
-        import static java.util.Locale.getAvailableLocales(): Array[##java.util.Locale, rc] \ { Write(rc), IO } ;
+        import static java.util.Locale.getAvailableLocales(): Array[##java.util.Locale, rc] \ { rc, IO } ;
         let _ = Array#{} @ rc;
         let xs = getAvailableLocales() |> Array.toList;
         List.map(Locale, xs)
     }
 
     pub def getIsoCountries(): List[String] = region rc {
-        import static java.util.Locale.getISOCountries(): Array[String, rc] \ Write(rc);
+        import static java.util.Locale.getISOCountries(): Array[String, rc] \ rc;
         let _ = Array#{} @ rc;
         getISOCountries() |> Array.toList
     }
@@ -383,7 +383,7 @@ mod Interop.Util.Locale {
     pub def getIsoLanguages(): Result[String, List[String]] =
         Result.tryCatch(_ -> {
             region rc {
-                import static java.util.Locale.getISOLanguages(): Array[String, rc] \ Write(rc);
+                import static java.util.Locale.getISOLanguages(): Array[String, rc] \ rc;
                 let _ = Array#{} @ rc;            
                 getISOLanguages() |> Array.toList
             }

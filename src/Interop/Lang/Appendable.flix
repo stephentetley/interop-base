@@ -60,16 +60,16 @@ mod Interop.Lang.Appendable {
         Appendable(prim)
 
 
-    pub def appendChar!(c: Char, ap: Appendable[r]): Result[String, Appendable[r]] \ Write(r) = 
+    pub def appendChar!(c: Char, ap: Appendable[r]): Result[String, Appendable[r]] \ r = 
         Result.tryCatch(_ -> {
-            import java.lang.Appendable.append(Char): ##java.lang.Appendable \ Write(r);
+            import java.lang.Appendable.append(Char): ##java.lang.Appendable \ r;
             let Appendable(ap1) = ap;
             Appendable(append(ap1, c))
         })
 
-    pub def appendCharSequence!(cs: CharSequence[r1], ap: Appendable[r]): Result[String, Appendable[r]] \ { Read(r1), Write(r) } = 
+    pub def appendCharSequence!(cs: CharSequence[r1], ap: Appendable[r]): Result[String, Appendable[r]] \ {r, r1} = 
         Result.tryCatch(_ -> {
-            import java.lang.Appendable.append(##java.lang.CharSequence): ##java.lang.Appendable \ { Read(r1), Write(r) };
+            import java.lang.Appendable.append(##java.lang.CharSequence): ##java.lang.Appendable \ {r1, r};
             let cs1 = Interop.Lang.CharSequence.getHH(cs);
             let Appendable(ap1) = ap;
             Appendable(append(ap1, cs1))
@@ -78,9 +78,9 @@ mod Interop.Lang.Appendable {
     pub def appendCharSubSequence!(cs: CharSequence[r1], 
                                     start: {start = Int32},
                                     end: {end = Int32},
-                                    ap: Appendable[r2]): Result[String, Appendable[r]] \ { Read(r1), Write(r2) } = 
+                                    ap: Appendable[r2]): Result[String, Appendable[r]] \ {r1, r2} = 
         Result.tryCatch(_ -> {
-            import java.lang.Appendable.append(##java.lang.CharSequence, Int32, Int32): ##java.lang.Appendable \ { Read(r1), Write(r2) };
+            import java.lang.Appendable.append(##java.lang.CharSequence, Int32, Int32): ##java.lang.Appendable \ {r1, r2};
             let cs1 = Interop.Lang.CharSequence.getHH(cs);
             let Appendable(ap1) = ap;
             Appendable(append(ap1, cs1, start.start, end.end))
