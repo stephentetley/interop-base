@@ -99,7 +99,7 @@ mod Interop.IO.OutputStreamWriter {
                                 len: {len = Int32}, 
                                 w: OutputStreamWriter[r]): Result[String, Unit] \ {r, r1} =
         Result.tryCatch(_ -> {
-            import java.io.OutputStreamWriter.write(Array[Char, r2], Int32, Int32): Unit \ {r, r1};
+            import java.io.OutputStreamWriter.write(Array[Char, r1], Int32, Int32): Unit \ {r, r1};
             let OutputStreamWriter(w1) = w;
             write(w1, arr, offset.offset, len.len)
         })

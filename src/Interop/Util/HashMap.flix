@@ -91,7 +91,7 @@ mod Interop.Util.HashMap {
         let HashMap(_, m1) = m;
         hashCode(m1)
 
-    pub def get(k: k, m: HashMap[k, v, r]): Result[String, Option[v]] \ r =
+    pub def get(k: k, m: HashMap[k, v, r]): Result[String, Option[v]] \ r with Marshal[v], Marshal[k] =
         Result.tryCatch(_ -> {
             import java.util.HashMap.get(##java.lang.Object): ##java.lang.Object \ r; 
             let HashMap(_, m1) = m;
@@ -193,7 +193,7 @@ mod Interop.Util.HashMap {
     pub def toFlixMap(m: HashMap[k, v, r]): Map[k, v] \ { r } with Order[k], Marshal[k], Marshal[v] =
         Interop.Util.MapZ.toFlixMap(ImpMapZ.toMapZ(m))
 
-    pub def toFlixList(m: HashMap[k, v, r]): List[(k, v)] \ r = 
+    pub def toFlixList(m: HashMap[k, v, r]): List[(k, v)] \ r with Marshal[k], Marshal[v] = 
         Interop.Util.MapZ.toFlixList(ImpMapZ.toMapZ(m))
 
 }

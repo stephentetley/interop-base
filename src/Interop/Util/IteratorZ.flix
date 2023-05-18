@@ -85,7 +85,7 @@ mod Interop.Util.IteratorZ {
         iterator(r, iter) |> Iterator.toNel
     }
 
-    pub def toMapWith(f: a -> (k, v) \ ef1, iter: IteratorZ[a, ef, r]): Map[k, v] \ { ref1 } with Order[k], Marshal[a] = region r {
+    pub def toMapWith(f: a -> (k, v) \ ef1, iter: IteratorZ[a, ef, r]): Map[k, v] \ {ef, ef1, r} with Order[k], Marshal[a] = region r {
         iterator(r, iter) |> Iterator.foldLeft((acc, a) -> let (k,v) = f(a); Map.insert(k, v, acc), Map.empty())
     }
 

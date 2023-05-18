@@ -74,7 +74,7 @@ mod Interop.IO.InputStreamReader {
                         len: {len = Int32}, 
                         rd: InputStreamReader[r]): Result[String, Int32] \ {r, r1} = 
         Result.tryCatch(_ -> {
-            import java.io.InputStreamReader.read(Array[Char, r2], Int32, Int32): Int32 \ {r, r1};
+            import java.io.InputStreamReader.read(Array[Char, r1], Int32, Int32): Int32 \ {r, r1};
             let InputStreamReader(rd1) = rd;
             read(rd1, buf, offset.offset, len.len)
         })

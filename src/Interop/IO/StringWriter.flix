@@ -127,7 +127,7 @@ mod Interop.IO.StringWriter {
                                 len: {len = Int32}, 
                                 w: StringWriter[r]): Result[String, Unit] \ {r, r1} =
         Result.tryCatch(_ -> {
-            import java.io.StringWriter.write(Array[Char, r2], Int32, Int32): Unit \ {r, r1};
+            import java.io.StringWriter.write(Array[Char, r1], Int32, Int32): Unit \ {r, r1};
             let StringWriter(w1) = w;
             write(w1, arr, offset.offset, len.len)
         })

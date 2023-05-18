@@ -278,7 +278,7 @@ mod Interop.Util.ArrayList {
         iterator(rc, l) |> Iterator.enumerator
 
 
-    pub def unfoldArrayList(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): ArrayList[a, r] \ r with Marshal[a] =
+    pub def unfoldArrayList(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): ArrayList[a, r] \ {ef, r} with Marshal[a] =
         import new java.util.ArrayList(): ##java.util.ArrayList \ r as new1;
         import java.util.ArrayList.add(##java.lang.Object): Bool \ r as add1;
         def loop(st1, acc) = match f(st1) {

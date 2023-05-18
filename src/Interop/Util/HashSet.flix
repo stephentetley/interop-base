@@ -106,7 +106,7 @@ mod Interop.Util.HashSet {
         size(s1)
 
 
-    pub def add!(x: a, s: HashSet[a, r]): Bool \  r =
+    pub def add!(x: a, s: HashSet[a, r]): Bool \ r with Marshal[a] =
         import java.util.HashSet.add(##java.lang.Object): Bool \ r; 
         let HashSet(_, s1) = s;
         let x1 = Interop.Flix.Marshal.toJavaObject(x);

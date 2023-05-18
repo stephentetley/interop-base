@@ -67,7 +67,7 @@ mod Interop.IO.Reader {
     // read (into-array)
     pub def readArray(buf: Array[Char, r1], rd: Reader[r]): Result[String, Int32] \ {r, r1} = 
         Result.tryCatch(_ -> {
-            import java.io.Reader.read(Array[Char, r2]): Int32 \ {r, r1};
+            import java.io.Reader.read(Array[Char, r1]): Int32 \ {r, r1};
             let Reader(rd1) = rd;
             read(rd1, buf)
         })
@@ -78,7 +78,7 @@ mod Interop.IO.Reader {
                             len: {len = Int32}, 
                             rd: Reader[r]): Result[String, Int32] \ {r, r1} = 
         Result.tryCatch(_ -> {
-            import java.io.Reader.read(Array[Char, r2], Int32, Int32): Int32 \ {r, r1};
+            import java.io.Reader.read(Array[Char, r1], Int32, Int32): Int32 \ {r, r1};
             let Reader(rd1) = rd;
             read(rd1, buf, offset.offset, len.len)
         })
