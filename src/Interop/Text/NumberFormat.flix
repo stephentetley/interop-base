@@ -23,7 +23,7 @@ mod Interop.Text {
 
     pub enum MutNumberFormat[_: Region](##java.text.NumberFormat)
 
-    /// NumberFormat "builders" in the JDK return Unit...
+    /// NumberFormat "builders" in the JDK return void...
     pub type alias NumberFormatInit[r: Region] = MutNumberFormat[r] -> Result[String, Unit] \ r
     
     pub class SubNumberFormat[t: Type] {

@@ -29,7 +29,7 @@ mod Interop.Text {
 
     pub enum MutDecimalFormat[_: Region](##java.text.DecimalFormat)
 
-    /// DecimalFormat "builders" in the JDK return Unit...
+    /// DecimalFormat "builders" in the JDK return void...
     pub type alias DecimalFormatInit[r: Region] = MutDecimalFormat[r] -> Result[String, Unit] \ r
 
     instance SubNumberFormat[DecimalFormat] {
