@@ -53,8 +53,6 @@ mod Interop.Text.RuleBasedCollator {
     use Interop.Text.CollatorInit
     use Interop.Util.Locale
     use Interop.Util.Locale.{Locale}
-    use Interop.Flix.Setter
-    use Interop.Flix.Setter.Setter
 
     pub def getHH(c: RuleBasedCollator): ##java.text.RuleBasedCollator = 
         let RuleBasedCollator(c1) = c;

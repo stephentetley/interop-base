@@ -24,6 +24,7 @@ mod Interop.Text {
     
     pub enum MutCollator[_: Region](##java.text.Collator)
 
+    /// Collator "builders" in the JDK return Unit...
     pub type alias CollatorInit[r: Region] = MutCollator[r] -> Unit \ r
 
     pub class SubCollator[t: Type] {
@@ -43,8 +44,6 @@ mod Interop.Text.Collator {
     use Interop.Text.MutCollator.{MutCollator}
     use Interop.Util.Locale
     use Interop.Util.Locale.{Locale}
-    use Interop.Flix.Setter
-    use Interop.Flix.Setter.Setter
 
     pub def getHH(c: Collator): ##java.text.Collator = 
         let Collator(c1) = c;
