@@ -71,42 +71,6 @@ mod Interop.Lang.Character {
         let Character(x1) = x;
         charValue(x1)
 
-
-    pub def charValueWithCodePoint(cp: Int32): Int32 =
-        import static java.lang.Character.charCount(Int32): Int32 \ {};
-        charCount(cp)
-
-    pub def hashCode(x: Character): Int32 =
-        import java.lang.Character.hashCode(): Int32 \ {};
-        let Character(x1) = x;
-        hashCode(x1)
-
-    pub def valueOf(c: Char): Character =
-        import static java.lang.Character.valueOf(Char): ##java.lang.Character \ {};
-        valueOf(c) |> Character
-
-    pub def getDirectionality(c: Char): Int8 =
-        import static java.lang.Character.getDirectionality(Char): Int8 \ {};
-        getDirectionality(c)
-
-    pub def getName(cp: Int32): Option[String] =
-        import static java.lang.Character.getName(Int32): String \ {};
-        getName(cp) |> Object.toOption
-
-    pub def getNumericValue(c: Char): Int32 =
-        import static java.lang.Character.getNumericValue(Char): Int32 \ {};
-        getNumericValue(c)
-
-    pub def getType(c: Char): Int32 =
-        import static java.lang.Character.getType(Char): Int32 \ {};
-        getType(c)
-
-    pub def highSurrogate(cp: Int32): Char =
-        import static java.lang.Character.highSurrogate(Int32): Char \ {};
-        highSurrogate(cp)
-
-    pub def lowSurrogate(cp: Int32): Char =
-        import static java.lang.Character.lowSurrogate(Int32): Char \ {};
-        lowSurrogate(cp)
+    /// TODO - is this module needed as Flix's character handling has been extended?
 
 }
