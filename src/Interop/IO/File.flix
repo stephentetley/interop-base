@@ -39,10 +39,19 @@ mod Interop.IO.File {
     pub def wrapHH(_: Region[r], prim: ##java.io.File): File[r] = 
         File(prim)
 
+    pub def new(_: Region[r], path: String): File[r] \ r = 
+        import new java.io.File(String): ##java.io.File \ r as new1;
+        File(new1(path))
 
-    pub def new(_: Region[r], path: String): File[r] \ { IO, r } = 
-        import new java.io.File(String): ##java.io.File \ { IO, r } as newFile;
-        File(newFile(path))
+    pub def newWithChild(_: Region[r], parent: String, child: String): File[r] \ r = 
+        import new java.io.File(String, String): ##java.io.File \ r as new1;
+        File(new1(parent, child))
+
+
+    pub def toString(f: File[r]): String \ r = 
+        import java.io.File.toString(): String \ r;
+        let File(f1) = f;
+        toString(f1)
 
 
     pub def toPath(f: File[r]): Result[String, Path] \ r =

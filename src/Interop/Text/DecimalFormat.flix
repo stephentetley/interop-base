@@ -18,6 +18,8 @@ mod Interop.Text {
     
     use Interop.Text.DecimalFormat
     use Interop.Text.DecimalFormat.{DecimalFormat}
+    use Interop.Text.Format
+    use Interop.Text.Format.{Format}
     use Interop.Text.NumberFormat
     use Interop.Text.NumberFormat.{NumberFormat}
 
@@ -32,6 +34,16 @@ mod Interop.Text {
     /// DecimalFormat "builders" in the JDK return void...
     pub type alias DecimalFormatInit[r: Region] = MutDecimalFormat[r] -> Result[String, Unit] \ r
 
+    instance SubFormat[DecimalFormat] {
+        pub def toFormat(fmt: DecimalFormat): Format = 
+            let DecimalFormat(fmt1) = fmt;
+            Format(unchecked_cast(fmt1 as ##java.text.Format))
+
+        pub def fromFormat(fmt: Format): DecimalFormat = 
+            let Format(fmt1) = fmt;
+            DecimalFormat(unchecked_cast(fmt1 as ##java.text.DecimalFormat))
+    }
+
     instance SubNumberFormat[DecimalFormat] {
         pub def toNumberFormat(fmt: DecimalFormat): NumberFormat = 
             let DecimalFormat(fmt1) = fmt;
@@ -41,7 +53,6 @@ mod Interop.Text {
             let NumberFormat(fmt1) = fmt;
             DecimalFormat(unchecked_cast(fmt1 as ##java.text.DecimalFormat))
     }
-
 }
 
 
@@ -137,7 +148,7 @@ mod Interop.Text.DecimalFormat {
         let DecimalFormat(df1) = df;
         toLocalizedPattern(df1)
 
-    /// Setters        
+    /// Setters
 
 
     pub def setCurrency!(cur: Currency, df: MutDecimalFormat[r]): Result[String, Unit] \ r =

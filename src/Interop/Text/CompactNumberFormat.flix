@@ -18,6 +18,7 @@ mod Interop.Text {
     
     use Interop.Text.CompactNumberFormat
     use Interop.Text.CompactNumberFormat.{CompactNumberFormat}
+    use Interop.Text.Format.{Format}
     use Interop.Text.NumberFormat
     use Interop.Text.NumberFormat.{NumberFormat}
 
@@ -32,6 +33,16 @@ mod Interop.Text {
     pub enum CompactNumberFormat(##java.text.CompactNumberFormat)
 
     pub enum MutCompactNumberFormat[_: Region](##java.text.CompactNumberFormat)
+
+    instance SubFormat[CompactNumberFormat] {
+        pub def toFormat(fmt: CompactNumberFormat): Format = 
+            let CompactNumberFormat(fmt1) = fmt;
+            Format(unchecked_cast(fmt1 as ##java.text.Format))
+
+        pub def fromFormat(fmt: Format): CompactNumberFormat = 
+            let Format(fmt1) = fmt;
+            CompactNumberFormat(unchecked_cast(fmt1 as ##java.text.CompactNumberFormat))
+    }
 
     instance SubNumberFormat[CompactNumberFormat] {
         pub def toNumberFormat(fmt: CompactNumberFormat): NumberFormat = 

@@ -16,6 +16,9 @@
 
 mod Interop.Text {
     
+    use Interop.Text.NumberFormat.{NumberFormat}
+    use Interop.Text.Format.{Format}
+
     /// Abstract Class
     /// Represents a NumberFormat.
     /// "Immutable with Setter"
@@ -29,6 +32,16 @@ mod Interop.Text {
     pub class SubNumberFormat[t: Type] {
         pub def toNumberFormat(s: t): NumberFormat
         pub def fromNumberFormat(s: NumberFormat): t
+    }
+
+    instance SubFormat[NumberFormat] {
+        pub def toFormat(fmt: NumberFormat): Format = 
+            let NumberFormat(fmt1) = fmt;
+            Format(unchecked_cast(fmt1 as ##java.text.Format))
+
+        pub def fromFormat(fmt: Format): NumberFormat = 
+            let Format(fmt1) = fmt;
+            NumberFormat(unchecked_cast(fmt1 as ##java.text.NumberFormat))
     }
 
 }

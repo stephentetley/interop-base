@@ -1,3 +1,7 @@
+### v0.6.1
+   Added `Interop.Net.URI` and `Interop.Net.URL`.
+   Added `Interop.Text.Format`.
+   
 ### v0.6.0
    Removed `Read` and `Write` annotations from region signatures. 
    Removed `Builder` helper module and made `LocaleBuilder` mutable.
