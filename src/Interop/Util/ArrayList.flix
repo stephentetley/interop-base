@@ -32,14 +32,6 @@ mod Interop.Util {
         case ArrayList(Region[r], ##java.util.ArrayList)
     }
 
-    // instance Interop.Flix.MutMarshal[ArrayList] {
-    //     pub def mmToJavaObject(x: ArrayList[a, r]): ##java.lang.Object =
-    //         let ArrayList(x1) = x;
-    //         checked_cast(x1)
-
-    //     pub def mmFromJavaObject(_: Region[r], o: ##java.lang.Object): ArrayList[a, r] = 
-    //         ArrayList(unchecked_cast(o as ##java.util.ArrayList))
-    // }
 
 
     instance Interop.Util.ImpCollection[ArrayList] {

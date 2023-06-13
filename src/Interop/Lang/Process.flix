@@ -44,6 +44,11 @@ mod Interop.Lang.Process {
     pub def wrapHH(_: Region[r], prim: ##java.lang.Process): Process[r] = 
         Process(prim)
 
+    pub def new(_: Region[r]): Process[r] \ IO =
+        import new java.lang.Process(): ##java.lang.Process \ IO as new1;
+        Process(new1())
+
+
     pub def waitFor!(p: Process[r]): Result[String, Int32] \ { IO } =
         Result.tryCatch(_ -> {
             import java.lang.Process.waitFor(): Int32 \ { IO };
@@ -66,5 +71,21 @@ mod Interop.Lang.Process {
         let Process(p1) = p;
         getErrorStream(p1) |> Interop.IO.InputStream.wrapHH(rc)
 
+
+    pub def supportsNormalTermination(p: Process[r]): Bool \ r =
+        import java.lang.Process.supportsNormalTermination(): Bool \ r;
+        let Process(p1) = p;
+        supportsNormalTermination(p1)
+
+    pub def isAlive(p: Process[r]): Bool \ r =
+        import java.lang.Process.isAlive(): Bool \ r;
+        let Process(p1) = p;
+        isAlive(p1)
+
+
+    pub def pid(p: Process[r]): Int64 \ r =
+        import java.lang.Process.pid(): Int64 \ r;
+        let Process(p1) = p;
+        pid(p1)
 
 }

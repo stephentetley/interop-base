@@ -44,6 +44,13 @@ mod Interop.IO.InputStream {
 
 
 
+    pub def close!(s: InputStream[r]): Result[String, Unit] \ r = 
+        Result.tryCatch(_ -> {
+            import java.io.InputStream.close(): Unit \ r;
+            let InputStream(s1) = s;
+            close(s1)
+        })
+
 
     pub def readAllBytes(rc: Region[r1], s: InputStream[r]): Result[String, Array[Int8, r1]] \ { r, r1 } = 
         Result.tryCatch(_ -> {
@@ -51,6 +58,27 @@ mod Interop.IO.InputStream {
             let InputStream(s1) = s;
             let _ = Array.new(rc);
             readAllBytes(s1)
+        })
+
+    pub def reset!(s: InputStream[r]): Result[String, Unit] \ r = 
+        Result.tryCatch(_ -> {
+            import java.io.InputStream.reset(): Unit \ r;
+            let InputStream(s1) = s;
+            reset(s1)
+        })
+
+    pub def skip!(n: Int64, s: InputStream[r]): Result[String, Int64] \ r = 
+        Result.tryCatch(_ -> {
+            import java.io.InputStream.skip(Int64): Int64 \ r;
+            let InputStream(s1) = s;
+            skip(s1, n)
+        })
+
+    pub def skipNBytes!(n: Int64, s: InputStream[r]): Result[String, Unit] \ r = 
+        Result.tryCatch(_ -> {
+            import java.io.InputStream.skipNBytes(Int64): Unit \ r;
+            let InputStream(s1) = s;
+            skipNBytes(s1, n)
         })
 
 }
