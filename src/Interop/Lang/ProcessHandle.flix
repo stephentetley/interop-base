@@ -25,12 +25,7 @@ mod Interop.Lang {
 
 mod Interop.Lang.ProcessHandle {
     
-    use Interop.NIO.Charset.Charset
-    use Interop.NIO.Charset.Charset.{Charset}
-    use Interop.IO.InputStream
-    use Interop.IO.InputStream.{InputStream}
-    use Interop.IO.OutputStream
-    use Interop.IO.OutputStream.{OutputStream}
+
     use Interop.Lang.ProcessHandle
     use Interop.Lang.ProcessHandle.{ProcessHandle}
 

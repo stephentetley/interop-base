@@ -35,6 +35,8 @@ mod Interop.Lang.Process {
     use Interop.Lang.Process.{Process}
     use Interop.Lang.ProcessBuilder
     use Interop.Lang.ProcessBuilder.{ProcessBuilder}
+    use Interop.Lang.ProcessHandle
+    use Interop.Lang.ProcessHandle.{ProcessHandle}
 
 
     pub def getHH(p: Process[r]): ##java.lang.Process = 
@@ -55,6 +57,8 @@ mod Interop.Lang.Process {
             let Process(p1) = p;
             waitFor(p1)
         })
+
+    // `inputReader` / `errorReader` / `outputWriter` are Java 17
 
     pub def getOutputStream(rc: Region[r1], p: Process[r]): OutputStream[r1] \ { r, r1, IO } =
         import java.lang.Process.getOutputStream(): ##java.io.OutputStream \ { r, r1, IO };
@@ -87,5 +91,13 @@ mod Interop.Lang.Process {
         import java.lang.Process.pid(): Int64 \ r;
         let Process(p1) = p;
         pid(p1)
+
+
+    pub def toHandle(p: Process[r]): Result[String, ProcessHandle[r]] \ { IO } =
+        Result.tryCatch(_ -> {
+            import java.lang.Process.toHandle(): ##java.lang.ProcessHandle \ { IO };
+            let Process(p1) = p;
+            ProcessHandle(toHandle(p1))
+        })
 
 }
