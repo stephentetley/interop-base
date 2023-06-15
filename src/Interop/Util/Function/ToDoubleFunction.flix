@@ -33,7 +33,7 @@ mod Interop.Util.Function.ToDoubleFunction {
     use Interop.Util.Function.ToDoubleFunction.{ToDoubleFunction}
     use Interop.Flix.Marshal
 
-    pub def makeToDoubleFunction(f: a -> Float64 \ ef): ToDoubleFunction[a, ef] with Marshal[a]= 
+    pub def makeToDoubleFunction(f: a -> Float64 \ ef): ToDoubleFunction[a, ef] with Marshal[a] = 
         ToDoubleFunction(unchecked_cast(new ##java.util.function.ToDoubleFunction {
             def applyAsDouble(_this: ##java.util.function.ToDoubleFunction, t: ##java.lang.Object): Float64 = 
                 Interop.Flix.Marshal.fromJavaObject(t) |> f

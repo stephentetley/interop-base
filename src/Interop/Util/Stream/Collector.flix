@@ -20,7 +20,9 @@ mod Interop.Util.Stream {
     ///
     /// Represents a Java Collector.
     ///
-    pub enum Collector[_a: Type, _t: Type, _r: Type] {
+    /// TODO Collector should include an Effect as it is an amalgamation of functions...
+    ///
+    pub enum Collector[_a: Type, _t: Type, _ef: Eff, _ans: Type] {
         case Collector(##java.util.stream.Collector)
     }
 
@@ -47,17 +49,20 @@ mod Interop.Util.Stream.Collector {
                 accumulator: BiConsumer[a, t, ef2],
                 combiner: BinaryOperator[a, ef3],
                 finisher: FunctionZ[a, ans, ef4], 
-                characteristics: Array[##java.util.stream.Collector$Characteristics, r]): Collector[t, a, ans] \ {ef1, ef2, ef3, ef4, r} = 
-        import static java.util.stream.Collector.of(##java.util.function.Supplier, 
+                characteristics: Vector[Interop.Util.Stream.Collector.Characteristics]): Collector[t, a, ef1 + ef2 + ef3 + ef4, ans] = 
+        region rc {
+            import static java.util.stream.Collector.of(##java.util.function.Supplier, 
                                                     ##java.util.function.BiConsumer,
                                                     ##java.util.function.BinaryOperator, 
                                                     ##java.util.function.Function,
-                                                    Array[##java.util.stream.Collector$Characteristics, r]): ##java.util.stream.Collector \ {ef1, ef2, ef3, ef4, r};
-        let Supplier(supplier1) = supplier;
-        let BiConsumer(accumulator1) = accumulator;
-        let BinaryOperator(combiner1) = combiner;
-        let FunctionZ(finisher1) = finisher;
-        Collector(of(supplier1, accumulator1, combiner1, finisher1, characteristics))
+                                                    Array[##java.util.stream.Collector$Characteristics, rc]): ##java.util.stream.Collector \ rc;
+            let Supplier(supplier1) = supplier;
+            let BiConsumer(accumulator1) = accumulator;
+            let BinaryOperator(combiner1) = combiner;
+            let FunctionZ(finisher1) = finisher;
+            let characteristics1 = Vector.map(Interop.Util.Stream.Collector.Characteristics.getHH, characteristics) |> Vector.toArray(rc);
+            Collector(of(supplier1, accumulator1, combiner1, finisher1, characteristics1))
+        } 
 
     // /// TODO Supplier should be mutable...
     // pub def supplier(c: Collector[t, a, ans]): Supplier[a] \ r =

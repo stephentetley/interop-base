@@ -185,14 +185,14 @@ mod Interop.Util.Stream.Stream {
         findAny(s1) |> Interop.Util.Optional.hhToOption(Interop.Flix.Marshal.fromJavaObject)
 
 
-    pub def collect(c: Collector[t, a, ans], s: Stream[a, ef, r]): ans \ {ef, r} with Marshal[ans] = 
-        import java.util.stream.Stream.collect(##java.util.stream.Collector): ##java.lang.Object \ {ef, r};
+    pub def collect(c: Collector[t, a, ef1, ans], s: Stream[a, ef, r]): ans \ {ef, ef1, r} with Marshal[ans] = 
+        import java.util.stream.Stream.collect(##java.util.stream.Collector): ##java.lang.Object \ {ef, ef1, r};
         let Stream(_, s1) = s;
         let Collector(c1) = c;
         collect(s1, c1) |> Interop.Flix.Marshal.fromJavaObject
 
-    pub def collectWith(c: Collector[t, a, ans], s: Stream[a, ef, r], ocast: ##java.lang.Object -> ans): ans \ {ef, r} = 
-        import java.util.stream.Stream.collect(##java.util.stream.Collector): ##java.lang.Object \ {ef, r};
+    pub def collectWith(c: Collector[t, a, ef1, ans], s: Stream[a, ef, r], ocast: ##java.lang.Object -> ans): ans \ {ef, ef1, r} = 
+        import java.util.stream.Stream.collect(##java.util.stream.Collector): ##java.lang.Object \ {ef, ef1, r};
         let Stream(_, s1) = s;
         let Collector(c1) = c;
         collect(s1, c1) |> ocast

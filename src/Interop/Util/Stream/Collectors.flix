@@ -17,21 +17,38 @@
 
 mod Interop.Util.Stream.Collectors {
     
+    use Interop.Flix.Marshal
     use Interop.Util.Stream.Collector
     use Interop.Util.Stream.Collector.{Collector}
+    use Interop.Util.Function.ToDoubleFunction.{ToDoubleFunction}
 
-    pub def counting(): Collector[a, t, Int64] = 
+    /// Effects?
+    pub def averagingDouble(fn: a -> Float64 \ ef): Collector[a, t, ef, Float64] with Marshal[a] = 
+        import static java.util.stream.Collectors.averagingDouble(##java.util.function.ToDoubleFunction): ##java.util.stream.Collector \ {};
+        let ToDoubleFunction(fn1) = Interop.Util.Function.ToDoubleFunction.makeToDoubleFunction(fn);
+        Collector(averagingDouble(fn1))
+
+    pub def counting(): Collector[a, t, Pure, Int64] = 
         import static java.util.stream.Collectors.counting(): ##java.util.stream.Collector \ {};
         Collector(counting())
 
 
-    pub def joining(): Collector[String, t, String] = 
+    pub def joining(): Collector[String, t, Pure, String] = 
         import static java.util.stream.Collectors.joining(): ##java.util.stream.Collector \ {};
         Collector(joining())
 
-    pub def joiningWithDelimiter(delim: String): Collector[String, t, String] = 
+    pub def joiningWithDelimiter(delim: String): Collector[String, t, Pure, String] = 
         import static java.util.stream.Collectors.joining(##java.lang.CharSequence): ##java.util.stream.Collector \ {};
         let cs = checked_cast(delim);
         Collector(joining(cs))
+
+    pub def joiningWithEnclosing(delim: {delim = String}, 
+                                    prefix: {prefix = String}, 
+                                    suffix: {suffix = String}): Collector[String, t, Pure, String] = 
+        import static java.util.stream.Collectors.joining(##java.lang.CharSequence, ##java.lang.CharSequence, ##java.lang.CharSequence): ##java.util.stream.Collector \ {};
+        let d1 = checked_cast(delim.delim);
+        let p1 = checked_cast(prefix.prefix);
+        let s1 = checked_cast(suffix.suffix);
+        Collector(joining(d1, p1, s1))
 
 }

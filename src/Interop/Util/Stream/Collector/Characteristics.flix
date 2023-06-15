@@ -56,6 +56,11 @@ mod Interop.Util.Stream.Collector.Characteristics {
     use Interop.Util.Stream.Collector.Characteristics.{Characteristics}
 
 
+    pub def getHH(x: Characteristics): ##java.util.stream.Collector$Characteristics = 
+        let Characteristics(x1) = x;
+        x1
+
+
     pub def concurrent(): Characteristics = 
         import static get java.util.stream.Collector$Characteristics.CONCURRENT: ##java.util.stream.Collector$Characteristics \ {} as get_CONCURRENT;
         get_CONCURRENT() |> Characteristics
