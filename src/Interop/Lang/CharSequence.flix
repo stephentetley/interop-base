@@ -18,6 +18,10 @@ mod Interop.Lang {
 
     /// Interface...
     /// Read-only (not pure) - in Java handles both String and StringBuilder[r]
+    /// 
+    /// TODO - should we make this pure, then clients wanting to use e.g StringBuilder can
+    /// sort out a conversion (first to a String...) for themselves?
+
 
     use Interop.Lang.CharSequence
     use Interop.Lang.CharSequence.{CharSequence}

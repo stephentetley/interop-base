@@ -31,6 +31,7 @@ mod Interop.Util.Stream.Stream {
     use Interop.Util.Stream.Stream
     use Interop.Util.Stream.Stream.{Stream}
     use Interop.Util.Stream.Collector
+    use Interop.Util.Stream.Collector.{Collector}
     use Interop.Util.Stream.Stream.Builder.{Builder}
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
     use Interop.Util.Function.FunctionZ.{FunctionZ}
@@ -187,11 +188,13 @@ mod Interop.Util.Stream.Stream {
     pub def collect(c: Collector[t, a, ans], s: Stream[a, ef, r]): ans \ {ef, r} with Marshal[ans] = 
         import java.util.stream.Stream.collect(##java.util.stream.Collector): ##java.lang.Object \ {ef, r};
         let Stream(_, s1) = s;
-        collect(s1, c) |> Interop.Flix.Marshal.fromJavaObject
+        let Collector(c1) = c;
+        collect(s1, c1) |> Interop.Flix.Marshal.fromJavaObject
 
     pub def collectWith(c: Collector[t, a, ans], s: Stream[a, ef, r], ocast: ##java.lang.Object -> ans): ans \ {ef, r} = 
         import java.util.stream.Stream.collect(##java.util.stream.Collector): ##java.lang.Object \ {ef, r};
         let Stream(_, s1) = s;
-        collect(s1, c) |> ocast
+        let Collector(c1) = c;
+        collect(s1, c1) |> ocast
 
 }

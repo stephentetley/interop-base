@@ -20,8 +20,6 @@ mod Interop.Util {
     /// Represents a Java Optional.
     /// Immutable 
     ///
-    /// TODO - remove type param?
-    ///
     pub enum Optional[_a: Type](##java.util.Optional)
 
 
@@ -37,6 +35,9 @@ mod Interop.Util.Optional {
     pub def getHH(o: Optional[a]): ##java.util.Optional = 
         let Optional(o1) = o;
         o1
+
+    pub def wrapHH(prim: ##java.util.Optional): Optional[a] = 
+        Optional(prim)
 
     /// cast must be Pure
     pub def hhToOption(ocast: ##java.lang.Object -> a, o: ##java.util.Optional): Option[a] = 

@@ -20,8 +20,9 @@ mod Interop.Util.Stream {
     ///
     /// Represents a Java Collector.
     ///
-    pub type alias Collector[_: Type, _: Type, _: Type] = ##java.util.stream.Collector
-
+    pub enum Collector[_a: Type, _t: Type, _r: Type] {
+        case Collector(##java.util.stream.Collector)
+    }
 
 
 }
@@ -30,6 +31,7 @@ mod Interop.Util.Stream {
 mod Interop.Util.Stream.Collector {
     
     use Interop.Util.Stream.Collector
+    use Interop.Util.Stream.Collector.{Collector}
     use Interop.Util.Function.BiConsumer
     use Interop.Util.Function.BiConsumer.{BiConsumer}
     use Interop.Util.Function.BinaryOperator
@@ -55,7 +57,7 @@ mod Interop.Util.Stream.Collector {
         let BiConsumer(accumulator1) = accumulator;
         let BinaryOperator(combiner1) = combiner;
         let FunctionZ(finisher1) = finisher;
-        of(supplier1, accumulator1, combiner1, finisher1, characteristics)
+        Collector(of(supplier1, accumulator1, combiner1, finisher1, characteristics))
 
     // /// TODO Supplier should be mutable...
     // pub def supplier(c: Collector[t, a, ans]): Supplier[a] \ r =
