@@ -75,15 +75,17 @@ mod Interop.Util.Function.FunctionZ {
         Interop.Flix.Marshal.fromJavaObject(ans)
     
 
+    pub def andThen(f: FunctionZ[a, b, ef], g: FunctionZ[b, c, ef1]): FunctionZ[a, c, ef + ef1] = 
+        let FunctionZ(f1) = f;
+        let FunctionZ(g1) = g;
+        let fg1 = obj -> {let b = g1(obj); f1(b)};
+        FunctionZ(unchecked_cast((obj -> fg1(obj)) as ##java.util.function.Function))
 
-    // pub def andThen(f: Function[a, b], g: Function[b, c]): Function[a, c] = 
-    //     import java.util.function.Function.andThen(##java.util.function.Function): ##java.util.function.Function \ {};
-    //     andThen(f, g)
 
-    // pub def compose(f: Function[b, c], g: Function[a, b]): Function[a, c] = 
-    //     import java.util.function.Function.compose(##java.util.function.Function): ##java.util.function.Function \ {};
-    //     let Function(f1) = f;
-    //     let Function(g1) = g;
-    //     compose(f1, g1) |> Function
+    pub def compose(f: FunctionZ[b, c, ef1], g: FunctionZ[a, b, ef]): FunctionZ[a, c, ef + ef1] with Marshal[a] = 
+        let FunctionZ(f1) = f;
+        let FunctionZ(g1) = g;
+        let fg1 = obj -> {let b = g1(obj); f1(b)};
+        FunctionZ(unchecked_cast((obj -> fg1(obj)) as ##java.util.function.Function))
 
 }

@@ -17,7 +17,7 @@
 
 mod Interop.NIO.Channels {
 
-    // Interface
+    // Interface, mutable
     pub enum ChannelZ[_: Region](##java.nio.channels.Channel)
 
     pub class SubChannel[t: Region -> Type] {

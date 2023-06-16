@@ -39,4 +39,9 @@ mod Interop.Util.Function.IntFunctionZ {
     pub def makeIntFunctionZWith(f: Int32 -> a \ ef, castToObj: a -> ##java.lang.Object): IntFunctionZ[a, ef] = 
         IntFunctionZ(unchecked_cast((i -> f(i) |> castToObj) as ##java.util.function.IntFunction))
 
+    pub def apply(f: IntFunctionZ[a, ef], value: Int32): a \ ef with Marshal[a] = 
+        let IntFunctionZ(f1) = f;
+        unchecked_cast(f1(value) as _ \ ef) |> Interop.Flix.Marshal.fromJavaObject
+        
+
 }
