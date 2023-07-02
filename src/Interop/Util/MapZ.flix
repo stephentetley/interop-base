@@ -215,6 +215,7 @@ mod Interop.Util.MapZ {
     pub def fromFlixMapViaHashMap(rc: Region[r], t: Map[k, v]): MapZ[k, v, r] \ r with Marshal[k], Marshal[v] =
         Interop.Util.HashMap.fromFlixMap(rc, t) |> Interop.Util.ImpMapZ.toMapZ
 
+    /// Note - this is useful even though it breaks abstraction...
     pub def fromFlixMapViaHashMapHH(t: Map[k, v]): ##java.util.Map with Marshal[k], Marshal[v] = region rc {
         Interop.Util.HashMap.fromFlixMap(rc, t) |> Interop.Util.ImpMapZ.toMapHH
     }

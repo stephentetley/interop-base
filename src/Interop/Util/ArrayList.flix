@@ -18,6 +18,8 @@ mod Interop.Util {
 
     use Interop.Util.ArrayList
     use Interop.Util.ArrayList.{ArrayList}
+    use Interop.Lang.IterableZ
+    use Interop.Lang.IterableZ.{IterableZ}
     use Interop.Util.Collection
     use Interop.Util.Collection.{Collection}
     use Interop.Util.ListZ
@@ -54,6 +56,18 @@ mod Interop.Util {
             let ListZ(rc, t1) = t;
             ArrayList(rc, unchecked_cast(t1 as ##java.util.ArrayList))
     }
+
+
+    instance Interop.Lang.ImpIterable[ArrayList] {
+        pub def toIterable(t: ArrayList[a, r]): IterableZ[a, r] = 
+            let ArrayList(rc, t1) = t;
+            IterableZ(rc, unchecked_cast(t1 as ##java.lang.Iterable))
+
+        pub def fromIterable(t: IterableZ[a, r]): ArrayList[a, r] = 
+            let IterableZ(rc, t1) = t;
+            ArrayList(rc, unchecked_cast(t1 as ##java.util.ArrayList))
+    }
+
 
 }
 

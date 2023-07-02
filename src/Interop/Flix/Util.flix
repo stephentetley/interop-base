@@ -23,4 +23,10 @@ mod Interop.Flix.Util {
             s
 
 
+    pub def optionToNullable(o: Option[a], f: a -> b \ ef): b \ ef = match o {
+        case Some(x) => f(x)
+        case None    => unchecked_cast(null as b)
+    }
+
+    
 }

@@ -81,4 +81,11 @@ mod Interop.Lang.StringZ {
         import java.lang.String.codePoints(): ##java.util.stream.IntStream \ r ;
         IntStream(rc, codePoints(s))
 
+
+    pub def getBytes(_: Region[r], s: String): Array[Int8, r] \ r = 
+        import java.lang.String.getBytes(): Array[Int8, r] \ r ;
+        getBytes(s)
+
+
+
 }

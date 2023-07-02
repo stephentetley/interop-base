@@ -18,6 +18,9 @@ mod Interop.Util {
 
     use Interop.Util.LinkedList
     use Interop.Util.LinkedList.{LinkedList}
+    
+    use Interop.Lang.IterableZ
+    use Interop.Lang.IterableZ.{IterableZ}
     use Interop.Util.Collection;
     use Interop.Util.Collection.{Collection};
     use Interop.Util.ListZ;
@@ -51,6 +54,16 @@ mod Interop.Util {
 
         pub def fromListZ(t: ListZ[a, r]): LinkedList[a, r] = 
             let ListZ(rc, t1) = t;
+            LinkedList(rc, unchecked_cast(t1 as ##java.util.LinkedList))
+    }
+
+    instance Interop.Lang.ImpIterable[LinkedList] {
+        pub def toIterable(t: LinkedList[a, r]): IterableZ[a, r] = 
+            let LinkedList(rc, t1) = t;
+            IterableZ(rc, unchecked_cast(t1 as ##java.lang.Iterable))
+
+        pub def fromIterable(t: IterableZ[a, r]): LinkedList[a, r] = 
+            let IterableZ(rc, t1) = t;
             LinkedList(rc, unchecked_cast(t1 as ##java.util.LinkedList))
     }
 

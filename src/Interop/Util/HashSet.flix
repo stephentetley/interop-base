@@ -18,6 +18,9 @@ mod Interop.Util {
 
     use Interop.Util.HashSet
     use Interop.Util.HashSet.{HashSet}
+    
+    use Interop.Lang.IterableZ
+    use Interop.Lang.IterableZ.{IterableZ}
     use Interop.Util.Collection
     use Interop.Util.Collection.{Collection}
     use Interop.Util.SetZ
@@ -51,6 +54,15 @@ mod Interop.Util {
             HashSet(rc, unchecked_cast(t1 as ##java.util.HashSet))
     }
 
+    instance Interop.Lang.ImpIterable[HashSet] {
+        pub def toIterable(t: HashSet[a, r]): IterableZ[a, r] = 
+            let HashSet(rc, t1) = t;
+            IterableZ(rc, unchecked_cast(t1 as ##java.lang.Iterable))
+
+        pub def fromIterable(t: IterableZ[a, r]): HashSet[a, r] = 
+            let IterableZ(rc, t1) = t;
+            HashSet(rc, unchecked_cast(t1 as ##java.util.HashSet))
+    }
 }
 
 mod Interop.Util.HashSet {
