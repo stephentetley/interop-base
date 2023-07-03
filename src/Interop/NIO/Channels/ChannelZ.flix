@@ -30,8 +30,8 @@ mod Interop.NIO.Channels {
 
 mod Interop.NIO.Channels.ChannelZ { 
 
-    use Interop.NIO.Channels.ChannelZ;
-    use Interop.NIO.Channels.ChannelZ.{ChannelZ};
+    use Interop.NIO.Channels.ChannelZ
+    use Interop.NIO.Channels.ChannelZ.{ChannelZ}
 
     pub def getHH(x: ChannelZ[r]): ##java.nio.channels.Channel = 
         let ChannelZ(x1) = x;

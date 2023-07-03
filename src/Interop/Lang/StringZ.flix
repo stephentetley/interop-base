@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+// No wrapped type.
 
 mod Interop.Lang.StringZ {
 
@@ -86,6 +87,10 @@ mod Interop.Lang.StringZ {
         import java.lang.String.getBytes(): Array[Int8, r] \ r ;
         getBytes(s)
 
+    pub def getBytesWithCharset(_: Region[r], cs: Charset, s: String): Array[Int8, r] \ r = 
+        import java.lang.String.getBytes(##java.nio.charset.Charset): Array[Int8, r] \ r ;
+        let Charset(cs1) = cs;
+        getBytes(s, cs1)
 
 
 }

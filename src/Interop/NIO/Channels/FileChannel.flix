@@ -17,16 +17,39 @@
 
 mod Interop.NIO.Channels {
 
+    use Interop.NIO.Channels.FileChannel.{FileChannel}
+    use Interop.NIO.Channels.ReadableByteChannel.{ReadableByteChannel}
+    use Interop.NIO.Channels.WritableByteChannel.{WritableByteChannel}
+
     // Abstract Class
     pub enum FileChannel[_: Region](##java.nio.channels.FileChannel)
 
+    instance ImpReadableByteChannel[FileChannel] {
+        pub def toReadableByteChannel(c: FileChannel[r]): ReadableByteChannel[r] = 
+            let FileChannel(c1) = c;
+            ReadableByteChannel(unchecked_cast(c1 as ##java.nio.channels.ReadableByteChannel))
+        
+        pub def fromReadableByteChannel(c: ReadableByteChannel[r]): FileChannel[r] = 
+            let ReadableByteChannel(c1) = c;
+            FileChannel(unchecked_cast(c1 as ##java.nio.channels.FileChannel))
+    }
+
+    instance ImpWritableByteChannel[FileChannel] {
+        pub def toWritableByteChannel(c: FileChannel[r]): WritableByteChannel[r] = 
+            let FileChannel(c1) = c;
+            WritableByteChannel(unchecked_cast(c1 as ##java.nio.channels.WritableByteChannel))
+        
+        pub def fromWritableByteChannel(c: WritableByteChannel[r]): FileChannel[r] = 
+            let WritableByteChannel(c1) = c;
+            FileChannel(unchecked_cast(c1 as ##java.nio.channels.FileChannel))
+    }
 
 }
 
 mod Interop.NIO.Channels.FileChannel { 
 
-    use Interop.NIO.Channels.FileChannel;
-    use Interop.NIO.Channels.FileChannel.{FileChannel};
+    use Interop.NIO.Channels.FileChannel
+    use Interop.NIO.Channels.FileChannel.{FileChannel}
 
     pub def getHH(x: FileChannel[r]): ##java.nio.channels.FileChannel = 
         let FileChannel(x1) = x;

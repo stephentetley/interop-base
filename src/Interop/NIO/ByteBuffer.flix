@@ -23,11 +23,11 @@ mod Interop.NIO {
 
 mod Interop.NIO.ByteBuffer { 
 
-    use Interop.NIO.ByteBuffer;
-    use Interop.NIO.ByteBuffer.{ByteBuffer};
-    use Interop.NIO.ByteOrder;
-    use Interop.NIO.ByteOrder.{ByteOrder};
-    use Interop.Lang.CharSequence;
+    use Interop.NIO.ByteBuffer
+    use Interop.NIO.ByteBuffer.{ByteBuffer}
+    use Interop.NIO.ByteOrder
+    use Interop.NIO.ByteOrder.{ByteOrder}
+    use Interop.Lang.CharSequence
 
     pub def getHH(x: ByteBuffer[r]): ##java.nio.ByteBuffer = 
         let ByteBuffer(x1) = x;
