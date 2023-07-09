@@ -1,7 +1,8 @@
 ### v0.7.0
    Added `ReadableByteChannel` and `WritableByteChannel`.
    Added `MathContext` and BigDecimal operations using it.
-   Changed namespace of `Interop.Util.Stream.Collector.Characteristics` to `Interop.Util.Stream.CollectorCharacteristics``.
+   Changed namespace of `Interop.Util.Stream.Collector.Characteristics` to `Interop.Util.Stream.CollectorCharacteristics`.
+   Changed namespace of `Interop.Util.Stream.Stream.Builder` to `Interop.Util.Stream.StreamBuilder`.
 
 ### v0.6.1
    Added `Interop.Lang.IterableZ`.

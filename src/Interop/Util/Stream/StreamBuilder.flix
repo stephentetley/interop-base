@@ -14,55 +14,56 @@
  * limitations under the License.
  */
 
-mod Interop.Util.Stream.Stream {
+mod Interop.Util.Stream {
 
 
     ///
     /// Represents a Java Stream.Builder
     ///
-    pub enum Builder[_a: Type, r: Region] { 
-        case Builder(Region[r], ##java.util.stream.Stream$Builder)
+    pub enum StreamBuilder[_a: Type, r: Region] { 
+        case StreamBuilder(Region[r], ##java.util.stream.Stream$Builder)
     }
 
 
 }
 
 
-mod Interop.Util.Stream.Stream.Builder {
+mod Interop.Util.Stream.StreamBuilder {
     
-    use Interop.Util.Stream.Stream.Builder
-    use Interop.Util.Stream.Stream.Builder.{Builder}
+    use Interop.Util.Stream.StreamBuilder
+    use Interop.Util.Stream.StreamBuilder.{StreamBuilder}
     use Interop.Util.Stream.Stream
     use Interop.Util.Stream.Stream.{Stream}
     use Interop.Flix.Marshal
     
-    pub def getHH(x: Builder[a, r]): ##java.util.stream.Stream$Builder = 
-        let Builder(_, x1) = x;
+    pub def getHH(x: StreamBuilder[a, r]): ##java.util.stream.Stream$Builder = 
+        let StreamBuilder(_, x1) = x;
         x1
 
-    pub def wrapHH(rc: Region[r], prim: ##java.util.stream.Stream$Builder): Builder[a, r] = Builder(rc, prim)
+    pub def wrapHH(rc: Region[r], prim: ##java.util.stream.Stream$Builder): StreamBuilder[a, r] = 
+        StreamBuilder(rc, prim)
 
 
-    pub def accept(t: a, b: Builder[a, r]): Result[String, Unit] \ r with Marshal[a] =
+    pub def accept(t: a, b: StreamBuilder[a, r]): Result[String, Unit] \ r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.stream.Stream$Builder.accept(##java.lang.Object): Unit \ r;
-            let Builder(_, b1) = b;
+            let StreamBuilder(_, b1) = b;
             let t1 = Interop.Flix.Marshal.toJavaObject(t);
             accept(b1, t1)
         })
 
-    pub def add(t: a, b: Builder[a, r]): Result[String, Builder[a, r]] \ r with Marshal[a] =
+    pub def add(t: a, b: StreamBuilder[a, r]): Result[String, StreamBuilder[a, r]] \ r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.stream.Stream$Builder.add(##java.lang.Object): ##java.util.stream.Stream$Builder \ r;
-            let Builder(rc, b1) = b;
+            let StreamBuilder(rc, b1) = b;
             let t1 = Interop.Flix.Marshal.toJavaObject(t);
-            Builder(rc, add(b1, t1))
+            StreamBuilder(rc, add(b1, t1))
         })
 
-    pub def build(b: Builder[a, r]): Result[String, Stream[a, ef, r]] \ r =
+    pub def build(b: StreamBuilder[a, r]): Result[String, Stream[a, ef, r]] \ r =
         Result.tryCatch(_ -> {
             import java.util.stream.Stream$Builder.build(): ##java.util.stream.Stream \ {};
-            let Builder(rc, b1) = b;
+            let StreamBuilder(rc, b1) = b;
             Stream(rc, checked_ecast(build(b1)))
         })
 

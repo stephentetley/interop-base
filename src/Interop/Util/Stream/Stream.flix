@@ -32,7 +32,8 @@ mod Interop.Util.Stream.Stream {
     use Interop.Util.Stream.Stream.{Stream}
     use Interop.Util.Stream.Collector
     use Interop.Util.Stream.Collector.{Collector}
-    use Interop.Util.Stream.Stream.Builder.{Builder}
+    use Interop.Util.Stream.StreamBuilder
+    use Interop.Util.Stream.StreamBuilder.{StreamBuilder}
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
     use Interop.Util.Function.FunctionZ.{FunctionZ}
     use Interop.Util.Function.PredicateZ.{PredicateZ}
@@ -51,9 +52,9 @@ mod Interop.Util.Stream.Stream {
         import static java.util.stream.Stream.empty(): ##java.util.stream.Stream \ {};
         Stream(rc, checked_ecast(empty()))
 
-    pub def builder(rc: Region[r]): Builder[a, r] \ r = 
+    pub def builder(rc: Region[r]): StreamBuilder[a, r] \ r = 
         import static java.util.stream.Stream.builder(): ##java.util.stream.Stream$Builder \ r;
-        Builder(rc, builder())
+        StreamBuilder(rc, builder())
 
     pub def of(rc: Region[r], t: a): Stream[a, ef, r] with Marshal[a] = 
         import static java.util.stream.Stream.of(##java.lang.Object): ##java.util.stream.Stream \ {};
