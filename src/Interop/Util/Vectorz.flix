@@ -16,6 +16,12 @@
 
 mod Interop.Util {
 
+    use Interop.Util.VectorZ.{VectorZ}
+    use Interop.Lang.IterableZ
+    use Interop.Lang.IterableZ.{IterableZ}
+    use Interop.Util.Collection.{Collection}
+    use Interop.Util.ListZ.{ListZ}
+
     ///
     /// Represents a Java VectorZ.
     /// Class / Mutable
@@ -27,16 +33,36 @@ mod Interop.Util {
     }
 
 
-    // instance Interop.Util.ImpCollection[VectorZ] {
-    //     pub def toCollection(t: VectorZ[a, r]): Collection[a, r] = 
-    //         let VectorZ(_, t1) = t;
-    //         Collection(unchecked_cast(t1 as ##java.util.Collection))
+    instance Interop.Util.ImpCollection[VectorZ] {
+        pub def toCollection(t: VectorZ[a, r]): Collection[a, r] = 
+            let VectorZ(rc, t1) = t;
+            Collection(rc, unchecked_cast(t1 as ##java.util.Collection))
 
-    //     pub def fromCollection(rc: Region[r], t: Collection[a, r]): VectorZ[a, r] = 
-    //         let Collection(t1) = t;
-    //         VectorZ(rc, unchecked_cast(t1 as ##java.util.Vector))
-    // }
+        pub def fromCollection(t: Collection[a, r]): VectorZ[a, r] = 
+            let Collection(rc, t1) = t;
+            VectorZ(rc, unchecked_cast(t1 as ##java.util.Vector))
+    }
 
+
+    instance Interop.Util.ImpListZ[VectorZ] {
+        pub def toListZ(t: VectorZ[a, r]): ListZ[a, r] = 
+            let VectorZ(rc, t1) = t;
+            ListZ(rc, unchecked_cast(t1 as ##java.util.List))
+
+        pub def fromListZ(t: ListZ[a, r]): VectorZ[a, r] = 
+            let ListZ(rc, t1) = t;
+            VectorZ(rc, unchecked_cast(t1 as ##java.util.Vector))
+    }
+
+    instance Interop.Lang.ImpIterable[VectorZ] {
+        pub def toIterable(t: VectorZ[a, r]): IterableZ[a, r] = 
+            let VectorZ(rc, t1) = t;
+            IterableZ(rc, unchecked_cast(t1 as ##java.lang.Iterable))
+
+        pub def fromIterable(t: IterableZ[a, r]): VectorZ[a, r] = 
+            let IterableZ(rc, t1) = t;
+            VectorZ(rc, unchecked_cast(t1 as ##java.util.Vector))
+    }
 
 }
 

@@ -32,8 +32,8 @@ mod Interop.IO {
 
 mod Interop.IO.InputStream {
 
-    use Interop.IO.InputStream;
-    use Interop.IO.InputStream.{InputStream};
+    use Interop.IO.InputStream
+    use Interop.IO.InputStream.{InputStream}
 
     pub def getHH(s: InputStream[r]): ##java.io.InputStream = 
         let InputStream(s1) = s;

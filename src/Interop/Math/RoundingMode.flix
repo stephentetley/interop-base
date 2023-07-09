@@ -45,6 +45,18 @@ mod Interop.Math.RoundingMode {
         let RoundingMode(x1) = x;
         x1
 
+    pub def toString(t: RoundingMode): String = 
+        import java.math.RoundingMode.toString(): String \ {};
+        let RoundingMode(t1) = t;
+        toString(t1)
+
+
+    pub def equals(x: RoundingMode, y: RoundingMode): Bool =
+        import java.math.RoundingMode.equals(##java.lang.Object): Bool \ {};
+        let RoundingMode(x1) = x;
+        let RoundingMode(y1) = y;
+        equals(x1, checked_cast(y1))
+
     pub def ceiling(): RoundingMode = 
         import static get java.math.RoundingMode.CEILING: ##java.math.RoundingMode \ {} as get_CEILING;
         get_CEILING() |> RoundingMode

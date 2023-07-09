@@ -20,7 +20,8 @@ mod Interop.Util.Stream {
     ///
     /// Represents a Java Collector.
     ///
-    /// TODO Collector should include an Effect as it is an amalgamation of functions...
+    /// Collector contains an Effect as it is an amalgamation of functions...
+    /// TODO - separate effects for supplier, accumulator, combiner and finisher?
     ///
     pub enum Collector[_a: Type, _t: Type, _ef: Eff, _ans: Type] {
         case Collector(##java.util.stream.Collector)
@@ -34,6 +35,7 @@ mod Interop.Util.Stream.Collector {
     
     use Interop.Util.Stream.Collector
     use Interop.Util.Stream.Collector.{Collector}
+    use Interop.Util.Stream.CollectorCharacteristics
     use Interop.Util.Function.BiConsumer
     use Interop.Util.Function.BiConsumer.{BiConsumer}
     use Interop.Util.Function.BinaryOperator
@@ -49,7 +51,7 @@ mod Interop.Util.Stream.Collector {
                 accumulator: BiConsumer[a, t, ef2],
                 combiner: BinaryOperator[a, ef3],
                 finisher: FunctionZ[a, ans, ef4], 
-                characteristics: Vector[Interop.Util.Stream.Collector.Characteristics]): Collector[t, a, ef1 + ef2 + ef3 + ef4, ans] = 
+                characteristics: Vector[CollectorCharacteristics]): Collector[t, a, ef1 + ef2 + ef3 + ef4, ans] = 
         region rc {
             import static java.util.stream.Collector.of(##java.util.function.Supplier, 
                                                     ##java.util.function.BiConsumer,
@@ -60,7 +62,7 @@ mod Interop.Util.Stream.Collector {
             let BiConsumer(accumulator1) = accumulator;
             let BinaryOperator(combiner1) = combiner;
             let FunctionZ(finisher1) = finisher;
-            let characteristics1 = Vector.map(Interop.Util.Stream.Collector.Characteristics.getHH, characteristics) |> Vector.toArray(rc);
+            let characteristics1 = Vector.map(Interop.Util.Stream.CollectorCharacteristics.getHH, characteristics) |> Vector.toArray(rc);
             Collector(of(supplier1, accumulator1, combiner1, finisher1, characteristics1))
         } 
 

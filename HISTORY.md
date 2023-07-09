@@ -1,3 +1,8 @@
+### v0.7.0
+   Added `ReadableByteChannel` and `WritableByteChannel`.
+   Added `MathContext` and BigDecimal operations using it.
+   Changed namespace of `Interop.Util.Stream.Collector.Characteristics` to `Interop.Util.Stream.CollectorCharacteristics``.
+
 ### v0.6.1
    Added `Interop.Lang.IterableZ`.
    Added `StringZ.getBytes`.
@@ -20,7 +25,7 @@
    Removed uses of & in effects signatures.
 
 ### v0.3.0
-   Changed to use `mod` rather than `mod`.
+   Changed to use `mod` rather than `namespace`.
 
 ### v0.2.0
    First release with new Flix package manager. 
