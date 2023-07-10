@@ -252,4 +252,7 @@ mod Interop.Util.SetZ {
         toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, s) |> Iterator.toList
     }
 
+    pub def toFlixVector(s: SetZ[a, r]): Vector[a] \ { r } with Marshal[a] = region rc {
+        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, s) |> Iterator.toVector
+    }
 }

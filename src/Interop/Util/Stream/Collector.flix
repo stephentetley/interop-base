@@ -66,11 +66,48 @@ mod Interop.Util.Stream.Collector {
             Collector(of(supplier1, accumulator1, combiner1, finisher1, characteristics1))
         } 
 
-    // /// TODO Supplier should be mutable...
-    // pub def supplier(c: Collector[t, a, ans]): Supplier[a] \ r =
-    //     import java.util.stream.Collector.supplier(): ##java.util.function.Supplier \ r;
-    //     let Collector(c1) = c;
-    //     supplier(c1)
+    pub def characteristics(c: Collector[t, a, ef, ans]): Vector[CollectorCharacteristics] = region rc {
+        import java.util.stream.Collector.characteristics(): ##java.util.Set \ {};
+        let Collector(c1) = c;
+        characteristics(c1) |> Interop.Util.SetZ.wrapHH(rc) |> Interop.Util.SetZ.toFlixVector
+    }
 
+    pub def supplier(c: Collector[t, a, ef, ans]): Supplier[a, ef] =
+        import java.util.stream.Collector.supplier(): ##java.util.function.Supplier \ {};
+        let Collector(c1) = c;
+        Supplier(supplier(c1))
+
+    pub def accumulator(c: Collector[t, a, ef, ans]): BiConsumer[a, t, ef] =
+        import java.util.stream.Collector.accumulator(): ##java.util.function.BiConsumer \ {};
+        let Collector(c1) = c;
+        BiConsumer(accumulator(c1))
+
+    pub def combiner(c: Collector[t, a, ef, ans]): BinaryOperator[a, ef] =
+        import java.util.stream.Collector.combiner(): ##java.util.function.BinaryOperator \ {};
+        let Collector(c1) = c;
+        BinaryOperator(combiner(c1))        
+
+    pub def finisher(c: Collector[t, a, ef, ans]): FunctionZ[a, ans, ef] =
+        import java.util.stream.Collector.finisher(): ##java.util.function.Function \ {};
+        let Collector(c1) = c;
+        FunctionZ(finisher(c1))  
+
+    pub def mapFinisher(f1: FunctionZ[ans, ans1, ef1],
+                        c: Collector[t, a, ef, ans]): Collector[t, a, ef + ef1, ans1] =
+        let sf = supplier(c);
+        let af = accumulator(c);
+        let cf = combiner(c);
+        let ff = finisher(c);
+        let chars = characteristics(c);
+        of5(sf, af, cf, Interop.Util.Function.FunctionZ.andThen(ff, f1), chars)
+
+    pub def mapFinisher1(f: ans -> ans1 \ ef1, 
+                        c: Collector[t, a, ef, ans]): Collector[t, a, ef + ef1, ans1] with Marshal[ans], Marshal[ans1] =
+        let sf = supplier(c);
+        let af = accumulator(c);
+        let cf = combiner(c);
+        let ff = finisher(c);
+        let chars = characteristics(c);
+        of5(sf, af, cf, Interop.Util.Function.FunctionZ.andThen(ff, Interop.Util.Function.FunctionZ.makeFunctionZ(f)), chars)
 
 }

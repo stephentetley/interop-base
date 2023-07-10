@@ -32,7 +32,7 @@ mod Interop.Util.Function.FunctionZ {
     use Interop.Util.Function.FunctionZ
     use Interop.Util.Function.FunctionZ.{FunctionZ}
     use Interop.Flix.Marshal
-    use Interop.Flix.MutMarshal
+    use Interop.Flix.ColMarshal
 
 
     pub def makeFunctionZ(f: a -> b \ ef): FunctionZ[a, b, ef] with Marshal[a], Marshal[b] = 
@@ -45,20 +45,20 @@ mod Interop.Util.Function.FunctionZ {
 
 
     pub def makeSummaryFinisher[a: Type, b: Type, r: Region, t: Type -> Region -> Type, ef: Eff]
-                                (r: Region[r], f: t[a, r] -> b \ ef): FunctionZ[t[a, r], b, ef] with MutMarshal[t], Marshal[b] = 
+                                (rc: Region[r], f: t[a, r] -> b \ ef): FunctionZ[t[a, r], b, ef] with ColMarshal[t], Marshal[b] = 
         let f1 = obj -> {
-            let t1 = Interop.Flix.MutMarshal.mmFromJavaObject(r, obj);
+            let t1 = Interop.Flix.ColMarshal.colFromJavaObject(rc, obj);
             let ans = unchecked_cast(f(t1) as _ \ IO);
             Interop.Flix.Marshal.toJavaObject(ans) 
         };
         FunctionZ(unchecked_cast(f1 as ##java.util.function.Function))
 
     pub def makeCollectionFinisher[a: Type, r: Region, t: Type -> Region -> Type, ef: Eff]
-                                    (r: Region[r], f: t[a, r] -> t[a, r] \ ef): FunctionZ[t[a, r], t[a, r], ef] with MutMarshal[t] = 
+                                    (rc: Region[r], f: t[a, r] -> t[a, r] \ ef): FunctionZ[t[a, r], t[a, r], ef] with ColMarshal[t] = 
         let f1 = obj -> {
-            let t1 = Interop.Flix.MutMarshal.mmFromJavaObject(r, obj);
+            let t1 = Interop.Flix.ColMarshal.colFromJavaObject(rc, obj);
             let ans = unchecked_cast(f(t1) as _ \ IO);
-            Interop.Flix.MutMarshal.mmToJavaObject(ans) 
+            Interop.Flix.ColMarshal.colToJavaObject(ans) 
         };
         FunctionZ(unchecked_cast(f1 as ##java.util.function.Function))
 

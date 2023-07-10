@@ -31,7 +31,7 @@ mod Interop.Util.Function.BiConsumer {
     use Interop.Util.Function.BiConsumer
     use Interop.Util.Function.BiConsumer.{BiConsumer}
     use Interop.Flix.Marshal
-    use Interop.Flix.MutMarshal
+    use Interop.Flix.ColMarshal
 
 
 
@@ -49,9 +49,9 @@ mod Interop.Util.Function.BiConsumer {
 
     /// Collector imposes arg order: collection * element
     pub def makeAccumulator[a: Type, r: Region, t: Type -> Region -> Type, ef: Eff]
-                            (r: Region[r], f: (t[a, r], a) -> Unit \ ef): BiConsumer[t[a, r], a, ef] with Marshal[a], MutMarshal[t] = 
+                            (r: Region[r], f: (t[a, r], a) -> Unit \ ef): BiConsumer[t[a, r], a, ef] with Marshal[a], ColMarshal[t] = 
         let f1 = (o1, o2) -> {
-            let t = Interop.Flix.MutMarshal.mmFromJavaObject(r, o1); 
+            let t = Interop.Flix.ColMarshal.colFromJavaObject(r, o1); 
             let a = Interop.Flix.Marshal.fromJavaObject(o2);
             f(t, a)
         };

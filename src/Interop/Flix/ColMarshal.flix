@@ -16,22 +16,11 @@
 
 mod Interop.Flix {
 
-    use StringBuilder.{StringBuilder}
+    /// Marshal class for `Type -> Region -> Type` types.
+    pub class ColMarshal[t: Type -> Region -> Type] {
+        pub def colToJavaObject(x: t[a, r]): ##java.lang.Object
 
-    /// Marshal class for `Region -> Type` types.
-    pub class MutMarshal[t: Region -> Type] {
-        pub def mutToJavaObject(x: t[r]): ##java.lang.Object
-
-        pub def mutFromJavaObject(r: Region[r], o: ##java.lang.Object): t[r]
-    }
-
-    instance MutMarshal[StringBuilder] {
-        pub def mutToJavaObject(x: StringBuilder[r]): ##java.lang.Object = 
-            let StringBuilder(x1) = x;
-            checked_cast(x1)
-
-        pub def mutFromJavaObject(_: Region[r], o: ##java.lang.Object): StringBuilder[r] = 
-            StringBuilder(unchecked_cast(o as ##java.lang.StringBuilder))
+        pub def colFromJavaObject(rc: Region[r], o: ##java.lang.Object): t[a, r]
     }
 
 }

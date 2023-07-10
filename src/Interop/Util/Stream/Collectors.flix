@@ -20,7 +20,10 @@ mod Interop.Util.Stream.Collectors {
     use Interop.Flix.Marshal
     use Interop.Util.Stream.Collector
     use Interop.Util.Stream.Collector.{Collector}
+    use Interop.Util.Function.FunctionZ
+    use Interop.Util.Function.FunctionZ.{FunctionZ}
     use Interop.Util.Function.ToDoubleFunction.{ToDoubleFunction}
+    use Interop.Util.SetZ
 
     /// Effects?
     pub def averagingDouble(fn: a -> Float64 \ ef): Collector[a, t, ef, Float64] with Marshal[a] = 
@@ -50,5 +53,22 @@ mod Interop.Util.Stream.Collectors {
         let p1 = checked_cast(prefix.prefix);
         let s1 = checked_cast(suffix.suffix);
         Collector(joining(d1, p1, s1))
+
+    /// TODO...
+    // // Need to extend the finisher to get from ##java.util.Set to Flix's `Set[a]`
+    // pub def toSet(): Collector[a, t, Pure, Set[a]] with Marshal[a], Order[a] = 
+    //     import static java.util.stream.Collectors.toSet(): ##java.util.stream.Collector \ {};
+    //     let collector = Collector(toSet());
+    //     Interop.Util.Stream.Collector.mapFinisher(setFinisher(), collector)
+
+
+    // def setFinisher(rc: Region[r]): FunctionZ[##java.util.Set, SetZ[a, r], r] = 
+    //     let f1 = obj -> {
+    //         let s1 = unchecked_cast(obj as ##java.util.Set);
+    //         let ans: Set[a] = Interop.Util.SetZ.primSetToFlixSet(s1);
+    //         unchecked_cast(ans as ##java.lang.Object) 
+    //     };
+    //     FunctionZ(unchecked_cast(f1 as ##java.util.function.Function))
+
 
 }

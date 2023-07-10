@@ -33,7 +33,7 @@ mod Interop.Util.Function.BinaryOperator {
     use Interop.Util.Function.BinaryOperator
     use Interop.Util.Function.BinaryOperator.{BinaryOperator}
     use Interop.Flix.Marshal
-    use Interop.Flix.MutMarshal
+    use Interop.Flix.ColMarshal
     
 
     pub def makeBinaryOperator(f: (a, a) -> a \ ef): BinaryOperator[a, ef] with Marshal[a] = 
@@ -50,12 +50,12 @@ mod Interop.Util.Function.BinaryOperator {
 
 
     pub def makeCombiner[a: Type, r: Region, t: Type -> Region -> Type, ef: Eff]
-                        (r: Region[r], f: (t[a, r], t[a, r]) -> t[a, r] \ef): BinaryOperator[t[a, r], ef] with MutMarshal[t] = 
+                        (r: Region[r], f: (t[a, r], t[a, r]) -> t[a, r] \ef): BinaryOperator[t[a, r], ef] with ColMarshal[t] = 
         let f1 = (o1, o2) -> {
-            let a = Interop.Flix.MutMarshal.mmFromJavaObject(r, o1); 
-            let b = Interop.Flix.MutMarshal.mmFromJavaObject(r, o2); 
+            let a = Interop.Flix.ColMarshal.colFromJavaObject(r, o1); 
+            let b = Interop.Flix.ColMarshal.colFromJavaObject(r, o2); 
             let ans = f(a, b);
-            Interop.Flix.MutMarshal.mmToJavaObject(ans)
+            Interop.Flix.ColMarshal.colToJavaObject(ans)
         };
         BinaryOperator(unchecked_cast(new ##java.util.function.BinaryOperator {
             def apply(_this: ##java.util.function.BinaryOperator, t: ##java.lang.Object, u: ##java.lang.Object): ##java.lang.Object = 

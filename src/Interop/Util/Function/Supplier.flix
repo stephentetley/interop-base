@@ -32,7 +32,7 @@ mod Interop.Util.Function.Supplier {
     use Interop.Util.Function.Supplier
     use Interop.Util.Function.Supplier.{Supplier}
     use Interop.Flix.Marshal
-    use Interop.Flix.MutMarshal
+    use Interop.Flix.ColMarshal
 
     pub def makeSupplier(f: Unit -> a \ ef): Supplier[a, ef] with Marshal[a] = 
         Supplier(unchecked_cast(new ##java.util.function.Supplier {
@@ -42,10 +42,10 @@ mod Interop.Util.Function.Supplier {
 
 
     pub def makeInitialSupplier[a: Type, r: Region, t: Type -> Region -> Type, ef: Eff]
-                                (_: Region[r], f: Unit -> t[a, r] \ ef): Supplier[t[a, r], ef] with MutMarshal[t] = 
+                                (_: Region[r], f: Unit -> t[a, r] \ ef): Supplier[t[a, r], ef] with ColMarshal[t] = 
         Supplier(unchecked_cast(new ##java.util.function.Supplier {
             def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 
-                f() |> Interop.Flix.MutMarshal.mmToJavaObject
+                f() |> Interop.Flix.ColMarshal.colToJavaObject
         } as _ \ {}))
 
 
