@@ -34,6 +34,15 @@ mod Interop.Util {
         case HashSet(Region[r], ##java.util.HashSet)
     }
 
+    instance Interop.Flix.ColMarshal[HashSet] {
+        pub def colToJavaObject(x: HashSet[a, r]): ##java.lang.Object = 
+            let HashSet(_, t1) = x;
+            unchecked_cast(t1 as ##java.lang.Object)
+
+        pub def colFromJavaObject(rc: Region[r], o: ##java.lang.Object): HashSet[a, r] = 
+            HashSet(rc, unchecked_cast(o as ##java.util.HashSet))
+    }
+
     instance Interop.Util.ImpCollection[HashSet] {
         pub def toCollection(t: HashSet[a, r]): Collection[a, r] = 
             let HashSet(rc, t1) = t;

@@ -37,6 +37,15 @@ mod Interop.Util {
             ImpSetZ.toSetZ(s) |> Interop.Util.SetZ.getHH
     }
 
+    instance Interop.Flix.ColMarshal[SetZ] {
+        pub def colToJavaObject(x: SetZ[a, r]): ##java.lang.Object = 
+            let SetZ(_, t1) = x;
+            unchecked_cast(t1 as ##java.lang.Object)
+
+        pub def colFromJavaObject(rc: Region[r], o: ##java.lang.Object): SetZ[a, r] = 
+            SetZ(rc, unchecked_cast(o as ##java.util.Set))
+    }
+
     instance Interop.Util.ImpCollection[SetZ] {
         pub def toCollection(t: SetZ[a, r]): Collection[a, r] = 
             let SetZ(rc, t1) = t;

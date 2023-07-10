@@ -35,6 +35,14 @@ mod Interop.Util {
     }
 
 
+    instance Interop.Flix.ColMarshal[ArrayList] {
+        pub def colToJavaObject(x: ArrayList[a, r]): ##java.lang.Object = 
+            let ArrayList(_, t1) = x;
+            unchecked_cast(t1 as ##java.lang.Object)
+
+        pub def colFromJavaObject(rc: Region[r], o: ##java.lang.Object): ArrayList[a, r] = 
+            ArrayList(rc, unchecked_cast(o as ##java.util.ArrayList))
+    }
 
     instance Interop.Util.ImpCollection[ArrayList] {
         pub def toCollection(t: ArrayList[a, r]): Collection[a, r] = 

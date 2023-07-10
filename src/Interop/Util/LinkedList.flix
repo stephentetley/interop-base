@@ -36,6 +36,15 @@ mod Interop.Util {
     }
 
 
+    instance Interop.Flix.ColMarshal[LinkedList] {
+        pub def colToJavaObject(x: LinkedList[a, r]): ##java.lang.Object = 
+            let LinkedList(_, t1) = x;
+            unchecked_cast(t1 as ##java.lang.Object)
+
+        pub def colFromJavaObject(rc: Region[r], o: ##java.lang.Object): LinkedList[a, r] = 
+            LinkedList(rc, unchecked_cast(o as ##java.util.LinkedList))
+    }
+
     instance Interop.Util.ImpCollection[LinkedList] {
         pub def toCollection(t: LinkedList[a, r]): Collection[a, r] = 
             let LinkedList(rc, t1) = t;

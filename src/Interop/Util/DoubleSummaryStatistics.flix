@@ -16,10 +16,21 @@
 
 mod Interop.Util {
 
+    use Interop.Util.DoubleSummaryStatistics.{DoubleSummaryStatistics}
+
     ///
     /// Represents a Java DoubleSummaryStatistics.
     /// Mutable - see combine, no alloc
     pub enum DoubleSummaryStatistics[_: Region](##java.util.DoubleSummaryStatistics)
+
+    instance Interop.Flix.MutMarshal[DoubleSummaryStatistics] {
+        pub def mutToJavaObject(x: DoubleSummaryStatistics[r]): ##java.lang.Object = 
+            let DoubleSummaryStatistics(x1) = x;
+            checked_cast(x1)
+
+        pub def mutFromJavaObject(_: Region[r], o: ##java.lang.Object): DoubleSummaryStatistics[r] = 
+            DoubleSummaryStatistics(unchecked_cast(o as ##java.util.DoubleSummaryStatistics))
+    }
 
 }
 

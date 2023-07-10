@@ -16,11 +16,21 @@
 
 mod Interop.Util {
 
+    use Interop.Util.IntSummaryStatistics.{IntSummaryStatistics}
+    
     ///
     /// Represents a Java IntSummaryStatistics.
     /// Mutable - see combine, no alloc
     pub enum IntSummaryStatistics[_: Region](##java.util.IntSummaryStatistics)
 
+    instance Interop.Flix.MutMarshal[IntSummaryStatistics] {
+        pub def mutToJavaObject(x: IntSummaryStatistics[r]): ##java.lang.Object = 
+            let IntSummaryStatistics(x1) = x;
+            checked_cast(x1)
+
+        pub def mutFromJavaObject(_: Region[r], o: ##java.lang.Object): IntSummaryStatistics[r] = 
+            IntSummaryStatistics(unchecked_cast(o as ##java.util.IntSummaryStatistics))
+    }
 
 }
 
