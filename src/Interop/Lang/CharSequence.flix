@@ -17,33 +17,37 @@
 mod Interop.Lang {
 
     /// Interface...
-    /// Read-only (not pure) - in Java handles both String and StringBuilder[r]
-    /// 
-    /// TODO - should we make this pure, then clients wanting to use e.g StringBuilder can
-    /// sort out a conversion (first to a String...) for themselves?
-
+    /// Immutable  - but in Java handles both String and StringBuilder[r]....
 
     use Interop.Lang.CharSequence
     use Interop.Lang.CharSequence.{CharSequence}
-    use StringBuilder.{StringBuilder}
 
-    pub enum CharSequence[_: Region](##java.lang.CharSequence)
+    pub enum CharSequence(##java.lang.CharSequence)
 
 
-    pub class ImpCharSequence[t: Region -> Type] {
-        pub def toCharSequence(s: t[r]): CharSequence[r]
-        pub def fromCharSequence(s: CharSequence[r]): t[r]
+    pub class ImpCharSequence[t: Type] {
+        pub def toCharSequence(s: t): CharSequence
+        pub def fromCharSequence(s: CharSequence): t
     }
 
-    instance Interop.Lang.ImpCharSequence[StringBuilder] {
-        pub def toCharSequence(s: StringBuilder[r]): CharSequence[r] =             
-            let StringBuilder(s1) = s;
-            let cs: ##java.lang.CharSequence = checked_cast(s1);
+
+    instance Interop.Flix.Marshal[CharSequence] {
+        pub def toJavaObject(x: CharSequence): ##java.lang.Object = 
+            let CharSequence(x1) = x;
+            checked_cast(x1)
+
+        pub def fromJavaObject(o: ##java.lang.Object): CharSequence = 
+            CharSequence(unchecked_cast(o as ##java.lang.CharSequence))
+    }
+
+    instance Interop.Lang.ImpCharSequence[String] {
+        pub def toCharSequence(s: String): CharSequence =
+            let cs: ##java.lang.CharSequence = checked_cast(s);
             CharSequence(cs)
 
-        pub def fromCharSequence(s: CharSequence[r]): StringBuilder[r] = 
+        pub def fromCharSequence(s: CharSequence): String = 
             let CharSequence(s1) = s;
-            StringBuilder(unchecked_cast(s1 as ##java.lang.StringBuilder))
+            unchecked_cast(s1 as String)
     }
 
 }
@@ -52,58 +56,60 @@ mod Interop.Lang {
 
 mod Interop.Lang.CharSequence {
 
+    use StringBuilder.{StringBuilder}
+
     use Interop.Lang.CharSequence
     use Interop.Lang.CharSequence.{CharSequence}
     use Interop.Lang.ImpCharSequence
 
-    pub def getHH(cs: CharSequence[r]): ##java.lang.CharSequence = 
+    pub def getHH(cs: CharSequence): ##java.lang.CharSequence = 
         let CharSequence(cs1) = cs;
         cs1
 
-    pub def wrapHH(_: Region[r], prim: ##java.lang.CharSequence): CharSequence[r] = 
+    pub def wrapHH(prim: ##java.lang.CharSequence): CharSequence = 
         CharSequence(prim)
 
-    pub def toCharSequenceHH[t: Region -> Type, r: Region](s: t[r]): ##java.lang.CharSequence with ImpCharSequence[t] = 
+    pub def toCharSequenceHH(s: t): ##java.lang.CharSequence with ImpCharSequence[t] = 
         Interop.Lang.ImpCharSequence.toCharSequence(s) |> getHH
 
 
-    pub def toString(cs: CharSequence[r]): String \ r = 
-        import java.lang.CharSequence.toString(): String \ r;
+    pub def toString(cs: CharSequence): String = 
+        import java.lang.CharSequence.toString(): String \ {};
         let CharSequence(cs1) = cs;
         toString(cs1)
 
-    pub def isEmpty(cs: CharSequence[r]): Bool \ r = 
-        import java.lang.CharSequence.isEmpty(): Bool \ r;
+    pub def isEmpty(cs: CharSequence): Bool = 
+        import java.lang.CharSequence.isEmpty(): Bool \ {};
         let CharSequence(cs1) = cs;
         isEmpty(cs1)
 
-    pub def length(cs: CharSequence[r]): Int32 \ r = 
-        import java.lang.CharSequence.length(): Int32 \ r;
+    pub def length(cs: CharSequence): Int32 = 
+        import java.lang.CharSequence.length(): Int32 \ {};
         let CharSequence(cs1) = cs;
         length(cs1)
 
-    pub def charAt(ix: Int32, cs: CharSequence[r]): Result[String, Char] \ r = 
+    pub def charAt(ix: Int32, cs: CharSequence): Result[String, Char] = 
         Result.tryCatch(_ -> {
-            import java.lang.CharSequence.charAt(Int32): Char \ r;
+            import java.lang.CharSequence.charAt(Int32): Char \ {};
             let CharSequence(cs1) = cs;
             charAt(cs1, ix)
         })
 
-    pub def subSequence(start: {start = Int32}, end: {end = Int32}, cs: CharSequence[r]): Result[String, CharSequence[r]] \ r = 
+    pub def subSequence(start: {start = Int32}, end: {end = Int32}, cs: CharSequence): Result[String, CharSequence] = 
         Result.tryCatch(_ -> {
-            import java.lang.CharSequence.subSequence(Int32, Int32): ##java.lang.CharSequence \ r;
+            import java.lang.CharSequence.subSequence(Int32, Int32): ##java.lang.CharSequence \ {};
             let CharSequence(cs1) = cs;
             CharSequence(subSequence(cs1, start.start, end.end))
         })
 
     // Define explicit "from" functions because `CharSequence` is mutable but String isn't.
 
-    pub def fromString(_: Region[r], s: String): CharSequence[r] = 
-        let cs: ##java.lang.CharSequence = checked_cast(s);
-        CharSequence(cs)
+    pub def fromString(s: String): CharSequence = 
+        Interop.Lang.ImpCharSequence.toCharSequence(s)
 
-    pub def fromStringBuilder(sb: StringBuilder[r]): CharSequence[r] = 
-        Interop.Lang.ImpCharSequence.toCharSequence(sb)
-
+    pub def fromStringBuilder(sb: StringBuilder[r]): CharSequence \ r = 
+        let StringBuilder(sb1) = sb;
+        let cs: ##java.lang.CharSequence = checked_cast(sb1);
+        checked_ecast(CharSequence(cs))
 
 }

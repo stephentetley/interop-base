@@ -78,7 +78,7 @@ mod Interop.NIO.File.Files {
         })
 
     /// UTF_8
-    pub def writeStringUtf8!(path: Path, s: CharSequence[r], opts: List[OpenOption]): Result[String, Path] \ IO = 
+    pub def writeStringUtf8!(path: Path, s: CharSequence, opts: List[OpenOption]): Result[String, Path] \ IO = 
         Result.tryCatch(_ -> {
             region rc {
                 import static java.nio.file.Files.writeString(##java.nio.file.Path, 
@@ -90,7 +90,7 @@ mod Interop.NIO.File.Files {
             }
         })
 
-    pub def writeString!(path: Path, s: CharSequence[r], cs: Charset, opts: List[OpenOption]): Result[String, Path] \ IO = 
+    pub def writeString!(path: Path, s: CharSequence, cs: Charset, opts: List[OpenOption]): Result[String, Path] \ IO = 
         Result.tryCatch(_ -> {
             region rc {
                 import static java.nio.file.Files.writeString(##java.nio.file.Path, 

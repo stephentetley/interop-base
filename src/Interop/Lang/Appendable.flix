@@ -31,6 +31,15 @@ mod Interop.Lang {
         pub def fromAppendable[r: Region](s: Appendable[r]): t[r]
     }
 
+    instance Interop.Flix.MutMarshal[Appendable] {
+        pub def mutToJavaObject(x: Appendable[r]): ##java.lang.Object = 
+            let Appendable(x1) = x;
+            checked_cast(x1)
+
+        pub def mutFromJavaObject(_: Region[r], o: ##java.lang.Object): Appendable[r] = 
+            Appendable(unchecked_cast(o as ##java.lang.Appendable))
+    }
+
     instance Interop.Lang.ImpAppendable[StringBuilder] {
         pub def toAppendable(s: StringBuilder[r]): Appendable[r] = 
             let StringBuilder(s1) = s;
@@ -67,20 +76,20 @@ mod Interop.Lang.Appendable {
             Appendable(append(ap1, c))
         })
 
-    pub def appendCharSequence!(cs: CharSequence[r1], ap: Appendable[r]): Result[String, Appendable[r]] \ {r, r1} = 
+    pub def appendCharSequence!(cs: CharSequence, ap: Appendable[r]): Result[String, Appendable[r]] \ r = 
         Result.tryCatch(_ -> {
-            import java.lang.Appendable.append(##java.lang.CharSequence): ##java.lang.Appendable \ {r1, r};
+            import java.lang.Appendable.append(##java.lang.CharSequence): ##java.lang.Appendable \ r;
             let cs1 = Interop.Lang.CharSequence.getHH(cs);
             let Appendable(ap1) = ap;
             Appendable(append(ap1, cs1))
         })
 
-    pub def appendCharSubSequence!(cs: CharSequence[r1], 
+    pub def appendCharSubSequence!(cs: CharSequence, 
                                     start: {start = Int32},
                                     end: {end = Int32},
-                                    ap: Appendable[r2]): Result[String, Appendable[r]] \ {r1, r2} = 
+                                    ap: Appendable[r]): Result[String, Appendable[r]] \ r = 
         Result.tryCatch(_ -> {
-            import java.lang.Appendable.append(##java.lang.CharSequence, Int32, Int32): ##java.lang.Appendable \ {r1, r2};
+            import java.lang.Appendable.append(##java.lang.CharSequence, Int32, Int32): ##java.lang.Appendable \ r;
             let cs1 = Interop.Lang.CharSequence.getHH(cs);
             let Appendable(ap1) = ap;
             Appendable(append(ap1, cs1, start.start, end.end))

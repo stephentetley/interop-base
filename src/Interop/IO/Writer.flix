@@ -75,20 +75,20 @@ mod Interop.IO.Writer {
         })
 
 
-    pub def appendCharSequence!(cs: CharSequence[r2], w: Writer[r]): Result[String, Writer[r]] \ {r, r1} =
+    pub def appendCharSequence!(cs: CharSequence, w: Writer[r]): Result[String, Writer[r]] \ r =
         Result.tryCatch(_ -> {
-            import java.io.Writer.append(##java.lang.CharSequence): ##java.io.Writer \ {r, r1};
+            import java.io.Writer.append(##java.lang.CharSequence): ##java.io.Writer \ r;
             let Writer(w1) = w;
             let cs1 = Interop.Lang.CharSequence.getHH(cs);
             Writer(append(w1, cs1))
         })
 
-    pub def appendSubCharSequence!(cs: CharSequence[r1], 
+    pub def appendSubCharSequence!(cs: CharSequence, 
                                     start: {start = Int32}, 
                                     end: {end = Int32}, 
-                                    w: Writer[r]): Result[String, Writer[r]] \ {r, r1} =
+                                    w: Writer[r]): Result[String, Writer[r]] \ r =
         Result.tryCatch(_ -> {
-            import java.io.Writer.append(##java.lang.CharSequence, Int32, Int32): ##java.io.Writer \ {r, r1};
+            import java.io.Writer.append(##java.lang.CharSequence, Int32, Int32): ##java.io.Writer \ r;
             let Writer(w1) = w;
             let cs1 = Interop.Lang.CharSequence.getHH(cs);
             Writer(append(w1, cs1, start.start, end.end))

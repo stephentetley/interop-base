@@ -68,7 +68,7 @@ mod Interop.Util.SetZ {
     use Interop.Util.ImpSetZ
     use Interop.Util.Function.PredicateZ.{PredicateZ}
     use Interop.Flix.Marshal
-
+    use Interop.Flix.MutMarshal
 
     pub def getHH(s: SetZ[a, r]): ##java.util.Set = 
         let SetZ(_, s1) = s;
@@ -151,6 +151,16 @@ mod Interop.Util.SetZ {
             add(s1, x1)
         })
 
+    pub def addMut![r: Region, t: Region -> Type]
+                    (x: t[r], s: SetZ[t[r], r]): Result[String, Bool] \  r with MutMarshal[t] =
+        Result.tryCatch(_ -> {
+            import java.util.Set.add(##java.lang.Object): Bool \ r; 
+            let SetZ(_, s1) = s;
+            let x1 = Interop.Flix.MutMarshal.mutToJavaObject(x);
+            add(s1, x1)
+        })
+
+
     pub def addAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Set.addAll(##java.util.Collection): Bool \ r; 
@@ -158,6 +168,8 @@ mod Interop.Util.SetZ {
             let Collection(_, c1) = c;
             addAll(s1, c1)
         })
+
+
 
     pub def contains(x: a, s: SetZ[a, r]): Result[String, Bool] \  r with Marshal[a] =
         Result.tryCatch(_ -> {
@@ -200,7 +212,7 @@ mod Interop.Util.SetZ {
 
     
     pub def removeIf![a: Type, ef: Eff, r: Region]
-                        (f: a -> Bool \ ef, s: SetZ[a, r]): Result[String, Bool] \  {ef, r} with Marshal[a] =
+                        (f: a -> Bool \ ef, s: SetZ[a, r]): Result[String, Bool] \ {ef, r} with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Set.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let SetZ(_, s1) = s;
@@ -208,7 +220,7 @@ mod Interop.Util.SetZ {
             checked_ecast(removeIf(s1, f1))
         })
 
-    pub def retainAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \  r with Marshal[a] =
+    pub def retainAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \ r with Marshal[a] =
         Result.tryCatch(_ -> {
             import java.util.Set.retainAll(##java.util.Collection): Bool \ r; 
             let SetZ(_, s1) = s;

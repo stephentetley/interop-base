@@ -1,5 +1,6 @@
 ### v0.7.0
    Reworked `MutMarshal` typeclass, added `ColMarshal`.
+   Made `CharSequence` immutable.
    Added `ReadableByteChannel` and `WritableByteChannel`.
    Added `MathContext` and BigDecimal operations using it.
    Changed namespace of `Interop.Util.Stream.Collector.Characteristics` to `Interop.Util.Stream.CollectorCharacteristics`.

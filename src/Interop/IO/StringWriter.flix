@@ -89,14 +89,14 @@ mod Interop.IO.StringWriter {
         StringWriter(append(w1, c))
 
 
-    pub def appendCharSequence!(cs: CharSequence[r1], w: StringWriter[r]): StringWriter[r] \ {r, r1} =
-        import java.io.StringWriter.append(##java.lang.CharSequence): ##java.io.StringWriter \ {r, r1};
+    pub def appendCharSequence!(cs: CharSequence, w: StringWriter[r]): StringWriter[r] \ r =
+        import java.io.StringWriter.append(##java.lang.CharSequence): ##java.io.StringWriter \ r;
         let StringWriter(w1) = w;
         let cs1 = Interop.Lang.CharSequence.getHH(cs);
         StringWriter(append(w1, cs1))
 
 
-    pub def appendSubCharSequence!(cs: CharSequence[r2], 
+    pub def appendSubCharSequence!(cs: CharSequence, 
                                     start: {start = Int32}, 
                                     end: {end = Int32}, 
                                     w: StringWriter[r]): Result[String, StringWriter[r]] \ r =

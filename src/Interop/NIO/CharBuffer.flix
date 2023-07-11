@@ -51,21 +51,21 @@ mod Interop.NIO.CharBuffer {
             append(cb1, c) |> CharBuffer
         })
 
-    pub def appendCharSequence!(cs: CharSequence[r2], cb: CharBuffer[r]): Result[String, CharBuffer[r]] \ {r, r2} = 
+    pub def appendCharSequence!(cs: CharSequence, cb: CharBuffer[r]): Result[String, CharBuffer[r]] \ r = 
         Result.tryCatch(_ -> {
-            import java.nio.CharBuffer.append(##java.lang.CharSequence): ##java.nio.CharBuffer \ {r, r2};
+            import java.nio.CharBuffer.append(##java.lang.CharSequence): ##java.nio.CharBuffer \ r;
             let CharBuffer(cb1) = cb;
             let cs1 = Interop.Lang.CharSequence.getHH(cs);
             append(cb1, cs1) |> CharBuffer
         })
 
 
-    pub def appendSubCharSequence!(cs: CharSequence[r2], 
+    pub def appendSubCharSequence!(cs: CharSequence, 
                                     offset: {offset = Int32}, 
                                     len: {len = Int32}, 
-                                    cb: CharBuffer[r]): Result[String, CharBuffer[r]] \ {r, r2} = 
+                                    cb: CharBuffer[r]): Result[String, CharBuffer[r]] \ r = 
         Result.tryCatch(_ -> {
-            import java.nio.CharBuffer.append(##java.lang.CharSequence, Int32, Int32): ##java.nio.CharBuffer \ {r, r2};
+            import java.nio.CharBuffer.append(##java.lang.CharSequence, Int32, Int32): ##java.nio.CharBuffer \ r;
             let CharBuffer(cb1) = cb;
             let cs1 = Interop.Lang.CharSequence.getHH(cs);
             append(cb1, cs1, offset.offset, len.len) |> CharBuffer
