@@ -27,10 +27,10 @@ mod Interop.NIO.Channels.Pipe {
 
     use Interop.NIO.Channels.Pipe
     use Interop.NIO.Channels.Pipe.{Pipe}
-    use Interop.NIO.Channels.Pipe.SinkChannel
-    use Interop.NIO.Channels.Pipe.SinkChannel.{SinkChannel}
-    use Interop.NIO.Channels.Pipe.SourceChannel
-    use Interop.NIO.Channels.Pipe.SourceChannel.{SourceChannel}
+    use Interop.NIO.Channels.PipeSinkChannel
+    use Interop.NIO.Channels.PipeSinkChannel.{PipeSinkChannel}
+    use Interop.NIO.Channels.PipeSourceChannel
+    use Interop.NIO.Channels.PipeSourceChannel.{PipeSourceChannel}
 
     pub def getHH(x: Pipe[r]): ##java.nio.channels.Pipe = 
         let Pipe(x1) = x;
@@ -45,14 +45,14 @@ mod Interop.NIO.Channels.Pipe {
             open() |> Pipe
         })
 
-    pub def sink(p: Pipe[r]): SinkChannel[r] \ r = 
+    pub def sink(p: Pipe[r]): PipeSinkChannel[r] \ r = 
         import java.nio.channels.Pipe.sink(): ##java.nio.channels.Pipe$SinkChannel \ r;
         let Pipe(p1) = p;
-        sink(p1) |> SinkChannel 
+        PipeSinkChannel(sink(p1))
 
-    pub def source(p: Pipe[r]): SourceChannel[r] \ r = 
+    pub def source(p: Pipe[r]): PipeSourceChannel[r] \ r = 
         import java.nio.channels.Pipe.source(): ##java.nio.channels.Pipe$SourceChannel \ r;
         let Pipe(p1) = p;
-        source(p1) |> SourceChannel 
+        PipeSourceChannel(source(p1))
 
 }

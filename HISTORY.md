@@ -5,6 +5,8 @@
    Added `MathContext` and BigDecimal operations using it.
    Changed namespace of `Interop.Util.Stream.Collector.Characteristics` to `Interop.Util.Stream.CollectorCharacteristics`.
    Changed namespace of `Interop.Util.Stream.Stream.Builder` to `Interop.Util.Stream.StreamBuilder`.
+   Changed namespace of `Interop.NIO.Channels.Pipe.SinkChannel` to `Interop.NIO.Channels.PipeSinkChannel`.
+   Changed namespace of `Interop.NIO.Channels.Pipe.SourceChannel` to `Interop.NIO.Channels.PipeSourceChannel`.
 
 ### v0.6.1
    Added `Interop.Lang.IterableZ`.
