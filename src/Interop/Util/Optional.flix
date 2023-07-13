@@ -28,9 +28,10 @@ mod Interop.Util {
 
 mod Interop.Util.Optional {
     
-    use Interop.Util.Optional;
-    use Interop.Util.Optional.{Optional};
-    use Interop.Flix.Marshal;
+    use Interop.Util.Optional
+    use Interop.Util.Optional.{Optional}
+    use Interop.Flix.Marshal
+    use Interop.Flix.GoesToJava
 
     pub def getHH(o: Optional[a]): ##java.util.Optional = 
         let Optional(o1) = o;
@@ -67,5 +68,12 @@ mod Interop.Util.Optional {
             case None    => empty() |> Optional
             case Some(a) => Interop.Flix.Marshal.toJavaObject(a) |> of |> Optional
         }
-
+    
+    pub def fromOption1(o: Option[a]): Optional[a] with GoesToJava[a] =
+        import static java.util.Optional.empty(): ##java.util.Optional \ {};
+        import static java.util.Optional.of(##java.lang.Object): ##java.util.Optional \ {};
+        match o { 
+            case None    => empty() |> Optional
+            case Some(a) => Interop.Flix.GoesToJava.toJavaObject(a) |> of |> Optional
+        }
 }

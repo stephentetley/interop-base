@@ -19,9 +19,11 @@ mod Interop.Flix {
 
     // TODO 
     // There is a good case for having a singleton method toJavaObject class
-    // and a toJavaObject / fromJavaObject class. It is common to see enums
-    // that are used as arguments but are never returned in Java API's
-
+    // and a toJavaObject / fromJavaObject class. 
+    // `toJavaObject` would be applicable to types of kind Type, Region -> Type and Type -> Region -> Type, ...
+    // Would `fromJavaObject` need to variations:
+    // > def fromJavaObject(o: ##java.lang.Object): a
+    // > def fromJavaObject(rc: Region[r], o: ##java.lang.Object): t[r]
 
     pub class Marshal[a] {
         pub def toJavaObject(x: a): ##java.lang.Object
