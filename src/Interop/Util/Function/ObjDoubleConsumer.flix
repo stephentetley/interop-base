@@ -33,18 +33,19 @@ mod Interop.Util.Function {
 mod Interop.Util.Function.ObjDoubleConsumer {
     
     use Interop.Util.Function.ObjDoubleConsumer
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
-    pub def makeObjDoubleConsumer(f: (a, Float64) -> Unit \ ef): ObjDoubleConsumer[a] \ ef with Marshal[a] = 
+    pub def makeObjDoubleConsumer(f: (a, Float64) -> Unit \ ef): ObjDoubleConsumer[a] \ ef with ComesFromJava[a] = 
         unchecked_cast((new ##java.util.function.ObjDoubleConsumer {
             def accept(_this: ##java.util.function.ObjDoubleConsumer, t: ##java.lang.Object, u: Float64): Unit = 
-                f(Interop.Flix.Marshal.fromJavaObject(t), u)
+                f(Interop.Flix.ComesFromJava.fromJavaObject(t), u)
         }) as _ \ ef)
 
         
-    pub def accept(t: a, u: Float64, f: ObjDoubleConsumer[a]): Unit \ ef with Marshal[a] = 
+    pub def accept(t: a, u: Float64, f: ObjDoubleConsumer[a]): Unit \ ef with GoesToJava[a] = 
         import java.util.function.ObjDoubleConsumer.accept(##java.lang.Object, Float64): Unit \ ef;        
-        accept(f, Interop.Flix.Marshal.toJavaObject(t), u)
+        accept(f, Interop.Flix.GoesToJava.toJavaObject(t), u)
 
 
 }

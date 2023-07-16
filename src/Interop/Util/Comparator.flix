@@ -31,13 +31,13 @@ mod Interop.Util {
 mod Interop.Util.Comparator {
     
     use Interop.Util.Comparator;
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
 
 
-    pub def makeComparator(f: (a, a) -> Int32 \ ef): Comparator[a] \ ef with Marshal[a] = 
+    pub def makeComparator(f: (a, a) -> Int32 \ ef): Comparator[a] \ ef with ComesFromJava[a] = 
         let f1 = (o1, o2) -> {
-            let a = Interop.Flix.Marshal.fromJavaObject(o1); 
-            let b = Interop.Flix.Marshal.fromJavaObject(o2); 
+            let a = Interop.Flix.ComesFromJava.fromJavaObject(o1); 
+            let b = Interop.Flix.ComesFromJava.fromJavaObject(o2); 
             f(a, b)
         };
         unchecked_cast((new ##java.util.Comparator {

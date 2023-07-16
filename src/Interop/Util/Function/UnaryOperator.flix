@@ -32,14 +32,15 @@ mod Interop.Util.Function.UnaryOperator {
     
     use Interop.Util.Function.UnaryOperator
     use Interop.Util.Function.UnaryOperator.{UnaryOperator}
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
     
 
-    pub def makeUnaryOperator(f: a -> a \ ef): UnaryOperator[a, ef] with Marshal[a] = 
+    pub def makeUnaryOperator(f: a -> a \ ef): UnaryOperator[a, ef] with ComesFromJava[a], GoesToJava[a] = 
         let f1 = o1 -> {
-            let a = Interop.Flix.Marshal.fromJavaObject(o1); 
+            let a = Interop.Flix.ComesFromJava.fromJavaObject(o1); 
             let ans = f(a);
-            Interop.Flix.Marshal.toJavaObject(ans)
+            Interop.Flix.GoesToJava.toJavaObject(ans)
         };
         UnaryOperator(unchecked_cast(new ##java.util.function.UnaryOperator {
             def apply(_this: ##java.util.function.UnaryOperator, t: ##java.lang.Object): ##java.lang.Object = 
@@ -47,10 +48,10 @@ mod Interop.Util.Function.UnaryOperator {
         } as _ \ {}))
 
         
-    pub def apply(t: a, f: UnaryOperator[a, ef]): a \ ef with Marshal[a] = 
+    pub def apply(t: a, f: UnaryOperator[a, ef]): a \ ef with ComesFromJava[a], GoesToJava[a] = 
         import java.util.function.UnaryOperator.apply(##java.lang.Object): ##java.lang.Object \ ef;
         let UnaryOperator(f1) = f;
-        apply(f1, Interop.Flix.Marshal.toJavaObject(t)) |> Interop.Flix.Marshal.fromJavaObject
+        apply(f1, Interop.Flix.GoesToJava.toJavaObject(t)) |> Interop.Flix.ComesFromJava.fromJavaObject
 
     pub def identity(): UnaryOperator[a, ef] = 
         import static java.util.function.UnaryOperator.identity(): ##java.util.function.UnaryOperator \ {};

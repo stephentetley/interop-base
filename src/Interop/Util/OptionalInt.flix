@@ -27,9 +27,8 @@ mod Interop.Util {
 
 mod Interop.Util.OptionalInt {
     
-    use Interop.Util.OptionalInt;
-    use Interop.Util.OptionalInt.{OptionalInt};
-    use Interop.Flix.Marshal;
+    use Interop.Util.OptionalInt
+    use Interop.Util.OptionalInt.{OptionalInt}
 
     pub def getHH(o: OptionalInt): ##java.util.OptionalInt = 
         let OptionalInt(o1) = o;

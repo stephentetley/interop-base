@@ -25,11 +25,13 @@ mod Interop.Lang {
     pub enum Double(##java.lang.Double)
 
 
-    instance Interop.Flix.Marshal[Double] {
+    instance Interop.Flix.GoesToJava[Double] {
         pub def toJavaObject(x: Double): ##java.lang.Object = 
             let Double(x1) = x;
             checked_cast(x1)
+    }
 
+    instance Interop.Flix.ComesFromJava[Double] {
         pub def fromJavaObject(o: ##java.lang.Object): Double = 
             Double(unchecked_cast(o as ##java.lang.Double))
     }

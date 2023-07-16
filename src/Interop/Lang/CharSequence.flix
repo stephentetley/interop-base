@@ -31,11 +31,13 @@ mod Interop.Lang {
     }
 
 
-    instance Interop.Flix.Marshal[CharSequence] {
+    instance Interop.Flix.GoesToJava[CharSequence] {
         pub def toJavaObject(x: CharSequence): ##java.lang.Object = 
             let CharSequence(x1) = x;
             checked_cast(x1)
+    }
 
+    instance Interop.Flix.ComesFromJava[CharSequence] {
         pub def fromJavaObject(o: ##java.lang.Object): CharSequence = 
             CharSequence(unchecked_cast(o as ##java.lang.CharSequence))
     }

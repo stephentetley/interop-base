@@ -36,14 +36,14 @@ mod Interop.Util {
     }
 
 
-    instance Interop.Flix.ColMarshal[LinkedList] {
-        pub def colToJavaObject(x: LinkedList[a, r]): ##java.lang.Object = 
-            let LinkedList(_, t1) = x;
-            unchecked_cast(t1 as ##java.lang.Object)
+    // instance Interop.Flix.ColMarshal[LinkedList] {
+    //     pub def colToJavaObject(x: LinkedList[a, r]): ##java.lang.Object = 
+    //         let LinkedList(_, t1) = x;
+    //         unchecked_cast(t1 as ##java.lang.Object)
 
-        pub def colFromJavaObject(rc: Region[r], o: ##java.lang.Object): LinkedList[a, r] = 
-            LinkedList(rc, unchecked_cast(o as ##java.util.LinkedList))
-    }
+    //     pub def colFromJavaObject(rc: Region[r], o: ##java.lang.Object): LinkedList[a, r] = 
+    //         LinkedList(rc, unchecked_cast(o as ##java.util.LinkedList))
+    // }
 
     instance Interop.Util.ImpCollection[LinkedList] {
         pub def toCollection(t: LinkedList[a, r]): Collection[a, r] = 
@@ -88,7 +88,8 @@ mod Interop.Util.LinkedList {
     use Interop.Util.ImpCollection
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
     use Interop.Util.Function.PredicateZ.{PredicateZ}
-    use Interop.Flix.Marshal;
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
     
     pub def getHH(l: LinkedList[a, r]): ##java.util.LinkedList = 
@@ -116,7 +117,7 @@ mod Interop.Util.LinkedList {
         let LinkedList(_, l1) = l;
         hashCode(l1)
 
-    pub def equals(l1: LinkedList[a, r], l2: LinkedList[a, r]): Bool \  r with Marshal[a] =
+    pub def equals(l1: LinkedList[a, r], l2: LinkedList[a, r]): Bool \ r =
         import java.util.LinkedList.equals(##java.lang.Object): Bool \ r; 
         let LinkedList(_, ll1) = l1;
         let LinkedList(_, ll2) = l2;
@@ -133,21 +134,21 @@ mod Interop.Util.LinkedList {
         size(l1)
 
 
-    pub def get(ix: Int32, l: LinkedList[a, r]): a \ r with Marshal[a] = 
+    pub def get(ix: Int32, l: LinkedList[a, r]): a \ r with ComesFromJava[a] = 
         import java.util.LinkedList.get(Int32): ##java.lang.Object \ r;
         let LinkedList(_, l1) = l;
-        get(l1, ix) |> Interop.Flix.Marshal.fromJavaObject
+        get(l1, ix) |> Interop.Flix.ComesFromJava.fromJavaObject
 
-    pub def add!(x: a, l: LinkedList[a, r]): Bool \ { r } with Marshal[a] = 
+    pub def add!(x: a, l: LinkedList[a, r]): Bool \ { r } with GoesToJava[a] = 
         import java.util.LinkedList.add(##java.lang.Object): Bool \ r;
         let LinkedList(_, l1) = l;
-        add(l1, Interop.Flix.Marshal.toJavaObject(x))
+        add(l1, Interop.Flix.GoesToJava.toJavaObject(x))
 
-    pub def addAt!(ix: Int32, x: a, l: LinkedList[a, r]): Result[String, Unit] \ { r } with Marshal[a] = 
+    pub def addAt!(ix: Int32, x: a, l: LinkedList[a, r]): Result[String, Unit] \ { r } with GoesToJava[a] = 
         Result.tryCatch(_ -> {
             import java.util.LinkedList.add(Int32, ##java.lang.Object): Unit \ r;
             let LinkedList(_, l1) = l;
-            add(l1, ix, Interop.Flix.Marshal.toJavaObject(x))
+            add(l1, ix, Interop.Flix.GoesToJava.toJavaObject(x))
         })
 
     pub def addWith!(x: a, ocast: a -> ##java.lang.Object, l: LinkedList[a, r]): Bool \ r = 
@@ -165,15 +166,15 @@ mod Interop.Util.LinkedList {
         
 
 
-    pub def remove!(x: a, l: LinkedList[a, r]): Result[String, Bool] \  r with Marshal[a] =
+    pub def remove!(x: a, l: LinkedList[a, r]): Result[String, Bool] \ r with GoesToJava[a] =
         Result.tryCatch(_ -> {
             import java.util.LinkedList.remove(##java.lang.Object): Bool \ r; 
             let LinkedList(_, l1) = l;
-            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.GoesToJava.toJavaObject(x);        
             remove(l1, x1)
         })
 
-    pub def removeAll!(c: Collection[a, r1], l: LinkedList[a, r]): Result[String, Bool] \ {r, r1} with Marshal[a] =
+    pub def removeAll!(c: Collection[a, r1], l: LinkedList[a, r]): Result[String, Bool] \ {r, r1} with GoesToJava[a] =
         Result.tryCatch(_ -> {
             import java.util.LinkedList.removeAll(##java.util.Collection): Bool \ {r, r1}; 
             let LinkedList(_, l1) = l;
@@ -182,7 +183,7 @@ mod Interop.Util.LinkedList {
         })
 
     pub def removeIf![a: Type, ef: Eff, r: Region]
-                        (f: a -> Bool \ ef, l: LinkedList[a, r]): Result[String, Bool] \  {ef, r} with Marshal[a] =
+                        (f: a -> Bool \ ef, l: LinkedList[a, r]): Result[String, Bool] \  {ef, r} with ComesFromJava[a] =
         Result.tryCatch(_ -> {
             import java.util.LinkedList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let LinkedList(_, l1) = l;
@@ -192,7 +193,7 @@ mod Interop.Util.LinkedList {
 
 
 
-    pub def retainAll!(c: Collection[a, r1], l: LinkedList[a, r]): Result[String, Bool] \ {r, r1} with Marshal[a] =
+    pub def retainAll!(c: Collection[a, r1], l: LinkedList[a, r]): Result[String, Bool] \ {r, r1} =
         Result.tryCatch(_ -> {
             import java.util.LinkedList.retainAll(##java.util.Collection): Bool \ {r, r1}; 
             let LinkedList(_, l1) = l;
@@ -202,7 +203,7 @@ mod Interop.Util.LinkedList {
 
 
     pub def forEach[a: Type, ef: Eff, r: Region]
-                    (f: a -> Unit \ ef, l: LinkedList[a, r]): Result[String, Unit] \  {ef, r} with Marshal[a] =
+                    (f: a -> Unit \ ef, l: LinkedList[a, r]): Result[String, Unit] \  {ef, r} with ComesFromJava[a] =
         Result.tryCatch(_ -> {
             import java.util.LinkedList.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let LinkedList(_, l1) = l;
@@ -211,12 +212,12 @@ mod Interop.Util.LinkedList {
         })
 
 
-    pub def sort!(f: (a, a) -> Int32, l: LinkedList[a, r]): Result[String, Unit] \ r with Marshal[a] =
+    pub def sort!(f: (a, a) -> Int32, l: LinkedList[a, r]): Result[String, Unit] \ r with ComesFromJava[a] =
         let f1 = Interop.Util.Comparator.makeComparator(f);
         sortWithComparator!(f1, l)
 
 
-    pub def sortWithComparator!(c: Comparator[a], l: LinkedList[a, r]): Result[String, Unit] \ r with Marshal[a] =
+    pub def sortWithComparator!(c: Comparator[a], l: LinkedList[a, r]): Result[String, Unit] \ r with ComesFromJava[a] =
         Result.tryCatch(_ -> {
             import java.util.LinkedList.sort(##java.util.Comparator): Unit \ r; 
             let LinkedList(_, l1) = l;
@@ -230,7 +231,7 @@ mod Interop.Util.LinkedList {
     //     Iterator.forEach(x -> discard add!(x, als), iter1);
     //     als
 
-    pub def fromFoldable(r: Region[r], t: t[a]): LinkedList[a, r] \ { r } with Foldable[t], Marshal[a] =
+    pub def fromFoldable(r: Region[r], t: t[a]): LinkedList[a, r] \ { r } with Foldable[t], GoesToJava[a] =
         let als = new(r);
         Foldable.forEach(x -> discard add!(x, als), t);
         als
@@ -244,8 +245,8 @@ mod Interop.Util.LinkedList {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def iterator(rc: Region[r1], l: LinkedList[a, r]): Iterator[a, r1, r1] \ { r } with Marshal[a] =
-        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, l)
+    pub def iterator(rc: Region[r1], l: LinkedList[a, r]): Iterator[a, r1, r1] \ { r } with ComesFromJava[a] =
+        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, l)
 
     ///
     /// Returns an iterator over `l`.
@@ -267,33 +268,33 @@ mod Interop.Util.LinkedList {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def enumerator(rc: Region[r1], l: LinkedList[a, r]): Iterator[(Int32, a), r1, r1] \ { r, r1 } with Marshal[a] =
+    pub def enumerator(rc: Region[r1], l: LinkedList[a, r]): Iterator[(Int32, a), r1, r1] \ { r, r1 } with ComesFromJava[a] =
         iterator(rc, l) |> Iterator.enumerator
 
 
-    pub def unfoldLinkedList(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): LinkedList[a, r] \ {ef, r} with Marshal[a] =
+    pub def unfoldLinkedList(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): LinkedList[a, r] \ {ef, r} with GoesToJava[a] =
         import new java.util.LinkedList(): ##java.util.LinkedList \ r as new1;
         import java.util.LinkedList.add(##java.lang.Object): Bool \ r as add1;
         def loop(st1, acc) = match f(st1) {
             case None         => LinkedList(rc, acc)
-            case Some(o, st2) => {discard add1(acc, Interop.Flix.Marshal.toJavaObject(o)); loop(st2, acc)}
+            case Some(o, st2) => {discard add1(acc, Interop.Flix.GoesToJava.toJavaObject(o)); loop(st2, acc)}
         };
         loop(st, new1())
 
-    pub def foldLinkedList(f: (b, a) -> b \ ef, s: b, l: LinkedList[a, r]): b \ { r, ef } with Marshal[a] = region r {
+    pub def foldLinkedList(f: (b, a) -> b \ ef, s: b, l: LinkedList[a, r]): b \ { r, ef } with ComesFromJava[a], GoesToJava[a] = region r {
         iterator(r, l) |> Iterator.foldLeft(f, s)
     }
 
-    pub def toFlixList(l: LinkedList[a, r]): List[a] \ { r } with Marshal[a] = region r {
+    pub def toFlixList(l: LinkedList[a, r]): List[a] \ { r } with ComesFromJava[a], GoesToJava[a] = region r {
         iterator(r, l) |> Iterator.toList
     }
 
-    pub def toFlixSet(l: LinkedList[a, r]): Set[a] \ { r } with Order[a], Marshal[a] = region r {
+    pub def toFlixSet(l: LinkedList[a, r]): Set[a] \ { r } with Order[a], ComesFromJava[a] = region r {
         let step = (acc, a) -> Set.insert(a, acc);
         iterator(r, l) |> Iterator.foldLeft(step, Set.empty())
     }
 
-    pub def toArray(r1: Region[r1], l: LinkedList[a, r2]): Array[a, r1] \ {r1, r2} with Marshal[a] =
+    pub def toArray(r1: Region[r1], l: LinkedList[a, r2]): Array[a, r1] \ {r1, r2} with ComesFromJava[a], GoesToJava[a] =
         let len = size(l);
         if (len < 1) 
             Array#{} @ r1

@@ -31,18 +31,19 @@ mod Interop.Util.Function.ToDoubleFunction {
     
     use Interop.Util.Function.ToDoubleFunction
     use Interop.Util.Function.ToDoubleFunction.{ToDoubleFunction}
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
-    pub def makeToDoubleFunction(f: a -> Float64 \ ef): ToDoubleFunction[a, ef] with Marshal[a] = 
+    pub def makeToDoubleFunction(f: a -> Float64 \ ef): ToDoubleFunction[a, ef] with ComesFromJava[a] = 
         ToDoubleFunction(unchecked_cast(new ##java.util.function.ToDoubleFunction {
             def applyAsDouble(_this: ##java.util.function.ToDoubleFunction, t: ##java.lang.Object): Float64 = 
-                Interop.Flix.Marshal.fromJavaObject(t) |> f
+                Interop.Flix.ComesFromJava.fromJavaObject(t) |> f
         } as _ \ {}))
 
 
-    pub def applyAsDouble(f: ToDoubleFunction[a, ef], t: a): Float64 \ ef with Marshal[a]  = 
+    pub def applyAsDouble(f: ToDoubleFunction[a, ef], t: a): Float64 \ ef with GoesToJava[a]  = 
         import java.util.function.ToDoubleFunction.applyAsDouble(##java.lang.Object): Float64 \ ef;
         let ToDoubleFunction(f1) = f;
-        applyAsDouble(f1, Interop.Flix.Marshal.toJavaObject(t))
+        applyAsDouble(f1, Interop.Flix.GoesToJava.toJavaObject(t))
 
 }

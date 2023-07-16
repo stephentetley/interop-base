@@ -17,7 +17,7 @@
 
 mod Interop.Util.Stream.Collectors {
     
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
     use Interop.Util.Stream.Collector
     use Interop.Util.Stream.Collector.{Collector}
     use Interop.Util.Function.FunctionZ
@@ -26,7 +26,7 @@ mod Interop.Util.Stream.Collectors {
     use Interop.Util.SetZ
 
     /// Effects?
-    pub def averagingDouble(fn: a -> Float64 \ ef): Collector[a, t, ef, Float64] with Marshal[a] = 
+    pub def averagingDouble(fn: a -> Float64 \ ef): Collector[a, t, ef, Float64] with ComesFromJava[a] = 
         import static java.util.stream.Collectors.averagingDouble(##java.util.function.ToDoubleFunction): ##java.util.stream.Collector \ {};
         let ToDoubleFunction(fn1) = Interop.Util.Function.ToDoubleFunction.makeToDoubleFunction(fn);
         Collector(averagingDouble(fn1))

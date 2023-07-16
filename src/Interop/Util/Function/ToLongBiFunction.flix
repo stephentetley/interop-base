@@ -31,20 +31,21 @@ mod Interop.Util.Function.ToLongBiFunction {
     
     use Interop.Util.Function.ToLongBiFunction
     use Interop.Util.Function.ToLongBiFunction.{ToLongBiFunction}
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
-    pub def makeToLongBiFunction(f: (a, b) -> Int64 \ ef): ToLongBiFunction[a, b, ef] with Marshal[a], Marshal[b] = 
+    pub def makeToLongBiFunction(f: (a, b) -> Int64 \ ef): ToLongBiFunction[a, b, ef] with ComesFromJava[a], ComesFromJava[b] = 
         ToLongBiFunction(unchecked_cast(new ##java.util.function.ToLongBiFunction {
             def applyAsLong(_this: ##java.util.function.ToLongBiFunction, t: ##java.lang.Object, u: ##java.lang.Object): Int64 = 
-                let a1 = Interop.Flix.Marshal.fromJavaObject(t);
-                let b1 = Interop.Flix.Marshal.fromJavaObject(u);
+                let a1 = Interop.Flix.ComesFromJava.fromJavaObject(t);
+                let b1 = Interop.Flix.ComesFromJava.fromJavaObject(u);
                 f(a1, b1)
         } as _ \ {}))
 
 
-    pub def applyAsInt(f: ToLongBiFunction[a, b, ef], t: a, u: b): Int64 \ ef with Marshal[a], Marshal[b] = 
+    pub def applyAsInt(f: ToLongBiFunction[a, b, ef], t: a, u: b): Int64 \ ef with GoesToJava[a], GoesToJava[b] = 
         import java.util.function.ToLongBiFunction.applyAsLong(##java.lang.Object, ##java.lang.Object): Int64 \ ef;
         let ToLongBiFunction(f1) = f;
-        applyAsLong(f1, Interop.Flix.Marshal.toJavaObject(t), Interop.Flix.Marshal.toJavaObject(u))
+        applyAsLong(f1, Interop.Flix.GoesToJava.toJavaObject(t), Interop.Flix.GoesToJava.toJavaObject(u))
 
 }

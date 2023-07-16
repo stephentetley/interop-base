@@ -29,7 +29,6 @@ mod Interop.Util.OptionalLong {
     
     use Interop.Util.OptionalLong
     use Interop.Util.OptionalLong.{OptionalLong}
-    use Interop.Flix.Marshal
 
     pub def getHH(o: OptionalLong): ##java.util.OptionalLong = 
         let OptionalLong(o1) = o;

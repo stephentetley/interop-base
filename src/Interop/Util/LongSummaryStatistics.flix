@@ -24,14 +24,14 @@ mod Interop.Util {
     pub enum LongSummaryStatistics[_: Region](##java.util.LongSummaryStatistics)
 
 
-    instance Interop.Flix.MutMarshal[LongSummaryStatistics] {
-        pub def mutToJavaObject(x: LongSummaryStatistics[r]): ##java.lang.Object = 
-            let LongSummaryStatistics(x1) = x;
-            checked_cast(x1)
+    // instance Interop.Flix.MutMarshal[LongSummaryStatistics] {
+    //     pub def mutToJavaObject(x: LongSummaryStatistics[r]): ##java.lang.Object = 
+    //         let LongSummaryStatistics(x1) = x;
+    //         checked_cast(x1)
 
-        pub def mutFromJavaObject(_: Region[r], o: ##java.lang.Object): LongSummaryStatistics[r] = 
-            LongSummaryStatistics(unchecked_cast(o as ##java.util.LongSummaryStatistics))
-    }
+    //     pub def mutFromJavaObject(_: Region[r], o: ##java.lang.Object): LongSummaryStatistics[r] = 
+    //         LongSummaryStatistics(unchecked_cast(o as ##java.util.LongSummaryStatistics))
+    // }
 
 }
 
@@ -40,7 +40,6 @@ mod Interop.Util.LongSummaryStatistics {
     
     use Interop.Util.LongSummaryStatistics
     use Interop.Util.LongSummaryStatistics.{LongSummaryStatistics}
-    use Interop.Flix.Marshal
 
     pub def getHH(ss: LongSummaryStatistics[r]): ##java.util.LongSummaryStatistics = 
         let LongSummaryStatistics(ss1) = ss;

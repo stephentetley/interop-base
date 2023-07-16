@@ -16,6 +16,7 @@
 
 mod Interop.Flix {
 
+    use StringBuilder.{StringBuilder}
 
     // TODO 
     // There is a good case for having a singleton method toJavaObject class
@@ -79,10 +80,22 @@ mod Interop.Flix {
             checked_cast(Interop.Util.Optional.fromOption1(o))    
     }
 
+    instance GoesToJava[StringBuilder[r]] {
+        pub def toJavaObject(sb: StringBuilder[r]): ##java.lang.Object =
+            let StringBuilder(sb1) = sb;
+            checked_cast(sb1)    
+    }
+
+
 }
 
 
 mod Interop.Flix.GoesToJava {
+
+    /// TODO - remove
+    /// Use this only on primitive Java objects.
+    pub def unsafeCastToObject(x: a): ##java.lang.Object = 
+        unchecked_cast(x as ##java.lang.Object)
 
 
     pub def boolToJava(b: Bool): ##java.lang.Boolean = 

@@ -1,5 +1,5 @@
 ### v0.7.0
-   Reworked `MutMarshal` typeclass, added `ColMarshal`.
+   Removed `Marshal` typeclass, it is replaced by `GoesToJava` and `ComesFromJava` (`ComesFromJava` is not adequate and will be replaced).
    Made `CharSequence` immutable.
    Added `ReadableByteChannel` and `WritableByteChannel`.
    Added `MathContext` and BigDecimal operations using it.

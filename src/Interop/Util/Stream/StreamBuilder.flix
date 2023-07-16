@@ -34,7 +34,7 @@ mod Interop.Util.Stream.StreamBuilder {
     use Interop.Util.Stream.StreamBuilder.{StreamBuilder}
     use Interop.Util.Stream.Stream
     use Interop.Util.Stream.Stream.{Stream}
-    use Interop.Flix.Marshal
+    use Interop.Flix.GoesToJava
     
     pub def getHH(x: StreamBuilder[a, r]): ##java.util.stream.Stream$Builder = 
         let StreamBuilder(_, x1) = x;
@@ -44,19 +44,19 @@ mod Interop.Util.Stream.StreamBuilder {
         StreamBuilder(rc, prim)
 
 
-    pub def accept(t: a, b: StreamBuilder[a, r]): Result[String, Unit] \ r with Marshal[a] =
+    pub def accept(t: a, b: StreamBuilder[a, r]): Result[String, Unit] \ r with GoesToJava[a] =
         Result.tryCatch(_ -> {
             import java.util.stream.Stream$Builder.accept(##java.lang.Object): Unit \ r;
             let StreamBuilder(_, b1) = b;
-            let t1 = Interop.Flix.Marshal.toJavaObject(t);
+            let t1 = Interop.Flix.GoesToJava.toJavaObject(t);
             accept(b1, t1)
         })
 
-    pub def add(t: a, b: StreamBuilder[a, r]): Result[String, StreamBuilder[a, r]] \ r with Marshal[a] =
+    pub def add(t: a, b: StreamBuilder[a, r]): Result[String, StreamBuilder[a, r]] \ r with GoesToJava[a] =
         Result.tryCatch(_ -> {
             import java.util.stream.Stream$Builder.add(##java.lang.Object): ##java.util.stream.Stream$Builder \ r;
             let StreamBuilder(rc, b1) = b;
-            let t1 = Interop.Flix.Marshal.toJavaObject(t);
+            let t1 = Interop.Flix.GoesToJava.toJavaObject(t);
             StreamBuilder(rc, add(b1, t1))
         })
 

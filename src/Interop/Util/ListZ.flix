@@ -70,7 +70,8 @@ mod Interop.Util.ListZ {
     use Interop.Util.ImpListZ
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
     use Interop.Util.Function.PredicateZ.{PredicateZ}
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
 
     pub def getHH(l: ListZ[a, r]): ##java.util.List = 
@@ -81,46 +82,46 @@ mod Interop.Util.ListZ {
         ListZ(rc, prim)
 
 
-    pub def of0(rc: Region[r]): ListZ[a, r] \ r with Marshal[a] =
+    pub def of0(rc: Region[r]): ListZ[a, r] \ r with GoesToJava[a] =
         import static java.util.List.of(): ##java.util.List \ r;
         ListZ(rc, of())
 
-    pub def of1(rc: Region[r], e1: a): ListZ[a, r] \ r with Marshal[a] =
+    pub def of1(rc: Region[r], e1: a): ListZ[a, r] \ r with GoesToJava[a] =
         import static java.util.List.of(##java.lang.Object): ##java.util.List \ r;
-        let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
-        ListZ(rc, of(eo1))
+        let o1 = Interop.Flix.GoesToJava.toJavaObject(e1);
+        ListZ(rc, of(o1))
 
-    pub def of2(rc: Region[r], e1: a, e2: a): ListZ[a, r] \ r with Marshal[a] =
+    pub def of2(rc: Region[r], e1: a, e2: a): ListZ[a, r] \ r with GoesToJava[a] =
         import static java.util.List.of(##java.lang.Object, ##java.lang.Object): ##java.util.List \ r;
-        let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
-        let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
-        ListZ(rc, of(eo1, eo2))
+        let o1 = Interop.Flix.GoesToJava.toJavaObject(e1);
+        let o2 = Interop.Flix.GoesToJava.toJavaObject(e2);
+        ListZ(rc, of(o1, o2))
 
-    pub def of3(rc: Region[r], e1: a, e2: a, e3: a): ListZ[a, r] \ r with Marshal[a] =
+    pub def of3(rc: Region[r], e1: a, e2: a, e3: a): ListZ[a, r] \ r with GoesToJava[a] =
         import static java.util.List.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.List \ r;
-        let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
-        let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
-        let eo3 = Interop.Flix.Marshal.toJavaObject(e3);
-        ListZ(rc, of(eo1, eo2, eo3))
+        let o1 = Interop.Flix.GoesToJava.toJavaObject(e1);
+        let o2 = Interop.Flix.GoesToJava.toJavaObject(e2);
+        let o3 = Interop.Flix.GoesToJava.toJavaObject(e3);
+        ListZ(rc, of(o1, o2, o3))
 
-    pub def of4(rc: Region[r], e1: a, e2: a, e3: a, e4: a): ListZ[a, r] \ r with Marshal[a] =
+    pub def of4(rc: Region[r], e1: a, e2: a, e3: a, e4: a): ListZ[a, r] \ r with GoesToJava[a] =
         import static java.util.List.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.List \ r;
-        let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
-        let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
-        let eo3 = Interop.Flix.Marshal.toJavaObject(e3);
-        let eo4 = Interop.Flix.Marshal.toJavaObject(e4);
-        ListZ(rc, of(eo1, eo2, eo3, eo4))
+        let o1 = Interop.Flix.GoesToJava.toJavaObject(e1);
+        let o2 = Interop.Flix.GoesToJava.toJavaObject(e2);
+        let o3 = Interop.Flix.GoesToJava.toJavaObject(e3);
+        let o4 = Interop.Flix.GoesToJava.toJavaObject(e4);
+        ListZ(rc, of(o1, o2, o3, o4))
 
-    pub def of5(rc: Region[r], e1: a, e2: a, e3: a, e4: a, e5: a): ListZ[a, r] \ r with Marshal[a] =
+    pub def of5(rc: Region[r], e1: a, e2: a, e3: a, e4: a, e5: a): ListZ[a, r] \ r with GoesToJava[a] =
         import static java.util.List.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.List \ r;
-        let eo1 = Interop.Flix.Marshal.toJavaObject(e1);
-        let eo2 = Interop.Flix.Marshal.toJavaObject(e2);
-        let eo3 = Interop.Flix.Marshal.toJavaObject(e3);
-        let eo4 = Interop.Flix.Marshal.toJavaObject(e4);
-        let eo5 = Interop.Flix.Marshal.toJavaObject(e5);
-        ListZ(rc, of(eo1, eo2, eo3, eo4, eo5))
+        let o1 = Interop.Flix.GoesToJava.toJavaObject(e1);
+        let o2 = Interop.Flix.GoesToJava.toJavaObject(e2);
+        let o3 = Interop.Flix.GoesToJava.toJavaObject(e3);
+        let o4 = Interop.Flix.GoesToJava.toJavaObject(e4);
+        let o5 = Interop.Flix.GoesToJava.toJavaObject(e5);
+        ListZ(rc, of(o1, o2, o3, o4, o5))
 
-    pub def equals(l1: ListZ[a, r], l2: ListZ[a, r]): Bool \  r with Marshal[a] =
+    pub def equals(l1: ListZ[a, r], l2: ListZ[a, r]): Bool \ r =
         import java.util.List.equals(##java.lang.Object): Bool \ r; 
         let ListZ(_, ll1) = l1;
         let ListZ(_, ll2) = l2;
@@ -142,15 +143,15 @@ mod Interop.Util.ListZ {
         let ListZ(_, l1) = l;
         size(l1)
 
-    pub def add!(x: a, l: ListZ[a, r]): Result[String, Bool] \ r with Marshal[a] =
+    pub def add!(x: a, l: ListZ[a, r]): Result[String, Bool] \ r with GoesToJava[a] =
         Result.tryCatch(_ -> {
             import java.util.List.add(##java.lang.Object): Bool \ r;
             let ListZ(_, l1) = l;
-            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.GoesToJava.toJavaObject(x);        
             add(l1, x1)
         })
 
-    pub def addAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ {r, r1} with Marshal[a] =
+    pub def addAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ {r, r1} with GoesToJava[a] =
         Result.tryCatch(_ -> {
             import java.util.List.addAll(##java.util.Collection): Bool \ {r, r1}; 
             let ListZ(_, l1) = l;
@@ -158,15 +159,15 @@ mod Interop.Util.ListZ {
             addAll(l1, c1)
         })
 
-    pub def contains(x: a, l: ListZ[a, r]): Result[String, Bool] \  r with Marshal[a] =
+    pub def contains(x: a, l: ListZ[a, r]): Result[String, Bool] \  r with GoesToJava[a] =
         Result.tryCatch(_ -> {
             import java.util.List.contains(##java.lang.Object): Bool \ r; 
             let ListZ(_, l1) = l;
-            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.GoesToJava.toJavaObject(x);        
             contains(l1, x1)
         })
 
-    pub def containsAll(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ {r, r1} with Marshal[a] =
+    pub def containsAll(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ {r, r1} =
         Result.tryCatch(_ -> {
             import java.util.List.containsAll(##java.util.Collection): Bool \ {r, r1}; 
             let ListZ(_, l1) = l;
@@ -182,15 +183,15 @@ mod Interop.Util.ListZ {
         })
 
 
-    pub def remove!(x: a, l: ListZ[a, r]): Result[String, Bool] \  r with Marshal[a] =
+    pub def remove!(x: a, l: ListZ[a, r]): Result[String, Bool] \ r with GoesToJava[a] =
         Result.tryCatch(_ -> {
             import java.util.List.remove(##java.lang.Object): Bool \ r; 
             let ListZ(_, l1) = l;
-            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.GoesToJava.toJavaObject(x);        
             remove(l1, x1)
         })
 
-    pub def removeAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ {r, r1} with Marshal[a] =
+    pub def removeAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ {r, r1} =
         Result.tryCatch(_ -> {
             import java.util.List.removeAll(##java.util.Collection): Bool \ {r, r1}; 
             let ListZ(_, l1) = l;
@@ -199,7 +200,7 @@ mod Interop.Util.ListZ {
         })
     
     pub def removeIf![a: Type, ef: Eff, r: Region]
-                        (f: a -> Bool \ ef, l: ListZ[a, r]): Result[String, Bool] \ {ef, r} with  Marshal[a] =
+                        (f: a -> Bool \ ef, l: ListZ[a, r]): Result[String, Bool] \ {ef, r} with ComesFromJava[a] =
         Result.tryCatch(_ -> {
             import java.util.List.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let ListZ(_, l1) = l;
@@ -207,7 +208,7 @@ mod Interop.Util.ListZ {
             checked_ecast(removeIf(l1, f1))
         })
 
-    pub def retainAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ {r, r1} with Marshal[a] =
+    pub def retainAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ {r, r1} =
         Result.tryCatch(_ -> {
             import java.util.List.retainAll(##java.util.Collection): Bool \ {r, r1}; 
             let ListZ(_, l1) = l;
@@ -216,7 +217,7 @@ mod Interop.Util.ListZ {
         })
 
     pub def forEach[a: Type, ef: Eff, r: Region]
-                    (f: a -> Unit \ ef, l: ListZ[a, r]): Result[String, Unit] \  {ef, r} with Marshal[a] =
+                    (f: a -> Unit \ ef, l: ListZ[a, r]): Result[String, Unit] \  {ef, r} with ComesFromJava[a] =
         Result.tryCatch(_ -> {
             import java.util.List.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let ListZ(_, l1) = l;
@@ -225,41 +226,41 @@ mod Interop.Util.ListZ {
         })
 
 
-    pub def sort!(f: (a, a) -> Int32, l: ListZ[a, r]): Result[String, Unit] \ r with Marshal[a] =
+    pub def sort!(f: (a, a) -> Int32, l: ListZ[a, r]): Result[String, Unit] \ r with ComesFromJava[a] =
         let f1 = Interop.Util.Comparator.makeComparator(f);
         sortWithComparator!(f1, l)
 
 
-    pub def sortWithComparator!(c: Comparator[a], l: ListZ[a, r]): Result[String, Unit] \ r with Marshal[a] =
+    pub def sortWithComparator!(c: Comparator[a], l: ListZ[a, r]): Result[String, Unit] \ r with ComesFromJava[a] =
         Result.tryCatch(_ -> {
             import java.util.List.sort(##java.util.Comparator): Unit \ r; 
             let ListZ(_, l1) = l;
             sort(l1, c)
         })
 
-    pub def fromFoldableViaArrayList(rc: Region[r], t: t[a]): ListZ[a, r] \ { r } with Foldable[t], Marshal[a] =
+    pub def fromFoldableViaArrayList(rc: Region[r], t: t[a]): ListZ[a, r] \ { r } with Foldable[t], GoesToJava[a] =
         Interop.Util.ArrayList.fromFoldable(rc, t) |> Interop.Util.ImpListZ.toListZ
 
-    pub def fromFoldableViaArrayListHH(t: t[a]): ##java.util.List with Foldable[t], Marshal[a] = region rc {
+    pub def fromFoldableViaArrayListHH(t: t[a]): ##java.util.List with Foldable[t], GoesToJava[a] = region rc {
         Interop.Util.ArrayList.fromFoldable(rc, t) |> Interop.Util.ImpListZ.toListHH
     }
 
-    pub def fromFoldableViaLinkedList(rc: Region[r], t: t[a]): ListZ[a, r] \ r with Foldable[t], Marshal[a] =
+    pub def fromFoldableViaLinkedList(rc: Region[r], t: t[a]): ListZ[a, r] \ r with Foldable[t], GoesToJava[a] =
         Interop.Util.LinkedList.fromFoldable(rc, t) |> Interop.Util.ImpListZ.toListZ
 
-    pub def fromFoldableViaLinkedListHH(t: t[a]): ##java.util.List with Foldable[t], Marshal[a] = region rc {
+    pub def fromFoldableViaLinkedListHH(t: t[a]): ##java.util.List with Foldable[t], GoesToJava[a] = region rc {
         Interop.Util.LinkedList.fromFoldable(rc, t) |> Interop.Util.ImpListZ.toListHH
     }
 
-    pub def primListToFlixList(prim: ##java.util.List): List[a] with Marshal[a] = region rc {
+    pub def primListToFlixList(prim: ##java.util.List): List[a] with ComesFromJava[a] = region rc {
         wrapHH(rc, prim) |> toFlixList   
     }
 
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def iterator(rc: Region[r1], l: ListZ[a, r]): Iterator[a, r1, r1] \ { r } with Marshal[a] =
-        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, l)
+    pub def iterator(rc: Region[r1], l: ListZ[a, r]): Iterator[a, r1, r1] \ { r } with ComesFromJava[a] =
+        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, l)
 
     ///
     /// Returns an iterator over `l`.
@@ -276,12 +277,12 @@ mod Interop.Util.ListZ {
 
 
 
-    pub def toFlixList(l: ListZ[a, r]): List[a] \ r with Marshal[a] = region rc {
-        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, l) |> Iterator.toList
+    pub def toFlixList(l: ListZ[a, r]): List[a] \ r with ComesFromJava[a] = region rc {
+        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, l) |> Iterator.toList
     }
 
-    pub def toSet(l: ListZ[a, r]): Set[a] \ r with Order[a], Marshal[a] = region rc {
-        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, l) |> Iterator.toSet
+    pub def toSet(l: ListZ[a, r]): Set[a] \ r with Order[a], ComesFromJava[a] = region rc {
+        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, l) |> Iterator.toSet
     }
 
 

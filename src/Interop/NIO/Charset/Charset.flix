@@ -45,11 +45,13 @@ mod Interop.NIO.Charset {
             Interop.NIO.Charset.Charset.hashCode(x)
     }
 
-    instance Interop.Flix.Marshal[Charset] {
+    instance Interop.Flix.GoesToJava[Charset] {
         pub def toJavaObject(x: Charset): ##java.lang.Object =
             let Charset(x1) = x;
             checked_cast(x1)
+    }
 
+    instance Interop.Flix.ComesFromJava[Charset] {
         pub def fromJavaObject(o: ##java.lang.Object): Charset = 
             Charset(unchecked_cast(o as ##java.nio.charset.Charset))
     }

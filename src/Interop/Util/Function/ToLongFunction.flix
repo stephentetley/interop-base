@@ -31,18 +31,19 @@ mod Interop.Util.Function.ToLongFunction {
     
     use Interop.Util.Function.ToLongFunction
     use Interop.Util.Function.ToLongFunction.{ToLongFunction}
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
-    pub def makeToLongFunction(f: a -> Int64 \ ef): ToLongFunction[a, ef] with Marshal[a]= 
+    pub def makeToLongFunction(f: a -> Int64 \ ef): ToLongFunction[a, ef] with ComesFromJava[a]= 
         ToLongFunction(unchecked_cast(new ##java.util.function.ToLongFunction {
             def applyAsLong(_this: ##java.util.function.ToLongFunction, t: ##java.lang.Object): Int64 = 
-                Interop.Flix.Marshal.fromJavaObject(t) |> f
+                Interop.Flix.ComesFromJava.fromJavaObject(t) |> f
         } as _ \ {}))
 
 
-    pub def applyAsLong(f: ToLongFunction[a, ef], t: a): Int64 \ ef with Marshal[a]  = 
+    pub def applyAsLong(f: ToLongFunction[a, ef], t: a): Int64 \ ef with GoesToJava[a]  = 
         import java.util.function.ToLongFunction.applyAsLong(##java.lang.Object): Int64 \ ef;
         let ToLongFunction(f1) = f;
-        applyAsLong(f1, Interop.Flix.Marshal.toJavaObject(t))
+        applyAsLong(f1, Interop.Flix.GoesToJava.toJavaObject(t))
 
 }

@@ -30,9 +30,9 @@ mod Interop.Util {
 
 mod Interop.Util.IteratorZ {
 
-    use Interop.Util.IteratorZ;
-    use Interop.Util.IteratorZ.{IteratorZ};
-    use Interop.Flix.Marshal;
+    use Interop.Util.IteratorZ
+    use Interop.Util.IteratorZ.{IteratorZ}
+    use Interop.Flix.ComesFromJava
 
 
     pub def getHH(iter: IteratorZ[a, ef, r]): ##java.util.Iterator = 
@@ -43,11 +43,11 @@ mod Interop.Util.IteratorZ {
         IteratorZ(rc, iter)
 
     /// Mutable (raw) to mutable (Flix iterator) 
-    pub def iterator(rc: Region[r1], iter: IteratorZ[a, ef, r]): Iterator[a, ef + r + r1, r1] with Marshal[a]  =
-        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, iter)
+    pub def iterator(rc: Region[r1], iter: IteratorZ[a, ef, r]): Iterator[a, ef + r + r1, r1] with ComesFromJava[a]  =
+        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, iter)
 
-    pub def enumerator(rc: Region[r1], iter: IteratorZ[a, ef, r]): Iterator[(Int32, a), ef + r + r1, r1] \ r1 with Marshal[a] =
-        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, iter) |> Iterator.enumerator        
+    pub def enumerator(rc: Region[r1], iter: IteratorZ[a, ef, r]): Iterator[(Int32, a), ef + r + r1, r1] \ r1 with ComesFromJava[a] =
+        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, iter) |> Iterator.enumerator        
 
     /// Cast must be Pure!
     pub def toFlixIterator(rc: Region[r1], ocast: ##java.lang.Object -> a, iter: IteratorZ[a, ef, r]): Iterator[a, ef + r + r1, r1] =
@@ -73,19 +73,19 @@ mod Interop.Util.IteratorZ {
     ///
     /// Apply the effectful function `f` to all the elements in the array `a`.
     ///
-    pub def forEach(f: a -> Unit \ ef1, iter: IteratorZ[a, ef, r]): Unit \ { ef, ef1, r } with Marshal[a] = region r {
+    pub def forEach(f: a -> Unit \ ef1, iter: IteratorZ[a, ef, r]): Unit \ { ef, ef1, r } with ComesFromJava[a] = region r {
         iterator(r, iter) |> Iterator.forEach(f)
     }
 
-    pub def toList(iter: IteratorZ[a, ef, r]): List[a] \ { ef, r } with Marshal[a] = region r {
+    pub def toList(iter: IteratorZ[a, ef, r]): List[a] \ { ef, r } with ComesFromJava[a] = region r {
         iterator(r, iter) |> Iterator.toList
     }
 
-    pub def toNel(iter: IteratorZ[a, ef, r]): Option[Nel[a]] \ { ef, r } with Marshal[a] = region r {
+    pub def toNel(iter: IteratorZ[a, ef, r]): Option[Nel[a]] \ { ef, r } with ComesFromJava[a] = region r {
         iterator(r, iter) |> Iterator.toNel
     }
 
-    pub def toMapWith(f: a -> (k, v) \ ef1, iter: IteratorZ[a, ef, r]): Map[k, v] \ {ef, ef1, r} with Order[k], Marshal[a] = region r {
+    pub def toMapWith(f: a -> (k, v) \ ef1, iter: IteratorZ[a, ef, r]): Map[k, v] \ {ef, ef1, r} with Order[k], ComesFromJava[a] = region r {
         iterator(r, iter) |> Iterator.foldLeft((acc, a) -> let (k,v) = f(a); Map.insert(k, v, acc), Map.empty())
     }
 

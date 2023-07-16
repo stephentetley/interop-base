@@ -30,14 +30,18 @@ mod Interop.Util.Function.LongFunctionZ {
     
     use Interop.Util.Function.LongFunctionZ
     use Interop.Util.Function.LongFunctionZ.{LongFunctionZ}
-    use Interop.Flix.Marshal;
+    use Interop.Flix.GoesToJava
+    use Interop.Flix.ComesFromJava
 
 
-    pub def makeLongFunctionZ(f: Int64 -> a \ ef): LongFunctionZ[a, ef] with Marshal[a] = 
-        LongFunctionZ(unchecked_cast((i -> f(i) |> Interop.Flix.Marshal.toJavaObject) as ##java.util.function.LongFunction))
+    pub def makeLongFunctionZ(f: Int64 -> a \ ef): LongFunctionZ[a, ef] with GoesToJava[a] = 
+        LongFunctionZ(unchecked_cast((i -> f(i) |> Interop.Flix.GoesToJava.toJavaObject) as ##java.util.function.LongFunction))
 
 
     pub def makeLongFunctionZWith(f: Int64 -> a \ ef, castToObj: a -> ##java.lang.Object): LongFunctionZ[a, ef] = 
         LongFunctionZ(unchecked_cast((i -> f(i) |> castToObj) as ##java.util.function.LongFunction))
 
+    pub def apply(f: LongFunctionZ[a, ef], value: Int64): a \ ef with ComesFromJava[a] = 
+        let LongFunctionZ(f1) = f;
+        unchecked_cast(f1(value) as _ \ ef) |> Interop.Flix.ComesFromJava.fromJavaObject
 }

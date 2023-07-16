@@ -30,15 +30,16 @@ mod Interop.Util.Function.BiConsumer {
     
     use Interop.Util.Function.BiConsumer
     use Interop.Util.Function.BiConsumer.{BiConsumer}
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
     use Interop.Flix.ColMarshal
 
 
 
-    pub def makeBiConsumer(f: (a, b) -> Unit \ ef): BiConsumer[a, b, ef] with Marshal[a], Marshal[b] = 
+    pub def makeBiConsumer(f: (a, b) -> Unit \ ef): BiConsumer[a, b, ef] with ComesFromJava[a], ComesFromJava[b] = 
         let f1 = (o1, o2) -> {
-            let a = Interop.Flix.Marshal.fromJavaObject(o1); 
-            let b = Interop.Flix.Marshal.fromJavaObject(o2);
+            let a = Interop.Flix.ComesFromJava.fromJavaObject(o1); 
+            let b = Interop.Flix.ComesFromJava.fromJavaObject(o2);
             f(a, b)
         };
         BiConsumer(unchecked_cast(new ##java.util.function.BiConsumer {
@@ -49,10 +50,10 @@ mod Interop.Util.Function.BiConsumer {
 
     /// Collector imposes arg order: collection * element
     pub def makeAccumulator[a: Type, r: Region, t: Type -> Region -> Type, ef: Eff]
-                            (r: Region[r], f: (t[a, r], a) -> Unit \ ef): BiConsumer[t[a, r], a, ef] with Marshal[a], ColMarshal[t] = 
+                            (r: Region[r], f: (t[a, r], a) -> Unit \ ef): BiConsumer[t[a, r], a, ef] with ComesFromJava[a], ColMarshal[t] = 
         let f1 = (o1, o2) -> {
             let t = Interop.Flix.ColMarshal.colFromJavaObject(r, o1); 
-            let a = Interop.Flix.Marshal.fromJavaObject(o2);
+            let a = Interop.Flix.ComesFromJava.fromJavaObject(o2);
             f(t, a)
         };
         BiConsumer(unchecked_cast(new ##java.util.function.BiConsumer {
@@ -75,9 +76,9 @@ mod Interop.Util.Function.BiConsumer {
         } as _ \ {}))
 
         
-    pub def accept(t: a, u: b, f: BiConsumer[a, b, ef]): Unit \ ef with Marshal[a], Marshal[b] = 
+    pub def accept(t: a, u: b, f: BiConsumer[a, b, ef]): Unit \ ef with GoesToJava[a], GoesToJava[b] = 
         import java.util.function.BiConsumer.accept(##java.lang.Object, ##java.lang.Object): Unit \ ef;
         let BiConsumer(f1) = f;
-        accept(f1, Interop.Flix.Marshal.toJavaObject(t), Interop.Flix.Marshal.toJavaObject(u))
+        accept(f1, Interop.Flix.GoesToJava.toJavaObject(t), Interop.Flix.GoesToJava.toJavaObject(u))
 
 }

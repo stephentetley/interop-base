@@ -29,11 +29,13 @@ mod Interop.NIO.File {
 
     pub enum LinkOption(##java.nio.file.LinkOption)
 
-    instance Interop.Flix.Marshal[LinkOption] {
+    instance Interop.Flix.GoesToJava[LinkOption] {
         pub def toJavaObject(x: LinkOption): ##java.lang.Object =
             let LinkOption(x1) = x;
             checked_cast(x1)
+    }
 
+    instance Interop.Flix.ComesFromJava[LinkOption] {
         pub def fromJavaObject(o: ##java.lang.Object): LinkOption = 
             LinkOption(unchecked_cast(o as ##java.nio.file.LinkOption))
     }

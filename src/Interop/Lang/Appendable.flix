@@ -31,14 +31,22 @@ mod Interop.Lang {
         pub def fromAppendable[r: Region](s: Appendable[r]): t[r]
     }
 
-    instance Interop.Flix.MutMarshal[Appendable] {
-        pub def mutToJavaObject(x: Appendable[r]): ##java.lang.Object = 
+    instance Interop.Flix.GoesToJava[Appendable[r]] {
+        pub def toJavaObject(x: Appendable[r]): ##java.lang.Object = 
             let Appendable(x1) = x;
             checked_cast(x1)
-
-        pub def mutFromJavaObject(_: Region[r], o: ##java.lang.Object): Appendable[r] = 
-            Appendable(unchecked_cast(o as ##java.lang.Appendable))
     }
+
+
+    // instance Interop.Flix.MutMarshal[Appendable] {
+    //     pub def mutToJavaObject(x: Appendable[r]): ##java.lang.Object = 
+    //         let Appendable(x1) = x;
+    //         checked_cast(x1)
+     
+    //     pub def mutFromJavaObject(_: Region[r], o: ##java.lang.Object): Appendable[r] = 
+    //         Appendable(unchecked_cast(o as ##java.lang.Appendable))
+    // }
+
 
     instance Interop.Lang.ImpAppendable[StringBuilder] {
         pub def toAppendable(s: StringBuilder[r]): Appendable[r] = 

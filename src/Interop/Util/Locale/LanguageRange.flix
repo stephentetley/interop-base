@@ -22,15 +22,16 @@ mod Interop.Util.Locale {
     /// Class / Immutable
     pub enum LanguageRange(##java.util.Locale$LanguageRange)
 
-    instance Interop.Flix.Marshal[LanguageRange] {
+    instance Interop.Flix.GoesToJava[LanguageRange] {
         pub def toJavaObject(x: LanguageRange): ##java.lang.Object =
             let LanguageRange(x1) = x;
             checked_cast(x1)
-
+    }
+    
+    instance Interop.Flix.ComesFromJava[LanguageRange] {
         pub def fromJavaObject(o: ##java.lang.Object): LanguageRange = 
             LanguageRange(unchecked_cast(o as ##java.util.Locale$LanguageRange))
     }
-
 }
 
 
@@ -101,8 +102,8 @@ mod Interop.Util.Locale.LanguageRange {
                                     customizations: Map[String, List[String]]): Result[String, List[LanguageRange]] =
         Result.tryCatch(_ -> {
             import static java.util.Locale$LanguageRange.parse(String, ##java.util.Map): ##java.util.List \ {};
-            let marshalKey = Interop.Flix.Marshal.toJavaObject;
-            let marshalValue = Interop.Util.ListZ.fromFoldableViaArrayListHH >> Interop.Flix.Marshal.unsafeCastToObject;
+            let marshalKey = Interop.Flix.GoesToJava.toJavaObject;
+            let marshalValue = Interop.Util.ListZ.fromFoldableViaArrayListHH >> Interop.Flix.GoesToJava.unsafeCastToObject;
             let cs1 = Interop.Util.MapZ.fromFlixMapViaHashMapHHWith(marshalKey, marshalValue, customizations);
             parse(ranges, cs1) |> Interop.Util.ListZ.primListToFlixList
         })
@@ -113,8 +114,8 @@ mod Interop.Util.Locale.LanguageRange {
         Result.tryCatch(_ -> {
             import static java.util.Locale$LanguageRange.mapEquivalents(##java.util.List, ##java.util.Map): ##java.util.List \ {};
             let ps1 = Interop.Util.ListZ.fromFoldableViaArrayListHH(priorityList);
-            let marshalKey = Interop.Flix.Marshal.toJavaObject;
-            let marshalValue = Interop.Util.ListZ.fromFoldableViaArrayListHH >> Interop.Flix.Marshal.unsafeCastToObject;
+            let marshalKey = Interop.Flix.GoesToJava.toJavaObject;
+            let marshalValue = Interop.Util.ListZ.fromFoldableViaArrayListHH >> Interop.Flix.GoesToJava.unsafeCastToObject;
             let cs1 = Interop.Util.MapZ.fromFlixMapViaHashMapHHWith(marshalKey, marshalValue, customizations);
             mapEquivalents(ps1, cs1) |> Interop.Util.ListZ.primListToFlixList
         })

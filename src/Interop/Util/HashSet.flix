@@ -34,14 +34,14 @@ mod Interop.Util {
         case HashSet(Region[r], ##java.util.HashSet)
     }
 
-    instance Interop.Flix.ColMarshal[HashSet] {
-        pub def colToJavaObject(x: HashSet[a, r]): ##java.lang.Object = 
-            let HashSet(_, t1) = x;
-            unchecked_cast(t1 as ##java.lang.Object)
+    // instance Interop.Flix.ColMarshal[HashSet] {
+    //     pub def colToJavaObject(x: HashSet[a, r]): ##java.lang.Object = 
+    //         let HashSet(_, t1) = x;
+    //         unchecked_cast(t1 as ##java.lang.Object)
 
-        pub def colFromJavaObject(rc: Region[r], o: ##java.lang.Object): HashSet[a, r] = 
-            HashSet(rc, unchecked_cast(o as ##java.util.HashSet))
-    }
+    //     pub def colFromJavaObject(rc: Region[r], o: ##java.lang.Object): HashSet[a, r] = 
+    //         HashSet(rc, unchecked_cast(o as ##java.util.HashSet))
+    // }
 
     instance Interop.Util.ImpCollection[HashSet] {
         pub def toCollection(t: HashSet[a, r]): Collection[a, r] = 
@@ -82,7 +82,8 @@ mod Interop.Util.HashSet {
     use Interop.Util.Collection.{Collection}
     use Interop.Util.ImpSetZ
     use Interop.Util.Function.PredicateZ.{PredicateZ}
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
 
     pub def getHH(s: HashSet[a, r]): ##java.util.HashSet = 
@@ -104,7 +105,7 @@ mod Interop.Util.HashSet {
         let HashSet(_, s1) = s;
         toString(s1)
 
-    pub def equals(s1: HashSet[a, r], s2: HashSet[a, r]): Bool \  r with Marshal[a] =
+    pub def equals(s1: HashSet[a, r], s2: HashSet[a, r]): Bool \ r =
         import java.util.HashSet.equals(##java.lang.Object): Bool \ r; 
         let HashSet(_, ss1) = s1;
         let HashSet(_, ss2) = s2;
@@ -127,10 +128,10 @@ mod Interop.Util.HashSet {
         size(s1)
 
 
-    pub def add!(x: a, s: HashSet[a, r]): Bool \ r with Marshal[a] =
+    pub def add!(x: a, s: HashSet[a, r]): Bool \ r with GoesToJava[a] =
         import java.util.HashSet.add(##java.lang.Object): Bool \ r; 
         let HashSet(_, s1) = s;
-        let x1 = Interop.Flix.Marshal.toJavaObject(x);
+        let x1 = Interop.Flix.GoesToJava.toJavaObject(x);
         add(s1, x1)
 
     pub def addWith!(x: a, ocast: a -> ##java.lang.Object, s: HashSet[a, r]): Bool \ { r } = 
@@ -145,15 +146,15 @@ mod Interop.Util.HashSet {
         clear(s1)
 
     /// Use Result - `s` could be null...
-    pub def remove!(x: a, s: HashSet[a, r]): Result[String, Bool] \  r with Marshal[a] =
+    pub def remove!(x: a, s: HashSet[a, r]): Result[String, Bool] \ r with GoesToJava[a] =
         Result.tryCatch(_ -> {
             import java.util.HashSet.remove(##java.lang.Object): Bool \ r; 
             let HashSet(_, s1) = s;
-            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.GoesToJava.toJavaObject(x);        
             remove(s1, x1)
         })
 
-    pub def removeAll!(c: Collection[a, r1], s: HashSet[a, r]): Result[String, Bool] \ {r, r1} with Marshal[a] =
+    pub def removeAll!(c: Collection[a, r1], s: HashSet[a, r]): Result[String, Bool] \ {r, r1} with GoesToJava[a] =
         Result.tryCatch(_ -> {
             import java.util.HashSet.removeAll(##java.util.Collection): Bool \ {r, r1}; 
             let HashSet(_, s1) = s;
@@ -163,7 +164,7 @@ mod Interop.Util.HashSet {
 
     
     pub def removeIf![a: Type, ef: Eff, r: Region]
-                        (f: a -> Bool \ ef, s: HashSet[a, r]): Result[String, Bool] \  {ef, r} with Marshal[a] =
+                        (f: a -> Bool \ ef, s: HashSet[a, r]): Result[String, Bool] \  {ef, r} with ComesFromJava[a] =
         Result.tryCatch(_ -> {
             import java.util.HashSet.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let HashSet(_, s1) = s;
@@ -171,7 +172,7 @@ mod Interop.Util.HashSet {
             unchecked_cast(removeIf(s1, f1) as _ \ {ef, r})
         })
 
-    pub def retainAll!(c: Collection[a, r1], s: HashSet[a, r]): Result[String, Bool] \ {r, r1} with Marshal[a] =
+    pub def retainAll!(c: Collection[a, r1], s: HashSet[a, r]): Result[String, Bool] \ {r, r1} =
         Result.tryCatch(_ -> {
             import java.util.HashSet.retainAll(##java.util.Collection): Bool \ {r, r1}; 
             let HashSet(_, s1) = s;
@@ -179,7 +180,7 @@ mod Interop.Util.HashSet {
             retainAll(s1, c1)
         })
 
-    pub def fromFoldable(r: Region[r], t: t[a]): HashSet[a, r] \ r with Foldable[t], Marshal[a] =
+    pub def fromFoldable(r: Region[r], t: t[a]): HashSet[a, r] \ r with Foldable[t], GoesToJava[a] =
         let set1 = new(r);
         Foldable.forEach(x -> discard add!(x, set1), t);
         set1
@@ -189,12 +190,12 @@ mod Interop.Util.HashSet {
         Foldable.forEach(x -> discard addWith!(x, ocast, set1), t);
         set1
     
-    pub def iterator(rc: Region[r1], m: HashSet[a, r]): Iterator[a, r1, r1] \ { r } with Marshal[a] =
-        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, m)
+    pub def iterator(rc: Region[r1], m: HashSet[a, r]): Iterator[a, r1, r1] \ { r } with ComesFromJava[a] =
+        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, m)
 
     pub def toFlixIterator(rc: Region[r1], 
                             ocast: ##java.lang.Object -> a,
-                            s: HashSet[a, r]): Iterator[a, r1, r1] \ { r} with Marshal[a] =
+                            s: HashSet[a, r]): Iterator[a, r1, r1] \ r =
         Interop.Util.SetZ.toFlixIterator(rc, ocast, ImpSetZ.toSetZ(s))
 
 }

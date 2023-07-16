@@ -53,7 +53,8 @@ mod Interop.Util.SortedMap {
     use Interop.Util.Collection.{Collection}
     use Interop.Util.SetZ
     use Interop.Util.SetZ.{SetZ}
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
 
     pub def getHH(m: SortedMap[k, v, r]): ##java.util.SortedMap = 
@@ -85,20 +86,20 @@ mod Interop.Util.SortedMap {
         let SortedMap(_, m1) = m;
         hashCode(m1)
 
-    pub def get(k: k, m: SortedMap[k, v, r]): Result[String, Option[v]] \ r with Marshal[k], Marshal[v] =
+    pub def get(k: k, m: SortedMap[k, v, r]): Result[String, Option[v]] \ r with GoesToJava[k], ComesFromJava[v] =
         Result.tryCatch(_ -> {
             import java.util.SortedMap.get(##java.lang.Object): ##java.lang.Object \ r; 
             let SortedMap(_, m1) = m;
-            let k1 = Interop.Flix.Marshal.toJavaObject(k);
-            get(m1, k1) |> Object.toOption |> Option.map(Interop.Flix.Marshal.fromJavaObject)
+            let k1 = Interop.Flix.GoesToJava.toJavaObject(k);
+            get(m1, k1) |> Object.toOption |> Option.map(Interop.Flix.ComesFromJava.fromJavaObject)
         })
 
-    pub def put!(k: k, v: v, m: SortedMap[k, v, r]): v \ r with Marshal[k], Marshal[v] =
+    pub def put!(k: k, v: v, m: SortedMap[k, v, r]): v \ r with GoesToJava[k], GoesToJava[v], ComesFromJava[v] =
         import java.util.SortedMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
         let SortedMap(_, m1) = m;
-        let k1 = Interop.Flix.Marshal.toJavaObject(k);
-        let v1 = Interop.Flix.Marshal.toJavaObject(v);
-        put(m1, k1, v1) |> Interop.Flix.Marshal.fromJavaObject
+        let k1 = Interop.Flix.GoesToJava.toJavaObject(k);
+        let v1 = Interop.Flix.GoesToJava.toJavaObject(v);
+        put(m1, k1, v1) |> Interop.Flix.ComesFromJava.fromJavaObject
 
     /// Can't guarantee `Ord[k]` at this point...
     pub def entrySet(rc: Region[r1], m: SortedMap[k, v, r]): SetZ[MapEntry[k, v, r1], r1] \ { r, r1 } = 
@@ -114,24 +115,26 @@ mod Interop.Util.SortedMap {
         Collection(rc, values(m1))
 
 
-    pub def foldMap(f: (b, (k, v)) -> b \ ef, s: b, m: SortedMap[k, v, r]): b \ { r, ef} with Order[k], Marshal[k], Marshal[v] = region r {
+    pub def foldMap(f: (b, (k, v)) -> b \ ef, s: b, m: SortedMap[k, v, r]): b \ { r, ef} with Order[k], ComesFromJava[k], ComesFromJava[v] = region r {
         iterator(r, m) |> Iterator.foldLeft(f, s)
     }
         
 
 
-    pub def unfoldViaTreeMap(rc: Region[r], f: s -> Option[(k, v, s)] \ ef, st: s): SortedMap[k, v, r] \ { r, ef } with Marshal[k], Marshal[v] =
+    pub def unfoldViaTreeMap(rc: Region[r], 
+                                f: s -> Option[(k, v, s)] \ ef, 
+                                st: s): SortedMap[k, v, r] \ { r, ef } with GoesToJava[k], GoesToJava[v] =
         import new java.util.TreeMap(): ##java.util.TreeMap \ r as newTreeMap;
         import java.util.TreeMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r as put; 
         def loop(st1, ac) = match f(st1) {
             case None            => SortedMap(rc, unchecked_cast(ac as ##java.util.SortedMap))
-            case Some(k, v, st2) => { discard put(ac, Interop.Flix.Marshal.toJavaObject(k), Interop.Flix.Marshal.toJavaObject(v)); loop(st2, ac) }
+            case Some(k, v, st2) => { discard put(ac, Interop.Flix.GoesToJava.toJavaObject(k), Interop.Flix.GoesToJava.toJavaObject(v)); loop(st2, ac) }
         };
         loop(st, newTreeMap())
 
 
     /// TODO - remove and add TreeMap module...
-    pub def fromMapViaTreeMap(r: Region[r], m: Map[k, v]): SortedMap[k, v, r] \ r with Marshal[k], Marshal[v] =
+    pub def fromMapViaTreeMap(r: Region[r], m: Map[k, v]): SortedMap[k, v, r] \ r with GoesToJava[k], GoesToJava[v] =
         let step = iter -> match Iterator.next(iter) {
             case Some(k, v)   => Some((k, v, iter))
             case None         => None
@@ -139,15 +142,15 @@ mod Interop.Util.SortedMap {
         unfoldViaTreeMap(r, step, Map.iterator(r, m))
 
 
-    pub def primSortedMapToFlixMap(prim: ##java.util.SortedMap): Map[k, v] with Order[k], Marshal[k], Marshal[v] = region rc {
+    pub def primSortedMapToFlixMap(prim: ##java.util.SortedMap): Map[k, v] with Order[k], ComesFromJava[k], ComesFromJava[v] = region rc {
         wrapHH(rc, prim) |> toFlixMap
     }
 
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     ///
-    pub def iterator(rc: Region[r1], m: SortedMap[k, v, r]): Iterator[(k, v), r1, r1] \ { r } with Marshal[k], Marshal[v] =
-        toIterator(rc, Interop.Flix.Marshal.fromJavaObject, Interop.Flix.Marshal.fromJavaObject, m)
+    pub def iterator(rc: Region[r1], m: SortedMap[k, v, r]): Iterator[(k, v), r1, r1] \ { r } with ComesFromJava[k], ComesFromJava[v] =
+        toIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, Interop.Flix.ComesFromJava.fromJavaObject, m)
 
     ///
     /// Returns an iterator over all key-value pairs in `m`.
@@ -174,7 +177,7 @@ mod Interop.Util.SortedMap {
 
     
     
-    pub def toFlixMap(m: SortedMap[k, v, r]): Map[k, v] \ { r } with Order[k], Marshal[k], Marshal[v] = region r {
+    pub def toFlixMap(m: SortedMap[k, v, r]): Map[k, v] \ { r } with Order[k], ComesFromJava[k], ComesFromJava[v] = region r {
         let step = (acc, entry) -> {
             let (k, v) = entry;
             Map.insert(k, v, acc)
@@ -182,7 +185,7 @@ mod Interop.Util.SortedMap {
         iterator(r, m) |> Iterator.foldLeft(step, Map.empty())
     }
 
-    pub def toFlixList(m: SortedMap[k, v, r]): List[(k, v)] \ { r } with Marshal[k], Marshal[v] = region r {
+    pub def toFlixList(m: SortedMap[k, v, r]): List[(k, v)] \ { r } with ComesFromJava[k], ComesFromJava[v] = region r {
         iterator(r, m) |> Iterator.toList
     }
 

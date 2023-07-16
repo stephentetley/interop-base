@@ -29,14 +29,17 @@ mod Interop.Util.Stream {
     ///
     pub enum CollectorCharacteristics(##java.util.stream.Collector$Characteristics)
 
-    instance Interop.Flix.Marshal[CollectorCharacteristics] {
-        pub def toJavaObject(x: CollectorCharacteristics): ##java.lang.Object =
-            let CollectorCharacteristics(x1) = x;
-            checked_cast(x1)
-
+    instance Interop.Flix.ComesFromJava[CollectorCharacteristics] {
         pub def fromJavaObject(o: ##java.lang.Object): CollectorCharacteristics = 
             CollectorCharacteristics(unchecked_cast(o as ##java.util.stream.Collector$Characteristics))
     }
+
+    instance Interop.Flix.GoesToJava[CollectorCharacteristics] {
+        pub def toJavaObject(x: CollectorCharacteristics): ##java.lang.Object =
+            let CollectorCharacteristics(x1) = x;
+            checked_cast(x1)
+    }
+
 
     instance SubEnum[CollectorCharacteristics] {
         pub def toEnum(x: CollectorCharacteristics): Enum = 

@@ -38,12 +38,14 @@ mod Interop.Util {
         pub def hash(x: Locale): Int32 = 
             Interop.Util.Locale.hashCode(x)
     }
-
-    instance Interop.Flix.Marshal[Locale] {
+    
+    instance Interop.Flix.GoesToJava[Locale] {
         pub def toJavaObject(x: Locale): ##java.lang.Object =
             let Locale(x1) = x;
             checked_cast(x1)
-
+    }
+    
+    instance Interop.Flix.ComesFromJava[Locale] {
         pub def fromJavaObject(o: ##java.lang.Object): Locale = 
             Locale(unchecked_cast(o as ##java.util.Locale))
     }

@@ -39,7 +39,6 @@ mod Interop.Util.DoubleSummaryStatistics {
     
     use Interop.Util.DoubleSummaryStatistics
     use Interop.Util.DoubleSummaryStatistics.{DoubleSummaryStatistics}
-    use Interop.Flix.Marshal
 
     pub def getHH(ss: DoubleSummaryStatistics[r]): ##java.util.DoubleSummaryStatistics = 
         let DoubleSummaryStatistics(ss1) = ss;

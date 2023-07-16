@@ -31,20 +31,21 @@ mod Interop.Util.Function.ToIntBiFunction {
     
     use Interop.Util.Function.ToIntBiFunction
     use Interop.Util.Function.ToIntBiFunction.{ToIntBiFunction}
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
-    pub def makeToIntBiFunction(f: (a, b) -> Int32 \ ef): ToIntBiFunction[a, b, ef] with Marshal[a], Marshal[b] = 
+    pub def makeToIntBiFunction(f: (a, b) -> Int32 \ ef): ToIntBiFunction[a, b, ef] with ComesFromJava[a], ComesFromJava[b] = 
         ToIntBiFunction(unchecked_cast(new ##java.util.function.ToIntBiFunction {
             def applyAsInt(_this: ##java.util.function.ToIntBiFunction, t: ##java.lang.Object, u: ##java.lang.Object): Int32 = 
-                let a1 = Interop.Flix.Marshal.fromJavaObject(t);
-                let b1 = Interop.Flix.Marshal.fromJavaObject(u);
+                let a1 = Interop.Flix.ComesFromJava.fromJavaObject(t);
+                let b1 = Interop.Flix.ComesFromJava.fromJavaObject(u);
                 f(a1, b1)
         } as _ \ {}))
 
 
-    pub def applyAsInt(f: ToIntBiFunction[a, b, ef], t: a, u: b): Int32 \ ef with Marshal[a], Marshal[b] = 
+    pub def applyAsInt(f: ToIntBiFunction[a, b, ef], t: a, u: b): Int32 \ ef with GoesToJava[a], GoesToJava[b] = 
         import java.util.function.ToIntBiFunction.applyAsInt(##java.lang.Object, ##java.lang.Object): Int32 \ ef;
         let ToIntBiFunction(f1) = f;
-        applyAsInt(f1, Interop.Flix.Marshal.toJavaObject(t), Interop.Flix.Marshal.toJavaObject(u))
+        applyAsInt(f1, Interop.Flix.GoesToJava.toJavaObject(t), Interop.Flix.GoesToJava.toJavaObject(u))
 
 }

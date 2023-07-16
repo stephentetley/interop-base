@@ -32,16 +32,17 @@ mod Interop.Util.Function.BinaryOperator {
     
     use Interop.Util.Function.BinaryOperator
     use Interop.Util.Function.BinaryOperator.{BinaryOperator}
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
     use Interop.Flix.ColMarshal
     
 
-    pub def makeBinaryOperator(f: (a, a) -> a \ ef): BinaryOperator[a, ef] with Marshal[a] = 
+    pub def makeBinaryOperator(f: (a, a) -> a \ ef): BinaryOperator[a, ef] with ComesFromJava[a], GoesToJava[a] = 
         let f1 = (o1, o2) -> {
-            let a = Interop.Flix.Marshal.fromJavaObject(o1); 
-            let b = Interop.Flix.Marshal.fromJavaObject(o2); 
+            let a = Interop.Flix.ComesFromJava.fromJavaObject(o1); 
+            let b = Interop.Flix.ComesFromJava.fromJavaObject(o2); 
             let ans = f(a, b);
-            Interop.Flix.Marshal.toJavaObject(ans)
+            Interop.Flix.GoesToJava.toJavaObject(ans)
         };
         BinaryOperator(unchecked_cast(new ##java.util.function.BinaryOperator {
             def apply(_this: ##java.util.function.BinaryOperator, t: ##java.lang.Object, u: ##java.lang.Object): ##java.lang.Object = 
@@ -74,10 +75,10 @@ mod Interop.Util.Function.BinaryOperator {
                 f1(t, u)
         } as _ \ {}))
 
-    pub def apply(t: a, u: a, f: BinaryOperator[a, ef]): a \ ef with Marshal[a] = 
+    pub def apply(t: a, u: a, f: BinaryOperator[a, ef]): a \ ef with ComesFromJava[a], GoesToJava[a] = 
         import java.util.function.BinaryOperator.apply(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ ef;        
         let BinaryOperator(f1) = f;
-        apply(f1, Interop.Flix.Marshal.toJavaObject(t), Interop.Flix.Marshal.toJavaObject(u)) |> Interop.Flix.Marshal.fromJavaObject
+        apply(f1, Interop.Flix.GoesToJava.toJavaObject(t), Interop.Flix.GoesToJava.toJavaObject(u)) |> Interop.Flix.ComesFromJava.fromJavaObject
 
 
 }

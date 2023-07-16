@@ -53,8 +53,8 @@ mod Interop.Util.HashMap {
     use Interop.Util.Collection.{Collection}
     use Interop.Util.SetZ
     use Interop.Util.SetZ.{SetZ}
-    use Interop.Flix.Marshal
-
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
     pub def getHH(m: HashMap[k, v, r]): ##java.util.HashMap = 
         let HashMap(_, m1) = m;
@@ -92,20 +92,20 @@ mod Interop.Util.HashMap {
         let HashMap(_, m1) = m;
         hashCode(m1)
 
-    pub def get(k: k, m: HashMap[k, v, r]): Result[String, Option[v]] \ r with Marshal[v], Marshal[k] =
+    pub def get(k: k, m: HashMap[k, v, r]): Result[String, Option[v]] \ r with GoesToJava[k], ComesFromJava[v] =
         Result.tryCatch(_ -> {
             import java.util.HashMap.get(##java.lang.Object): ##java.lang.Object \ r; 
             let HashMap(_, m1) = m;
-            let k1 = Interop.Flix.Marshal.toJavaObject(k);
-            get(m1, k1) |> Object.toOption |> Option.map(Interop.Flix.Marshal.fromJavaObject)
+            let k1 = Interop.Flix.GoesToJava.toJavaObject(k);
+            get(m1, k1) |> Object.toOption |> Option.map(Interop.Flix.ComesFromJava.fromJavaObject)
         })
 
-    pub def put!(k: k, v: v, m: HashMap[k, v, r]): v \ r with Marshal[k], Marshal[v] =
+    pub def put!(k: k, v: v, m: HashMap[k, v, r]): v \ r with GoesToJava[k], GoesToJava[v], ComesFromJava[v] =
         import java.util.HashMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
         let HashMap(_, m1) = m;
-        let k1 = Interop.Flix.Marshal.toJavaObject(k);
-        let v1 = Interop.Flix.Marshal.toJavaObject(v);
-        put(m1, k1, v1) |> Interop.Flix.Marshal.fromJavaObject
+        let k1 = Interop.Flix.GoesToJava.toJavaObject(k);
+        let v1 = Interop.Flix.GoesToJava.toJavaObject(v);
+        put(m1, k1, v1) |> Interop.Flix.ComesFromJava.fromJavaObject
 
     pub def putWith!(k: k, v: v, 
                         kcast: k -> ##java.lang.Object, 
@@ -140,14 +140,14 @@ mod Interop.Util.HashMap {
         Collection(rc, values(m1))
 
 
-    pub def remove!(k: k, m: HashMap[k, v, r]): Option[v] \  r with Marshal[k], Marshal[v] =
+    pub def remove!(k: k, m: HashMap[k, v, r]): Option[v] \  r with GoesToJava[k], ComesFromJava[v] =
         import java.util.HashMap.remove(##java.lang.Object): ##java.lang.Object \ r; 
         let HashMap(_, m1) = m;
-        let k1 = Interop.Flix.Marshal.toJavaObject(k);        
-        remove(m1, k1) |> Object.toOption |>  Option.map(Interop.Flix.Marshal.fromJavaObject)
+        let k1 = Interop.Flix.GoesToJava.toJavaObject(k);        
+        remove(m1, k1) |> Object.toOption |>  Option.map(Interop.Flix.ComesFromJava.fromJavaObject)
 
 
-    pub def fromFlixMap(r: Region[r], t: Map[k, v]): HashMap[k, v, r] \ r with Marshal[k], Marshal[v] =
+    pub def fromFlixMap(r: Region[r], t: Map[k, v]): HashMap[k, v, r] \ r with GoesToJava[k], GoesToJava[v], ComesFromJava[v] =
         let map1 = new(r);
         Map.forEach((k, v) -> discard put!(k, v, map1), t);
         map1
@@ -160,7 +160,7 @@ mod Interop.Util.HashMap {
         Map.forEach((k, v) -> putWith!(k, v, kcast, vcast, map1), t);
         map1
 
-    pub def fromFoldable(r: Region[r], t: t[(k, v)]): HashMap[k, v, r] \ r with Foldable[t], Marshal[k], Marshal[v] =
+    pub def fromFoldable(r: Region[r], t: t[(k, v)]): HashMap[k, v, r] \ r with Foldable[t], GoesToJava[k], GoesToJava[v], ComesFromJava[v] =
         let map1 = new(r);
         Foldable.forEach(match (k, v) -> discard put!(k, v, map1), t);
         map1
@@ -174,7 +174,7 @@ mod Interop.Util.HashMap {
         map1
 
 
-    pub def primHashMapToFlixMap(prim: ##java.util.HashMap): Map[k, v] with Order[k], Marshal[k], Marshal[v] = region rc {
+    pub def primHashMapToFlixMap(prim: ##java.util.HashMap): Map[k, v] with Order[k], ComesFromJava[k], ComesFromJava[v] = region rc {
         wrapHH(rc, prim) |> toFlixMap
     }
 
@@ -182,19 +182,19 @@ mod Interop.Util.HashMap {
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     ///
-    pub def iterator(rc: Region[r1], m: HashMap[k, v, r]): Iterator[(k, v), r1, r1] \ { r } with Marshal[k], Marshal[v] =
-        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, Interop.Flix.Marshal.fromJavaObject, m)
+    pub def iterator(rc: Region[r1], m: HashMap[k, v, r]): Iterator[(k, v), r1, r1] \ { r } with ComesFromJava[k], ComesFromJava[v] =
+        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, Interop.Flix.ComesFromJava.fromJavaObject, m)
 
     pub def toFlixIterator(rc: Region[r1], 
                             kcast: ##java.lang.Object -> k, 
                             vcast: ##java.lang.Object -> v, 
-                            m: HashMap[k, v, r]): Iterator[(k, v), r1, r1] \ { r} with Marshal[k], Marshal[v] =
+                            m: HashMap[k, v, r]): Iterator[(k, v), r1, r1] \ r =
         Interop.Util.MapZ.toFlixIterator(rc, kcast, vcast, ImpMapZ.toMapZ(m))
 
-    pub def toFlixMap(m: HashMap[k, v, r]): Map[k, v] \ { r } with Order[k], Marshal[k], Marshal[v] =
+    pub def toFlixMap(m: HashMap[k, v, r]): Map[k, v] \ { r } with Order[k], ComesFromJava[k], ComesFromJava[v] =
         Interop.Util.MapZ.toFlixMap(ImpMapZ.toMapZ(m))
 
-    pub def toFlixList(m: HashMap[k, v, r]): List[(k, v)] \ r with Marshal[k], Marshal[v] = 
+    pub def toFlixList(m: HashMap[k, v, r]): List[(k, v)] \ r with ComesFromJava[k], ComesFromJava[v] = 
         Interop.Util.MapZ.toFlixList(ImpMapZ.toMapZ(m))
 
 }

@@ -51,7 +51,8 @@ mod Interop.Util.MapZ {
     use Interop.Util.ImpMapZ
     use Interop.Util.Function.BiConsumer
     use Interop.Util.Function.BiConsumer.{BiConsumer}
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
     pub def getHH(m: MapZ[k, v, r]): ##java.util.Map = 
         let MapZ(_, m1) = m;
@@ -64,61 +65,61 @@ mod Interop.Util.MapZ {
 
 
 
-    pub def of0(rc: Region[r]): MapZ[k, v, r] \ r with Marshal[k], Marshal[v] =
+    pub def of0(rc: Region[r]): MapZ[k, v, r] \ r with GoesToJava[k], GoesToJava[v] =
         import static java.util.Map.of(): ##java.util.Map \ r;
         MapZ(rc, of())
 
-    pub def of1(rc: Region[r], k1: k, v1: v): MapZ[k, v, r] \ r with Marshal[k], Marshal[v] =
+    pub def of1(rc: Region[r], k1: k, v1: v): MapZ[k, v, r] \ r with GoesToJava[k], GoesToJava[v] =
         import static java.util.Map.of(##java.lang.Object, ##java.lang.Object): ##java.util.Map \ r;
-        let ko1 = Interop.Flix.Marshal.toJavaObject(k1);
-        let vo1 = Interop.Flix.Marshal.toJavaObject(v1);
+        let ko1 = Interop.Flix.GoesToJava.toJavaObject(k1);
+        let vo1 = Interop.Flix.GoesToJava.toJavaObject(v1);
         MapZ(rc, of(ko1, vo1))
 
-    pub def of2(rc: Region[r], k1: k, v1: v, k2: k, v2: v): MapZ[k, v, r] \ r with Marshal[k], Marshal[v] =
+    pub def of2(rc: Region[r], k1: k, v1: v, k2: k, v2: v): MapZ[k, v, r] \ r with GoesToJava[k], GoesToJava[v] =
         import static java.util.Map.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Map \ r;
-        let ko1 = Interop.Flix.Marshal.toJavaObject(k1);
-        let vo1 = Interop.Flix.Marshal.toJavaObject(v1);
-        let ko2 = Interop.Flix.Marshal.toJavaObject(k2);
-        let vo2 = Interop.Flix.Marshal.toJavaObject(v2);
+        let ko1 = Interop.Flix.GoesToJava.toJavaObject(k1);
+        let vo1 = Interop.Flix.GoesToJava.toJavaObject(v1);
+        let ko2 = Interop.Flix.GoesToJava.toJavaObject(k2);
+        let vo2 = Interop.Flix.GoesToJava.toJavaObject(v2);
         MapZ(rc, of(ko1, vo1, ko2, vo2))
 
 
-    pub def of3(rc: Region[r], k1: k, v1: v, k2: k, v2: v, k3: k, v3: v): MapZ[k, v, r] \ r with Marshal[k], Marshal[v] =
+    pub def of3(rc: Region[r], k1: k, v1: v, k2: k, v2: v, k3: k, v3: v): MapZ[k, v, r] \ r with GoesToJava[k], GoesToJava[v] =
         import static java.util.Map.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Map \ r;
-        let ko1 = Interop.Flix.Marshal.toJavaObject(k1);
-        let vo1 = Interop.Flix.Marshal.toJavaObject(v1);
-        let ko2 = Interop.Flix.Marshal.toJavaObject(k2);
-        let vo2 = Interop.Flix.Marshal.toJavaObject(v2);
-        let ko3 = Interop.Flix.Marshal.toJavaObject(k3);
-        let vo3 = Interop.Flix.Marshal.toJavaObject(v3);
+        let ko1 = Interop.Flix.GoesToJava.toJavaObject(k1);
+        let vo1 = Interop.Flix.GoesToJava.toJavaObject(v1);
+        let ko2 = Interop.Flix.GoesToJava.toJavaObject(k2);
+        let vo2 = Interop.Flix.GoesToJava.toJavaObject(v2);
+        let ko3 = Interop.Flix.GoesToJava.toJavaObject(k3);
+        let vo3 = Interop.Flix.GoesToJava.toJavaObject(v3);
         MapZ(rc, of(ko1, vo1, ko2, vo2, ko3, vo3))
 
-    pub def of4(rc: Region[r], k1: k, v1: v, k2: k, v2: v, k3: k, v3: v, k4: k, v4: v): MapZ[k, v, r] \ r with Marshal[k], Marshal[v] =
+    pub def of4(rc: Region[r], k1: k, v1: v, k2: k, v2: v, k3: k, v3: v, k4: k, v4: v): MapZ[k, v, r] \ r with GoesToJava[k], GoesToJava[v] =
         import static java.util.Map.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, 
                                         ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Map \ r;
-        let ko1 = Interop.Flix.Marshal.toJavaObject(k1);
-        let vo1 = Interop.Flix.Marshal.toJavaObject(v1);
-        let ko2 = Interop.Flix.Marshal.toJavaObject(k2);
-        let vo2 = Interop.Flix.Marshal.toJavaObject(v2);
-        let ko3 = Interop.Flix.Marshal.toJavaObject(k3);
-        let vo3 = Interop.Flix.Marshal.toJavaObject(v3);
-        let ko4 = Interop.Flix.Marshal.toJavaObject(k4);
-        let vo4 = Interop.Flix.Marshal.toJavaObject(v4);
+        let ko1 = Interop.Flix.GoesToJava.toJavaObject(k1);
+        let vo1 = Interop.Flix.GoesToJava.toJavaObject(v1);
+        let ko2 = Interop.Flix.GoesToJava.toJavaObject(k2);
+        let vo2 = Interop.Flix.GoesToJava.toJavaObject(v2);
+        let ko3 = Interop.Flix.GoesToJava.toJavaObject(k3);
+        let vo3 = Interop.Flix.GoesToJava.toJavaObject(v3);
+        let ko4 = Interop.Flix.GoesToJava.toJavaObject(k4);
+        let vo4 = Interop.Flix.GoesToJava.toJavaObject(v4);
         MapZ(rc, of(ko1, vo1, ko2, vo2, ko3, vo3, ko4, vo4))
 
-    pub def of5(rc: Region[r], k1: k, v1: v, k2: k, v2: v, k3: k, v3: v, k4: k, v4: v, k5: k, v5: v): MapZ[k, v, r] \ r with Marshal[k], Marshal[v] =
+    pub def of5(rc: Region[r], k1: k, v1: v, k2: k, v2: v, k3: k, v3: v, k4: k, v4: v, k5: k, v5: v): MapZ[k, v, r] \ r with GoesToJava[k], GoesToJava[v] =
         import static java.util.Map.of(##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, 
                                         ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object, ##java.lang.Object): ##java.util.Map \ r;
-        let ko1 = Interop.Flix.Marshal.toJavaObject(k1);
-        let vo1 = Interop.Flix.Marshal.toJavaObject(v1);
-        let ko2 = Interop.Flix.Marshal.toJavaObject(k2);
-        let vo2 = Interop.Flix.Marshal.toJavaObject(v2);
-        let ko3 = Interop.Flix.Marshal.toJavaObject(k3);
-        let vo3 = Interop.Flix.Marshal.toJavaObject(v3);
-        let ko4 = Interop.Flix.Marshal.toJavaObject(k4);
-        let vo4 = Interop.Flix.Marshal.toJavaObject(v4);
-        let ko5 = Interop.Flix.Marshal.toJavaObject(k5);
-        let vo5 = Interop.Flix.Marshal.toJavaObject(v5);
+        let ko1 = Interop.Flix.GoesToJava.toJavaObject(k1);
+        let vo1 = Interop.Flix.GoesToJava.toJavaObject(v1);
+        let ko2 = Interop.Flix.GoesToJava.toJavaObject(k2);
+        let vo2 = Interop.Flix.GoesToJava.toJavaObject(v2);
+        let ko3 = Interop.Flix.GoesToJava.toJavaObject(k3);
+        let vo3 = Interop.Flix.GoesToJava.toJavaObject(v3);
+        let ko4 = Interop.Flix.GoesToJava.toJavaObject(k4);
+        let vo4 = Interop.Flix.GoesToJava.toJavaObject(v4);
+        let ko5 = Interop.Flix.GoesToJava.toJavaObject(k5);
+        let vo5 = Interop.Flix.GoesToJava.toJavaObject(v5);
         MapZ(rc, of(ko1, vo1, ko2, vo2, ko3, vo3, ko4, vo4, ko5, vo5))
 
 
@@ -148,36 +149,36 @@ mod Interop.Util.MapZ {
         let MapZ(_, m1) = m;
         clear(m1)
 
-    pub def get(k: k, m: MapZ[k, v, r]): Result[String, Option[v]] \ r with Marshal[k], Marshal[v] =
+    pub def get(k: k, m: MapZ[k, v, r]): Result[String, Option[v]] \ r with GoesToJava[k], ComesFromJava[v] =
         Result.tryCatch(_ -> {
             import java.util.Map.get(##java.lang.Object): ##java.lang.Object \ r; 
             let MapZ(_, m1) = m;
-            let k1 = Interop.Flix.Marshal.toJavaObject(k);
-            get(m1, k1) |> Object.toOption |> Option.map(Interop.Flix.Marshal.fromJavaObject)
+            let k1 = Interop.Flix.GoesToJava.toJavaObject(k);
+            get(m1, k1) |> Object.toOption |> Option.map(Interop.Flix.ComesFromJava.fromJavaObject)
         })
 
-    pub def put!(k: k, v: v, m: MapZ[k, v, r]): Result[String, Option[v]] \ r with Marshal[k], Marshal[v] =
+    pub def put!(k: k, v: v, m: MapZ[k, v, r]): Result[String, Option[v]] \ r with GoesToJava[k], GoesToJava[v], ComesFromJava[v] =
         Result.tryCatch(_ -> {
             import java.util.Map.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
             let MapZ(_, m1) = m;
-            let k1 = Interop.Flix.Marshal.toJavaObject(k);
-            let v1 = Interop.Flix.Marshal.toJavaObject(v);
-            put(m1, k1, v1) |> Object.toOption |> Option.map(Interop.Flix.Marshal.fromJavaObject)
+            let k1 = Interop.Flix.GoesToJava.toJavaObject(k);
+            let v1 = Interop.Flix.GoesToJava.toJavaObject(v);
+            put(m1, k1, v1) |> Object.toOption |> Option.map(Interop.Flix.ComesFromJava.fromJavaObject)
         })
 
-    pub def containsKey(k: k, m: MapZ[k, v, r]): Result[String, Bool] \ r with Marshal[k] =
+    pub def containsKey(k: k, m: MapZ[k, v, r]): Result[String, Bool] \ r with GoesToJava[k] =
         Result.tryCatch(_ -> {
             import java.util.Map.containsKey(##java.lang.Object): Bool \ r; 
             let MapZ(_, m1) = m;
-            let k1 = Interop.Flix.Marshal.toJavaObject(k);
+            let k1 = Interop.Flix.GoesToJava.toJavaObject(k);
             containsKey(m1, k1)
         })
 
-    pub def containsValue(v: v, m: MapZ[k, v, r]): Result[String, Bool] \ r with Marshal[v] =
+    pub def containsValue(v: v, m: MapZ[k, v, r]): Result[String, Bool] \ r with GoesToJava[v] =
         Result.tryCatch(_ -> {
             import java.util.Map.containsValue(##java.lang.Object): Bool \ r; 
             let MapZ(_, m1) = m;
-            let v1 = Interop.Flix.Marshal.toJavaObject(v);
+            let v1 = Interop.Flix.GoesToJava.toJavaObject(v);
             containsValue(m1, v1)
         })
 
@@ -194,17 +195,17 @@ mod Interop.Util.MapZ {
         let MapZ(_, m1) = m;
         Collection(rc, values(m1))
 
-    pub def remove!(k: k, m: MapZ[k, v, r]): Result[String, Option[v]] \ r with Marshal[k], Marshal[v] =
+    pub def remove!(k: k, m: MapZ[k, v, r]): Result[String, Option[v]] \ r with GoesToJava[k], ComesFromJava[v] =
         Result.tryCatch(_ -> {
             import java.util.Map.remove(##java.lang.Object): ##java.lang.Object \ r; 
             let MapZ(_, m1) = m;
-            let k1 = Interop.Flix.Marshal.toJavaObject(k);        
-            remove(m1, k1) |> Object.toOption |> Option.map(Interop.Flix.Marshal.fromJavaObject)
+            let k1 = Interop.Flix.GoesToJava.toJavaObject(k);        
+            remove(m1, k1) |> Object.toOption |> Option.map(Interop.Flix.ComesFromJava.fromJavaObject)
         })
 
     /// Note - needs kinds specifying...
     pub def forEach[k: Type, v: Type, ef: Eff, r: Region]
-                    (f: (k, v) -> Unit \ ef, m: MapZ[k, v, r]): Result[String, Unit] \  {ef, r} with Marshal[k], Marshal[v] =
+                    (f: (k, v) -> Unit \ ef, m: MapZ[k, v, r]): Result[String, Unit] \  {ef, r} with ComesFromJava[k], GoesToJava[v], ComesFromJava[v] =
         Result.tryCatch(_ -> {
             import java.util.Map.forEach(##java.util.function.BiConsumer): Unit \ {ef, r}; 
             let MapZ(_, m1) = m;
@@ -212,11 +213,11 @@ mod Interop.Util.MapZ {
             forEach(m1, f1)
         })
 
-    pub def fromFlixMapViaHashMap(rc: Region[r], t: Map[k, v]): MapZ[k, v, r] \ r with Marshal[k], Marshal[v] =
+    pub def fromFlixMapViaHashMap(rc: Region[r], t: Map[k, v]): MapZ[k, v, r] \ r with GoesToJava[k], GoesToJava[v], ComesFromJava[v] =
         Interop.Util.HashMap.fromFlixMap(rc, t) |> Interop.Util.ImpMapZ.toMapZ
 
     /// Note - this is useful even though it breaks abstraction...
-    pub def fromFlixMapViaHashMapHH(t: Map[k, v]): ##java.util.Map with Marshal[k], Marshal[v] = region rc {
+    pub def fromFlixMapViaHashMapHH(t: Map[k, v]): ##java.util.Map with GoesToJava[k], GoesToJava[v], ComesFromJava[v] = region rc {
         Interop.Util.HashMap.fromFlixMap(rc, t) |> Interop.Util.ImpMapZ.toMapHH
     }
 
@@ -234,23 +235,23 @@ mod Interop.Util.MapZ {
     }
 
 
-    pub def fromFoldableViaHashMap(rc: Region[r], t: t[(k, v)]): MapZ[k, v, r] \ { r } with Foldable[t], Marshal[k], Marshal[v] =
+    pub def fromFoldableViaHashMap(rc: Region[r], t: t[(k, v)]): MapZ[k, v, r] \ { r } with Foldable[t], GoesToJava[k], GoesToJava[v], ComesFromJava[v] =
         Interop.Util.HashMap.fromFoldable(rc, t) |> Interop.Util.ImpMapZ.toMapZ
 
-    pub def fromFoldableViaHashMapHH(t: t[(k, v)]): ##java.util.Map with Foldable[t], Marshal[k], Marshal[v] = region rc {
+    pub def fromFoldableViaHashMapHH(t: t[(k, v)]): ##java.util.Map with Foldable[t], GoesToJava[k], GoesToJava[v], ComesFromJava[v] = region rc {
         Interop.Util.HashMap.fromFoldable(rc, t) |> Interop.Util.ImpMapZ.toMapHH
     }
 
 
-    pub def primMapToFlixMap(prim: ##java.util.Map): Map[k, v] with Order[k], Marshal[k], Marshal[v] = region rc {
+    pub def primMapToFlixMap(prim: ##java.util.Map): Map[k, v] with Order[k], ComesFromJava[k], ComesFromJava[v] = region rc {
         wrapHH(rc, prim) |> toFlixMap
     }
 
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     ///
-    pub def iterator(rc: Region[r1], m: MapZ[k, v, r]): Iterator[(k, v), r1, r1] \ { r} with Marshal[k], Marshal[v] =
-        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, Interop.Flix.Marshal.fromJavaObject, m)
+    pub def iterator(rc: Region[r1], m: MapZ[k, v, r]): Iterator[(k, v), r1, r1] \ { r} with ComesFromJava[k], ComesFromJava[v] =
+        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, Interop.Flix.ComesFromJava.fromJavaObject, m)
 
     ///
     /// Returns an iterator over all key-value pairs in `m`.
@@ -259,7 +260,7 @@ mod Interop.Util.MapZ {
     pub def toFlixIterator(rc: Region[r1], 
                             kcast: ##java.lang.Object -> k, 
                             vcast: ##java.lang.Object -> v, 
-                            m: MapZ[k, v, r]): Iterator[(k, v), r1, r1] \ r with Marshal[k], Marshal[v] =
+                            m: MapZ[k, v, r]): Iterator[(k, v), r1, r1] \ r =
         import java.util.Map.entrySet(): ##java.util.Set \ r;
         import java.util.Set.iterator(): ##java.util.Iterator \ r;
         import java.util.Iterator.hasNext(): Bool \ r1;
@@ -277,7 +278,7 @@ mod Interop.Util.MapZ {
 
 
     
-    pub def toFlixMap(m: MapZ[k, v, r]): Map[k, v] \ { r } with Order[k], Marshal[k], Marshal[v] = region r {
+    pub def toFlixMap(m: MapZ[k, v, r]): Map[k, v] \ { r } with Order[k], ComesFromJava[k], ComesFromJava[v] = region r {
         let step = (acc, entry) -> {
             let (k, v) = entry;
             Map.insert(k, v, acc)
@@ -285,7 +286,7 @@ mod Interop.Util.MapZ {
         iterator(r, m) |> Iterator.foldLeft(step, Map.empty())
     } 
 
-    pub def toFlixList(m: MapZ[k, v, r]): List[(k, v)] \ { r } with Marshal[k], Marshal[v] = region r {
+    pub def toFlixList(m: MapZ[k, v, r]): List[(k, v)] \ { r } with ComesFromJava[k], ComesFromJava[v] = region r {
         iterator(r, m) |> Iterator.toList
     }
 

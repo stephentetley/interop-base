@@ -37,7 +37,7 @@ mod Interop.Lang.IterableZ {
     use Interop.Lang.IterableZ;
     use Interop.Lang.IterableZ.{IterableZ};
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
-    use Interop.Flix.Marshal;
+    use Interop.Flix.ComesFromJava
 
 
     pub def getHH(iter: IterableZ[a, r]): ##java.lang.Iterable = 
@@ -48,19 +48,19 @@ mod Interop.Lang.IterableZ {
         IterableZ(rc, iter)
 
     // Iterable to mutable (Flix iterator) 
-    pub def iterator(iter: IterableZ[a, r]): Iterator[a, r, r] \ r with Marshal[a] =
+    pub def iterator(iter: IterableZ[a, r]): Iterator[a, r, r] \ r with ComesFromJava[a] =
         let IterableZ(rc, _) = iter;
         let iter1 = Interop.Util.IteratorZ.wrapHH(rc, iteratorHH(iter));
-        Interop.Util.IteratorZ.toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, iter1)
+        Interop.Util.IteratorZ.toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, iter1)
 
-    pub def iteratorHH(iter: IterableZ[a, r]): ##java.util.Iterator \ r with Marshal[a] =
+    pub def iteratorHH(iter: IterableZ[a, r]): ##java.util.Iterator \ r with ComesFromJava[a] =
         import java.lang.Iterable.iterator(): ##java.util.Iterator \ r ;
         let IterableZ(_, iter1) = iter;
         iterator(iter1)
 
 
     pub def forEach[a: Type, ef: Eff, r: Region]
-                    (f: a -> Unit \ ef, l: IterableZ[a, r]): Result[String, Unit] \ {ef, r} with Marshal[a] =
+                    (f: a -> Unit \ ef, l: IterableZ[a, r]): Result[String, Unit] \ {ef, r} with ComesFromJava[a] =
         Result.tryCatch(_ -> {
             import java.lang.Iterable.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let IterableZ(_, l1) = l;

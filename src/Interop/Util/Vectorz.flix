@@ -33,14 +33,14 @@ mod Interop.Util {
     }
 
 
-    instance Interop.Flix.ColMarshal[VectorZ] {
-        pub def colToJavaObject(x: VectorZ[a, r]): ##java.lang.Object = 
-            let VectorZ(_, t1) = x;
-            unchecked_cast(t1 as ##java.lang.Object)
+    // instance Interop.Flix.ColMarshal[VectorZ] {
+    //     pub def colToJavaObject(x: VectorZ[a, r]): ##java.lang.Object = 
+    //         let VectorZ(_, t1) = x;
+    //         unchecked_cast(t1 as ##java.lang.Object)
 
-        pub def colFromJavaObject(rc: Region[r], o: ##java.lang.Object): VectorZ[a, r] = 
-            VectorZ(rc, unchecked_cast(o as ##java.util.Vector))
-    }
+    //     pub def colFromJavaObject(rc: Region[r], o: ##java.lang.Object): VectorZ[a, r] = 
+    //         VectorZ(rc, unchecked_cast(o as ##java.util.Vector))
+    // }
 
     instance Interop.Util.ImpCollection[VectorZ] {
         pub def toCollection(t: VectorZ[a, r]): Collection[a, r] = 
@@ -77,10 +77,11 @@ mod Interop.Util {
 
 mod Interop.Util.VectorZ {
 
-    use Interop.Util.VectorZ;
-    use Interop.Util.VectorZ.{VectorZ};
-    use Interop.Util.Comparator;
-    use Interop.Flix.Marshal;
+    use Interop.Util.VectorZ
+    use Interop.Util.VectorZ.{VectorZ}
+    use Interop.Util.Comparator
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
 
     pub def getHH(v: VectorZ[a, r]): ##java.util.Vector = 
@@ -98,7 +99,7 @@ mod Interop.Util.VectorZ {
         import new java.util.Vector(): ##java.util.Vector \ r as newVector;
         VectorZ(rc, newVector())
 
-    pub def equals(v1: VectorZ[a, r], v2: VectorZ[a, r]): Bool \  r with Marshal[a] =
+    pub def equals(v1: VectorZ[a, r], v2: VectorZ[a, r]): Bool \ r =
         import java.util.Vector.equals(##java.lang.Object): Bool \ r; 
         let VectorZ(_, jv1) = v1;
         let VectorZ(_, jv2) = v2;
@@ -120,18 +121,18 @@ mod Interop.Util.VectorZ {
         let VectorZ(_, v1) = v;
         size(v1)
 
-    pub def add!(x: a, v: VectorZ[a, r]): Bool \ r with Marshal[a] = 
+    pub def add!(x: a, v: VectorZ[a, r]): Bool \ r with GoesToJava[a] = 
         import java.util.Vector.add(##java.lang.Object): Bool \ r;
         let VectorZ(_, v1) = v;
-        add(v1, Interop.Flix.Marshal.toJavaObject(x))
+        add(v1, Interop.Flix.GoesToJava.toJavaObject(x))
 
 
-    pub def sort!(f: (a, a) -> Int32, v: VectorZ[a, r]): Result[String, Unit] \ r with Marshal[a] =
+    pub def sort!(f: (a, a) -> Int32, v: VectorZ[a, r]): Result[String, Unit] \ r with ComesFromJava[a] =
         let f1 = Interop.Util.Comparator.makeComparator(f);
         sortWithComparator!(f1, v)
 
 
-    pub def sortWithComparator!(c: Comparator[a], v: VectorZ[a, r]): Result[String, Unit] \ r with Marshal[a] =
+    pub def sortWithComparator!(c: Comparator[a], v: VectorZ[a, r]): Result[String, Unit] \ r with ComesFromJava[a] =
         Result.tryCatch(_ -> {
             import java.util.Vector.sort(##java.util.Comparator): Unit \ r; 
             let VectorZ(_, v1) = v;
@@ -142,8 +143,8 @@ mod Interop.Util.VectorZ {
     ///
     /// Returns an iterator over `s`.
     ///
-    pub def iterator(rc: Region[r1], v: VectorZ[a, r]): Iterator[a, r1, r1] \ r with Marshal[a] =
-        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, v)
+    pub def iterator(rc: Region[r1], v: VectorZ[a, r]): Iterator[a, r1, r1] \ r with ComesFromJava[a] =
+        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, v)
 
 
     ///
@@ -161,14 +162,14 @@ mod Interop.Util.VectorZ {
                 |> Interop.Util.IteratorZ.wrapHH(rc)
                 |> Interop.Util.IteratorZ.toFlixIterator(rc, ocast)
 
-    pub def toFlixSet(v: VectorZ[a, r]): Set[a] \ { r } with Order[a], Marshal[a] =
+    pub def toFlixSet(v: VectorZ[a, r]): Set[a] \ { r } with Order[a], ComesFromJava[a] =
         region r2 {
-            toFlixIterator(r2, Interop.Flix.Marshal.fromJavaObject, v) |> Iterator.toSet
+            toFlixIterator(r2, Interop.Flix.ComesFromJava.fromJavaObject, v) |> Iterator.toSet
         }
 
-    pub def toFlixList(v: VectorZ[a, r]): List[a] \ { r } with Marshal[a] =
+    pub def toFlixList(v: VectorZ[a, r]): List[a] \ { r } with ComesFromJava[a] =
         region r2 {
-            toFlixIterator(r2, Interop.Flix.Marshal.fromJavaObject, v) |> Iterator.toList
+            toFlixIterator(r2, Interop.Flix.ComesFromJava.fromJavaObject, v) |> Iterator.toList
         }
 
 }

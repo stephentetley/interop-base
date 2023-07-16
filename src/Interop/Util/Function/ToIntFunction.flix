@@ -31,18 +31,20 @@ mod Interop.Util.Function.ToIntFunction {
     
     use Interop.Util.Function.ToIntFunction
     use Interop.Util.Function.ToIntFunction.{ToIntFunction}
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
-    pub def makeToIntFunction(f: a -> Int32 \ ef): ToIntFunction[a, ef] with Marshal[a]= 
+
+    pub def makeToIntFunction(f: a -> Int32 \ ef): ToIntFunction[a, ef] with ComesFromJava[a]= 
         ToIntFunction(unchecked_cast(new ##java.util.function.ToIntFunction {
             def applyAsInt(_this: ##java.util.function.ToIntFunction, t: ##java.lang.Object): Int32 = 
-                Interop.Flix.Marshal.fromJavaObject(t) |> f
+                Interop.Flix.ComesFromJava.fromJavaObject(t) |> f
         } as _ \ {}))
 
 
-    pub def applyAsInt(f: ToIntFunction[a, ef], t: a): Int32 \ ef with Marshal[a]  = 
+    pub def applyAsInt(f: ToIntFunction[a, ef], t: a): Int32 \ ef with GoesToJava[a]  = 
         import java.util.function.ToIntFunction.applyAsInt(##java.lang.Object): Int32 \ ef;
         let ToIntFunction(f1) = f;
-        applyAsInt(f1, Interop.Flix.Marshal.toJavaObject(t))
+        applyAsInt(f1, Interop.Flix.GoesToJava.toJavaObject(t))
 
 }

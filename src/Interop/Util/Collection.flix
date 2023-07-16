@@ -56,7 +56,8 @@ mod Interop.Util.Collection {
     use Interop.Util.Stream.Stream.{Stream}
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
     use Interop.Util.Function.PredicateZ.{PredicateZ}
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
 
     pub def getHH(c: Collection[a, r]): ##java.util.Collection = 
@@ -91,25 +92,25 @@ mod Interop.Util.Collection {
             clear(c1)
         })
 
-    pub def add!(x: a, c: Collection[a, r]): Result[String, Bool] \ r with Marshal[a] =
+    pub def add!(x: a, c: Collection[a, r]): Result[String, Bool] \ r with GoesToJava[a] =
         Result.tryCatch(_ -> {
             import java.util.Collection.add(##java.lang.Object): Bool \ r; 
             let Collection(_, c1) = c;
-            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.GoesToJava.toJavaObject(x);        
             add(c1, x1)
         })
 
-    pub def remove!(x: a, c: Collection[a, r]): Result[String, Bool] \ r with Marshal[a] =
+    pub def remove!(x: a, c: Collection[a, r]): Result[String, Bool] \ r with GoesToJava[a] =
         Result.tryCatch(_ -> {
             import java.util.Collection.remove(##java.lang.Object): Bool \ r; 
             let Collection(_, c1) = c;
-            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.GoesToJava.toJavaObject(x);        
             remove(c1, x1)
         })
 
 
     pub def removeIf![a: Type, ef: Eff, r: Region]
-                        (f: a -> Bool \ ef, c: Collection[a, r]): Result[String, Bool] \  {ef, r} with Marshal[a] =
+                        (f: a -> Bool \ ef, c: Collection[a, r]): Result[String, Bool] \  {ef, r} with ComesFromJava[a] =
         Result.tryCatch(_ -> {
             import java.util.Collection.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let Collection(_, c1) = c;
@@ -118,7 +119,7 @@ mod Interop.Util.Collection {
         })
 
     pub def forEach[a: Type, ef: Eff, r: Region]
-                    (f: a -> Unit \ ef, c: Collection[a, r]): Result[String, Unit] \  {ef, r} with Marshal[a] =
+                    (f: a -> Unit \ ef, c: Collection[a, r]): Result[String, Unit] \  {ef, r} with ComesFromJava[a] =
         Result.tryCatch(_ -> {
             import java.util.Collection.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let Collection(_, c1) = c;
@@ -128,42 +129,42 @@ mod Interop.Util.Collection {
 
 
     // Uses `Object.equals` for comparing.
-    pub def contains(x: a, c: Collection[a, r]): Result[String, Bool] \  r with Marshal[a] =
+    pub def contains(x: a, c: Collection[a, r]): Result[String, Bool] \  r with GoesToJava[a] =
         Result.tryCatch(_ -> {
             import java.util.Collection.contains(##java.lang.Object): Bool \ r; 
             let Collection(_, c1) = c;
-            let x1 = Interop.Flix.Marshal.toJavaObject(x);        
+            let x1 = Interop.Flix.GoesToJava.toJavaObject(x);        
             contains(c1, x1)
         })
 
-    pub def stream(rc: Region[r1], c: Collection[a, r]): Stream[a, ef + r, r1] with Marshal[a] =
+    pub def stream(rc: Region[r1], c: Collection[a, r]): Stream[a, ef + r, r1] =
         import java.util.Collection.stream(): ##java.util.stream.Stream \ {}; 
         let Collection(_, c1) = c;
         Stream(rc, checked_ecast(stream(c1)))
 
 
-    pub def fromFoldableViaArrayList(rc: Region[r], t: t[a]): Collection[a, r] \ { r } with Foldable[t], Marshal[a] =
+    pub def fromFoldableViaArrayList(rc: Region[r], t: t[a]): Collection[a, r] \ { r } with Foldable[t], GoesToJava[a] =
         Interop.Util.ArrayList.fromFoldable(rc, t) |> Interop.Util.ImpCollection.toCollection
 
-    pub def fromFoldableViaArrayListHH(t: t[a]): ##java.util.Collection with Foldable[t], Marshal[a] = region rc {
+    pub def fromFoldableViaArrayListHH(t: t[a]): ##java.util.Collection with Foldable[t], GoesToJava[a] = region rc {
         Interop.Util.ArrayList.fromFoldable(rc, t) |> Interop.Util.ImpCollection.toCollectionHH
     }
 
-    pub def fromFoldableViaLinkedList(rc: Region[r], t: t[a]): Collection[a, r] \ { r } with Foldable[t], Marshal[a] =
+    pub def fromFoldableViaLinkedList(rc: Region[r], t: t[a]): Collection[a, r] \ { r } with Foldable[t], GoesToJava[a] =
         Interop.Util.LinkedList.fromFoldable(rc, t) |> Interop.Util.ImpCollection.toCollection
 
-    pub def fromFoldableViaLinkedListHH(t: t[a]): ##java.util.Collection with Foldable[t], Marshal[a] = region rc {
+    pub def fromFoldableViaLinkedListHH(t: t[a]): ##java.util.Collection with Foldable[t], GoesToJava[a] = region rc {
         Interop.Util.LinkedList.fromFoldable(rc, t) |> Interop.Util.ImpCollection.toCollectionHH
     }
 
-    pub def iterator(rc: Region[r1], c: Collection[a, r]): Iterator[a, r1, r1] \ { r } with Marshal[a] =
-        toFlixIterator(rc, Interop.Flix.Marshal.fromJavaObject, c)
+    pub def iterator(rc: Region[r1], c: Collection[a, r]): Iterator[a, r1, r1] \ { r } with ComesFromJava[a] =
+        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, c)
         
 
     pub def toFlixIterator(rc: Region[r1], 
                             ocast: ##java.lang.Object -> a,
-                            c: Collection[a, r]): Iterator[a, r1, r1] \ { r } with Marshal[a] =
-        import java.util.Collection.iterator(): ##java.util.Iterator \ { r } as iterator;
+                            c: Collection[a, r]): Iterator[a, r1, r1] \ r =
+        import java.util.Collection.iterator(): ##java.util.Iterator \ r as iterator;
         let Collection(_, c1) = c;
         if (Object.isNull(c1))
             Iterator.empty(rc)
@@ -176,12 +177,12 @@ mod Interop.Util.Collection {
     ///     iterator(r, c) |> Iterator.enumerator
 
     /// remove...
-    pub def unfoldCollection(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): Collection[a, r] \ { r,  ef } with Marshal[a] =
+    pub def unfoldCollection(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): Collection[a, r] \ { r,  ef } with GoesToJava[a] =
         import new java.util.LinkedList(): ##java.util.LinkedList \ r as new1;
         import java.util.LinkedList.add(##java.lang.Object): Bool \ r as add1;
         def loop(st1, acc) = match f(st1) {
             case None         => Collection(rc, unchecked_cast(acc as ##java.util.Collection))
-            case Some(o, st2) => {discard add1(acc, Interop.Flix.Marshal.toJavaObject(o)); loop(st2, acc)}
+            case Some(o, st2) => {discard add1(acc, Interop.Flix.GoesToJava.toJavaObject(o)); loop(st2, acc)}
         };
         loop(st, new1())
 

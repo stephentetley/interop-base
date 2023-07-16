@@ -48,7 +48,6 @@ mod Interop.Util.Stream.IntStream {
     use Interop.Util.Function.IntPredicateZ.{IntPredicateZ}
     use Interop.Util.Function.IntSupplier.{IntSupplier}
     use Interop.Util.Function.IntUnaryOperatorZ.{IntUnaryOperatorZ}
-    use Interop.Flix.Marshal
 
     pub def getHH(x: IntStream[ef, r]): ##java.util.stream.IntStream = 
         let IntStream(_, x1) = x;

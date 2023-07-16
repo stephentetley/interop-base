@@ -46,7 +46,6 @@ mod Interop.Util.Stream.LongStream {
     use Interop.Util.Function.LongPredicateZ.{LongPredicateZ}
     use Interop.Util.Function.LongSupplier.{LongSupplier}
     use Interop.Util.Function.LongUnaryOperatorZ.{LongUnaryOperatorZ}
-    use Interop.Flix.Marshal
 
 
     pub def getHH(x: LongStream[ef, r]): ##java.util.stream.LongStream = 

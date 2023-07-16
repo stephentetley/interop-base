@@ -25,14 +25,16 @@ mod Interop.NIO.File {
     use Interop.NIO.File.OpenOption.{OpenOption}
 
     pub enum StandardOpenOption(##java.nio.file.StandardOpenOption)
+    
+    instance Interop.Flix.ComesFromJava[StandardOpenOption] {    
+        pub def fromJavaObject(o: ##java.lang.Object): StandardOpenOption = 
+            StandardOpenOption(unchecked_cast(o as ##java.nio.file.StandardOpenOption))
+    }
 
-    instance Interop.Flix.Marshal[StandardOpenOption] {
+    instance Interop.Flix.GoesToJava[StandardOpenOption] {
         pub def toJavaObject(x: StandardOpenOption): ##java.lang.Object =
             let StandardOpenOption(x1) = x;
             checked_cast(x1)
-
-        pub def fromJavaObject(o: ##java.lang.Object): StandardOpenOption = 
-            StandardOpenOption(unchecked_cast(o as ##java.nio.file.StandardOpenOption))
     }
 
 

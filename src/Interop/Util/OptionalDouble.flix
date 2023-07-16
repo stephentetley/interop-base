@@ -27,9 +27,8 @@ mod Interop.Util {
 
 mod Interop.Util.OptionalDouble {
     
-    use Interop.Util.OptionalDouble;
-    use Interop.Util.OptionalDouble.{OptionalDouble};
-    use Interop.Flix.Marshal;
+    use Interop.Util.OptionalDouble
+    use Interop.Util.OptionalDouble.{OptionalDouble}
 
     pub def getHH(o: OptionalDouble): ##java.util.OptionalDouble = 
         let OptionalDouble(o1) = o;

@@ -38,7 +38,8 @@ mod Interop.Util.Stream.Stream {
     use Interop.Util.Function.FunctionZ.{FunctionZ}
     use Interop.Util.Function.PredicateZ.{PredicateZ}
     use Interop.Util.Function.UnaryOperator.{UnaryOperator}
-    use Interop.Flix.Marshal;
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
     pub def getHH(x: Stream[a, ef, r]): ##java.util.stream.Stream = 
         let Stream(_, x1) = x;
@@ -56,33 +57,33 @@ mod Interop.Util.Stream.Stream {
         import static java.util.stream.Stream.builder(): ##java.util.stream.Stream$Builder \ r;
         StreamBuilder(rc, builder())
 
-    pub def of(rc: Region[r], t: a): Stream[a, ef, r] with Marshal[a] = 
+    pub def of(rc: Region[r], t: a): Stream[a, ef, r] with GoesToJava[a] = 
         import static java.util.stream.Stream.of(##java.lang.Object): ##java.util.stream.Stream \ {};
-        let t1 = Interop.Flix.Marshal.toJavaObject(t);
+        let t1 = Interop.Flix.GoesToJava.toJavaObject(t);
         Stream(rc, checked_ecast(of(t1)))
 
-    pub def ofArray(rc: Region[r1], arr: Array[a, r]): Stream[a, ef + r + r1, r1] with Marshal[a] = 
+    pub def ofArray(rc: Region[r1], arr: Array[a, r]): Stream[a, ef + r + r1, r1] with GoesToJava[a] = 
         import static java.util.stream.Stream.of(Array[##java.lang.Object, r1]): ##java.util.stream.Stream \ {};
-        let arr1 = unchecked_cast(Array.map(rc, Interop.Flix.Marshal.toJavaObject, arr) as Array[##java.lang.Object, r1] \ {});
+        let arr1 = unchecked_cast(Array.map(rc, Interop.Flix.GoesToJava.toJavaObject, arr) as Array[##java.lang.Object, r1] \ {});
         Stream(rc, checked_ecast(of(arr1)))
 
-    pub def ofNullable(rc: Region[r], t: a): Stream[a, ef, r] with Marshal[a] = 
+    pub def ofNullable(rc: Region[r], t: a): Stream[a, ef, r] with GoesToJava[a] = 
         import static java.util.stream.Stream.ofNullable(##java.lang.Object): ##java.util.stream.Stream \ {};
-        let t1 = Interop.Flix.Marshal.toJavaObject(t);
+        let t1 = Interop.Flix.GoesToJava.toJavaObject(t);
         Stream(rc, checked_ecast(ofNullable(t1)))
 
 
-    pub def iterate(rc: Region[r], seed: a, op: a -> a \ ef): Stream[a, ef, r] with Marshal[a] = 
+    pub def iterate(rc: Region[r], seed: a, op: a -> a \ ef): Stream[a, ef, r] with ComesFromJava[a], GoesToJava[a] = 
         import static java.util.stream.Stream.iterate(##java.lang.Object, ##java.util.function.UnaryOperator): ##java.util.stream.Stream \ {};
-        let seed1 = Interop.Flix.Marshal.toJavaObject(seed);
+        let seed1 = Interop.Flix.GoesToJava.toJavaObject(seed);
         let UnaryOperator(op1) = Interop.Util.Function.UnaryOperator.makeUnaryOperator(op);
         Stream(rc, checked_ecast(iterate(seed1, op1)))
 
 
-    pub def iterator(rc: Region[r1], s: Stream[a,  ef, r]): Iterator[a, ef + r + r1, r1] with Marshal[a] =
-        iteratorWith(rc, Interop.Flix.Marshal.fromJavaObject, s)
+    pub def iterator(rc: Region[r1], s: Stream[a,  ef, r]): Iterator[a, ef + r + r1, r1] with ComesFromJava[a] =
+        iteratorWith(rc, Interop.Flix.ComesFromJava.fromJavaObject, s)
 
-    pub def iteratorWith(rc: Region[r1], ocast: ##java.lang.Object -> a, s: Stream[a, ef, r]): Iterator[a, ef + r + r1, r1] with Marshal[a] =
+    pub def iteratorWith(rc: Region[r1], ocast: ##java.lang.Object -> a, s: Stream[a, ef, r]): Iterator[a, ef + r + r1, r1] with ComesFromJava[a] =
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ {} as mkIterator;
         import java.util.Iterator.hasNext(): Bool \ r;
         import java.util.Iterator.next(): ##java.lang.Object \ r;
@@ -111,13 +112,13 @@ mod Interop.Util.Stream.Stream {
         let Stream(_, t1) = t;
         Stream(rc, checked_ecast(concat(s1, t1)))
 
-    pub def filter(p: a -> Bool \ ef1, s: Stream[a, ef, r]): Stream[a, ef + ef1, r] with Marshal[a] = 
+    pub def filter(p: a -> Bool \ ef1, s: Stream[a, ef, r]): Stream[a, ef + ef1, r] with ComesFromJava[a] = 
         import java.util.stream.Stream.filter(##java.util.function.Predicate): ##java.util.stream.Stream \ {};
         let Stream(rc, s1) = s;
         let PredicateZ(p1) = Interop.Util.Function.PredicateZ.makePredicateZ(p);
         Stream(rc, checked_ecast(filter(s1, p1)))
 
-    pub def dropWhile(p: a -> Bool \ ef1, s: Stream[a, ef, r]): Stream[a, ef + ef1, r] with Marshal[a] =
+    pub def dropWhile(p: a -> Bool \ ef1, s: Stream[a, ef, r]): Stream[a, ef + ef1, r] with ComesFromJava[a] =
         import java.util.stream.Stream.dropWhile(##java.util.function.Predicate): ##java.util.stream.Stream \ {};
         let Stream(rc, s1) = s;
         let PredicateZ(p1) = Interop.Util.Function.PredicateZ.makePredicateZ(p);
@@ -128,21 +129,21 @@ mod Interop.Util.Stream.Stream {
         let Stream(rc, s1) = s;
         Stream(rc, checked_ecast(limit(s1, size)))
 
-    pub def map(f: a -> b \ ef, s: Stream[a, ef, r]): Stream[b, ef + ef1, r] with Marshal[a], Marshal[b] = 
+    pub def map(f: a -> b \ ef, s: Stream[a, ef, r]): Stream[b, ef + ef1, r] with ComesFromJava[a], GoesToJava[b] = 
         import java.util.stream.Stream.map(##java.util.function.Function): ##java.util.stream.Stream \ {};
         let Stream(rc, s1) = s;
         let FunctionZ(f1) =Interop.Util.Function.FunctionZ.makeFunctionZ(f);
         Stream(rc, checked_ecast(map(s1, f1)))
 
     /// Warning `f1` ...
-    pub def flatMap(f: a -> Stream[b, ef1, r] \ ef2, s: Stream[a, ef, r]): Stream[b, ef + ef1 + ef2, r] with Marshal[a], Marshal[b] = 
+    pub def flatMap(f: a -> Stream[b, ef1, r] \ ef2, s: Stream[a, ef, r]): Stream[b, ef + ef1 + ef2, r] with ComesFromJava[a], GoesToJava[b] = 
         import java.util.stream.Stream.flatMap(##java.util.function.Function): ##java.util.stream.Stream \ {};
         let Stream(rc, s1) = s;
-        let FunctionZ(f1) = Interop.Util.Function.FunctionZ.makeFunctionZWith(f, Interop.Flix.Marshal.fromJavaObject, strm -> unchecked_cast(strm as ##java.lang.Object));
+        let FunctionZ(f1) = Interop.Util.Function.FunctionZ.makeFunctionZWith(f, Interop.Flix.ComesFromJava.fromJavaObject, strm -> unchecked_cast(strm as ##java.lang.Object));
         Stream(rc, checked_ecast(flatMap(s1, f1)))
 
     pub def forEach[a: Type, ef: Eff, ef1: Region, r: Region]
-                    (f: a -> Unit \ ef1, s: Stream[a, ef, r]): Unit \ {ef, ef1, r} with Marshal[a] = 
+                    (f: a -> Unit \ ef1, s: Stream[a, ef, r]): Unit \ {ef, ef1, r} with ComesFromJava[a] = 
         import java.util.stream.Stream.forEach(##java.util.function.Consumer): Unit \ {ef, ef1, r};
         let ConsumerZ(f1) = Interop.Util.Function.ConsumerZ.makeConsumerZ(f);
         let Stream(_, s1) = s;
@@ -154,43 +155,43 @@ mod Interop.Util.Stream.Stream {
         checked_ecast(toArray(s1))
 
     pub def anyMatch[a: Type, ef: Eff, ef1: Eff, r: Region]
-                    (f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, r} with Marshal[a] = 
+                    (f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, r} with ComesFromJava[a] = 
         import java.util.stream.Stream.anyMatch(##java.util.function.Predicate): Bool \ {r, ef, ef1};
         let Stream(_, s1) = s;
         let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
         anyMatch(s1, f1)
 
     pub def allMatch[a: Type, ef: Eff, ef1: Eff, r: Region]
-                    (f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, r} with Marshal[a] = 
+                    (f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, r} with ComesFromJava[a] = 
         import java.util.stream.Stream.allMatch(##java.util.function.Predicate): Bool \ {r, ef, ef1};
         let Stream(_, s1) = s;
         let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
         allMatch(s1, f1)
 
     pub def noneMatch[a: Type, ef: Eff, ef1: Eff, r: Region]
-                        (f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, r} with Marshal[a] = 
+                        (f: a -> Bool \ ef1, s: Stream[a, ef, r]): Bool \ {ef, ef1, r} with ComesFromJava[a] = 
         import java.util.stream.Stream.noneMatch(##java.util.function.Predicate): Bool \ {r, ef, ef1};
         let Stream(_, s1) = s;
         let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
         noneMatch(s1, f1)
 
 
-    pub def findFirst(s: Stream[a, ef, r]): Option[a] \ {ef, r} with Marshal[a] = 
+    pub def findFirst(s: Stream[a, ef, r]): Option[a] \ {ef, r} with ComesFromJava[a] = 
         import java.util.stream.Stream.findFirst(): ##java.util.Optional \ {ef, r};
         let Stream(_, s1) = s;
-        findFirst(s1) |> Interop.Util.Optional.hhToOption(Interop.Flix.Marshal.fromJavaObject)
+        findFirst(s1) |> Interop.Util.Optional.hhToOption(Interop.Flix.ComesFromJava.fromJavaObject)
 
-    pub def findAny(s: Stream[a, ef, r]): Option[a] \ {ef, r} with Marshal[a] = 
+    pub def findAny(s: Stream[a, ef, r]): Option[a] \ {ef, r} with ComesFromJava[a] = 
         import java.util.stream.Stream.findAny(): ##java.util.Optional \ {ef, r};
         let Stream(_, s1) = s;
-        findAny(s1) |> Interop.Util.Optional.hhToOption(Interop.Flix.Marshal.fromJavaObject)
+        findAny(s1) |> Interop.Util.Optional.hhToOption(Interop.Flix.ComesFromJava.fromJavaObject)
 
 
-    pub def collect(c: Collector[t, a, ef1, ans], s: Stream[a, ef, r]): ans \ {ef, ef1, r} with Marshal[ans] = 
+    pub def collect(c: Collector[t, a, ef1, ans], s: Stream[a, ef, r]): ans \ {ef, ef1, r} with ComesFromJava[ans] = 
         import java.util.stream.Stream.collect(##java.util.stream.Collector): ##java.lang.Object \ {ef, ef1, r};
         let Stream(_, s1) = s;
         let Collector(c1) = c;
-        collect(s1, c1) |> Interop.Flix.Marshal.fromJavaObject
+        collect(s1, c1) |> Interop.Flix.ComesFromJava.fromJavaObject
 
     pub def collectWith(c: Collector[t, a, ef1, ans], s: Stream[a, ef, r], ocast: ##java.lang.Object -> ans): ans \ {ef, ef1, r} = 
         import java.util.stream.Stream.collect(##java.util.stream.Collector): ##java.lang.Object \ {ef, ef1, r};

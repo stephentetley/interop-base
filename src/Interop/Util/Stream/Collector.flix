@@ -44,7 +44,6 @@ mod Interop.Util.Stream.Collector {
     use Interop.Util.Function.FunctionZ.{FunctionZ}
     use Interop.Util.Function.Supplier
     use Interop.Util.Function.Supplier.{Supplier}
-    use Interop.Flix.Marshal
 
 
     pub def of5(supplier: Supplier[a, ef1], 
@@ -101,13 +100,13 @@ mod Interop.Util.Stream.Collector {
         let chars = characteristics(c);
         of5(sf, af, cf, Interop.Util.Function.FunctionZ.andThen(ff, f1), chars)
 
-    pub def mapFinisher1(f: ans -> ans1 \ ef1, 
-                        c: Collector[t, a, ef, ans]): Collector[t, a, ef + ef1, ans1] with Marshal[ans], Marshal[ans1] =
-        let sf = supplier(c);
-        let af = accumulator(c);
-        let cf = combiner(c);
-        let ff = finisher(c);
-        let chars = characteristics(c);
-        of5(sf, af, cf, Interop.Util.Function.FunctionZ.andThen(ff, Interop.Util.Function.FunctionZ.makeFunctionZ(f)), chars)
+    // pub def mapFinisher1(f: ans -> ans1 \ ef1, 
+    //                     c: Collector[t, a, ef, ans]): Collector[t, a, ef + ef1, ans1] with Marshal[ans], Marshal[ans1] =
+    //     let sf = supplier(c);
+    //     let af = accumulator(c);
+    //     let cf = combiner(c);
+    //     let ff = finisher(c);
+    //     let chars = characteristics(c);
+    //     of5(sf, af, cf, Interop.Util.Function.FunctionZ.andThen(ff, Interop.Util.Function.FunctionZ.makeFunctionZ(f)), chars)
 
 }

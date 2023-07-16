@@ -31,22 +31,23 @@ mod Interop.Util.Function.Supplier {
     
     use Interop.Util.Function.Supplier
     use Interop.Util.Function.Supplier.{Supplier}
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
     use Interop.Flix.ColMarshal
 
-    pub def makeSupplier(f: Unit -> a \ ef): Supplier[a, ef] with Marshal[a] = 
+    pub def makeSupplier(f: Unit -> a \ ef): Supplier[a, ef] with GoesToJava[a] = 
         Supplier(unchecked_cast(new ##java.util.function.Supplier {
             def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 
-                f() |> Interop.Flix.Marshal.toJavaObject
+                f() |> Interop.Flix.GoesToJava.toJavaObject
         } as _ \ {}))
 
 
-    pub def makeInitialSupplier[a: Type, r: Region, t: Type -> Region -> Type, ef: Eff]
-                                (_: Region[r], f: Unit -> t[a, r] \ ef): Supplier[t[a, r], ef] with ColMarshal[t] = 
-        Supplier(unchecked_cast(new ##java.util.function.Supplier {
-            def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 
-                f() |> Interop.Flix.ColMarshal.colToJavaObject
-        } as _ \ {}))
+    // pub def makeInitialSupplier[a: Type, r: Region, t: Type -> Region -> Type, ef: Eff]
+    //                             (_: Region[r], f: Unit -> t[a, r] \ ef): Supplier[t[a, r], ef] with ColMarshal[t] = 
+    //     Supplier(unchecked_cast(new ##java.util.function.Supplier {
+    //         def get(_this: ##java.util.function.Supplier): ##java.lang.Object = 
+    //             f() |> Interop.Flix.ColMarshal.colToJavaObject
+    //     } as _ \ {}))
 
 
     pub def makeSupplier2(f: Unit -> a \ ef, castToObj: a -> ##java.lang.Object): Supplier[a, ef] = 
@@ -55,10 +56,10 @@ mod Interop.Util.Function.Supplier {
                 f() |> castToObj
         } as _ \ {}))
 
-    pub def get(f: Supplier[a, ef]): a \ ef with Marshal[a] = 
+    pub def get(f: Supplier[a, ef]): a \ ef with ComesFromJava[a] = 
         import java.util.function.Supplier.get(): ##java.lang.Object \ ef;
         let Supplier(f1) = f;
-        get(f1) |> Interop.Flix.Marshal.fromJavaObject
+        get(f1) |> Interop.Flix.ComesFromJava.fromJavaObject
 
 
 }

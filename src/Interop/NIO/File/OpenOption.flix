@@ -30,11 +30,13 @@ mod Interop.NIO.File {
         pub def fromOpenOption(s: OpenOption): t
     }
 
-    instance Interop.Flix.Marshal[OpenOption] {
+    instance Interop.Flix.GoesToJava[OpenOption] {
         pub def toJavaObject(x: OpenOption): ##java.lang.Object =
             let OpenOption(x1) = x;
             checked_cast(x1)
+    }
 
+    instance Interop.Flix.ComesFromJava[OpenOption] {
         pub def fromJavaObject(o: ##java.lang.Object): OpenOption = 
             OpenOption(unchecked_cast(o as ##java.nio.file.OpenOption))
     }

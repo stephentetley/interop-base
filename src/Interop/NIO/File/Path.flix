@@ -46,11 +46,13 @@ mod Interop.NIO.File {
     }
 
 
-    instance Interop.Flix.Marshal[Path] {
+    instance Interop.Flix.GoesToJava[Path] {
         pub def toJavaObject(x: Path): ##java.lang.Object =
             let Path(x1) = x;
             checked_cast(x1)
+    }
 
+    instance Interop.Flix.ComesFromJava[Path] {
         pub def fromJavaObject(o: ##java.lang.Object): Path = 
             Path(unchecked_cast(o as ##java.nio.file.Path))
     }

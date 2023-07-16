@@ -32,11 +32,11 @@ mod Interop.Util.Function.ConsumerZ {
     
     use Interop.Util.Function.ConsumerZ
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
 
 
-    pub def makeConsumerZ(f: a -> Unit \ ef): ConsumerZ[a, ef] with Marshal[a] = 
-        ConsumerZ(unchecked_cast((Interop.Flix.Marshal.fromJavaObject >> f) as ##java.util.function.Consumer))
+    pub def makeConsumerZ(f: a -> Unit \ ef): ConsumerZ[a, ef] with ComesFromJava[a] = 
+        ConsumerZ(unchecked_cast((Interop.Flix.ComesFromJava.fromJavaObject >> f) as ##java.util.function.Consumer))
 
 
     // /// Result?

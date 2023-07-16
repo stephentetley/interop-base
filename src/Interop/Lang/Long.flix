@@ -25,11 +25,13 @@ mod Interop.Lang {
     pub enum Long(##java.lang.Long)
 
 
-    instance Interop.Flix.Marshal[Long] {
+    instance Interop.Flix.GoesToJava[Long] {
         pub def toJavaObject(x: Long): ##java.lang.Object = 
             let Long(x1) = x;
             checked_cast(x1)
+    }
 
+    instance Interop.Flix.ComesFromJava[Long] {
         pub def fromJavaObject(o: ##java.lang.Object): Long = 
             Long(unchecked_cast(o as ##java.lang.Long))
     }

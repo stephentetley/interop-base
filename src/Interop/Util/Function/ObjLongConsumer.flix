@@ -31,18 +31,19 @@ mod Interop.Util.Function {
 mod Interop.Util.Function.ObjLongConsumer {
     
     use Interop.Util.Function.ObjLongConsumer
-    use Interop.Flix.Marshal
+    use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
-    pub def makeObjLongConsumer(f: (a, Int64) -> Unit \ ef): ObjLongConsumer[a] \ ef with Marshal[a] = 
+    pub def makeObjLongConsumer(f: (a, Int64) -> Unit \ ef): ObjLongConsumer[a] \ ef with ComesFromJava[a] = 
         unchecked_cast((new ##java.util.function.ObjLongConsumer {
             def accept(_this: ##java.util.function.ObjLongConsumer, t: ##java.lang.Object, u: Int64): Unit = 
-                f(Interop.Flix.Marshal.fromJavaObject(t), u)
+                f(Interop.Flix.ComesFromJava.fromJavaObject(t), u)
         }) as _ \ ef)
 
         
-    pub def accept(t: a, u: Int64, f: ObjLongConsumer[a]): Unit \ ef with Marshal[a] = 
+    pub def accept(t: a, u: Int64, f: ObjLongConsumer[a]): Unit \ ef with GoesToJava[a] = 
         import java.util.function.ObjLongConsumer.accept(##java.lang.Object, Int64): Unit \ ef;        
-        accept(f, Interop.Flix.Marshal.toJavaObject(t), u)
+        accept(f, Interop.Flix.GoesToJava.toJavaObject(t), u)
 
 
 }

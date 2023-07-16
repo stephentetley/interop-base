@@ -29,11 +29,13 @@ mod Interop.Lang {
         pub def fromNumber(s: Number): x
     }
 
-    instance Interop.Flix.Marshal[Number] {
+    instance Interop.Flix.GoesToJava[Number] {
         pub def toJavaObject(x: Number): ##java.lang.Object = 
             let Number(x1) = x;
             checked_cast(x1)
+    }
 
+    instance Interop.Flix.ComesFromJava[Number] {
         pub def fromJavaObject(o: ##java.lang.Object): Number = 
             Number(unchecked_cast(o as ##java.lang.Number))
     }

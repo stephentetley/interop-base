@@ -25,13 +25,15 @@ mod Interop.Lang {
     pub enum Boolean(##java.lang.Boolean)
 
 
-    instance Interop.Flix.Marshal[Boolean] {
+    instance Interop.Flix.ComesFromJava[Boolean] {
+        pub def fromJavaObject(o: ##java.lang.Object): Boolean = 
+            Boolean(unchecked_cast(o as ##java.lang.Boolean))
+    }
+
+    instance Interop.Flix.GoesToJava[Boolean] {
         pub def toJavaObject(x: Boolean): ##java.lang.Object = 
             let Boolean(x1) = x;
             checked_cast(x1)
-
-        pub def fromJavaObject(o: ##java.lang.Object): Boolean = 
-            Boolean(unchecked_cast(o as ##java.lang.Boolean))
     }
 
 }
