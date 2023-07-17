@@ -18,8 +18,6 @@ mod Interop.Flix {
 
     /// Marshal class for `Type -> Region -> Type` types.
     pub class ColMarshal[t: Type -> Region -> Type] {
-        pub def colToJavaObject(x: t[a, r]): ##java.lang.Object
-
         pub def colFromJavaObject(rc: Region[r], o: ##java.lang.Object): t[a, r]
     }
 

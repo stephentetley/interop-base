@@ -36,11 +36,13 @@ mod Interop.Util {
 
     }
 
-    instance Interop.Flix.ColMarshal[Collection] {
-        pub def colToJavaObject(x: Collection[a, r]): ##java.lang.Object = 
+    instance Interop.Flix.GoesToJava[Collection[a, r]] with Interop.Flix.GoesToJava[a] {
+        pub def toJavaObject(x: Collection[a, r]): ##java.lang.Object = 
             let Collection(_, t1) = x;
             unchecked_cast(t1 as ##java.lang.Object)
+    }
 
+    instance Interop.Flix.ColMarshal[Collection] {
         pub def colFromJavaObject(rc: Region[r], o: ##java.lang.Object): Collection[a, r] = 
             Collection(rc, unchecked_cast(o as ##java.util.Collection))
     }

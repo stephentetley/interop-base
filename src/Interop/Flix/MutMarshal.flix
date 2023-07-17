@@ -20,15 +20,11 @@ mod Interop.Flix {
 
     /// Marshal class for `Region -> Type` types.
     pub class MutMarshal[t: Region -> Type] {
-        pub def mutToJavaObject(x: t[r]): ##java.lang.Object
 
         pub def mutFromJavaObject(r: Region[r], o: ##java.lang.Object): t[r]
     }
 
     instance MutMarshal[StringBuilder] {
-        pub def mutToJavaObject(x: StringBuilder[r]): ##java.lang.Object = 
-            let StringBuilder(x1) = x;
-            checked_cast(x1)
 
         pub def mutFromJavaObject(_: Region[r], o: ##java.lang.Object): StringBuilder[r] = 
             StringBuilder(unchecked_cast(o as ##java.lang.StringBuilder))
