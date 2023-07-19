@@ -36,4 +36,27 @@ mod Interop.Util.Function.DoublePredicateZ {
         DoublePredicateZ(unchecked_cast(f as ##java.util.function.DoublePredicate))
 
 
+    pub def test(d: Float64, f: DoublePredicateZ[ef]): Bool \ ef = 
+        let DoublePredicateZ(f1) = f;
+        unchecked_cast(f1(d) as _ \ ef)
+
+
+    pub def negate(f: DoublePredicateZ[ef]): DoublePredicateZ[ef] = 
+        let DoublePredicateZ(f1) = f;
+        let fn = i -> not f1(i);
+        DoublePredicateZ(fn)
+
+    pub def andz(f: DoublePredicateZ[ef1], g: DoublePredicateZ[ef2]): DoublePredicateZ[ef1 + ef2] = 
+        let DoublePredicateZ(f1) = f;
+        let DoublePredicateZ(g1) = g;
+        let fg = i -> f1(i) and g1(i);
+        DoublePredicateZ(fg)
+
+
+    pub def orz(f: DoublePredicateZ[ef1], g: DoublePredicateZ[ef2]): DoublePredicateZ[ef1 + ef2] = 
+        let DoublePredicateZ(f1) = f;
+        let DoublePredicateZ(g1) = g;
+        let fg = i -> f1(i) or g1(i);
+        DoublePredicateZ(fg)
+
 }

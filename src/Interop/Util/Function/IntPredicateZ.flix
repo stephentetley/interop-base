@@ -35,23 +35,27 @@ mod Interop.Util.Function.IntPredicateZ {
     pub def makeIntPredicateZ(f: Int32 -> Bool \ ef): IntPredicateZ[ef] = 
         IntPredicateZ(unchecked_cast(f as ##java.util.function.IntPredicate))
 
+    pub def test(i: Int32, f: IntPredicateZ[ef]): Bool \ ef = 
+        let IntPredicateZ(f1) = f;
+        unchecked_cast(f1(i) as _ \ ef)
 
 
-    // pub def negate(f: IntPredicate): IntPredicate = 
-    //     import java.util.function.IntPredicate.negate(): ##java.util.function.IntPredicate \ {};
-    //     let IntPredicate(f1) = f;
-    //     negate(f1) |> IntPredicate
+    pub def negate(f: IntPredicateZ[ef]): IntPredicateZ[ef] = 
+        let IntPredicateZ(f1) = f;
+        let fn = i -> not f1(i);
+        IntPredicateZ(fn)
 
-    // pub def andz(f: IntPredicate, g: IntPredicate): IntPredicate = 
-    //     import java.util.function.IntPredicate.and(##java.util.function.IntPredicate): ##java.util.function.IntPredicate \ {} as and1;
-    //     let IntPredicate(f1) = f;
-    //     let IntPredicate(g1) = g;
-    //     and1(f1, g1) |> IntPredicate
+    pub def andz(f: IntPredicateZ[ef1], g: IntPredicateZ[ef2]): IntPredicateZ[ef1 + ef2] = 
+        let IntPredicateZ(f1) = f;
+        let IntPredicateZ(g1) = g;
+        let fg = i -> f1(i) and g1(i);
+        IntPredicateZ(fg)
 
-    // pub def orz(f: IntPredicate, g: IntPredicate): IntPredicate = 
-    //     import java.util.function.IntPredicate.or(##java.util.function.IntPredicate): ##java.util.function.IntPredicate \ {} as or1;
-    //     let IntPredicate(f1) = f;
-    //     let IntPredicate(g1) = g;
-    //     or1(f1, g1) |> IntPredicate
+
+    pub def orz(f: IntPredicateZ[ef1], g: IntPredicateZ[ef2]): IntPredicateZ[ef1 + ef2] = 
+        let IntPredicateZ(f1) = f;
+        let IntPredicateZ(g1) = g;
+        let fg = i -> f1(i) or g1(i);
+        IntPredicateZ(fg)
 
 }

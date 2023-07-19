@@ -32,23 +32,34 @@ mod Interop.Util.Function.PredicateZ {
     use Interop.Util.Function.PredicateZ
     use Interop.Util.Function.PredicateZ.{PredicateZ}
     use Interop.Flix.ComesFromJava
+    use Interop.Flix.GoesToJava
 
     pub def makePredicateZ(f: a -> Bool \ ef): PredicateZ[a, ef] with ComesFromJava[a] = 
         PredicateZ(unchecked_cast(obj -> f(Interop.Flix.ComesFromJava.fromJavaObject(obj)) as ##java.util.function.Predicate))
 
 
 
+    pub def test(x: a, f: PredicateZ[a, ef]): Bool \ ef with GoesToJava[a] =  
+        let PredicateZ(f1) = f;
+        unchecked_cast(f1(Interop.Flix.GoesToJava.toJavaObject(x)) as _ \ ef)
 
-    // pub def andz(f: Predicate, g: Predicate): Predicate = 
-    //     import java.util.function.Predicate.and(##java.util.function.Predicate): ##java.util.function.Predicate \ {} as and1;
-    //     let Predicate(f1) = f;
-    //     let Predicate(g1) = g;
-    //     and1(f1, g1) |> Predicate
+    pub def negate(f: PredicateZ[a, ef]): PredicateZ[a, ef] with GoesToJava[a] = 
+        let PredicateZ(f1) = f;
+        let fn = x -> not f1(Interop.Flix.GoesToJava.toJavaObject(x));
+        PredicateZ(fn)
 
-    // pub def orz(f: Predicate, g: Predicate): Predicate = 
-    //     import java.util.function.IntPredicate.or(##java.util.function.Predicate): ##java.util.function.Predicate \ {} as or1;
-    //     let Predicate(f1) = f;
-    //     let Predicate(g1) = g;
-    //     or1(f1, g1) |> Predicate
+
+    pub def andz(f: PredicateZ[a, ef1], g: PredicateZ[a, ef2]): PredicateZ[a, ef1 + ef2] = 
+        let PredicateZ(f1) = f;
+        let PredicateZ(g1) = g;
+        let fg = x -> {let obj = Interop.Flix.GoesToJava.toJavaObject(x); f1(obj) and g1(obj)};
+        PredicateZ(fg)
+
+
+    pub def orz(f: PredicateZ[a, ef1], g: PredicateZ[a, ef2]): PredicateZ[a, ef1 + ef2] = 
+        let PredicateZ(f1) = f;
+        let PredicateZ(g1) = g;
+        let fg = x -> {let obj = Interop.Flix.GoesToJava.toJavaObject(x); f1(obj) or g1(obj)};
+        PredicateZ(fg)
 
 }

@@ -31,17 +31,21 @@ mod Interop.Util.Function {
 mod Interop.Util.Function.IntConsumerZ {
     
     use Interop.Util.Function.IntConsumerZ
+    use Interop.Util.Function.IntConsumerZ.{IntConsumerZ}
 
 
     pub def makeIntConsumerZ(f: Int32 -> Unit \ ef): IntConsumerZ[ef] = 
         IntConsumerZ(unchecked_cast(f as ##java.util.function.IntConsumer))
 
+    pub def accept(i: Int32, f: IntConsumerZ[ef]): Unit \ ef = 
+        let IntConsumerZ(f1) = f;
+        unchecked_cast(f1(i) as Unit \ ef)
 
-    // /// Result?
-    // pub def andThen(f: IntConsumer, g: IntConsumer): IntConsumer = 
-    //     import java.util.function.IntConsumer.andThen(##java.util.function.IntConsumer): ##java.util.function.IntConsumer \ {};
-    //     let IntConsumer(f1) = f;
-    //     let IntConsumer(g1) = g;
-    //     andThen(f1, g1) |> IntConsumer
+
+    pub def andThen(f: IntConsumerZ[ef1], g: IntConsumerZ[ef2]): IntConsumerZ[ef1 + ef2] = 
+        let IntConsumerZ(f1) = f;
+        let IntConsumerZ(g1) = g;
+        let fg = n -> {f1(n); g1(n)};
+        IntConsumerZ(fg)
 
 }

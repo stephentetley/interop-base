@@ -42,6 +42,6 @@ mod Interop.Util.Function.IntFunctionZ {
     pub def apply(f: IntFunctionZ[a, ef], value: Int32): a \ ef with ComesFromJava[a] = 
         let IntFunctionZ(f1) = f;
         unchecked_cast(f1(value) as _ \ ef) |> Interop.Flix.ComesFromJava.fromJavaObject
-        
+    
 
 }

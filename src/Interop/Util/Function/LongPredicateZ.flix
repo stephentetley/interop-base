@@ -36,5 +36,27 @@ mod Interop.Util.Function.LongPredicateZ {
         LongPredicateZ(unchecked_cast(f as ##java.util.function.LongPredicate))
 
 
+    pub def test(i: Int64, f: LongPredicateZ[ef]): Bool \ ef = 
+        let LongPredicateZ(f1) = f;
+        unchecked_cast(f1(i) as _ \ ef)
+
+
+    pub def negate(f: LongPredicateZ[ef]): LongPredicateZ[ef] = 
+        let LongPredicateZ(f1) = f;
+        let fn = i -> not f1(i);
+        LongPredicateZ(fn)
+
+    pub def andz(f: LongPredicateZ[ef1], g: LongPredicateZ[ef2]): LongPredicateZ[ef1 + ef2] = 
+        let LongPredicateZ(f1) = f;
+        let LongPredicateZ(g1) = g;
+        let fg = i -> f1(i) and g1(i);
+        LongPredicateZ(fg)
+
+
+    pub def orz(f: LongPredicateZ[ef1], g: LongPredicateZ[ef2]): LongPredicateZ[ef1 + ef2] = 
+        let LongPredicateZ(f1) = f;
+        let LongPredicateZ(g1) = g;
+        let fg = i -> f1(i) or g1(i);
+        LongPredicateZ(fg)
 
 }
