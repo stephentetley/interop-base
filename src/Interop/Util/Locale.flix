@@ -45,10 +45,6 @@ mod Interop.Util {
             checked_cast(x1)
     }
     
-    instance Interop.Flix.ComesFromJava[Locale] {
-        pub def fromJavaObject(o: ##java.lang.Object): Locale = 
-            Locale(unchecked_cast(o as ##java.util.Locale))
-    }
 
 }
 
@@ -78,6 +74,10 @@ mod Interop.Util.Locale {
 
     pub def wrapHH(prim: ##java.util.Locale): Locale = 
         Locale(prim)
+
+
+    pub def fromJavaObject(o: ##java.lang.Object): Locale = 
+        Locale(unchecked_cast(o as ##java.util.Locale))
 
 
     ///
@@ -435,23 +435,23 @@ mod Interop.Util.Locale {
 
 
     pub def filter(priorityList: List[LanguageRange], locales: List[Locale]): Result[String, List[Locale]] =         
-        Result.tryCatch(_ -> {
+        Result.tryCatch(_ -> region rc {
             import static java.util.Locale.filter(##java.util.List, ##java.util.Collection): ##java.util.List \ {};
             let ls      = Interop.Util.ListZ.fromFoldableViaArrayListHH(priorityList);
             let col     = Interop.Util.Collection.fromFoldableViaArrayListHH(locales);
-            filter(ls, col) |> Interop.Util.ListZ.primListToFlixList
+            filter(ls, col) |> Interop.Util.ListZ.wrapHH(rc) |> Interop.Util.ListZ.toFlixListWith(fromJavaObject)
         })
 
 
     pub def filterWithFilteringMode(priorityList: List[LanguageRange], 
                                     mode: LocaleFilteringMode, 
                                     locales: List[Locale]): Result[String, List[Locale]] = 
-        Result.tryCatch(_ -> {
+        Result.tryCatch(_ -> region rc {
             import static java.util.Locale.filter(##java.util.List, ##java.util.Collection, ##java.util.Locale$FilteringMode): ##java.util.List \ {};
             let ps      = Interop.Util.ListZ.fromFoldableViaArrayListHH(priorityList);
             let col     = Interop.Util.Collection.fromFoldableViaArrayListHH(locales);
             let LocaleFilteringMode(mode1) = mode;
-            filter(ps, col, mode1) |> Interop.Util.ListZ.primListToFlixList
+            filter(ps, col, mode1) |> Interop.Util.ListZ.wrapHH(rc) |> Interop.Util.ListZ.toFlixListWith(fromJavaObject)
         })
 
     pub def filterTags(priorityList: List[LanguageRange], tags: List[String]): Result[String, List[String]] = 
