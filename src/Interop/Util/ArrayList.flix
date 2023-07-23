@@ -89,7 +89,9 @@ mod Interop.Util.ArrayList {
     use Interop.Util.Collection.{Collection}
     use Interop.Util.Comparator
     use Interop.Util.ImpCollection
-    use Interop.Util.Function.ConsumerZ.{ConsumerZ}    
+    use Interop.Util.Function.ConsumerZ
+    use Interop.Util.Function.ConsumerZ.{ConsumerZ}
+    use Interop.Util.Function.PredicateZ
     use Interop.Util.Function.PredicateZ.{PredicateZ}
     use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
@@ -207,12 +209,11 @@ mod Interop.Util.ArrayList {
             removeAll(l1, c1)
         })
 
-    pub def removeIf![a: Type, ef: Eff, r: Region]
-                        (f: a -> Bool \ ef, l: ArrayList[a, r]): Result[String, Bool] \  {ef, r} with ComesFromJava[a] =
+    pub def removeIf!(f: PredicateZ[a, ef], l: ArrayList[a, r]): Result[String, Bool] \  {ef, r} =
         Result.tryCatch(_ -> {
             import java.util.ArrayList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let ArrayList(_, l1) = l;
-            let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
+            let PredicateZ(f1) = f;
             checked_ecast(removeIf(l1, f1))
         })
 
@@ -228,12 +229,11 @@ mod Interop.Util.ArrayList {
 
 
 
-    pub def forEach[a: Type, ef: Eff, r: Region]
-                    (f: a -> Unit \ ef, l: ArrayList[a, r]): Result[String, Unit] \ {ef, r} with ComesFromJava[a] =
+    pub def forEach(f: ConsumerZ[a, ef], l: ArrayList[a, r]): Result[String, Unit] \ {ef, r} =
         Result.tryCatch(_ -> {
             import java.util.ArrayList.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let ArrayList(_, l1) = l;
-            let ConsumerZ(f1) = Interop.Util.Function.ConsumerZ.makeConsumerZ(f);
+            let ConsumerZ(f1) = f;
             forEach(l1, f1)
         })
 
@@ -327,10 +327,10 @@ mod Interop.Util.ArrayList {
             Array#{} @ r1
         else {
             /// let head = get(0, l);
-            let aout = Array.new(r1, len);
-            let step = (ix, a) -> {Array.put(a, ix, aout); ix+1};
+            let arr = Array.new(r1, len);
+            let step = (ix, a) -> {Array.put(a, ix, arr); ix+1};
             discard foldArrayList(step, 0, l);
-            aout
+            arr
         }
 
 

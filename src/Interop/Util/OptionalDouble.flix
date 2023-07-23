@@ -38,6 +38,17 @@ mod Interop.Util.OptionalDouble {
         OptionalDouble(unchecked_cast(o as ##java.util.OptionalDouble))
 
 
+    pub def toString(x: OptionalDouble): String =
+        import java.util.OptionalDouble.toString(): String \ {};
+        let OptionalDouble(x1) = x;
+        toString(x1)
+
+    pub def equals(x: OptionalDouble, y: OptionalDouble): Bool =
+        import java.util.OptionalDouble.equals(##java.lang.Object): Bool \ {};
+        let OptionalDouble(x1) = x;
+        let OptionalDouble(y1) = y;
+        equals(x1, checked_cast(y1))
+
     pub def hhToOption(o: ##java.util.OptionalDouble): Option[Float64] = 
         OptionalDouble(o) |> toOption
 

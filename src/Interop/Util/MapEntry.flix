@@ -42,11 +42,12 @@ mod Interop.Util.MapEntry {
     pub def castObject(_: Region[r], o: ##java.lang.Object): MapEntry[k, v, r] \ r = 
         unchecked_cast(MapEntry(unchecked_cast(o as ##java.util.Map$Entry)) as _ \ r)
 
-    pub def equals(e1: MapEntry[k, v, r], e2: MapEntry[k, v, r]): Bool \ r =
+
+    pub def equals(x: MapEntry[k, v, r], y: MapEntry[k, v, r]): Bool \ r =
         import java.util.Map$Entry.equals(##java.lang.Object): Bool \ r;
-        let MapEntry(ee1) = e1;
-        let MapEntry(ee2) = e2;
-        equals(ee1, checked_cast(ee2))
+        let MapEntry(x1) = x;
+        let MapEntry(y1) = y;
+        equals(x1, checked_cast(y1))
 
     pub def hashCode(e: MapEntry[k, v, r]): Int32 \ r = 
         import java.util.Map$Entry.hashCode(): Int32 \ r;

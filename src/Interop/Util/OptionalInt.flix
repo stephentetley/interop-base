@@ -38,6 +38,18 @@ mod Interop.Util.OptionalInt {
         OptionalInt(unchecked_cast(o as ##java.util.OptionalInt))
 
 
+    pub def toString(x: OptionalInt): String =
+        import java.util.OptionalInt.toString(): String \ {};
+        let OptionalInt(x1) = x;
+        toString(x1)
+
+    pub def equals(x: OptionalInt, y: OptionalInt): Bool =
+        import java.util.OptionalInt.equals(##java.lang.Object): Bool \ {};
+        let OptionalInt(x1) = x;
+        let OptionalInt(y1) = y;
+        equals(x1, checked_cast(y1))
+
+
     pub def hhToOption(o: ##java.util.OptionalInt): Option[Int32] = 
         OptionalInt(o) |> toOption
 

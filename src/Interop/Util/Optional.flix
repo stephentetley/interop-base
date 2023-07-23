@@ -16,12 +16,20 @@
 
 mod Interop.Util {
 
+    use Interop.Util.Optional.{Optional} 
+
     ///
     /// Represents a Java Optional.
     /// Immutable 
     ///
     pub enum Optional[_a: Type](##java.util.Optional)
 
+
+    instance Interop.Flix.GoesToJava[Optional[a]] with Interop.Flix.GoesToJava[a] {
+        pub def toJavaObject(o: Optional[a]): ##java.lang.Object =
+            let Optional(o1) = o;
+            checked_cast(o1) 
+    }
 
 }
 
@@ -30,8 +38,12 @@ mod Interop.Util.Optional {
     
     use Interop.Util.Optional
     use Interop.Util.Optional.{Optional}
+    use Interop.Util.Function.ConsumerZ
+    use Interop.Util.Function.ConsumerZ.{ConsumerZ}
     use Interop.Util.Function.FunctionZ
     use Interop.Util.Function.FunctionZ.{FunctionZ}
+    use Interop.Util.Function.PredicateZ
+    use Interop.Util.Function.PredicateZ.{PredicateZ}
     use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
@@ -61,6 +73,12 @@ mod Interop.Util.Optional {
         let Optional(o1) = o;
         toString(o1)
 
+    pub def equals(x: Optional[a], y: Optional[a]): Bool =
+        import java.util.Optional.equals(##java.lang.Object): Bool \ {};
+        let Optional(x1) = x;
+        let Optional(y1) = y;
+        equals(x1, checked_cast(y1))
+
     pub def empty(): Optional[a] =
         import static java.util.Optional.empty(): ##java.util.Optional \ {};
         Optional(empty())
@@ -84,9 +102,25 @@ mod Interop.Util.Optional {
         import java.util.Optional.map(##java.util.function.Function): ##java.util.Optional \ ef;
         let Optional(x1) = x;
         let FunctionZ(f1) = f;
-        let ans: Optional[b] = Optional(map(x1, f1));
-        ans
+        Optional(map(x1, f1))
 
+    pub def flatMap(f: FunctionZ[a, Optional[b], ef], x: Optional[a]): Optional[b] \ ef =
+        import java.util.Optional.flatMap(##java.util.function.Function): ##java.util.Optional \ ef;
+        let Optional(x1) = x;
+        let FunctionZ(f1) = f;
+        Optional(flatMap(x1, f1))
+
+    pub def ifPresent(f: ConsumerZ[a, ef], x: Optional[a]): Unit \ ef =
+        import java.util.Optional.ifPresent(##java.util.function.Consumer): Unit \ ef;
+        let Optional(x1) = x;
+        let ConsumerZ(f1) = f;
+        ifPresent(x1, f1)
+
+    pub def filter(f: PredicateZ[a, ef], x: Optional[a]): Optional[a] \ ef =
+        import java.util.Optional.filter(##java.util.function.Predicate): ##java.util.Optional \ ef;
+        let Optional(x1) = x;
+        let PredicateZ(f1) = f;
+        Optional(filter(x1, f1))
 
     pub def toOption(fromObject: ##java.lang.Object -> a, o: Optional[a]): Option[a] =
         let Optional(o1) = o;

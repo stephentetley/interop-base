@@ -37,6 +37,18 @@ mod Interop.Util.OptionalLong {
     pub def fromJavaObject(o: ##java.lang.Object): OptionalLong = 
         OptionalLong(unchecked_cast(o as ##java.util.OptionalLong))
 
+    pub def toString(x: OptionalLong): String =
+        import java.util.OptionalLong.toString(): String \ {};
+        let OptionalLong(x1) = x;
+        toString(x1)
+
+    pub def equals(x: OptionalLong, y: OptionalLong): Bool =
+        import java.util.OptionalLong.equals(##java.lang.Object): Bool \ {};
+        let OptionalLong(x1) = x;
+        let OptionalLong(y1) = y;
+        equals(x1, checked_cast(y1))
+
+
     pub def hhToOption(o: ##java.util.OptionalLong): Option[Int64] = 
         OptionalLong(o) |> toOption
 
