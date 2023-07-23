@@ -44,6 +44,13 @@ mod Interop.Util.Function.FunctionZ {
         };
         FunctionZ(unchecked_cast(f1 as ##java.util.function.Function))
 
+    pub def makeFunctionZ1(fromObject: ##java.lang.Object -> a, f: a -> b \ ef): FunctionZ[a, b, ef] with GoesToJava[b] = 
+        let f1 = obj -> {
+            let a = fromObject(obj); 
+            let ans = unchecked_cast(f(a) as _ \ {});
+            Interop.Flix.GoesToJava.toJavaObject(ans) 
+        };
+        FunctionZ(unchecked_cast(f1 as ##java.util.function.Function))
 
     pub def makeSummaryFinisher[a: Type, b: Type, r: Region, t: Type -> Region -> Type, ef: Eff]
                                 (rc: Region[r], f: t[a, r] -> b \ ef): FunctionZ[t[a, r], b, ef] with ColMarshal[t], GoesToJava[b] = 

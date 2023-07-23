@@ -17,6 +17,7 @@
 
 mod Interop.Lang {
 
+    /// TODO check impurity...
     pub enum ProcessHandleInfo[_: Region](##java.lang.ProcessHandle$Info)
 
 
@@ -36,21 +37,31 @@ mod Interop.Lang.ProcessHandleInfo {
     pub def wrapHH(_: Region[r], prim: ##java.lang.ProcessHandle$Info): ProcessHandleInfo[r] = 
         ProcessHandleInfo(prim)
 
+    pub def fromJavaObject(_: Region[r], o: ##java.lang.Object): ProcessHandleInfo[r] = 
+        ProcessHandleInfo(unchecked_cast(o as ##java.lang.ProcessHandle$Info))
+
+
     pub def command(info: ProcessHandleInfo[r]): Option[String] \ r = 
         import java.lang.ProcessHandle$Info.command(): ##java.util.Optional \ r;
         let ProcessHandleInfo(info1) = info;
-        command(info1) |> Interop.Util.Optional.wrapHH |> Interop.Util.Optional.toOption
+        command(info1) 
+            |> Interop.Util.Optional.wrapHH 
+            |> Interop.Util.Optional.toOption(Interop.Lang.StringZ.fromJavaObject)
 
 
     pub def commandLine(info: ProcessHandleInfo[r]): Option[String] \ r = 
         import java.lang.ProcessHandle$Info.commandLine(): ##java.util.Optional \ r;
         let ProcessHandleInfo(info1) = info;
-        commandLine(info1) |> Interop.Util.Optional.wrapHH |> Interop.Util.Optional.toOption
+        commandLine(info1) 
+            |> Interop.Util.Optional.wrapHH 
+            |> Interop.Util.Optional.toOption(Interop.Lang.StringZ.fromJavaObject)
 
 
     pub def user(info: ProcessHandleInfo[r]): Option[String] \ r = 
         import java.lang.ProcessHandle$Info.user(): ##java.util.Optional \ r;
         let ProcessHandleInfo(info1) = info;
-        user(info1) |> Interop.Util.Optional.wrapHH |> Interop.Util.Optional.toOption
+        user(info1) 
+            |> Interop.Util.Optional.wrapHH 
+            |> Interop.Util.Optional.toOption(Interop.Lang.StringZ.fromJavaObject)
 
 }

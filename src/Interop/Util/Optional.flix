@@ -30,6 +30,8 @@ mod Interop.Util.Optional {
     
     use Interop.Util.Optional
     use Interop.Util.Optional.{Optional}
+    use Interop.Util.Function.FunctionZ
+    use Interop.Util.Function.FunctionZ.{FunctionZ}
     use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
@@ -40,12 +42,16 @@ mod Interop.Util.Optional {
     pub def wrapHH(prim: ##java.util.Optional): Optional[a] = 
         Optional(prim)
 
+    pub def fromJavaObject(o: ##java.lang.Object): Optional[a] = 
+        Optional(unchecked_cast(o as ##java.util.Optional))
+
+
     /// cast must be Pure
-    pub def hhToOption(ocast: ##java.lang.Object -> a, o: ##java.util.Optional): Option[a] = 
+    pub def hhToOption(fromObject: ##java.lang.Object -> a, o: ##java.util.Optional): Option[a] = 
         import java.util.Optional.isPresent(): Bool \ {};
         import java.util.Optional.get(): ##java.lang.Object \ {};
         if (isPresent(o))
-            get(o) |> ocast |> Some
+            get(o) |> fromObject |> Some
         else 
             None
 
@@ -55,11 +61,36 @@ mod Interop.Util.Optional {
         let Optional(o1) = o;
         toString(o1)
 
-        
+    pub def empty(): Optional[a] =
+        import static java.util.Optional.empty(): ##java.util.Optional \ {};
+        Optional(empty())
 
-    pub def toOption(o: Optional[a]): Option[a] with ComesFromJava[a] =
+    pub def of(x: a): Optional[a] with GoesToJava[a] =
+        import static java.util.Optional.of(##java.lang.Object): ##java.util.Optional \ {};
+        Optional(of(Interop.Flix.GoesToJava.toJavaObject(x)))
+
+    pub def ofNullable(x: a): Optional[a] with GoesToJava[a] =
+        import static java.util.Optional.ofNullable(##java.lang.Object): ##java.util.Optional \ {};
+        Optional(ofNullable(Interop.Flix.GoesToJava.toJavaObject(x)))
+
+
+    pub def isPresent(x: Optional[a]): Bool =
+        import java.util.Optional.isPresent(): Bool \ {};
+        let Optional(x1) = x;
+        isPresent(x1)
+
+
+    pub def map(f: FunctionZ[a, b, ef], x: Optional[a]): Optional[b] \ ef =
+        import java.util.Optional.map(##java.util.function.Function): ##java.util.Optional \ ef;
+        let Optional(x1) = x;
+        let FunctionZ(f1) = f;
+        let ans: Optional[b] = Optional(map(x1, f1));
+        ans
+
+
+    pub def toOption(fromObject: ##java.lang.Object -> a, o: Optional[a]): Option[a] =
         let Optional(o1) = o;
-        o1 |> hhToOption(Interop.Flix.ComesFromJava.fromJavaObject)
+        o1 |> hhToOption(fromObject)
     
     pub def fromOption(o: Option[a]): Optional[a] with GoesToJava[a] =
         import static java.util.Optional.empty(): ##java.util.Optional \ {};

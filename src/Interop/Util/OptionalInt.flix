@@ -34,6 +34,10 @@ mod Interop.Util.OptionalInt {
         let OptionalInt(o1) = o;
         o1
 
+    pub def fromJavaObject(o: ##java.lang.Object): OptionalInt = 
+        OptionalInt(unchecked_cast(o as ##java.util.OptionalInt))
+
+
     pub def hhToOption(o: ##java.util.OptionalInt): Option[Int32] = 
         OptionalInt(o) |> toOption
 

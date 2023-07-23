@@ -36,10 +36,6 @@ mod Interop.NIO.File {
             checked_cast(x1)
     }
 
-    instance Interop.Flix.ComesFromJava[OpenOption] {
-        pub def fromJavaObject(o: ##java.lang.Object): OpenOption = 
-            OpenOption(unchecked_cast(o as ##java.nio.file.OpenOption))
-    }
 
 }
 
@@ -54,5 +50,10 @@ mod Interop.NIO.File.OpenOption {
     pub def getHH(opt: OpenOption): ##java.nio.file.OpenOption = 
         let OpenOption(opt1) = opt;
         opt1
+
+
+    pub def fromJavaObject(o: ##java.lang.Object): OpenOption = 
+        OpenOption(unchecked_cast(o as ##java.nio.file.OpenOption))
+    
 
 }

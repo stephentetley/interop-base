@@ -102,6 +102,10 @@ mod Interop.Util.ArrayList {
     pub def wrapHH(rc: Region[r], prim: ##java.util.ArrayList): ArrayList[a, r] =
         ArrayList(rc, prim)
 
+    pub def fromJavaObject(rc: Region[r], o: ##java.lang.Object): ArrayList[a, r] = 
+        ArrayList(rc, unchecked_cast(o as ##java.util.ArrayList))
+
+
     ///
     /// Returns a new mutable ArrayList.
     ///
@@ -156,10 +160,10 @@ mod Interop.Util.ArrayList {
         size(l1)
 
 
-    pub def getAt(ix: Int32, l: ArrayList[a, r]): a \ r with ComesFromJava[a] = 
+    pub def getAt(ix: Int32, l: ArrayList[a, r]): ##java.lang.Object \ r = 
         import java.util.ArrayList.get(Int32): ##java.lang.Object \ r as get1;
         let ArrayList(_, l1) = l;
-        get1(l1, ix) |> Interop.Flix.ComesFromJava.fromJavaObject
+        get1(l1, ix)
 
     pub def add!(x: a, l: ArrayList[a, r]): Bool \ { r } with GoesToJava[a] = 
         import java.util.ArrayList.add(##java.lang.Object): Bool \ r;
@@ -187,7 +191,7 @@ mod Interop.Util.ArrayList {
         })
 
 
-    pub def remove!(x: a, l: ArrayList[a, r]): Result[String, Bool] \  r with GoesToJava[a] =
+    pub def remove!(x: a, l: ArrayList[a, r]): Result[String, Bool] \ r with GoesToJava[a] =
         Result.tryCatch(_ -> {
             import java.util.ArrayList.remove(##java.lang.Object): Bool \ r; 
             let ArrayList(_, l1) = l;

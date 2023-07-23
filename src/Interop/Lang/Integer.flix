@@ -31,10 +31,6 @@ mod Interop.Lang {
             checked_cast(x1)
     }
 
-    instance Interop.Flix.ComesFromJava[Integer] {
-        pub def fromJavaObject(o: ##java.lang.Object): Integer = 
-            Integer(unchecked_cast(o as ##java.lang.Integer))
-    }
 
 }
 
@@ -50,6 +46,9 @@ mod Interop.Lang.Integer {
 
     pub def wrapHH(prim: ##java.lang.Integer): Integer = 
         Integer(prim)
+
+    pub def fromJavaObject(o: ##java.lang.Object): Integer = 
+        Integer(unchecked_cast(o as ##java.lang.Integer))
 
     pub def toString(x: Integer): String =
         import java.lang.Integer.toString(): String \ {};

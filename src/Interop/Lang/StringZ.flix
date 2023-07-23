@@ -23,6 +23,11 @@ mod Interop.Lang.StringZ {
     use Interop.Util.Stream.IntStream
     use Interop.Util.Stream.IntStream.{IntStream}
 
+
+    pub def fromJavaObject(o: ##java.lang.Object): String = 
+        unchecked_cast(o as ##java.lang.String)
+
+
     pub def fromArray(arr: Array[Int8, r]): String \ r = 
         import new java.lang.String(Array[Int8, r]): String \ r as newString;
         newString(arr)

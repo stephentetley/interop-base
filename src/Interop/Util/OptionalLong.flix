@@ -34,6 +34,8 @@ mod Interop.Util.OptionalLong {
         let OptionalLong(o1) = o;
         o1
 
+    pub def fromJavaObject(o: ##java.lang.Object): OptionalLong = 
+        OptionalLong(unchecked_cast(o as ##java.util.OptionalLong))
 
     pub def hhToOption(o: ##java.util.OptionalLong): Option[Int64] = 
         OptionalLong(o) |> toOption

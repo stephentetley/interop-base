@@ -34,6 +34,10 @@ mod Interop.Util.OptionalDouble {
         let OptionalDouble(o1) = o;
         o1
 
+    pub def fromJavaObject(o: ##java.lang.Object): OptionalDouble = 
+        OptionalDouble(unchecked_cast(o as ##java.util.OptionalDouble))
+
+
     pub def hhToOption(o: ##java.util.OptionalDouble): Option[Float64] = 
         OptionalDouble(o) |> toOption
 

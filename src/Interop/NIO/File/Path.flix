@@ -52,10 +52,6 @@ mod Interop.NIO.File {
             checked_cast(x1)
     }
 
-    instance Interop.Flix.ComesFromJava[Path] {
-        pub def fromJavaObject(o: ##java.lang.Object): Path = 
-            Path(unchecked_cast(o as ##java.nio.file.Path))
-    }
 
 }
 
@@ -74,6 +70,11 @@ mod Interop.NIO.File.Path {
     pub def getHH(path: Path): ##java.nio.file.Path = 
         let Path(path1) = path;
         path1
+
+    pub def fromJavaObject(o: ##java.lang.Object): Path = 
+        Path(unchecked_cast(o as ##java.nio.file.Path))
+
+
 
     pub def toString(path: Path): String = 
         import java.nio.file.Path.toString(): String \ {};

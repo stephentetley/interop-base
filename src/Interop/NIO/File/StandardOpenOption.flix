@@ -25,11 +25,7 @@ mod Interop.NIO.File {
     use Interop.NIO.File.OpenOption.{OpenOption}
 
     pub enum StandardOpenOption(##java.nio.file.StandardOpenOption)
-    
-    instance Interop.Flix.ComesFromJava[StandardOpenOption] {    
-        pub def fromJavaObject(o: ##java.lang.Object): StandardOpenOption = 
-            StandardOpenOption(unchecked_cast(o as ##java.nio.file.StandardOpenOption))
-    }
+
 
     instance Interop.Flix.GoesToJava[StandardOpenOption] {
         pub def toJavaObject(x: StandardOpenOption): ##java.lang.Object =
@@ -68,6 +64,11 @@ mod Interop.NIO.File.StandardOpenOption {
     pub def getHH(x: StandardOpenOption): ##java.nio.file.StandardOpenOption = 
         let StandardOpenOption(x1) = x;
         x1
+    
+    pub def fromJavaObject(o: ##java.lang.Object): StandardOpenOption = 
+        StandardOpenOption(unchecked_cast(o as ##java.nio.file.StandardOpenOption))
+        
+
 
     pub def append(): StandardOpenOption = 
         import static get java.nio.file.StandardOpenOption.APPEND: ##java.nio.file.StandardOpenOption \ {} as get_APPEND;

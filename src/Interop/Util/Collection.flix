@@ -70,6 +70,8 @@ mod Interop.Util.Collection {
     pub def wrapHH(rc: Region[r], col: ##java.util.Collection): Collection[a, r] = 
         Collection(rc, col)
 
+    pub def fromJavaObject(rc: Region[r], o: ##java.lang.Object): Collection[a, r] = 
+        Collection(rc, unchecked_cast(o as ##java.util.Collection))
 
 
     pub def size(c: Collection[a, r]): Int32 \ r =
