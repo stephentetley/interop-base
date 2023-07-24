@@ -33,7 +33,10 @@ mod Interop.Util.Function.IntUnaryOperatorZ {
     
 
     pub def makeIntUnaryOperatorZ(f: Int32 -> Int32 \ ef): IntUnaryOperatorZ[ef] = 
-        IntUnaryOperatorZ(unchecked_cast(f as ##java.util.function.IntUnaryOperator))
+        let f1 = i -> {
+            unchecked_cast(f(i) as _ \ {})
+        };
+        IntUnaryOperatorZ(unchecked_cast(f1 as ##java.util.function.IntUnaryOperator))
 
 
     // pub def identity(): IntUnaryOperator = 

@@ -57,7 +57,9 @@ mod Interop.Util.Stream.IntStream {
     use Interop.Util.Function.IntFunctionZ.{IntFunctionZ}
     use Interop.Util.Function.IntPredicateZ
     use Interop.Util.Function.IntPredicateZ.{IntPredicateZ}
+    use Interop.Util.Function.IntSupplier
     use Interop.Util.Function.IntSupplier.{IntSupplier}
+    use Interop.Util.Function.IntUnaryOperatorZ
     use Interop.Util.Function.IntUnaryOperatorZ.{IntUnaryOperatorZ}
 
     pub def getHH(x: IntStream[ef, r]): ##java.util.stream.IntStream = 
@@ -86,15 +88,25 @@ mod Interop.Util.Stream.IntStream {
         import static java.util.stream.IntStream.of(Array[Int32, r]): ##java.util.stream.IntStream \ {};
         IntStream(rc, checked_ecast(of(arr)))
 
-    pub def iterate(rc: Region[r], seed: Int32, f: Int32 -> Int32 \ ef): IntStream[ef, r] = 
+    pub def iterate(rc: Region[r], seed: Int32, f: IntUnaryOperatorZ[ef]): IntStream[ef, r] = 
         import static java.util.stream.IntStream.iterate(Int32, ##java.util.function.IntUnaryOperator): ##java.util.stream.IntStream \ {};
-        let IntUnaryOperatorZ(f1) = Interop.Util.Function.IntUnaryOperatorZ.makeIntUnaryOperatorZ(f);
+        let IntUnaryOperatorZ(f1) = f;
         IntStream(rc, checked_ecast(iterate(seed, f1)))
 
-    pub def generate(rc: Region[r], f: Unit -> Int32 \ ef): IntStream[ef, r] = 
+    pub def iterateWithPredicate(rc: Region[r], 
+                                seed: Int32, 
+                                hasNext: IntPredicateZ[ef1], 
+                                next: IntUnaryOperatorZ[ef]): IntStream[ef + ef1, r] = 
+        import static java.util.stream.IntStream.iterate(Int32, ##java.util.function.IntPredicate, ##java.util.function.IntUnaryOperator): ##java.util.stream.IntStream \ {};
+        let IntPredicateZ(hasNext1) = hasNext;
+        let IntUnaryOperatorZ(next1) = next;
+        IntStream(rc, checked_ecast(iterate(seed, hasNext1, next1)))
+
+
+    pub def generate(rc: Region[r], f: IntSupplier[ef]): IntStream[ef, r] = 
         import static java.util.stream.IntStream.generate(##java.util.function.IntSupplier): ##java.util.stream.IntStream \ {};
-        let IntSupplier(s1) = Interop.Util.Function.IntSupplier.makeIntSupplier(f);
-        IntStream(rc, checked_ecast(generate(s1)))
+        let IntSupplier(f1) = f;
+        IntStream(rc, checked_ecast(generate(f1)))
 
     pub def range(rc: Region[r], b: Int32, e: Int32): IntStream[ef, r] = 
         import static java.util.stream.IntStream.range(Int32, Int32): ##java.util.stream.IntStream \ {};
@@ -140,10 +152,10 @@ mod Interop.Util.Stream.IntStream {
         IntStream(rc, checked_ecast(limit(s1, size)))
 
 
-    pub def map(f: Int32 -> Int32 \ ef1, s: IntStream[ef, r]): IntStream[ef + ef1, r] = 
+    pub def map(f: IntUnaryOperatorZ[ef1], s: IntStream[ef, r]): IntStream[ef + ef1, r] = 
         import java.util.stream.IntStream.map(##java.util.function.IntUnaryOperator): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
-        let IntUnaryOperatorZ(f1) = Interop.Util.Function.IntUnaryOperatorZ.makeIntUnaryOperatorZ(f);
+        let IntUnaryOperatorZ(f1) = f;
         IntStream(rc, checked_ecast(map(s1, f1)))
 
 
@@ -177,26 +189,23 @@ mod Interop.Util.Stream.IntStream {
         let IntStream(_, s1) = s;
         IntSummaryStatistics(summaryStatistics(s1))
 
-    pub def anyMatch[ef: Eff, ef1: Eff, r: Region]
-                    (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {ef, ef1, r} = 
+    pub def anyMatch(p: IntPredicateZ[ef1], s: IntStream[ef, r]): Bool \ {ef, ef1, r} = 
         import java.util.stream.IntStream.anyMatch(##java.util.function.IntPredicate): Bool \ {ef, ef1, r};
         let IntStream(_, s1) = s;
-        let IntPredicateZ(p1) = Interop.Util.Function.IntPredicateZ.makeIntPredicateZ(p);
+        let IntPredicateZ(p1) = p;
         anyMatch(s1, p1)
 
-    pub def allMatch[ef: Eff, ef1: Eff, r: Region]
-                    (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {ef, ef1, r} = 
+    pub def allMatch(p: IntPredicateZ[ef1], s: IntStream[ef, r]): Bool \ {ef, ef1, r} = 
         import java.util.stream.IntStream.allMatch(##java.util.function.IntPredicate): Bool \ {ef, ef1, r};
         let IntStream(_, s1) = s;
-        let IntPredicateZ(p1) = Interop.Util.Function.IntPredicateZ.makeIntPredicateZ(p);
+        let IntPredicateZ(p1) = p;
         allMatch(s1, p1)
 
 
-    pub def noneMatch[ef: Eff, ef1: Eff, r: Region]
-                        (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): Bool \ {ef, ef1, r} = 
+    pub def noneMatch(p: IntPredicateZ[ef1], s: IntStream[ef, r]): Bool \ {ef, ef1, r} = 
         import java.util.stream.IntStream.noneMatch(##java.util.function.IntPredicate): Bool \ {ef, ef1, r};
         let IntStream(_, s1) = s;
-        let IntPredicateZ(p1) = Interop.Util.Function.IntPredicateZ.makeIntPredicateZ(p);
+        let IntPredicateZ(p1) = p;
         noneMatch(s1, p1)
 
     pub def findFirst(s: IntStream[ef, r]): Option[Int32] \ {ef, r} = 

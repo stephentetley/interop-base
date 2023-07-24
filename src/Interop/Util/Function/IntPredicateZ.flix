@@ -33,7 +33,10 @@ mod Interop.Util.Function.IntPredicateZ {
     use Interop.Util.Function.IntPredicateZ.{IntPredicateZ}
 
     pub def makeIntPredicateZ(f: Int32 -> Bool \ ef): IntPredicateZ[ef] = 
-        IntPredicateZ(unchecked_cast(f as ##java.util.function.IntPredicate))
+        let f1 = i -> {
+            unchecked_cast(f(i) as _ \ {})
+        };
+        IntPredicateZ(unchecked_cast(f1 as ##java.util.function.IntPredicate))
 
     pub def test(i: Int32, f: IntPredicateZ[ef]): Bool \ ef = 
         let IntPredicateZ(f1) = f;
