@@ -6,7 +6,7 @@ mod TestIntStream {
     @test
     def flatMap01(): Bool \ {} = region rc {
         /// for every i gen 3...
-        let f1 = i -> Interop.Util.Stream.IntStream.range(rc, i, i+3);
+        let f1 = Interop.Util.Function.IntFunctionZ.makeIntFunctionZ1(i -> Interop.Util.Stream.IntStream.range(rc, i, i+3));
         let stream0 = Interop.Util.Stream.IntStream.range(rc, 0, 2);
         let stream1 = Interop.Util.Stream.IntStream.flatMap(f1, stream0);
         let ct = Interop.Util.Stream.IntStream.count(stream1);

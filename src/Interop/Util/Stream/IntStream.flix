@@ -16,6 +16,8 @@
 
 mod Interop.Util.Stream {
 
+    use Interop.Util.Stream.IntStream.{IntStream} 
+
     ///
     /// Represents a Java IntStream.
     ///
@@ -23,6 +25,12 @@ mod Interop.Util.Stream {
         case IntStream(Region[r], ##java.util.stream.IntStream)
     }
 
+
+    instance Interop.Flix.GoesToJava[IntStream[ef, r]]{
+        pub def toJavaObject(o: IntStream[ef, r]): ##java.lang.Object =
+            let IntStream(_, o1) = o;
+            checked_cast(o1) 
+    }
 
 }
 
@@ -43,8 +51,11 @@ mod Interop.Util.Stream.IntStream {
     use Interop.Util.OptionalDouble.{OptionalDouble}
     use Interop.Util.OptionalInt
     use Interop.Util.OptionalInt.{OptionalInt}
+    use Interop.Util.Function.IntConsumerZ
     use Interop.Util.Function.IntConsumerZ.{IntConsumerZ}
+    use Interop.Util.Function.IntFunctionZ
     use Interop.Util.Function.IntFunctionZ.{IntFunctionZ}
+    use Interop.Util.Function.IntPredicateZ
     use Interop.Util.Function.IntPredicateZ.{IntPredicateZ}
     use Interop.Util.Function.IntSupplier.{IntSupplier}
     use Interop.Util.Function.IntUnaryOperatorZ.{IntUnaryOperatorZ}
@@ -110,18 +121,16 @@ mod Interop.Util.Stream.IntStream {
         IntStream(rc, checked_ecast(concat(s1, t1)))
 
 
-    pub def filter[ef: Eff, ef1: Eff, r: Region]
-                    (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): IntStream[ef + ef1, r] = 
+    pub def filter(p: IntPredicateZ[ef1], s: IntStream[ef, r]): IntStream[ef + ef1, r] = 
         import java.util.stream.IntStream.filter(##java.util.function.IntPredicate): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
-        let IntPredicateZ(p1) = Interop.Util.Function.IntPredicateZ.makeIntPredicateZ(p);
+        let IntPredicateZ(p1) = p;
         IntStream(rc, filter(s1, p1))
 
-    pub def dropWhile[ef: Eff, ef1: Eff, r: Region]
-                        (p: Int32 -> Bool \ ef1, s: IntStream[ef, r]): IntStream[ef + ef1, r] = 
+    pub def dropWhile(p: IntPredicateZ[ef1], s: IntStream[ef, r]): IntStream[ef + ef1, r] = 
         import java.util.stream.IntStream.dropWhile(##java.util.function.IntPredicate): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
-        let IntPredicateZ(p1) = Interop.Util.Function.IntPredicateZ.makeIntPredicateZ(p);
+        let IntPredicateZ(p1) = p;
         IntStream(rc, dropWhile(s1, p1))
 
 
@@ -139,17 +148,16 @@ mod Interop.Util.Stream.IntStream {
 
 
     /// 
-    pub def flatMap(f: Int32 -> IntStream[ef1, r] \ ef2, s: IntStream[ef, r]): IntStream[ef + ef1 + ef2, r] = 
+    pub def flatMap(f: IntFunctionZ[IntStream[ef1, r], ef2], s: IntStream[ef, r]): IntStream[ef + ef1 + ef2, r] = 
         import java.util.stream.IntStream.flatMap(##java.util.function.IntFunction): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
-        let IntFunctionZ(f1) = Interop.Util.Function.IntFunctionZ.makeIntFunctionZWith(f, t -> {let IntStream(_, t1) = t; unchecked_cast(t1 as ##java.lang.Object)});
-        IntStream(rc, checked_ecast(flatMap(s1, f1)))
+        let IntFunctionZ(f1) = f;
+        IntStream(rc, flatMap(s1, f1))
 
 
-    pub def forEach[ef: Eff, ef1: Eff, r: Region]
-                    (f: Int32 -> Unit \ ef1, s: IntStream[ef, r]): Unit \ {ef, ef1, r} = 
+    pub def forEach(f: IntConsumerZ[ef1], s: IntStream[ef, r]): Unit \ {ef, ef1, r} = 
         import java.util.stream.IntStream.forEach(##java.util.function.IntConsumer): Unit \ {ef, ef1, r};
-        let IntConsumerZ(f1) = Interop.Util.Function.IntConsumerZ.makeIntConsumerZ(f);
+        let IntConsumerZ(f1) = f;
         let IntStream(_, s1) = s;
         forEach(s1, f1)
 

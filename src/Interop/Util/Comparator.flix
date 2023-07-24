@@ -21,7 +21,7 @@ mod Interop.Util {
     ///
     /// Functional interface
     ///
-    /// TODO should comparator have an effect type param?
+    /// TODO should comparator have an effect type param? Probably then it can handle comparing mutable objects
     pub type alias Comparator[_: Type] = ##java.util.Comparator
 
 

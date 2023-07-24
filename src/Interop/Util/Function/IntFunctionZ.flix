@@ -17,7 +17,7 @@
 mod Interop.Util.Function {
 
     ///
-    /// Represents a Java IntFunction.
+    /// Represents a Java IntFunction (int -> a).
     ///
     /// IntFunction is a builtin functional Interface.
     ///
@@ -35,6 +35,14 @@ mod Interop.Util.Function.IntFunctionZ {
 
     pub def makeIntFunctionZ(f: Int32 -> a \ ef): IntFunctionZ[a, ef] with GoesToJava[a] = 
         IntFunctionZ(unchecked_cast((i -> f(i) |> Interop.Flix.GoesToJava.toJavaObject) as ##java.util.function.IntFunction))
+
+    pub def makeIntFunctionZ1(f: Int32 -> a \ ef): IntFunctionZ[a, ef] with GoesToJava[a] =  
+        let f1 = i -> {
+            let ans = unchecked_cast(f(i) as _ \ {});
+            Interop.Flix.GoesToJava.toJavaObject(ans) 
+        };
+        IntFunctionZ(unchecked_cast(f1 as ##java.util.function.IntFunction))
+
 
     pub def makeIntFunctionZWith(f: Int32 -> a \ ef, castToObj: a -> ##java.lang.Object): IntFunctionZ[a, ef] = 
         IntFunctionZ(unchecked_cast((i -> f(i) |> castToObj) as ##java.util.function.IntFunction))
