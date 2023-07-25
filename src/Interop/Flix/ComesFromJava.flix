@@ -94,6 +94,9 @@ mod Interop.Flix {
 mod Interop.Flix.ComesFromJava {
 
 
+    pub def stringFromJavaObject(o: ##java.lang.Object): String = 
+        unchecked_cast(o as ##java.lang.String)
+
     pub def boolFromJava(b: ##java.lang.Boolean): Bool = 
         import java.lang.Boolean.booleanValue(): Bool \ {};
         booleanValue(b)

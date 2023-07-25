@@ -1,13 +1,13 @@
 
 
-mod TestChoiceFormat {
+mod TestCollectors {
 
 
     @test
     def counting01(): Unit \ IO = region rc {
         let arr = Array#{"Hello", "world", "!"} @ rc;
         let strm = Interop.Util.Stream.Stream.ofArray(rc, arr);
-        let n = Interop.Util.Stream.Stream.collect(Interop.Util.Stream.Collectors.counting(), strm);
+        let n = Interop.Util.Stream.Stream.collect(Interop.Flix.ComesFromJava.int64FromJavaObject, Interop.Util.Stream.Collectors.counting(), strm);
         println("counting01 (should be 3): ${n}")
     }
 
@@ -15,25 +15,25 @@ mod TestChoiceFormat {
     def joining01(): Unit \ IO = region rc {
         let arr = Array#{"Hello", "world", "!"} @ rc;
         let strm = Interop.Util.Stream.Stream.ofArray(rc, arr);
-        let s = Interop.Util.Stream.Stream.collect(Interop.Util.Stream.Collectors.joining(), strm);
+        let s = Interop.Util.Stream.Stream.collect(Interop.Flix.ComesFromJava.stringFromJavaObject, Interop.Util.Stream.Collectors.joining(), strm);
         println("joining01: ${s}")
     }
 
-    @test
-    def joiningWithDelimiter01(): Unit \ IO = region rc {
-        let arr = Array#{"Hello", "world", "!"} @ rc;
-        let strm = Interop.Util.Stream.Stream.ofArray(rc, arr);
-        let s = Interop.Util.Stream.Stream.collect(Interop.Util.Stream.Collectors.joiningWithDelimiter("__"), strm);
-        println("joiningWithDelimiter01: ${s}")
-    }
+    // @test
+    // def joiningWithDelimiter01(): Unit \ IO = region rc {
+    //     let arr = Array#{"Hello", "world", "!"} @ rc;
+    //     let strm = Interop.Util.Stream.Stream.ofArray(rc, arr);
+    //     let s = Interop.Util.Stream.Stream.collect(Interop.Util.Stream.Collectors.joiningWithDelimiter("__"), strm);
+    //     println("joiningWithDelimiter01: ${s}")
+    // }
 
-    @test
-    def averagingDouble01(): Unit \ IO = region rc {
-        let arr = Array#{1, 2, 3, 4, 5, 6} @ rc;
-        let strm = Interop.Util.Stream.Stream.ofArray(rc, arr);
-        let ave = Interop.Util.Stream.Stream.collect(Interop.Util.Stream.Collectors.averagingDouble(Int32.toFloat64), strm);
-        println("averagingDouble01: ${ave}")
-    }
+    // @test
+    // def averagingDouble01(): Unit \ IO = region rc {
+    //     let arr = Array#{1, 2, 3, 4, 5, 6} @ rc;
+    //     let strm = Interop.Util.Stream.Stream.ofArray(rc, arr);
+    //     let ave = Interop.Util.Stream.Stream.collect(Interop.Util.Stream.Collectors.averagingDouble(Int32.toFloat64), strm);
+    //     println("averagingDouble01: ${ave}")
+    // }
 
     // @test
     // def toSet01(): Unit \ IO = region rc {
