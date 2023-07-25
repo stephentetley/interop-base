@@ -59,6 +59,10 @@ mod Interop.Util.Stream.IntStream {
     use Interop.Util.Function.IntPredicateZ.{IntPredicateZ}
     use Interop.Util.Function.IntSupplier
     use Interop.Util.Function.IntSupplier.{IntSupplier}
+    use Interop.Util.Function.IntToDoubleFunction
+    use Interop.Util.Function.IntToDoubleFunction.{IntToDoubleFunction}
+    use Interop.Util.Function.IntToLongFunction
+    use Interop.Util.Function.IntToLongFunction.{IntToLongFunction}
     use Interop.Util.Function.IntUnaryOperatorZ
     use Interop.Util.Function.IntUnaryOperatorZ.{IntUnaryOperatorZ}
 
@@ -86,6 +90,11 @@ mod Interop.Util.Stream.IntStream {
 
     pub def ofArray(rc: Region[r1], arr: Array[Int32, r]): IntStream[ef + r, r1] = 
         import static java.util.stream.IntStream.of(Array[Int32, r]): ##java.util.stream.IntStream \ {};
+        IntStream(rc, checked_ecast(of(arr)))
+
+    pub def ofVector(rc: Region[r], v: Vector[Int32]): IntStream[ef + r, r] \ r =  
+        import static java.util.stream.IntStream.of(Array[Int32, r]): ##java.util.stream.IntStream \ {};
+        let arr = Vector.toArray(rc, v);
         IntStream(rc, checked_ecast(of(arr)))
 
     pub def iterate(rc: Region[r], seed: Int32, f: IntUnaryOperatorZ[ef]): IntStream[ef, r] = 
@@ -126,6 +135,12 @@ mod Interop.Util.Stream.IntStream {
         let IntStream(_, s1) = s;
         count(s1)
 
+    pub def distinct(s: IntStream[ef, r]): IntStream[ef, r] \ {ef, r} = 
+        import java.util.stream.IntStream.distinct(): ##java.util.stream.IntStream \ {ef, r};
+        let IntStream(rc, s1) = s;
+        IntStream(rc, distinct(s1))
+
+
     pub def concat(s: IntStream[ef1, r], t: IntStream[ef2, r]): IntStream[ef1 + ef2, r] = 
         import static java.util.stream.IntStream.concat(##java.util.stream.IntStream, ##java.util.stream.IntStream): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
@@ -158,6 +173,17 @@ mod Interop.Util.Stream.IntStream {
         let IntUnaryOperatorZ(f1) = f;
         IntStream(rc, checked_ecast(map(s1, f1)))
 
+    pub def mapToDouble(rc: Region[r1], f: IntToDoubleFunction[ef1], s: IntStream[ef, r]): DoubleStream[ef + ef1 + r, r1] = 
+        import java.util.stream.IntStream.mapToDouble(##java.util.function.IntToDoubleFunction): ##java.util.stream.DoubleStream \ {};
+        let IntStream(_, s1) = s;
+        let IntToDoubleFunction(f1) = f;
+        DoubleStream(rc, checked_ecast(mapToDouble(s1, f1)))
+
+    pub def mapToLong(rc: Region[r1], f: IntToLongFunction[ef1], s: IntStream[ef, r]): LongStream[ef + ef1 + r, r1] = 
+        import java.util.stream.IntStream.mapToLong(##java.util.function.IntToLongFunction): ##java.util.stream.LongStream \ {};
+        let IntStream(_, s1) = s;
+        let IntToLongFunction(f1) = f;
+        LongStream(rc, checked_ecast(mapToLong(s1, f1)))
 
     /// 
     pub def flatMap(f: IntFunctionZ[IntStream[ef1, r], ef2], s: IntStream[ef, r]): IntStream[ef + ef1 + ef2, r] = 
@@ -167,11 +193,18 @@ mod Interop.Util.Stream.IntStream {
         IntStream(rc, flatMap(s1, f1))
 
 
+    pub def forEachOrdered(f: IntConsumerZ[ef1], s: IntStream[ef, r]): Unit \ {ef, ef1, r} = 
+        import java.util.stream.IntStream.forEachOrdered(##java.util.function.IntConsumer): Unit \ {ef, ef1, r};
+        let IntConsumerZ(f1) = f;
+        let IntStream(_, s1) = s;
+        forEachOrdered(s1, f1)
+
     pub def forEach(f: IntConsumerZ[ef1], s: IntStream[ef, r]): Unit \ {ef, ef1, r} = 
         import java.util.stream.IntStream.forEach(##java.util.function.IntConsumer): Unit \ {ef, ef1, r};
         let IntConsumerZ(f1) = f;
         let IntStream(_, s1) = s;
         forEach(s1, f1)
+
 
     pub def toArray(_: Region[r1], s: IntStream[ef, r]): Array[Int32, r1] \ {ef, r, r1} = 
         import java.util.stream.IntStream.toArray(): Array[Int32, r1] \ {};

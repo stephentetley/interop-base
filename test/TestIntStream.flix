@@ -23,19 +23,38 @@ mod TestIntStream {
         });
         let stream0 = Interop.Util.Stream.IntStream.generate(rc, gen);
         let stream1 = Interop.Util.Stream.IntStream.limit(10i64, stream0);
-        let ct = Interop.Util.Stream.IntStream.count(stream1);
-        ct == 10i64
+        let size = Interop.Util.Stream.IntStream.count(stream1);
+        size == 10i64
     }
 
     @test
     def iterateWithPredicate01(): Bool \ {} = region rc {
-        /// for every i gen 3...
         let p1 = Interop.Util.Function.IntPredicateZ.makeIntPredicateZ(i -> i < 10);
         let f1 = Interop.Util.Function.IntUnaryOperatorZ.makeIntUnaryOperatorZ(i -> i+1);
         let stream = Interop.Util.Stream.IntStream.iterateWithPredicate(rc, 0, p1, f1);
         let arr = Interop.Util.Stream.IntStream.toArray(rc, stream);
         Array.compare(arr, Array#{0, 1, 2, 3, 4, 5, 6, 7, 8, 9} @ rc) == Comparison.EqualTo
     }
+
+    @test
+    def mapToDouble01(): Bool \ {} = region rc {
+        let f1 = Interop.Util.Function.IntToDoubleFunction.makeIntToDoubleFunction(Int32.toFloat64);
+        let stream1 = Interop.Util.Stream.IntStream.ofVector(rc, Vector#{0, 1, 2, 3, 4, 5});
+        let stream2 = Interop.Util.Stream.IntStream.mapToDouble(rc, f1, stream1);
+        let size = Interop.Util.Stream.DoubleStream.count(stream2);
+        size == 6i64
+    }
+
+    @test
+    def mapToLong01(): Bool \ {} = region rc {
+        let f1 = Interop.Util.Function.IntToLongFunction.makeIntToLongFunction(Int32.toInt64);
+        let stream1 = Interop.Util.Stream.IntStream.ofVector(rc, Vector#{0, 1, 2, 3, 4, 5});
+        let stream2 = Interop.Util.Stream.IntStream.mapToLong(rc, f1, stream1);
+        let arr = Interop.Util.Stream.LongStream.toArray(rc, stream2);
+        Array.compare(arr, Array#{0i64, 1i64, 2i64, 3i64, 4i64, 5i64} @ rc) == Comparison.EqualTo
+    }
+
+
 
 /*
     @test
