@@ -135,7 +135,7 @@ mod Interop.IO.BufferedReader {
         Result.tryCatch(_ -> {
             import java.io.BufferedReader.lines(): ##java.util.stream.Stream \ {};
             let BufferedReader(rd1) = rd;
-            Stream(rc, checked_ecast(lines(rd1)))
+            Stream(rc, lines(rd1))
         })
 
 

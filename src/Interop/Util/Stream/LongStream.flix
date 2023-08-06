@@ -68,44 +68,44 @@ mod Interop.Util.Stream.LongStream {
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ {} as mkIterator;
         let LongStream(_, s1) = s;
         let iter1 = mkIterator(unchecked_cast(s1 as ##java.util.stream.BaseStream));
-        let iter2 = checked_ecast(Interop.Util.IteratorZ.wrapHH(rc, iter1));
+        let iter2 = Interop.Util.IteratorZ.wrapHH(rc, iter1);
         Interop.Util.IteratorZ.iterator(rc, iter2)
 
     pub def empty(rc: Region[r]): LongStream[ef, r] = 
         import static java.util.stream.LongStream.empty(): ##java.util.stream.LongStream \ {};
-        LongStream(rc, checked_ecast(empty()))
+        LongStream(rc, empty())
 
     pub def ofInt64(rc: Region[r], i: Int64): LongStream[ef, r] = 
         import static java.util.stream.LongStream.of(Int64): ##java.util.stream.LongStream \ {};
-        LongStream(rc, checked_ecast(of(i)))
+        LongStream(rc, of(i))
 
     pub def ofArray(rc: Region[r1], arr: Array[Int64, r]): LongStream[ef + r, r1] = 
         import static java.util.stream.LongStream.of(Array[Int64, r]): ##java.util.stream.LongStream \ {};
-        LongStream(rc, checked_ecast(of(arr)))
+        LongStream(rc, of(arr))
 
     pub def iterate(rc: Region[r], seed: Int64, f: LongUnaryOperatorZ[ef]): LongStream[ef, r] = 
         import static java.util.stream.LongStream.iterate(Int64, ##java.util.function.LongUnaryOperator): ##java.util.stream.LongStream \ {};
         let LongUnaryOperatorZ(f1) = f;
-        LongStream(rc, checked_ecast(iterate(seed, f1)))
+        LongStream(rc, iterate(seed, f1))
 
     pub def generate(rc: Region[r], f: LongSupplier[ef]): LongStream[ef, r] = 
         import static java.util.stream.LongStream.generate(##java.util.function.LongSupplier): ##java.util.stream.LongStream \ {};
         let LongSupplier(f1) = f;
-        LongStream(rc, checked_ecast(generate(f1)))
+        LongStream(rc, generate(f1))
 
 
     pub def range(rc: Region[r], b: Int64, e: Int64): LongStream[ef, r] = 
         import static java.util.stream.LongStream.range(Int64, Int64): ##java.util.stream.LongStream \ {};
-        LongStream(rc, checked_ecast(range(b, e)))
+        LongStream(rc, range(b, e))
 
     pub def rangeClosed(rc: Region[r], b: Int64, e: Int64): LongStream[ef, r] = 
         import static java.util.stream.LongStream.rangeClosed(Int64, Int64): ##java.util.stream.LongStream \ {};
-        LongStream(rc, checked_ecast(rangeClosed(b, e)))
+        LongStream(rc, rangeClosed(b, e))
 
     pub def boxed(s: LongStream[ef, r]): Stream[##java.lang.Long, ef, r] = 
         import java.util.stream.LongStream.boxed(): ##java.util.stream.Stream \ {};
         let LongStream(rc, s1) = s;
-        Stream(rc, checked_ecast(boxed(s1)))
+        Stream(rc, boxed(s1))
 
     pub def count(s: LongStream[ef, r]): Int64 \ { ef, r } = 
         import java.util.stream.LongStream.count(): Int64 \ {ef, r};
@@ -116,37 +116,37 @@ mod Interop.Util.Stream.LongStream {
         import static java.util.stream.LongStream.concat(##java.util.stream.LongStream, ##java.util.stream.LongStream): ##java.util.stream.LongStream \ {};
         let LongStream(rc, s1) = s;
         let LongStream(_, t1) = t;
-        LongStream(rc, checked_ecast(concat(s1, t1)))
+        LongStream(rc, concat(s1, t1))
 
 
     pub def filter(p: LongPredicateZ[ef1], s: LongStream[ef, r]): LongStream[ef + ef1, r] = 
         import java.util.stream.LongStream.filter(##java.util.function.LongPredicate): ##java.util.stream.LongStream \ {};
         let LongStream(rc, s1) = s;
         let LongPredicateZ(p1) = p;
-        LongStream(rc, checked_ecast(filter(s1, p1)))
+        LongStream(rc, filter(s1, p1))
 
     pub def dropWhile(p: LongPredicateZ[ef1], s: LongStream[ef, r]): LongStream[ef + ef1, r] = 
         import java.util.stream.LongStream.dropWhile(##java.util.function.LongPredicate): ##java.util.stream.LongStream \ {};
         let LongStream(rc, s1) = s;
         let LongPredicateZ(p1) = p;
-        LongStream(rc, checked_ecast(dropWhile(s1, p1)))
+        LongStream(rc, dropWhile(s1, p1))
 
     pub def limit(size: Int64, s: LongStream[ef, r]): LongStream[ef, r] = 
         import java.util.stream.LongStream.limit(Int64): ##java.util.stream.LongStream \ {};
         let LongStream(rc, s1) = s;
-        LongStream(rc, checked_ecast(limit(s1, size)))
+        LongStream(rc, limit(s1, size))
 
     pub def map(f: LongUnaryOperatorZ[ef1], s: LongStream[ef, r]): LongStream[ef + ef1, r] = 
         import java.util.stream.LongStream.map(##java.util.function.LongUnaryOperator): ##java.util.stream.LongStream \ {};
         let LongStream(rc, s1) = s;
         let LongUnaryOperatorZ(f1) = f;
-        LongStream(rc, checked_ecast(map(s1, f1)))
+        LongStream(rc, map(s1, f1))
 
     pub def flatMap(f: LongFunctionZ[LongStream[ef1, r], ef2], s: LongStream[ef, r]): LongStream[ef + ef1 + ef2, r] = 
         import java.util.stream.LongStream.flatMap(##java.util.function.LongFunction): ##java.util.stream.LongStream \ {};
         let LongStream(rc, s1) = s;
         let LongFunctionZ(f1) = f;
-        LongStream(rc, checked_ecast(flatMap(s1, f1)))
+        LongStream(rc, flatMap(s1, f1))
 
 
     pub def forEach(f: LongConsumerZ[ef1], s: LongStream[ef, r]): Unit \ {ef, ef1, r} = 
@@ -214,7 +214,7 @@ mod Interop.Util.Stream.LongStream {
     pub def sorted(s: LongStream[ef, r]): LongStream[ef, r] = 
         import java.util.stream.LongStream.sorted(): ##java.util.stream.LongStream \ {};
         let LongStream(rc, s1) = s;
-        LongStream(rc, checked_ecast(sorted(s1)))
+        LongStream(rc, sorted(s1))
 
     pub def asDoubleStream(rc: Region[r1], s: LongStream[ef, r]): DoubleStream[ef, r1] = 
         import java.util.stream.LongStream.asDoubleStream(): ##java.util.stream.DoubleStream \ {};

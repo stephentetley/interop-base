@@ -34,12 +34,16 @@ mod Interop.Util.Stream.Stream {
     use Interop.Util.Stream.Collector.{Collector}
     use Interop.Util.Stream.StreamBuilder
     use Interop.Util.Stream.StreamBuilder.{StreamBuilder}
+    use Interop.Util.Function.BiConsumer
+    use Interop.Util.Function.BiConsumer.{BiConsumer}
     use Interop.Util.Function.ConsumerZ
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
     use Interop.Util.Function.FunctionZ
     use Interop.Util.Function.FunctionZ.{FunctionZ}
     use Interop.Util.Function.PredicateZ
     use Interop.Util.Function.PredicateZ.{PredicateZ}
+    use Interop.Util.Function.Supplier
+    use Interop.Util.Function.Supplier.{Supplier}
     use Interop.Util.Function.UnaryOperator
     use Interop.Util.Function.UnaryOperator.{UnaryOperator}
     use Interop.Flix.GoesToJava
@@ -54,7 +58,7 @@ mod Interop.Util.Stream.Stream {
 
     pub def empty(rc: Region[r]): Stream[a, ef, r] = 
         import static java.util.stream.Stream.empty(): ##java.util.stream.Stream \ {};
-        Stream(rc, checked_ecast(empty()))
+        Stream(rc, empty())
 
     pub def builder(rc: Region[r]): StreamBuilder[a, r] \ r = 
         import static java.util.stream.Stream.builder(): ##java.util.stream.Stream$Builder \ r;
@@ -63,24 +67,24 @@ mod Interop.Util.Stream.Stream {
     pub def of(rc: Region[r], t: a): Stream[a, ef, r] with GoesToJava[a] = 
         import static java.util.stream.Stream.of(##java.lang.Object): ##java.util.stream.Stream \ {};
         let t1 = Interop.Flix.GoesToJava.toJavaObject(t);
-        Stream(rc, checked_ecast(of(t1)))
+        Stream(rc, of(t1))
 
     pub def ofArray(rc: Region[r1], arr: Array[a, r]): Stream[a, ef + r + r1, r1] with GoesToJava[a] = 
         import static java.util.stream.Stream.of(Array[##java.lang.Object, r1]): ##java.util.stream.Stream \ {};
         let arr1 = unchecked_cast(Array.map(rc, Interop.Flix.GoesToJava.toJavaObject, arr) as Array[##java.lang.Object, r1] \ {});
-        Stream(rc, checked_ecast(of(arr1)))
+        Stream(rc, of(arr1))
 
     pub def ofNullable(rc: Region[r], t: a): Stream[a, ef, r] with GoesToJava[a] = 
         import static java.util.stream.Stream.ofNullable(##java.lang.Object): ##java.util.stream.Stream \ {};
         let t1 = Interop.Flix.GoesToJava.toJavaObject(t);
-        Stream(rc, checked_ecast(ofNullable(t1)))
+        Stream(rc, ofNullable(t1))
 
 
     pub def iterate(rc: Region[r], seed: a, op: UnaryOperator[a, ef]): Stream[a, ef, r] with GoesToJava[a] = 
         import static java.util.stream.Stream.iterate(##java.lang.Object, ##java.util.function.UnaryOperator): ##java.util.stream.Stream \ {};
         let seed1 = Interop.Flix.GoesToJava.toJavaObject(seed);
         let UnaryOperator(op1) = op;
-        Stream(rc, checked_ecast(iterate(seed1, op1)))
+        Stream(rc, iterate(seed1, op1))
 
 
     pub def iterator(rc: Region[r1], fromObject: ##java.lang.Object -> a, s: Stream[a, ef, r]): Iterator[a, ef + r + r1, r1] =
@@ -110,37 +114,37 @@ mod Interop.Util.Stream.Stream {
         import static java.util.stream.Stream.concat(##java.util.stream.Stream, ##java.util.stream.Stream): ##java.util.stream.Stream \ {};
         let Stream(rc, s1) = s;
         let Stream(_, t1) = t;
-        Stream(rc, checked_ecast(concat(s1, t1)))
+        Stream(rc, concat(s1, t1))
 
     pub def filter(p:  PredicateZ[a, ef1], s: Stream[a, ef, r]): Stream[a, ef + ef1, r] = 
         import java.util.stream.Stream.filter(##java.util.function.Predicate): ##java.util.stream.Stream \ {};
         let Stream(rc, s1) = s;
         let PredicateZ(p1) = p;
-        Stream(rc, checked_ecast(filter(s1, p1)))
+        Stream(rc, filter(s1, p1))
 
     pub def dropWhile(p: PredicateZ[a, ef1], s: Stream[a, ef, r]): Stream[a, ef + ef1, r] =
         import java.util.stream.Stream.dropWhile(##java.util.function.Predicate): ##java.util.stream.Stream \ {};
         let Stream(rc, s1) = s;
         let PredicateZ(p1) = p;
-        Stream(rc, checked_ecast(dropWhile(s1, p1)))
+        Stream(rc, dropWhile(s1, p1))
 
     pub def limit(size: Int64, s: Stream[a, ef, r]): Stream[a, ef, r] = 
         import java.util.stream.Stream.limit(Int64): ##java.util.stream.Stream \ {};
         let Stream(rc, s1) = s;
-        Stream(rc, checked_ecast(limit(s1, size)))
+        Stream(rc, limit(s1, size))
 
     pub def map(f: FunctionZ[a, b, ef], s: Stream[a, ef, r]): Stream[b, ef + ef1, r] with GoesToJava[b] = 
         import java.util.stream.Stream.map(##java.util.function.Function): ##java.util.stream.Stream \ {};
         let Stream(rc, s1) = s;
         let FunctionZ(f1) = f;
-        Stream(rc, checked_ecast(map(s1, f1)))
+        Stream(rc, map(s1, f1))
 
     /// Warning `f1` ...
     pub def flatMap(f: FunctionZ[a, Stream[b, ef1, r], ef2], s: Stream[a, ef, r]): Stream[b, ef + ef1 + ef2, r] with GoesToJava[b] = 
         import java.util.stream.Stream.flatMap(##java.util.function.Function): ##java.util.stream.Stream \ {};
         let Stream(rc, s1) = s;
         let FunctionZ(f1) = f;
-        Stream(rc, checked_ecast(flatMap(s1, f1)))
+        Stream(rc, flatMap(s1, f1))
 
     pub def forEach(f: ConsumerZ[a, ef1], s: Stream[a, ef, r]): Unit \ {ef, ef1, r} = 
         import java.util.stream.Stream.forEach(##java.util.function.Consumer): Unit \ {ef, ef1, r};
@@ -183,13 +187,19 @@ mod Interop.Util.Stream.Stream {
     //     findAny(s1)
 
 
-    // pub def collect(c: Collector[t, a, ef1, ans], s: Stream[a, ef, r]): ans \ {ef, ef1, r} = 
-    //     import java.util.stream.Stream.collect(##java.util.stream.Collector): ##java.lang.Object \ {ef, ef1, r};
-    //     let Stream(_, s1) = s;
-    //     let Collector(c1) = c;
-    //     collect(s1, c1)
+    pub def collect(fromObject: ##java.lang.Object -> ans, 
+                    supp: Supplier[a, ef1], 
+                    acc: BiConsumer[a, b, ef2], 
+                    comb: BiConsumer[a, a, ef3], 
+                    s: Stream[a, ef, r]): ans \ {ef, ef1, ef2, ef3, r} = 
+        import java.util.stream.Stream.collect(##java.util.function.Supplier, ##java.util.function.BiConsumer, ##java.util.function.BiConsumer): ##java.lang.Object \ {ef, ef1, ef2, ef3, r};
+        let Stream(_, s1) = s;
+        let Supplier(supp1) = supp;
+        let BiConsumer(acc1) = acc;
+        let BiConsumer(comb1) = comb;
+        collect(s1, supp1, acc1, comb1) |> fromObject
 
-    pub def collect(fromObject: ##java.lang.Object -> ans, c: Collector[t, a, ef1, ans], s: Stream[a, ef, r]): ans \ {ef, ef1, r} = 
+    pub def collectWithCollector(fromObject: ##java.lang.Object -> ans, c: Collector[t, a, ef1, ans], s: Stream[a, ef, r]): ans \ {ef, ef1, r} = 
         import java.util.stream.Stream.collect(##java.util.stream.Collector): ##java.lang.Object \ {ef, ef1, r};
         let Stream(_, s1) = s;
         let Collector(c1) = c;

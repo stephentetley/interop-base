@@ -144,7 +144,7 @@ mod Interop.Util.Collection {
     pub def stream(rc: Region[r1], c: Collection[a, r]): Stream[a, ef + r, r1] =
         import java.util.Collection.stream(): ##java.util.stream.Stream \ {}; 
         let Collection(_, c1) = c;
-        Stream(rc, checked_ecast(stream(c1)))
+        Stream(rc, stream(c1))
 
 
     pub def fromFoldableViaArrayList(rc: Region[r], t: t[a]): Collection[a, r] \ { r } with Foldable[t], GoesToJava[a] =

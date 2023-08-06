@@ -78,6 +78,10 @@ mod Interop.Util.Stream.CollectorCharacteristics {
         let CollectorCharacteristics(y1) = y;
         equals(x1, checked_cast(y1))
 
+    pub def hashCode(x: CollectorCharacteristics): Int32 =
+        import java.util.stream.Collector$Characteristics.hashCode(): Int32 \ {};
+        let CollectorCharacteristics(x1) = x;
+        hashCode(x1)
 
     pub def concurrent(): CollectorCharacteristics = 
         import static get java.util.stream.Collector$Characteristics.CONCURRENT: ##java.util.stream.Collector$Characteristics \ {} as get_CONCURRENT;

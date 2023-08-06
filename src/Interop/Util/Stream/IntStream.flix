@@ -77,30 +77,30 @@ mod Interop.Util.Stream.IntStream {
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ {} as mkIterator;
         let IntStream(_, s1) = s;
         let iter1 = mkIterator(unchecked_cast(s1 as ##java.util.stream.BaseStream));
-        let iter2 = checked_ecast(Interop.Util.IteratorZ.wrapHH(rc, iter1));
+        let iter2 = Interop.Util.IteratorZ.wrapHH(rc, iter1);
         Interop.Util.IteratorZ.iterator(rc, iter2)
 
     pub def empty(rc: Region[r]): IntStream[ef, r] = 
         import static java.util.stream.IntStream.empty(): ##java.util.stream.IntStream \ {};
-        IntStream(rc, checked_ecast(empty()))
+        IntStream(rc, empty())
 
     pub def ofInt32(rc: Region[r], i: Int32): IntStream[ef, r] = 
         import static java.util.stream.IntStream.of(Int32): ##java.util.stream.IntStream \ {};
-        IntStream(rc, checked_ecast(of(i)))
+        IntStream(rc, of(i))
 
     pub def ofArray(rc: Region[r1], arr: Array[Int32, r]): IntStream[ef + r, r1] = 
         import static java.util.stream.IntStream.of(Array[Int32, r]): ##java.util.stream.IntStream \ {};
-        IntStream(rc, checked_ecast(of(arr)))
+        IntStream(rc, of(arr))
 
     pub def ofVector(rc: Region[r], v: Vector[Int32]): IntStream[ef + r, r] \ r =  
         import static java.util.stream.IntStream.of(Array[Int32, r]): ##java.util.stream.IntStream \ {};
         let arr = Vector.toArray(rc, v);
-        IntStream(rc, checked_ecast(of(arr)))
+        IntStream(rc, of(arr))
 
     pub def iterate(rc: Region[r], seed: Int32, f: IntUnaryOperatorZ[ef]): IntStream[ef, r] = 
         import static java.util.stream.IntStream.iterate(Int32, ##java.util.function.IntUnaryOperator): ##java.util.stream.IntStream \ {};
         let IntUnaryOperatorZ(f1) = f;
-        IntStream(rc, checked_ecast(iterate(seed, f1)))
+        IntStream(rc, iterate(seed, f1))
 
     pub def iterateWithPredicate(rc: Region[r], 
                                 seed: Int32, 
@@ -109,26 +109,26 @@ mod Interop.Util.Stream.IntStream {
         import static java.util.stream.IntStream.iterate(Int32, ##java.util.function.IntPredicate, ##java.util.function.IntUnaryOperator): ##java.util.stream.IntStream \ {};
         let IntPredicateZ(hasNext1) = hasNext;
         let IntUnaryOperatorZ(next1) = next;
-        IntStream(rc, checked_ecast(iterate(seed, hasNext1, next1)))
+        IntStream(rc, iterate(seed, hasNext1, next1))
 
 
     pub def generate(rc: Region[r], f: IntSupplier[ef]): IntStream[ef, r] = 
         import static java.util.stream.IntStream.generate(##java.util.function.IntSupplier): ##java.util.stream.IntStream \ {};
         let IntSupplier(f1) = f;
-        IntStream(rc, checked_ecast(generate(f1)))
+        IntStream(rc, generate(f1))
 
     pub def range(rc: Region[r], b: Int32, e: Int32): IntStream[ef, r] = 
         import static java.util.stream.IntStream.range(Int32, Int32): ##java.util.stream.IntStream \ {};
-        IntStream(rc, checked_ecast(range(b, e)))
+        IntStream(rc, range(b, e))
 
     pub def rangeClosed(rc: Region[r], b: Int32, e: Int32): IntStream[ef, r] = 
         import static java.util.stream.IntStream.rangeClosed(Int32, Int32): ##java.util.stream.IntStream \ {};
-        IntStream(rc, checked_ecast(rangeClosed(b, e)))
+        IntStream(rc, rangeClosed(b, e))
 
     pub def boxed(rc: Region[r1], s: IntStream[ef, r]): Stream[##java.lang.Integer, ef, r1] = 
         import java.util.stream.IntStream.boxed(): ##java.util.stream.Stream \ {};
         let IntStream(_, s1) = s;
-        Stream(rc, checked_ecast(boxed(s1)))
+        Stream(rc, boxed(s1))
 
     pub def count(s: IntStream[ef, r]): Int64 \ { ef, r } = 
         import java.util.stream.IntStream.count(): Int64 \ {ef, r};
@@ -145,7 +145,7 @@ mod Interop.Util.Stream.IntStream {
         import static java.util.stream.IntStream.concat(##java.util.stream.IntStream, ##java.util.stream.IntStream): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
         let IntStream(_, t1) = t;
-        IntStream(rc, checked_ecast(concat(s1, t1)))
+        IntStream(rc, concat(s1, t1))
 
 
     pub def filter(p: IntPredicateZ[ef1], s: IntStream[ef, r]): IntStream[ef + ef1, r] = 
@@ -164,26 +164,26 @@ mod Interop.Util.Stream.IntStream {
     pub def limit(size: Int64, s: IntStream[ef, r]): IntStream[ef, r] = 
         import java.util.stream.IntStream.limit(Int64): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
-        IntStream(rc, checked_ecast(limit(s1, size)))
+        IntStream(rc, limit(s1, size))
 
 
     pub def map(f: IntUnaryOperatorZ[ef1], s: IntStream[ef, r]): IntStream[ef + ef1, r] = 
         import java.util.stream.IntStream.map(##java.util.function.IntUnaryOperator): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
         let IntUnaryOperatorZ(f1) = f;
-        IntStream(rc, checked_ecast(map(s1, f1)))
+        IntStream(rc, map(s1, f1))
 
     pub def mapToDouble(rc: Region[r1], f: IntToDoubleFunction[ef1], s: IntStream[ef, r]): DoubleStream[ef + ef1 + r, r1] = 
         import java.util.stream.IntStream.mapToDouble(##java.util.function.IntToDoubleFunction): ##java.util.stream.DoubleStream \ {};
         let IntStream(_, s1) = s;
         let IntToDoubleFunction(f1) = f;
-        DoubleStream(rc, checked_ecast(mapToDouble(s1, f1)))
+        DoubleStream(rc, mapToDouble(s1, f1))
 
     pub def mapToLong(rc: Region[r1], f: IntToLongFunction[ef1], s: IntStream[ef, r]): LongStream[ef + ef1 + r, r1] = 
         import java.util.stream.IntStream.mapToLong(##java.util.function.IntToLongFunction): ##java.util.stream.LongStream \ {};
         let IntStream(_, s1) = s;
         let IntToLongFunction(f1) = f;
-        LongStream(rc, checked_ecast(mapToLong(s1, f1)))
+        LongStream(rc, mapToLong(s1, f1))
 
     /// 
     pub def flatMap(f: IntFunctionZ[IntStream[ef1, r], ef2], s: IntStream[ef, r]): IntStream[ef + ef1 + ef2, r] = 
@@ -264,7 +264,7 @@ mod Interop.Util.Stream.IntStream {
     pub def sorted(s: IntStream[ef, r]): IntStream[ef, r] = 
         import java.util.stream.IntStream.sorted(): ##java.util.stream.IntStream \ {};
         let IntStream(rc, s1) = s;
-        IntStream(rc, checked_ecast(sorted(s1)))
+        IntStream(rc, sorted(s1))
 
 
     pub def asLongStream(rc: Region[r1], s: IntStream[ef, r]): LongStream[ef, r1] = 

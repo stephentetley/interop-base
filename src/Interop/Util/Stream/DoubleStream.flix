@@ -60,30 +60,30 @@ mod Interop.Util.Stream.DoubleStream {
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ {} as mkIterator;
         let DoubleStream(_, s1) = s;
         let iter1 = mkIterator(unchecked_cast(s1 as ##java.util.stream.BaseStream));
-        let iter2 = checked_ecast(Interop.Util.IteratorZ.wrapHH(rc, iter1));
+        let iter2 = Interop.Util.IteratorZ.wrapHH(rc, iter1);
         Interop.Util.IteratorZ.iterator(rc, iter2)
 
     pub def empty(rc: Region[r]): DoubleStream[ef, r] = 
         import static java.util.stream.DoubleStream.empty(): ##java.util.stream.DoubleStream \ {};
-        DoubleStream(rc, checked_ecast(empty()))
+        DoubleStream(rc, empty())
 
     pub def ofFloat64(rc: Region[r], i: Float64): DoubleStream[ef, r] = 
         import static java.util.stream.DoubleStream.of(Float64): ##java.util.stream.DoubleStream \ {};
-        DoubleStream(rc, checked_ecast(of(i)))
+        DoubleStream(rc, of(i))
 
     pub def ofArray(rc: Region[r1], arr: Array[Float64, r]): DoubleStream[ef, r1] = 
         import static java.util.stream.DoubleStream.of(Array[Float64, r]): ##java.util.stream.DoubleStream \ {};
-        DoubleStream(rc, checked_ecast(of(arr)))
+        DoubleStream(rc, of(arr))
 
     pub def ofVector(rc: Region[r], v: Vector[Float64]): DoubleStream[ef + r, r] \ r =  
         import static java.util.stream.DoubleStream.of(Array[Float64, r]): ##java.util.stream.DoubleStream \ {};
         let arr = Vector.toArray(rc, v);
-        DoubleStream(rc, checked_ecast(of(arr)))
+        DoubleStream(rc, of(arr))
 
     pub def iterate(rc: Region[r], seed: Float64, f: DoubleUnaryOperatorZ[ef]): DoubleStream[ef, r] = 
         import static java.util.stream.DoubleStream.iterate(Float64, ##java.util.function.DoubleUnaryOperator): ##java.util.stream.DoubleStream \ {};
         let DoubleUnaryOperatorZ(f1) = f;
-        DoubleStream(rc, checked_ecast(iterate(seed, f1)))
+        DoubleStream(rc, iterate(seed, f1))
 
     pub def generate(rc: Region[r], f: DoubleSupplier[ef]): DoubleStream[ef, r] = 
         import static java.util.stream.DoubleStream.generate(##java.util.function.DoubleSupplier): ##java.util.stream.DoubleStream \ {};
@@ -94,18 +94,25 @@ mod Interop.Util.Stream.DoubleStream {
     pub def boxed(rc: Region[r1], s: DoubleStream[ef, r]): Stream[##java.lang.Double, ef, r1] = 
         import java.util.stream.DoubleStream.boxed(): ##java.util.stream.Stream \ {};
         let DoubleStream(_, s1) = s;
-        Stream(rc, checked_ecast(boxed(s1)))
+        Stream(rc, boxed(s1))
 
     pub def count(s: DoubleStream[ef, r]): Int64 \ {ef, r} = 
         import java.util.stream.DoubleStream.count(): Int64 \ {ef, r};
         let DoubleStream(_, s1) = s;
         count(s1)
 
+    // pub def collect(fromObject: ##java.lang.Object -> ans, c: Collector[t, a, ef1, ans], s: DoubleStream[ef, r]): ans \ {ef, ef1, r} = 
+    //     import java.util.stream.DoubleStream.collect(##java.util.stream.Collector): ##java.lang.Object \ {ef, ef1, r};
+    //     let DoubleStreamStream(_, s1) = s;
+    //     let Collector(c1) = c;
+    //     collect(s1, c1) |> fromObject
+
+
     pub def concat(s: DoubleStream[ef1, r], t: DoubleStream[ef2, r]): DoubleStream[ef1 + ef2, r] = 
         import static java.util.stream.DoubleStream.concat(##java.util.stream.DoubleStream, ##java.util.stream.DoubleStream): ##java.util.stream.DoubleStream \ {};
         let DoubleStream(rc, s1) = s;
         let DoubleStream(_, t1) = t;
-        DoubleStream(rc, checked_ecast(concat(s1, t1)))
+        DoubleStream(rc, concat(s1, t1))
 
 
     pub def filter(p: DoublePredicateZ[ef1], s: DoubleStream[ef, r]): DoubleStream[ef + ef1, r] = 
@@ -123,19 +130,19 @@ mod Interop.Util.Stream.DoubleStream {
     pub def limit(size: Int64, s: DoubleStream[ef, r]): DoubleStream[ef, r] = 
         import java.util.stream.DoubleStream.limit(Int64): ##java.util.stream.DoubleStream \ {};
         let DoubleStream(rc, s1) = s;
-        DoubleStream(rc, checked_ecast(limit(s1, size)))
+        DoubleStream(rc, limit(s1, size))
 
     pub def map(f: DoubleUnaryOperatorZ[ef1], s: DoubleStream[ef, r]): DoubleStream[ef + ef1, r] = 
         import java.util.stream.DoubleStream.map(##java.util.function.DoubleUnaryOperator): ##java.util.stream.DoubleStream \ {};
         let DoubleStream(rc, s1) = s;
         let DoubleUnaryOperatorZ(f1) = f;
-        DoubleStream(rc, checked_ecast(map(s1, f1)))
+        DoubleStream(rc, map(s1, f1))
 
     pub def flatMap(f: DoubleFunctionZ[DoubleStream[ef, r], ef], s: DoubleStream[ef, r]): DoubleStream[ef, r] = 
         import java.util.stream.DoubleStream.flatMap(##java.util.function.DoubleFunction): ##java.util.stream.DoubleStream \ {};
         let DoubleStream(rc, s1) = s;
         let DoubleFunctionZ(f1) = f;
-        DoubleStream(rc, checked_ecast(flatMap(s1, f1)))
+        DoubleStream(rc, flatMap(s1, f1))
 
 
     pub def forEach(f: DoubleConsumerZ[ef1], s: DoubleStream[ef, r]): Unit \ {ef, ef1, r} = 
@@ -203,6 +210,6 @@ mod Interop.Util.Stream.DoubleStream {
     pub def sorted(s: DoubleStream[ef, r]): DoubleStream[ef, r] = 
         import java.util.stream.DoubleStream.sorted(): ##java.util.stream.DoubleStream \ {};
         let DoubleStream(rc, s1) = s;
-        DoubleStream(rc, checked_ecast(sorted(s1)))
+        DoubleStream(rc, sorted(s1))
         
 }
