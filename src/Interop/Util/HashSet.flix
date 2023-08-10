@@ -190,12 +190,18 @@ mod Interop.Util.HashSet {
         Foldable.forEach(x -> discard addWith!(x, ocast, set1), t);
         set1
     
-    pub def iterator(rc: Region[r1], m: HashSet[a, r]): Iterator[a, r1, r1] \ { r } with ComesFromJava[a] =
-        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, m)
 
     pub def toFlixIterator(rc: Region[r1], 
-                            ocast: ##java.lang.Object -> a,
+                            fromJava: ##java.lang.Object -> a,
                             s: HashSet[a, r]): Iterator[a, r1, r1] \ r =
-        Interop.Util.SetZ.toFlixIterator(rc, ocast, ImpSetZ.toSetZ(s))
+        Interop.Util.SetZ.toFlixIterator(rc, fromJava, ImpSetZ.toSetZ(s))
+
+    pub def toFlixList(fromJava: ##java.lang.Object -> a, l: HashSet[a, r]): List[a] \ r = region rc {
+        toFlixIterator(rc, fromJava, l) |> Iterator.toList
+    }
+
+    pub def toFlixSet(fromJava: ##java.lang.Object -> a, l: HashSet[a, r]): Set[a] \ r with Order[a] = region rc {
+        toFlixIterator(rc, fromJava, l) |> Iterator.toSet
+    }
 
 }

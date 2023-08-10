@@ -174,27 +174,21 @@ mod Interop.Util.HashMap {
         map1
 
 
-    pub def primHashMapToFlixMap(prim: ##java.util.HashMap): Map[k, v] with Order[k], ComesFromJava[k], ComesFromJava[v] = region rc {
-        wrapHH(rc, prim) |> toFlixMap
-    }
-
-
-    ///
-    /// Returns an iterator over all key-value pairs in `m`.
-    ///
-    pub def iterator(rc: Region[r1], m: HashMap[k, v, r]): Iterator[(k, v), r1, r1] \ { r } with ComesFromJava[k], ComesFromJava[v] =
-        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, Interop.Flix.ComesFromJava.fromJavaObject, m)
 
     pub def toFlixIterator(rc: Region[r1], 
-                            kcast: ##java.lang.Object -> k, 
-                            vcast: ##java.lang.Object -> v, 
+                            fromJavaKey: ##java.lang.Object -> k, 
+                            fromJavaValue: ##java.lang.Object -> v, 
                             m: HashMap[k, v, r]): Iterator[(k, v), r1, r1] \ r =
-        Interop.Util.MapZ.toFlixIterator(rc, kcast, vcast, ImpMapZ.toMapZ(m))
+        Interop.Util.MapZ.toFlixIterator(rc, fromJavaKey, fromJavaValue, ImpMapZ.toMapZ(m))
 
-    pub def toFlixMap(m: HashMap[k, v, r]): Map[k, v] \ { r } with Order[k], ComesFromJava[k], ComesFromJava[v] =
-        Interop.Util.MapZ.toFlixMap(ImpMapZ.toMapZ(m))
+    pub def toFlixMap(fromJavaKey: ##java.lang.Object -> k, 
+                        fromJavaValue: ##java.lang.Object -> v,
+                        m: HashMap[k, v, r]): Map[k, v] \ r with Order[k] =
+        Interop.Util.MapZ.toFlixMap(fromJavaKey, fromJavaValue, ImpMapZ.toMapZ(m))
 
-    pub def toFlixList(m: HashMap[k, v, r]): List[(k, v)] \ r with ComesFromJava[k], ComesFromJava[v] = 
-        Interop.Util.MapZ.toFlixList(ImpMapZ.toMapZ(m))
+    pub def toFlixList(fromJavaKey: ##java.lang.Object -> k, 
+                        fromJavaValue: ##java.lang.Object -> v,
+                        m: HashMap[k, v, r]): List[(k, v)] \ r = 
+        Interop.Util.MapZ.toFlixList(fromJavaKey, fromJavaValue, ImpMapZ.toMapZ(m))
 
 }

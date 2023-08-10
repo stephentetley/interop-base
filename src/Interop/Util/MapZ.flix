@@ -243,23 +243,13 @@ mod Interop.Util.MapZ {
     }
 
 
-    pub def primMapToFlixMap(prim: ##java.util.Map): Map[k, v] with Order[k], ComesFromJava[k], ComesFromJava[v] = region rc {
-        wrapHH(rc, prim) |> toFlixMap
-    }
-
-    ///
-    /// Returns an iterator over all key-value pairs in `m`.
-    ///
-    pub def iterator(rc: Region[r1], m: MapZ[k, v, r]): Iterator[(k, v), r1, r1] \ { r} with ComesFromJava[k], ComesFromJava[v] =
-        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, Interop.Flix.ComesFromJava.fromJavaObject, m)
-
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     /// Can't use RawIterator because no Marshal instance for MapEntry
     ///
     pub def toFlixIterator(rc: Region[r1], 
-                            kcast: ##java.lang.Object -> k, 
-                            vcast: ##java.lang.Object -> v, 
+                            fromJavaKey: ##java.lang.Object -> k, 
+                            fromJavaValue: ##java.lang.Object -> v, 
                             m: MapZ[k, v, r]): Iterator[(k, v), r1, r1] \ r =
         import java.util.Map.entrySet(): ##java.util.Set \ r;
         import java.util.Set.iterator(): ##java.util.Iterator \ r;
@@ -270,7 +260,7 @@ mod Interop.Util.MapZ {
         let getNext = () -> match hasNext(iter) {
             case true  => {
                 let entry = next(iter) |> Interop.Util.MapEntry.castObject(rc);
-                Interop.Util.MapEntry.toKeyValueWith(kcast, vcast, entry) |> Some
+                Interop.Util.MapEntry.toKeyValueWith(fromJavaKey, fromJavaValue, entry) |> Some
             }
             case false => None
         };
@@ -278,16 +268,20 @@ mod Interop.Util.MapZ {
 
 
     
-    pub def toFlixMap(m: MapZ[k, v, r]): Map[k, v] \ { r } with Order[k], ComesFromJava[k], ComesFromJava[v] = region r {
+    pub def toFlixMap(fromJavaKey: ##java.lang.Object -> k, 
+                        fromJavaValue: ##java.lang.Object -> v,
+                        m: MapZ[k, v, r]): Map[k, v] \ r with Order[k] = region rc {
         let step = (acc, entry) -> {
             let (k, v) = entry;
             Map.insert(k, v, acc)
         };
-        iterator(r, m) |> Iterator.foldLeft(step, Map.empty())
+        toFlixIterator(rc, fromJavaKey, fromJavaValue, m) |> Iterator.foldLeft(step, Map.empty())
     } 
 
-    pub def toFlixList(m: MapZ[k, v, r]): List[(k, v)] \ { r } with ComesFromJava[k], ComesFromJava[v] = region r {
-        iterator(r, m) |> Iterator.toList
+    pub def toFlixList(fromJavaKey: ##java.lang.Object -> k, 
+                        fromJavaValue: ##java.lang.Object -> v,
+                        m: MapZ[k, v, r]): List[(k, v)] \ r = region rc {
+        toFlixIterator(rc, fromJavaKey, fromJavaValue, m) |> Iterator.toList
     }
 
 }

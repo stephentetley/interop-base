@@ -274,7 +274,6 @@ mod Interop.Util.ListZ {
         toFlixIterator(rc, fromJava, l) |> Iterator.toList
     }
 
-
     pub def toFlixSet(fromJava: ##java.lang.Object -> a, l: ListZ[a, r]): Set[a] \ r with Order[a] = region rc {
         toFlixIterator(rc, fromJava, l) |> Iterator.toSet
     }

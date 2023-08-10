@@ -65,7 +65,9 @@ mod Interop.Lang.ProcessBuilder {
     pub def getCommand(pb: ProcessBuilder[r]): List[String] \ r = region rc {
         import java.lang.ProcessBuilder.command(): ##java.util.List \ r;
         let ProcessBuilder(pb1) = pb;
-        command(pb1) |> Interop.Util.ListZ.wrapHH(rc) |> Interop.Util.ListZ.toFlixList(Interop.Lang.StringZ.fromJavaObject)
+        command(pb1) 
+            |> Interop.Util.ListZ.wrapHH(rc) 
+            |> Interop.Util.ListZ.toFlixList(Interop.Lang.StringZ.fromJavaObject)
     }
 
     pub def directory!(f: File[r1], pb: ProcessBuilder[r]): ProcessBuilder[r] \ { r, r1 } = 
@@ -80,10 +82,12 @@ mod Interop.Lang.ProcessBuilder {
         File(directory(pb1))
 
     pub def environment(pb: ProcessBuilder[r]): Result[String, Map[String, String]] \ {r, IO} =
-        Result.tryCatch(_ -> {
+        Result.tryCatch(_ -> region rc {
             import java.lang.ProcessBuilder.environment(): ##java.util.Map \ {r, IO};
             let ProcessBuilder(pb1) = pb;
-            environment(pb1) |> Interop.Util.MapZ.primMapToFlixMap
+            environment(pb1) 
+                |> Interop.Util.MapZ.wrapHH(rc)
+                |> Interop.Util.MapZ.toFlixMap(Interop.Lang.StringZ.fromJavaObject, Interop.Lang.StringZ.fromJavaObject)
         })
 
 

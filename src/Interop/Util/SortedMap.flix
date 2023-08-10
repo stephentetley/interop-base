@@ -142,10 +142,6 @@ mod Interop.Util.SortedMap {
         unfoldViaTreeMap(r, step, Map.iterator(r, m))
 
 
-    // pub def primSortedMapToFlixMap(prim: ##java.util.SortedMap): Map[k, v] with Order[k], ComesFromJava[k], ComesFromJava[v] = region rc {
-    //     wrapHH(rc, prim) |> toFlixMap
-    // }
-
     ///
     /// Returns an iterator over all key-value pairs in `m`.
     /// Can't use RawIterator because no Marshal instance for MapEntry
