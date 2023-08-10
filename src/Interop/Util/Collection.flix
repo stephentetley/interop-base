@@ -166,7 +166,7 @@ mod Interop.Util.Collection {
         
 
     pub def toFlixIterator(rc: Region[r1], 
-                            ocast: ##java.lang.Object -> a,
+                            fromJava: ##java.lang.Object -> a,
                             c: Collection[a, r]): Iterator[a, r1, r1] \ r =
         import java.util.Collection.iterator(): ##java.util.Iterator \ r as iterator;
         let Collection(_, c1) = c;
@@ -175,10 +175,16 @@ mod Interop.Util.Collection {
         else 
             iterator(c1) 
                 |> Interop.Util.IteratorZ.wrapHH(rc)
-                |> Interop.Util.IteratorZ.toFlixIterator(rc, ocast)
+                |> Interop.Util.IteratorZ.toFlixIterator(rc, fromJava)
 
-    /// pub def enumerator(r: Region[r1], c: Collection[a, r2]): Iterator[(a, Int32), r] \ {r1, r2}  with Marshal[a] =
-    ///     iterator(r, c) |> Iterator.enumerator
+
+    pub def toFlixList(fromJava: ##java.lang.Object -> a, l: Collection[a, r]): List[a] \ r = region rc {
+        toFlixIterator(rc, fromJava, l) |> Iterator.toList
+    }
+
+    pub def toFlixSet(fromJava: ##java.lang.Object -> a, l: Collection[a, r]): Set[a] \ r with Order[a] = region rc {
+        toFlixIterator(rc, fromJava, l) |> Iterator.toSet
+    }
 
     /// remove...
     pub def unfoldCollection(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): Collection[a, r] \ { r,  ef } with GoesToJava[a] =

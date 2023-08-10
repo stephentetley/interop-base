@@ -167,12 +167,12 @@ mod Interop.Util.ArrayList {
         let ArrayList(_, l1) = l;
         get1(l1, ix)
 
-    pub def add!(x: a, l: ArrayList[a, r]): Bool \ { r } with GoesToJava[a] = 
+    pub def add!(x: a, l: ArrayList[a, r]): Bool \ r with GoesToJava[a] = 
         import java.util.ArrayList.add(##java.lang.Object): Bool \ r;
         let ArrayList(_, l1) = l;
         add(l1, Interop.Flix.GoesToJava.toJavaObject(x))
 
-    pub def addAt!(ix: Int32, x: a, l: ArrayList[a, r]): Result[String, Unit] \ { r } with GoesToJava[a] = 
+    pub def addAt!(ix: Int32, x: a, l: ArrayList[a, r]): Result[String, Unit] \ r with GoesToJava[a] = 
         Result.tryCatch(_ -> {
             import java.util.ArrayList.add(Int32, ##java.lang.Object): Unit \ r;
             let ArrayList(_, l1) = l;
@@ -272,31 +272,30 @@ mod Interop.Util.ArrayList {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def iterator(rc: Region[r1], l: ArrayList[a, r]): Iterator[a, r1, r1] \ { r } with ComesFromJava[a] =
-        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, l)
-
-    ///
-    /// Returns an iterator over `l`.
-    ///
     pub def toFlixIterator(rc: Region[r1], 
-                            ocast: ##java.lang.Object -> a, 
-                            l: ArrayList[a, r]): Iterator[a, r1, r1] \ { r } =
-        import java.util.ArrayList.iterator(): ##java.util.Iterator \ { r } as iterator;
+                            fromJava: ##java.lang.Object -> a, 
+                            l: ArrayList[a, r]): Iterator[a, r1, r1] \ r =
+        import java.util.ArrayList.iterator(): ##java.util.Iterator \ r as iterator;
         let ArrayList(_, l1) = l;
         if (Object.isNull(l1))
             Iterator.empty(rc)
         else 
             iterator(l1) 
                 |> Interop.Util.IteratorZ.wrapHH(rc) 
-                |> Interop.Util.IteratorZ.toFlixIterator(rc, ocast)
+                |> Interop.Util.IteratorZ.toFlixIterator(rc, fromJava)
 
 
+    pub def toFlixList(fromJava: ##java.lang.Object -> a, l: ArrayList[a, r]): List[a] \ r = region rc {
+        toFlixIterator(rc, fromJava, l) |> Iterator.toList
+    }
 
-    ///
-    /// Returns an iterator over `l`.
-    ///
-    pub def enumerator(rc: Region[r1], l: ArrayList[a, r]): Iterator[(Int32, a), r1, r1] \ {r, r1} with ComesFromJava[a] =
-        iterator(rc, l) |> Iterator.enumerator
+    pub def toFlixSet(fromJava: ##java.lang.Object -> a, l: ArrayList[a, r]): Set[a] \ r with Order[a] = region rc {
+        toFlixIterator(rc, fromJava, l) |> Iterator.toSet
+    }
+
+    pub def toArray(r1: Region[r1], fromJava: ##java.lang.Object -> a, l: ArrayList[a, r]): Array[a, r1] \ {r, r1} = region rc {
+        toFlixIterator(rc, fromJava, l) |> Iterator.toArray(r1)
+    }
 
 
     pub def unfoldArrayList(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): ArrayList[a, r] \ {ef, r} with GoesToJava[a] =
@@ -308,30 +307,8 @@ mod Interop.Util.ArrayList {
         };
         loop(st, new1())
 
-    pub def foldArrayList(f: (b, a) -> b \ ef, s: b, l: ArrayList[a, r]): b \ { r, ef } with ComesFromJava[a], GoesToJava[a] = region rc {
-        iterator(rc, l) |> Iterator.foldLeft(f, s)
-    }
-
-    pub def toFlixList(l: ArrayList[a, r]): List[a] \ { r } with ComesFromJava[a] = region rc {
-        iterator(rc, l) |> Iterator.toList
-    }
-
-    pub def toFlixSet(l: ArrayList[a, r]): Set[a] \ { r } with Order[a], ComesFromJava[a] = region rc {
-        let step = (acc, a) -> Set.insert(a, acc);
-        iterator(rc, l) |> Iterator.foldLeft(step, Set.empty())
-    }
-
-    pub def toArray(r1: Region[r1], l: ArrayList[a, r]): Array[a, r1] \ {r, r1} with ComesFromJava[a], GoesToJava[a] =
-        let len = size(l);
-        if (len < 1) 
-            Array#{} @ r1
-        else {
-            /// let head = get(0, l);
-            let arr = Array.new(r1, len);
-            let step = (ix, a) -> {Array.put(a, ix, arr); ix+1};
-            discard foldArrayList(step, 0, l);
-            arr
-        }
-
+    // pub def foldArrayList(f: (b, a) -> b \ ef, s: b, l: ArrayList[a, r]): b \ { r, ef } with ComesFromJava[a], GoesToJava[a] = region rc {
+    //     iterator(rc, l) |> Iterator.foldLeft(f, s)
+    // }
 
 }
