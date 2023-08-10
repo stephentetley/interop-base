@@ -230,52 +230,47 @@ mod Interop.Util.SetZ {
             retainAll(s1, c1)
         })
 
-    pub def primSetToFlixSet(prim: ##java.util.Set): Set[a] with ComesFromJava[a], Order[a] = region rc {
-        wrapHH(rc, prim) |> toFlixSet
-    }
+    // pub def primSetToFlixSet(prim: ##java.util.Set): Set[a] with ComesFromJava[a], Order[a] = region rc {
+    //     wrapHH(rc, prim) |> toFlixSet
+    // }
 
-    /// No Order constraint on `a`
-    pub def primSetToFlixList(prim: ##java.util.Set): List[a] with ComesFromJava[a] = region rc {
-        wrapHH(rc, prim) |> toFlixList
-    }
+    // /// No Order constraint on `a`
+    // pub def primSetToFlixList(prim: ##java.util.Set): List[a] with ComesFromJava[a] = region rc {
+    //     wrapHH(rc, prim) |> toFlixList
+    // }
 
 
-    pub def fromFoldableViaHashSet(rc: Region[r], t: t[a]): SetZ[a, r] \ { r } with Foldable[t], GoesToJava[a] =
+    pub def fromFoldableViaHashSet(rc: Region[r], t: t[a]): SetZ[a, r] \ r with Foldable[t], GoesToJava[a] =
         Interop.Util.HashSet.fromFoldable(rc, t) |> Interop.Util.ImpSetZ.toSetZ
 
     pub def fromFoldableViaHashSetHH(t: t[a]): ##java.util.Set with Foldable[t], GoesToJava[a] = region rc {
         Interop.Util.HashSet.fromFoldable(rc, t) |> Interop.Util.ImpSetZ.toSetHH
     }
 
-    ///
-    /// Returns an iterator over `s`.
-    ///
-    pub def iterator(rc: Region[r1], s: SetZ[a, r]): Iterator[a, r1, r1] \ { r } with ComesFromJava[a] =
-        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, s)
-
 
     ///
     /// Returns an iterator over `s`.
     ///
     pub def toFlixIterator(rc: Region[r1], 
-                            ocast: ##java.lang.Object -> a, 
-                            s: SetZ[a, r]): Iterator[a, r1, r1] \ { r } =
-        import java.util.Set.iterator(): ##java.util.Iterator \ { r };
+                            fromJava: ##java.lang.Object -> a, 
+                            s: SetZ[a, r]): Iterator[a, r1, r1] \ r =
+        import java.util.Set.iterator(): ##java.util.Iterator \ r;
         let SetZ(_, s1) = s;
         if (Object.isNull(s1))
             Iterator.empty(rc)
         else 
-            iterator(s1) |> Interop.Util.IteratorZ.primIteratorToFlixIterator(rc, ocast)
+            iterator(s1) |> Interop.Util.IteratorZ.primIteratorToFlixIterator(rc, fromJava)
 
-    pub def toFlixSet(s: SetZ[a, r]): Set[a] \ { r } with Order[a], ComesFromJava[a] = region rc {
-        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, s) |> Iterator.toSet
+    pub def toFlixList(fromJava: ##java.lang.Object -> a, s: SetZ[a, r]): List[a] \ r = region rc {
+        toFlixIterator(rc, fromJava, s) |> Iterator.toList
     }
 
-    pub def toFlixList(s: SetZ[a, r]): List[a] \ { r } with ComesFromJava[a] = region rc {
-        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, s) |> Iterator.toList
+    pub def toFlixSet(fromJava: ##java.lang.Object -> a, s: SetZ[a, r]): Set[a] \ r with Order[a] = region rc {
+        toFlixIterator(rc, fromJava, s) |> Iterator.toSet
     }
 
-    pub def toFlixVector(s: SetZ[a, r]): Vector[a] \ { r } with ComesFromJava[a] = region rc {
-        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, s) |> Iterator.toVector
+    pub def toFlixVector(fromJava: ##java.lang.Object -> a, s: SetZ[a, r]): Vector[a] \ r = region rc {
+        toFlixIterator(rc, fromJava, s) |> Iterator.toVector
     }
+
 }

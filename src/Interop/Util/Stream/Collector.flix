@@ -68,7 +68,9 @@ mod Interop.Util.Stream.Collector {
     pub def characteristics(c: Collector[t, a, ef, ans]): Vector[CollectorCharacteristics] = region rc {
         import java.util.stream.Collector.characteristics(): ##java.util.Set \ {};
         let Collector(c1) = c;
-        characteristics(c1) |> Interop.Util.SetZ.wrapHH(rc) |> Interop.Util.SetZ.toFlixVector
+        characteristics(c1) 
+            |> Interop.Util.SetZ.wrapHH(rc) 
+            |> Interop.Util.SetZ.toFlixVector(Interop.Util.Stream.CollectorCharacteristics.fromJavaObject)
     }
 
     pub def supplier(c: Collector[t, a, ef, ans]): Supplier[a, ef] =

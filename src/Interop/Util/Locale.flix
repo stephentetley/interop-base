@@ -375,10 +375,12 @@ mod Interop.Util.Locale {
     }
 
     pub def getIsoCountriesWithIsoCountryCode(icc: LocaleIsoCountryCode): Result[String, Set[String]] =
-        Result.tryCatch(_ -> {
+        Result.tryCatch(_ -> region rc {
             import static java.util.Locale.getISOCountries(##java.util.Locale$IsoCountryCode): ##java.util.Set \ {};
             let LocaleIsoCountryCode(icc1) = icc;
-            getISOCountries(icc1) |> Interop.Util.SetZ.primSetToFlixSet
+            getISOCountries(icc1) 
+                |> Interop.Util.SetZ.wrapHH(rc)
+                |> Interop.Util.SetZ.toFlixSet(Interop.Lang.StringZ.fromJavaObject)
         })
 
 
@@ -398,23 +400,29 @@ mod Interop.Util.Locale {
             getExtension(x1, key) |> Interop.Flix.Util.getStringWithoutNull(default = "")
         })
 
-    pub def getExtensionKeys(x: Locale): Set[Char] = 
+    pub def getExtensionKeys(x: Locale): Set[Char] = region rc {
         import java.util.Locale.getExtensionKeys(): ##java.util.Set \ {};
         let Locale(x1) = x;
-        getExtensionKeys(x1) |> Interop.Util.SetZ.primSetToFlixSet
+        getExtensionKeys(x1) 
+            |> Interop.Util.SetZ.wrapHH(rc)
+            |> Interop.Util.SetZ.toFlixSet(Interop.Flix.ComesFromJava.charFromJavaObject)
+    }
 
-
-    pub def getUnicodeLocaleAttributes(x: Locale): Set[String] =
+    pub def getUnicodeLocaleAttributes(x: Locale): Set[String] = region rc {
         import java.util.Locale.getUnicodeLocaleAttributes(): ##java.util.Set \ {};
         let Locale(x1) = x;
-        getUnicodeLocaleAttributes(x1) |> Interop.Util.SetZ.primSetToFlixSet
+        getUnicodeLocaleAttributes(x1) 
+            |> Interop.Util.SetZ.wrapHH(rc)
+            |> Interop.Util.SetZ.toFlixSet(Interop.Lang.StringZ.fromJavaObject)
+    }
 
-
-    pub def getUnicodeLocaleKeys(x: Locale): Set[String] = 
+    pub def getUnicodeLocaleKeys(x: Locale): Set[String] = region rc {
         import java.util.Locale.getUnicodeLocaleKeys(): ##java.util.Set \ {};
         let Locale(x1) = x;
-        getUnicodeLocaleKeys(x1) |> Interop.Util.SetZ.primSetToFlixSet
-
+        getUnicodeLocaleKeys(x1) 
+            |> Interop.Util.SetZ.wrapHH(rc)
+            |> Interop.Util.SetZ.toFlixSet(Interop.Lang.StringZ.fromJavaObject)
+    }
 
     pub def lookup(priorityList: List[LanguageRange], locales: List[Locale]): Result[String, Option[Locale]] =
         Result.tryCatch(_ -> {

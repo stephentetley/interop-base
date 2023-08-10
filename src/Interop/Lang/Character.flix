@@ -53,6 +53,11 @@ mod Interop.Lang.Character {
     pub def wrapHH(prim: ##java.lang.Character): Character = 
         Character(prim)
 
+
+    pub def fromJavaObject(o: ##java.lang.Object): Character = 
+        Character(unchecked_cast(o as ##java.lang.Character))
+
+
     pub def toString(x: Character): String =
         import java.lang.Character.toString(): String \ {};
         let Character(x1) = x;

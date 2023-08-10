@@ -74,6 +74,10 @@ mod Interop.NIO.Charset.Charset {
     pub def wrapHH(prim: ##java.nio.charset.Charset): Charset = 
         Charset(prim)
 
+    pub def fromJavaObject(o: ##java.lang.Object): Charset = 
+        Charset(unchecked_cast(o as ##java.nio.charset.Charset))
+
+
     pub def forName(name: String): Result[String, Charset] =
         Result.tryCatch(_ -> {
             import static java.nio.charset.Charset.forName(String): ##java.nio.charset.Charset \ {};
@@ -162,14 +166,16 @@ mod Interop.NIO.Charset.Charset {
         let Charset(y1) = y;
         contains(x1, y1)
 
-    pub def aliases(x: Charset): Set[String] =
+    pub def aliases(x: Charset): Set[String] = region rc {
         import java.nio.charset.Charset.aliases(): ##java.util.Set \ {};
         let Charset(x1) = x;
-        aliases(x1) |> Interop.Util.SetZ.primSetToFlixSet
+        aliases(x1) |> Interop.Util.SetZ.wrapHH(rc) |> Interop.Util.SetZ.toFlixSet(Interop.Lang.StringZ.fromJavaObject)
+    }
 
-    pub def availableCharsets(): Map[String, Charset] \ IO =
+    pub def availableCharsets(): Map[String, Charset] \ IO = region rc {
         import static java.nio.charset.Charset.availableCharsets(): ##java.util.SortedMap \ IO;
-        availableCharsets() |> Interop.Util.SortedMap.primSortedMapToFlixMap
+        availableCharsets() |> Interop.Util.SortedMap.wrapHH(rc) |> Interop.Util.SortedMap.toFlixMap(Interop.Lang.StringZ.fromJavaObject, fromJavaObject)
+    }
 
     /// TODO wrap ByteBuffer and CharBuffer
 

@@ -139,12 +139,12 @@ mod Interop.Util.LinkedList {
         let LinkedList(_, l1) = l;
         get(l1, ix) |> Interop.Flix.ComesFromJava.fromJavaObject
 
-    pub def add!(x: a, l: LinkedList[a, r]): Bool \ { r } with GoesToJava[a] = 
+    pub def add!(x: a, l: LinkedList[a, r]): Bool \ r with GoesToJava[a] = 
         import java.util.LinkedList.add(##java.lang.Object): Bool \ r;
         let LinkedList(_, l1) = l;
         add(l1, Interop.Flix.GoesToJava.toJavaObject(x))
 
-    pub def addAt!(ix: Int32, x: a, l: LinkedList[a, r]): Result[String, Unit] \ { r } with GoesToJava[a] = 
+    pub def addAt!(ix: Int32, x: a, l: LinkedList[a, r]): Result[String, Unit] \ r with GoesToJava[a] = 
         Result.tryCatch(_ -> {
             import java.util.LinkedList.add(Int32, ##java.lang.Object): Unit \ r;
             let LinkedList(_, l1) = l;
@@ -231,12 +231,12 @@ mod Interop.Util.LinkedList {
     //     Iterator.forEach(x -> discard add!(x, als), iter1);
     //     als
 
-    pub def fromFoldable(r: Region[r], t: t[a]): LinkedList[a, r] \ { r } with Foldable[t], GoesToJava[a] =
+    pub def fromFoldable(r: Region[r], t: t[a]): LinkedList[a, r] \ r with Foldable[t], GoesToJava[a] =
         let als = new(r);
         Foldable.forEach(x -> discard add!(x, als), t);
         als
 
-    pub def fromFoldableWith(r: Region[r], ocast: a -> ##java.lang.Object, t: t[a]): LinkedList[a, r] \ { r } with Foldable[t] =
+    pub def fromFoldableWith(r: Region[r], ocast: a -> ##java.lang.Object, t: t[a]): LinkedList[a, r] \ r with Foldable[t] =
         let als = new(r);
         Foldable.forEach(x -> discard addWith!(x, ocast, als), t);
         als
@@ -245,31 +245,18 @@ mod Interop.Util.LinkedList {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def iterator(rc: Region[r1], l: LinkedList[a, r]): Iterator[a, r1, r1] \ { r } with ComesFromJava[a] =
-        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, l)
-
-    ///
-    /// Returns an iterator over `l`.
-    ///
     pub def toFlixIterator(rc: Region[r1], 
-                            ocast: ##java.lang.Object -> a, 
-                            l: LinkedList[a, r]): Iterator[a, r1, r1] \ { r } =
-        import java.util.LinkedList.iterator(): ##java.util.Iterator \ { r } as iterator;
+                            fromJava: ##java.lang.Object -> a, 
+                            l: LinkedList[a, r]): Iterator[a, r1, r1] \ r =
+        import java.util.LinkedList.iterator(): ##java.util.Iterator \ r as iterator;
         let LinkedList(_, l1) = l;
         if (Object.isNull(l1))
             Iterator.empty(rc)
         else 
             iterator(l1) 
                 |> Interop.Util.IteratorZ.wrapHH(rc) 
-                |> Interop.Util.IteratorZ.toFlixIterator(rc, ocast)
+                |> Interop.Util.IteratorZ.toFlixIterator(rc, fromJava)
 
-
-
-    ///
-    /// Returns an iterator over `l`.
-    ///
-    pub def enumerator(rc: Region[r1], l: LinkedList[a, r]): Iterator[(Int32, a), r1, r1] \ { r, r1 } with ComesFromJava[a] =
-        iterator(rc, l) |> Iterator.enumerator
 
 
     pub def unfoldLinkedList(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): LinkedList[a, r] \ {ef, r} with GoesToJava[a] =
@@ -281,30 +268,18 @@ mod Interop.Util.LinkedList {
         };
         loop(st, new1())
 
-    pub def foldLinkedList(f: (b, a) -> b \ ef, s: b, l: LinkedList[a, r]): b \ { r, ef } with ComesFromJava[a], GoesToJava[a] = region r {
-        iterator(r, l) |> Iterator.foldLeft(f, s)
+
+    pub def toFlixList(fromJava: ##java.lang.Object -> a, l: LinkedList[a, r]): List[a] \ r = region rc {
+        toFlixIterator(rc, fromJava, l) |> Iterator.toList
     }
 
-    pub def toFlixList(l: LinkedList[a, r]): List[a] \ { r } with ComesFromJava[a], GoesToJava[a] = region r {
-        iterator(r, l) |> Iterator.toList
+    pub def toFlixSet(fromJava: ##java.lang.Object -> a, l: LinkedList[a, r]): Set[a] \ r with Order[a] = region rc {
+        toFlixIterator(rc, fromJava, l) |> Iterator.toSet
     }
 
-    pub def toFlixSet(l: LinkedList[a, r]): Set[a] \ { r } with Order[a], ComesFromJava[a] = region r {
-        let step = (acc, a) -> Set.insert(a, acc);
-        iterator(r, l) |> Iterator.foldLeft(step, Set.empty())
+    pub def toFlixArray(r1: Region[r1], fromJava: ##java.lang.Object -> a, l: LinkedList[a, r2]): Array[a, r1] \ {r1, r2} = region rc {
+        toFlixIterator(rc, fromJava, l) |> Iterator.toArray(r1)
     }
-
-    pub def toArray(r1: Region[r1], l: LinkedList[a, r2]): Array[a, r1] \ {r1, r2} with ComesFromJava[a], GoesToJava[a] =
-        let len = size(l);
-        if (len < 1) 
-            Array#{} @ r1
-        else {
-            ///let head = get(0, l);
-            let aout = Array.new(r1, len);
-            let step = (ix, a) -> {Array.put(a, ix, aout); ix+1};
-            discard foldLinkedList(step, 0, l);
-            aout
-        }
 
 
 }

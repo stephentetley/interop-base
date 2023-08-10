@@ -254,16 +254,11 @@ mod Interop.Util.ListZ {
     }
 
 
-    ///
-    /// Returns an iterator over `l`.
-    ///
-    pub def iterator(rc: Region[r1], l: ListZ[a, r]): Iterator[a, r1, r1] \ { r } with ComesFromJava[a] =
-        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, l)
 
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def toFlixIterator(rc: Region[r1], ocast: ##java.lang.Object -> a, l: ListZ[a, r]): Iterator[a, r1, r1] \ { r} =
+    pub def toFlixIterator(rc: Region[r1], fromJava: ##java.lang.Object -> a, l: ListZ[a, r]): Iterator[a, r1, r1] \ { r} =
         import java.util.List.iterator(): ##java.util.Iterator \ r;
         let ListZ(_, l1) = l;
         if (Object.isNull(l1))
@@ -271,7 +266,7 @@ mod Interop.Util.ListZ {
         else 
             iterator(l1) 
                 |> Interop.Util.IteratorZ.wrapHH(rc)
-                |> Interop.Util.IteratorZ.toFlixIterator(rc, ocast)
+                |> Interop.Util.IteratorZ.toFlixIterator(rc, fromJava)
 
 
 

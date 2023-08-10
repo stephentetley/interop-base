@@ -140,18 +140,12 @@ mod Interop.Util.VectorZ {
         })
 
 
-    ///
-    /// Returns an iterator over `s`.
-    ///
-    pub def iterator(rc: Region[r1], v: VectorZ[a, r]): Iterator[a, r1, r1] \ r with ComesFromJava[a] =
-        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, v)
-
 
     ///
     /// Returns an iterator over `s`.
     ///
     pub def toFlixIterator(rc: Region[r1], 
-                            ocast: ##java.lang.Object -> a, 
+                            fromJava: ##java.lang.Object -> a, 
                             v: VectorZ[a, r]): Iterator[a, r1, r1] \ { r } =
         import java.util.Vector.iterator(): ##java.util.Iterator \ r;
         let VectorZ(_, v1) = v;
@@ -160,16 +154,15 @@ mod Interop.Util.VectorZ {
         else 
             iterator(v1) 
                 |> Interop.Util.IteratorZ.wrapHH(rc)
-                |> Interop.Util.IteratorZ.toFlixIterator(rc, ocast)
+                |> Interop.Util.IteratorZ.toFlixIterator(rc, fromJava)
 
-    pub def toFlixSet(v: VectorZ[a, r]): Set[a] \ { r } with Order[a], ComesFromJava[a] =
-        region r2 {
-            toFlixIterator(r2, Interop.Flix.ComesFromJava.fromJavaObject, v) |> Iterator.toSet
-        }
+    pub def toFlixList(fromJava: ##java.lang.Object -> a, v: VectorZ[a, r]): List[a] \ { r } with ComesFromJava[a] = region rc {
+        toFlixIterator(rc, fromJava, v) |> Iterator.toList
+    }
+    
+    pub def toFlixSet(fromJava: ##java.lang.Object -> a, v: VectorZ[a, r]): Set[a] \ { r } with Order[a] = region rc {
+        toFlixIterator(rc, fromJava, v) |> Iterator.toSet
+    }
 
-    pub def toFlixList(v: VectorZ[a, r]): List[a] \ { r } with ComesFromJava[a] =
-        region r2 {
-            toFlixIterator(r2, Interop.Flix.ComesFromJava.fromJavaObject, v) |> Iterator.toList
-        }
 
 }

@@ -66,6 +66,10 @@ mod Interop.Util.Stream.CollectorCharacteristics {
     pub def wrapHH(prim: ##java.util.stream.Collector$Characteristics): CollectorCharacteristics = 
         CollectorCharacteristics(prim)
 
+    pub def fromJavaObject(o: ##java.lang.Object): CollectorCharacteristics = 
+        CollectorCharacteristics(unchecked_cast(o as ##java.util.stream.Collector$Characteristics))
+
+
     pub def toString(t: CollectorCharacteristics): String = 
         import java.util.stream.Collector$Characteristics.toString(): String \ {};
         let CollectorCharacteristics(t1) = t;
