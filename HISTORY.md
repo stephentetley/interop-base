@@ -1,3 +1,6 @@
+### v0.7.1
+   Work on removing `ComesFromJava`.
+
 ### v0.7.0
    Removed `Marshal` typeclass, it is replaced by `GoesToJava` and `ComesFromJava` (`ComesFromJava` has problems and and will itself be removed).
    Made `CharSequence` immutable.

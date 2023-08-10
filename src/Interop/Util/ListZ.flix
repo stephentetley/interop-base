@@ -253,9 +253,6 @@ mod Interop.Util.ListZ {
         Interop.Util.LinkedList.fromFoldable(rc, t) |> Interop.Util.ImpListZ.toListHH
     }
 
-    pub def primListToFlixList(prim: ##java.util.List): List[a] with ComesFromJava[a] = region rc {
-        wrapHH(rc, prim) |> toFlixList   
-    }
 
     ///
     /// Returns an iterator over `l`.
@@ -278,18 +275,13 @@ mod Interop.Util.ListZ {
 
 
 
-    pub def toFlixList(l: ListZ[a, r]): List[a] \ r with ComesFromJava[a] = region rc {
-        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, l) |> Iterator.toList
-    }
-
-
-    pub def toFlixListWith(fromJava: ##java.lang.Object -> a, l: ListZ[a, r]): List[a] \ r = region rc {
+    pub def toFlixList(fromJava: ##java.lang.Object -> a, l: ListZ[a, r]): List[a] \ r = region rc {
         toFlixIterator(rc, fromJava, l) |> Iterator.toList
     }
 
 
-    pub def toSet(l: ListZ[a, r]): Set[a] \ r with Order[a], ComesFromJava[a] = region rc {
-        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, l) |> Iterator.toSet
+    pub def toFlixSet(fromJava: ##java.lang.Object -> a, l: ListZ[a, r]): Set[a] \ r with Order[a] = region rc {
+        toFlixIterator(rc, fromJava, l) |> Iterator.toSet
     }
 
 

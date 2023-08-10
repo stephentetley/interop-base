@@ -95,7 +95,7 @@ mod Interop.Util.Locale.LanguageRange {
     pub def parse(ranges: String): Result[String, List[LanguageRange]] = 
         Result.tryCatch(_ -> region rc {
             import static java.util.Locale$LanguageRange.parse(String): ##java.util.List \ {};
-            parse(ranges) |> Interop.Util.ListZ.wrapHH(rc) |> Interop.Util.ListZ.toFlixListWith(fromJavaObject)
+            parse(ranges) |> Interop.Util.ListZ.wrapHH(rc) |> Interop.Util.ListZ.toFlixList(fromJavaObject)
         })
 
 
@@ -106,7 +106,7 @@ mod Interop.Util.Locale.LanguageRange {
             let marshalKey = Interop.Flix.GoesToJava.toJavaObject;
             let marshalValue = Interop.Util.ListZ.fromFoldableViaArrayListHH >> Interop.Flix.GoesToJava.unsafeCastToObject;
             let cs1 = Interop.Util.MapZ.fromFlixMapViaHashMapHHWith(marshalKey, marshalValue, customizations);
-            parse(ranges, cs1) |> Interop.Util.ListZ.wrapHH(rc) |> Interop.Util.ListZ.toFlixListWith(fromJavaObject)
+            parse(ranges, cs1) |> Interop.Util.ListZ.wrapHH(rc) |> Interop.Util.ListZ.toFlixList(fromJavaObject)
         })
 
 
@@ -118,7 +118,7 @@ mod Interop.Util.Locale.LanguageRange {
             let marshalKey = Interop.Flix.GoesToJava.toJavaObject;
             let marshalValue = Interop.Util.ListZ.fromFoldableViaArrayListHH >> Interop.Flix.GoesToJava.unsafeCastToObject;
             let cs1 = Interop.Util.MapZ.fromFlixMapViaHashMapHHWith(marshalKey, marshalValue, customizations);
-            mapEquivalents(ps1, cs1) |> Interop.Util.ListZ.wrapHH(rc) |> Interop.Util.ListZ.toFlixListWith(fromJavaObject)
+            mapEquivalents(ps1, cs1) |> Interop.Util.ListZ.wrapHH(rc) |> Interop.Util.ListZ.toFlixList(fromJavaObject)
         })
 
 

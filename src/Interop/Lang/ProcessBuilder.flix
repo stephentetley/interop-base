@@ -62,11 +62,11 @@ mod Interop.Lang.ProcessBuilder {
         ProcessBuilder(command(pb1, ls1))
 
 
-    pub def getCommand(pb: ProcessBuilder[r]): List[String] \ r =
+    pub def getCommand(pb: ProcessBuilder[r]): List[String] \ r = region rc {
         import java.lang.ProcessBuilder.command(): ##java.util.List \ r;
         let ProcessBuilder(pb1) = pb;
-        command(pb1) |> Interop.Util.ListZ.primListToFlixList
-
+        command(pb1) |> Interop.Util.ListZ.wrapHH(rc) |> Interop.Util.ListZ.toFlixList(Interop.Lang.StringZ.fromJavaObject)
+    }
 
     pub def directory!(f: File[r1], pb: ProcessBuilder[r]): ProcessBuilder[r] \ { r, r1 } = 
         import java.lang.ProcessBuilder.directory(##java.io.File): ##java.lang.ProcessBuilder \ {r, r1} ;
