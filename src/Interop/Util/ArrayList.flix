@@ -238,12 +238,12 @@ mod Interop.Util.ArrayList {
         })
 
 
-    pub def sort!(f: (a, a) -> Int32, l: ArrayList[a, r]): Result[String, Unit] \ r with ComesFromJava[a] =
-        let f1 = Interop.Util.Comparator.makeComparator(f);
+    pub def sort!(fromJava: ##java.lang.Object -> a, f: (a, a) -> Int32, l: ArrayList[a, r]): Result[String, Unit] \ r =
+        let f1 = Interop.Util.Comparator.makeComparator(fromJava, f);
         sortWithComparator!(f1, l)
 
 
-    pub def sortWithComparator!(c: Comparator[a], l: ArrayList[a, r]): Result[String, Unit] \ r with ComesFromJava[a] =
+    pub def sortWithComparator!(c: Comparator[a], l: ArrayList[a, r]): Result[String, Unit] \ r =
         Result.tryCatch(_ -> {
             import java.util.ArrayList.sort(##java.util.Comparator): Unit \ r; 
             let ArrayList(_, l1) = l;
@@ -263,7 +263,7 @@ mod Interop.Util.ArrayList {
         Foldable.forEach(x -> discard add!(x, als), t);
         als
 
-    pub def fromFoldableWith(rc: Region[r], ocast: a -> ##java.lang.Object, t: t[a]): ArrayList[a, r] \ r  with Foldable[t] =
+    pub def fromFoldableWith(rc: Region[r], ocast: a -> ##java.lang.Object, t: t[a]): ArrayList[a, r] \ r with Foldable[t] =
         let als = new(rc);
         Foldable.forEach(x -> discard addWith!(x, ocast, als), t);
         als

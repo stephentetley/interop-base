@@ -34,10 +34,10 @@ mod Interop.Util.Comparator {
     use Interop.Flix.ComesFromJava
 
 
-    pub def makeComparator(f: (a, a) -> Int32 \ ef): Comparator[a] \ ef with ComesFromJava[a] = 
+    pub def makeComparator(fromJava: ##java.lang.Object -> a, f: (a, a) -> Int32 \ ef): Comparator[a] \ ef = 
         let f1 = (o1, o2) -> {
-            let a = Interop.Flix.ComesFromJava.fromJavaObject(o1); 
-            let b = Interop.Flix.ComesFromJava.fromJavaObject(o2); 
+            let a = fromJava(o1); 
+            let b = fromJava(o2); 
             f(a, b)
         };
         unchecked_cast((new ##java.util.Comparator {

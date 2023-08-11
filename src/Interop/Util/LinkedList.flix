@@ -212,12 +212,12 @@ mod Interop.Util.LinkedList {
         })
 
 
-    pub def sort!(f: (a, a) -> Int32, l: LinkedList[a, r]): Result[String, Unit] \ r with ComesFromJava[a] =
-        let f1 = Interop.Util.Comparator.makeComparator(f);
+    pub def sort!(fromJava: ##java.lang.Object -> a, f: (a, a) -> Int32, l: LinkedList[a, r]): Result[String, Unit] \ r =
+        let f1 = Interop.Util.Comparator.makeComparator(fromJava, f);
         sortWithComparator!(f1, l)
 
 
-    pub def sortWithComparator!(c: Comparator[a], l: LinkedList[a, r]): Result[String, Unit] \ r with ComesFromJava[a] =
+    pub def sortWithComparator!(c: Comparator[a], l: LinkedList[a, r]): Result[String, Unit] \ r =
         Result.tryCatch(_ -> {
             import java.util.LinkedList.sort(##java.util.Comparator): Unit \ r; 
             let LinkedList(_, l1) = l;

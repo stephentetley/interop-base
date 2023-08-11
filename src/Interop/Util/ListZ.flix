@@ -227,12 +227,12 @@ mod Interop.Util.ListZ {
         })
 
 
-    pub def sort!(f: (a, a) -> Int32, l: ListZ[a, r]): Result[String, Unit] \ r with ComesFromJava[a] =
-        let f1 = Interop.Util.Comparator.makeComparator(f);
+    pub def sort!(fromJava: ##java.lang.Object -> a, f: (a, a) -> Int32, l: ListZ[a, r]): Result[String, Unit] \ r =
+        let f1 = Interop.Util.Comparator.makeComparator(fromJava, f);
         sortWithComparator!(f1, l)
 
 
-    pub def sortWithComparator!(c: Comparator[a], l: ListZ[a, r]): Result[String, Unit] \ r with ComesFromJava[a] =
+    pub def sortWithComparator!(c: Comparator[a], l: ListZ[a, r]): Result[String, Unit] \ r =
         Result.tryCatch(_ -> {
             import java.util.List.sort(##java.util.Comparator): Unit \ r; 
             let ListZ(_, l1) = l;
