@@ -56,9 +56,10 @@ mod Interop.Util.Collection {
     use Interop.Util.ImpCollection
     use Interop.Util.Stream.Stream
     use Interop.Util.Stream.Stream.{Stream}
+    use Interop.Util.Function.ConsumerZ
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
+    use Interop.Util.Function.PredicateZ
     use Interop.Util.Function.PredicateZ.{PredicateZ}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
 
@@ -113,21 +114,19 @@ mod Interop.Util.Collection {
         })
 
 
-    pub def removeIf![a: Type, ef: Eff, r: Region]
-                        (f: a -> Bool \ ef, c: Collection[a, r]): Result[String, Bool] \  {ef, r} with ComesFromJava[a] =
+    pub def removeIf!(f: PredicateZ[a, ef], c: Collection[a, r]): Result[String, Bool] \ {ef, r} =
         Result.tryCatch(_ -> {
             import java.util.Collection.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let Collection(_, c1) = c;
-            let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
-            checked_ecast(removeIf(c1, f1))
+            let PredicateZ(f1) = f;
+            removeIf(c1, f1)
         })
 
-    pub def forEach[a: Type, ef: Eff, r: Region]
-                    (f: a -> Unit \ ef, c: Collection[a, r]): Result[String, Unit] \  {ef, r} with ComesFromJava[a] =
+    pub def forEach(f: ConsumerZ[a, ef], c: Collection[a, r]): Result[String, Unit] \ {ef, r}  =
         Result.tryCatch(_ -> {
             import java.util.Collection.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let Collection(_, c1) = c;
-            let ConsumerZ(f1) = Interop.Util.Function.ConsumerZ.makeConsumerZ(f);
+            let ConsumerZ(f1) = f;
             forEach(c1, f1)
         })
 
@@ -161,8 +160,6 @@ mod Interop.Util.Collection {
         Interop.Util.LinkedList.fromFoldable(rc, t) |> Interop.Util.ImpCollection.toCollectionHH
     }
 
-    pub def iterator(rc: Region[r1], c: Collection[a, r]): Iterator[a, r1, r1] \ { r } with ComesFromJava[a] =
-        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, c)
         
 
     pub def toFlixIterator(rc: Region[r1], 
@@ -187,7 +184,7 @@ mod Interop.Util.Collection {
     }
 
     /// remove...
-    pub def unfoldCollection(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): Collection[a, r] \ { r,  ef } with GoesToJava[a] =
+    pub def unfoldCollection(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): Collection[a, r] \ {ef,  r} with GoesToJava[a] =
         import new java.util.LinkedList(): ##java.util.LinkedList \ r as new1;
         import java.util.LinkedList.add(##java.lang.Object): Bool \ r as add1;
         def loop(st1, acc) = match f(st1) {

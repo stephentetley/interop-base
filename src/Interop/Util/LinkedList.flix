@@ -86,9 +86,10 @@ mod Interop.Util.LinkedList {
     use Interop.Util.Collection.{Collection}
     use Interop.Util.Comparator
     use Interop.Util.ImpCollection
+    use Interop.Util.Function.ConsumerZ
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
+    use Interop.Util.Function.PredicateZ
     use Interop.Util.Function.PredicateZ.{PredicateZ}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
     
@@ -134,10 +135,10 @@ mod Interop.Util.LinkedList {
         size(l1)
 
 
-    pub def get(ix: Int32, l: LinkedList[a, r]): a \ r with ComesFromJava[a] = 
+    pub def get(fromJava: ##java.lang.Object -> a, ix: Int32, l: LinkedList[a, r]): a \ r = 
         import java.util.LinkedList.get(Int32): ##java.lang.Object \ r;
         let LinkedList(_, l1) = l;
-        get(l1, ix) |> Interop.Flix.ComesFromJava.fromJavaObject
+        get(l1, ix) |> fromJava
 
     pub def add!(x: a, l: LinkedList[a, r]): Bool \ r with GoesToJava[a] = 
         import java.util.LinkedList.add(##java.lang.Object): Bool \ r;
@@ -182,13 +183,12 @@ mod Interop.Util.LinkedList {
             removeAll(l1, c1)
         })
 
-    pub def removeIf![a: Type, ef: Eff, r: Region]
-                        (f: a -> Bool \ ef, l: LinkedList[a, r]): Result[String, Bool] \  {ef, r} with ComesFromJava[a] =
+    pub def removeIf!(f: PredicateZ[a, ef], l: LinkedList[a, r]): Result[String, Bool] \ {ef, r} =
         Result.tryCatch(_ -> {
             import java.util.LinkedList.removeIf(##java.util.function.Predicate): Bool \ {ef, r}; 
             let LinkedList(_, l1) = l;
-            let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
-            checked_ecast(removeIf(l1, f1))
+            let PredicateZ(f1) = f;
+            removeIf(l1, f1)
         })
 
 
@@ -202,12 +202,11 @@ mod Interop.Util.LinkedList {
         })
 
 
-    pub def forEach[a: Type, ef: Eff, r: Region]
-                    (f: a -> Unit \ ef, l: LinkedList[a, r]): Result[String, Unit] \  {ef, r} with ComesFromJava[a] =
+    pub def forEach(f: ConsumerZ[a, ef], l: LinkedList[a, r]): Result[String, Unit] \ {ef, r} =
         Result.tryCatch(_ -> {
             import java.util.LinkedList.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let LinkedList(_, l1) = l;
-            let ConsumerZ(f1) = Interop.Util.Function.ConsumerZ.makeConsumerZ(f);
+            let ConsumerZ(f1) = f;
             forEach(l1, f1)
         })
 

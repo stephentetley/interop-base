@@ -66,9 +66,8 @@ mod Interop.Util.SetZ {
     use Interop.Util.Collection
     use Interop.Util.Collection.{Collection}
     use Interop.Util.ImpSetZ
+    use Interop.Util.Function.PredicateZ
     use Interop.Util.Function.PredicateZ.{PredicateZ}
-    use Interop.Flix.ComesFromJava
-    use Interop.Flix.GoesToJava
     use Interop.Flix.GoesToJava
     use Interop.Flix.MutMarshal
 
@@ -213,12 +212,11 @@ mod Interop.Util.SetZ {
         })
 
     
-    pub def removeIf![a: Type, ef: Eff, r: Region]
-                        (f: a -> Bool \ ef, s: SetZ[a, r]): Result[String, Bool] \ {ef, r} with ComesFromJava[a] =
+    pub def removeIf!(f: PredicateZ[a, ef], s: SetZ[a, r]): Result[String, Bool] \ {ef, r} =
         Result.tryCatch(_ -> {
             import java.util.Set.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let SetZ(_, s1) = s;
-            let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
+            let PredicateZ(f1) = f;
             checked_ecast(removeIf(s1, f1))
         })
 
@@ -229,15 +227,6 @@ mod Interop.Util.SetZ {
             let Collection(_, c1) = c;
             retainAll(s1, c1)
         })
-
-    // pub def primSetToFlixSet(prim: ##java.util.Set): Set[a] with ComesFromJava[a], Order[a] = region rc {
-    //     wrapHH(rc, prim) |> toFlixSet
-    // }
-
-    // /// No Order constraint on `a`
-    // pub def primSetToFlixList(prim: ##java.util.Set): List[a] with ComesFromJava[a] = region rc {
-    //     wrapHH(rc, prim) |> toFlixList
-    // }
 
 
     pub def fromFoldableViaHashSet(rc: Region[r], t: t[a]): SetZ[a, r] \ r with Foldable[t], GoesToJava[a] =

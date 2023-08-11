@@ -39,8 +39,8 @@ mod Interop.Util.MapEntry {
 
 
     /// MapEntry cannot be an instance of Marshal because it carries a region.
-    pub def castObject(_: Region[r], o: ##java.lang.Object): MapEntry[k, v, r] \ r = 
-        unchecked_cast(MapEntry(unchecked_cast(o as ##java.util.Map$Entry)) as _ \ r)
+    pub def castObject(_: Region[r], o: ##java.lang.Object): MapEntry[k, v, r] = 
+        MapEntry(unchecked_cast(o as ##java.util.Map$Entry))
 
 
     pub def equals(x: MapEntry[k, v, r], y: MapEntry[k, v, r]): Bool \ r =

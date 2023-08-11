@@ -93,7 +93,6 @@ mod Interop.Util.ArrayList {
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
     use Interop.Util.Function.PredicateZ
     use Interop.Util.Function.PredicateZ.{PredicateZ}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
     
@@ -307,8 +306,5 @@ mod Interop.Util.ArrayList {
         };
         loop(st, new1())
 
-    // pub def foldArrayList(f: (b, a) -> b \ ef, s: b, l: ArrayList[a, r]): b \ { r, ef } with ComesFromJava[a], GoesToJava[a] = region rc {
-    //     iterator(rc, l) |> Iterator.foldLeft(f, s)
-    // }
 
 }

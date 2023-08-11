@@ -81,8 +81,8 @@ mod Interop.Util.HashSet {
     use Interop.Util.Collection
     use Interop.Util.Collection.{Collection}
     use Interop.Util.ImpSetZ
+    use Interop.Util.Function.PredicateZ
     use Interop.Util.Function.PredicateZ.{PredicateZ}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
 
@@ -163,13 +163,12 @@ mod Interop.Util.HashSet {
         })
 
     
-    pub def removeIf![a: Type, ef: Eff, r: Region]
-                        (f: a -> Bool \ ef, s: HashSet[a, r]): Result[String, Bool] \  {ef, r} with ComesFromJava[a] =
+    pub def removeIf!(f: PredicateZ[a, ef], s: HashSet[a, r]): Result[String, Bool] \ {ef, r} =
         Result.tryCatch(_ -> {
             import java.util.HashSet.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let HashSet(_, s1) = s;
-            let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
-            unchecked_cast(removeIf(s1, f1) as _ \ {ef, r})
+            let PredicateZ(f1) = f;
+            removeIf(s1, f1)
         })
 
     pub def retainAll!(c: Collection[a, r1], s: HashSet[a, r]): Result[String, Bool] \ {r, r1} =

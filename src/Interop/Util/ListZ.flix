@@ -69,9 +69,10 @@ mod Interop.Util.ListZ {
     use Interop.Util.Collection.{Collection}
     use Interop.Util.Comparator
     use Interop.Util.ImpListZ
+    use Interop.Util.Function.ConsumerZ
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
+    use Interop.Util.Function.PredicateZ
     use Interop.Util.Function.PredicateZ.{PredicateZ}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
 
@@ -200,13 +201,12 @@ mod Interop.Util.ListZ {
             removeAll(l1, c1)
         })
     
-    pub def removeIf![a: Type, ef: Eff, r: Region]
-                        (f: a -> Bool \ ef, l: ListZ[a, r]): Result[String, Bool] \ {ef, r} with ComesFromJava[a] =
+    pub def removeIf!(f: PredicateZ[a, ef], l: ListZ[a, r]): Result[String, Bool] \ {ef, r} =
         Result.tryCatch(_ -> {
             import java.util.List.removeIf(##java.util.function.Predicate): Bool \ {ef, r};
             let ListZ(_, l1) = l;
-            let PredicateZ(f1) = Interop.Util.Function.PredicateZ.makePredicateZ(f);
-            checked_ecast(removeIf(l1, f1))
+            let PredicateZ(f1) = f;
+            removeIf(l1, f1)
         })
 
     pub def retainAll!(c: Collection[a, r1], l: ListZ[a, r]): Result[String, Bool] \ {r, r1} =
@@ -217,12 +217,11 @@ mod Interop.Util.ListZ {
             retainAll(l1, c1)
         })
 
-    pub def forEach[a: Type, ef: Eff, r: Region]
-                    (f: a -> Unit \ ef, l: ListZ[a, r]): Result[String, Unit] \  {ef, r} with ComesFromJava[a] =
+    pub def forEach(f: ConsumerZ[a, ef], l: ListZ[a, r]): Result[String, Unit] \ {ef, r} =
         Result.tryCatch(_ -> {
             import java.util.List.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let ListZ(_, l1) = l;
-            let ConsumerZ(f1) = Interop.Util.Function.ConsumerZ.makeConsumerZ(f);
+            let ConsumerZ(f1) = f;
             forEach(l1, f1)
         })
 

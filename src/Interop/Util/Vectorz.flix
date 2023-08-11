@@ -80,7 +80,6 @@ mod Interop.Util.VectorZ {
     use Interop.Util.VectorZ
     use Interop.Util.VectorZ.{VectorZ}
     use Interop.Util.Comparator
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
 
@@ -146,7 +145,7 @@ mod Interop.Util.VectorZ {
     ///
     pub def toFlixIterator(rc: Region[r1], 
                             fromJava: ##java.lang.Object -> a, 
-                            v: VectorZ[a, r]): Iterator[a, r1, r1] \ { r } =
+                            v: VectorZ[a, r]): Iterator[a, r1, r1] \ r =
         import java.util.Vector.iterator(): ##java.util.Iterator \ r;
         let VectorZ(_, v1) = v;
         if (Object.isNull(v1))
@@ -156,11 +155,11 @@ mod Interop.Util.VectorZ {
                 |> Interop.Util.IteratorZ.wrapHH(rc)
                 |> Interop.Util.IteratorZ.toFlixIterator(rc, fromJava)
 
-    pub def toFlixList(fromJava: ##java.lang.Object -> a, v: VectorZ[a, r]): List[a] \ { r } with ComesFromJava[a] = region rc {
+    pub def toFlixList(fromJava: ##java.lang.Object -> a, v: VectorZ[a, r]): List[a] \ r  = region rc {
         toFlixIterator(rc, fromJava, v) |> Iterator.toList
     }
     
-    pub def toFlixSet(fromJava: ##java.lang.Object -> a, v: VectorZ[a, r]): Set[a] \ { r } with Order[a] = region rc {
+    pub def toFlixSet(fromJava: ##java.lang.Object -> a, v: VectorZ[a, r]): Set[a] \ r with Order[a] = region rc {
         toFlixIterator(rc, fromJava, v) |> Iterator.toSet
     }
 
