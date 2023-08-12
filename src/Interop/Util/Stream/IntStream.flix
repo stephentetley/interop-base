@@ -78,7 +78,7 @@ mod Interop.Util.Stream.IntStream {
         let IntStream(_, s1) = s;
         let iter1 = mkIterator(unchecked_cast(s1 as ##java.util.stream.BaseStream));
         let iter2 = Interop.Util.IteratorZ.wrapHH(rc, iter1);
-        Interop.Util.IteratorZ.iterator(rc, iter2)
+        Interop.Util.IteratorZ.toFlixIterator(rc, Interop.Flix.ComesFromJava.int32FromJavaObject, iter2)
 
     pub def empty(rc: Region[r]): IntStream[ef, r] = 
         import static java.util.stream.IntStream.empty(): ##java.util.stream.IntStream \ {};

@@ -56,12 +56,12 @@ mod Interop.Util.Stream.DoubleStream {
     pub def wrapHH(rc: Region[r], prim: ##java.util.stream.DoubleStream): DoubleStream[ef, r] = DoubleStream(rc, prim)
 
 
-    pub def doubleStreamIterator(rc: Region[r1], s: DoubleStream[ef, r]): Iterator[Int64, ef + r + r1, r1] =
+    pub def doubleStreamIterator(rc: Region[r1], s: DoubleStream[ef, r]): Iterator[Float64, ef + r + r1, r1] =
         import java.util.stream.BaseStream.iterator(): ##java.util.Iterator \ {} as mkIterator;
         let DoubleStream(_, s1) = s;
         let iter1 = mkIterator(unchecked_cast(s1 as ##java.util.stream.BaseStream));
         let iter2 = Interop.Util.IteratorZ.wrapHH(rc, iter1);
-        Interop.Util.IteratorZ.iterator(rc, iter2)
+        Interop.Util.IteratorZ.toFlixIterator(rc, Interop.Flix.ComesFromJava.float64FromJavaObject, iter2)
 
     pub def empty(rc: Region[r]): DoubleStream[ef, r] = 
         import static java.util.stream.DoubleStream.empty(): ##java.util.stream.DoubleStream \ {};

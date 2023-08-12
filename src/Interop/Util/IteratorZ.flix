@@ -32,6 +32,8 @@ mod Interop.Util.IteratorZ {
 
     use Interop.Util.IteratorZ
     use Interop.Util.IteratorZ.{IteratorZ}
+    use Interop.Util.Function.ConsumerZ
+    use Interop.Util.Function.ConsumerZ.{ConsumerZ}
     use Interop.Flix.ComesFromJava
 
 
@@ -42,21 +44,14 @@ mod Interop.Util.IteratorZ {
     pub def wrapHH(rc: Region[r], iter: ##java.util.Iterator): IteratorZ[a, ef, r] = 
         IteratorZ(rc, iter)
 
-    /// Mutable (raw) to mutable (Flix iterator) 
-    pub def iterator(rc: Region[r1], iter: IteratorZ[a, ef, r]): Iterator[a, ef + r + r1, r1] with ComesFromJava[a]  =
-        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, iter)
-
-    pub def enumerator(rc: Region[r1], iter: IteratorZ[a, ef, r]): Iterator[(Int32, a), ef + r + r1, r1] \ r1 with ComesFromJava[a] =
-        toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, iter) |> Iterator.enumerator        
-
     /// Cast must be Pure!
-    pub def toFlixIterator(rc: Region[r1], ocast: ##java.lang.Object -> a, iter: IteratorZ[a, ef, r]): Iterator[a, ef + r + r1, r1] =
+    pub def toFlixIterator(rc: Region[r1], getter: ##java.lang.Object -> b \ ef1, iter: IteratorZ[a, ef, r]): Iterator[b, ef + ef1 + r + r1, r1] =
         import java.util.Iterator.hasNext(): Bool \ r;
-        import java.util.Iterator.next(): ##java.lang.Object \ { ef, r }; // "destructive read" == write
+        import java.util.Iterator.next(): ##java.lang.Object \ {ef, r};
         let IteratorZ(_, iter1) = iter;
         let step = () -> { 
             match hasNext(iter1) {
-                case true  => next(iter1) |> ocast |> Some
+                case true  => next(iter1) |> getter |> Some
                 case false => None
             }
         };
@@ -73,20 +68,24 @@ mod Interop.Util.IteratorZ {
     ///
     /// Apply the effectful function `f` to all the elements in the array `a`.
     ///
-    pub def forEach(f: a -> Unit \ ef1, iter: IteratorZ[a, ef, r]): Unit \ { ef, ef1, r } with ComesFromJava[a] = region r {
-        iterator(r, iter) |> Iterator.forEach(f)
+    pub def forEachRemaining(f: ConsumerZ[a, ef1], iter: IteratorZ[a, ef, r]): Result[String, Unit] \ {ef, ef1, r} = 
+        Result.tryCatch(_ -> {
+            import java.util.Iterator.forEachRemaining(##java.util.function.Consumer): Unit \ {ef, ef1, r};
+            let IteratorZ(_, iter1) = iter;
+            let ConsumerZ(f1) = f;
+            forEachRemaining(iter1, f1)
+        })
+
+    pub def toList(getter: ##java.lang.Object -> b \ ef1, iter: IteratorZ[a, ef, r]): List[b] \ {ef, ef1, r} = region r {
+        toFlixIterator(r, getter, iter) |> Iterator.toList
     }
 
-    pub def toList(iter: IteratorZ[a, ef, r]): List[a] \ { ef, r } with ComesFromJava[a] = region r {
-        iterator(r, iter) |> Iterator.toList
+    pub def toNel(getter: ##java.lang.Object -> b \ ef1, iter: IteratorZ[a, ef, r]): Option[Nel[b]] \ {ef, ef1, r} = region r {
+        toFlixIterator(r, getter, iter) |> Iterator.toNel
     }
 
-    pub def toNel(iter: IteratorZ[a, ef, r]): Option[Nel[a]] \ { ef, r } with ComesFromJava[a] = region r {
-        iterator(r, iter) |> Iterator.toNel
-    }
-
-    pub def toMapWith(f: a -> (k, v) \ ef1, iter: IteratorZ[a, ef, r]): Map[k, v] \ {ef, ef1, r} with Order[k], ComesFromJava[a] = region r {
-        iterator(r, iter) |> Iterator.foldLeft((acc, a) -> let (k,v) = f(a); Map.insert(k, v, acc), Map.empty())
+    pub def toMapWith(getter: ##java.lang.Object -> b \ ef1, f: b -> (k, v) \ ef2, iter: IteratorZ[a, ef, r]): Map[k, v] \ {ef, ef1, ef2, r} with Order[k] = region r {
+        toFlixIterator(r, getter, iter) |> Iterator.foldLeft((acc, a) -> let (k,v) = f(a); Map.insert(k, v, acc), Map.empty())
     }
 
 }
