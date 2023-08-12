@@ -19,8 +19,6 @@ mod Interop.Util {
     ///
     /// Represents a Java Iterator.
     ///
-    /// TODO should probably include an effect param
-    ///
     pub enum IteratorZ[_a: Type, _ef: Eff, r: Region] {
         case IteratorZ(Region[r], ##java.util.Iterator)
     }

@@ -44,7 +44,6 @@ mod Interop.Util.Optional {
     use Interop.Util.Function.FunctionZ.{FunctionZ}
     use Interop.Util.Function.PredicateZ
     use Interop.Util.Function.PredicateZ.{PredicateZ}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
     pub def getHH(o: Optional[a]): ##java.util.Optional = 

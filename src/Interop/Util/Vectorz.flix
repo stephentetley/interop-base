@@ -144,23 +144,23 @@ mod Interop.Util.VectorZ {
     /// Returns an iterator over `s`.
     ///
     pub def toFlixIterator(rc: Region[r1], 
-                            fromJava: ##java.lang.Object -> a, 
-                            v: VectorZ[a, r]): Iterator[a, r1, r1] \ r =
+                            getter: ##java.lang.Object -> b \ ef, 
+                            v: VectorZ[a, r]): Iterator[b, ef + r1, r1] \ r =
         import java.util.Vector.iterator(): ##java.util.Iterator \ r;
         let VectorZ(_, v1) = v;
         if (Object.isNull(v1))
-            Iterator.empty(rc)
+            Iterator.iterate(rc, _ -> checked_ecast(None))
         else 
             iterator(v1) 
                 |> Interop.Util.IteratorZ.wrapHH(rc)
-                |> Interop.Util.IteratorZ.toFlixIterator(rc, fromJava)
+                |> Interop.Util.IteratorZ.toFlixIterator(rc, getter)
 
-    pub def toFlixList(fromJava: ##java.lang.Object -> a, v: VectorZ[a, r]): List[a] \ r  = region rc {
-        toFlixIterator(rc, fromJava, v) |> Iterator.toList
+    pub def toFlixList(getter: ##java.lang.Object -> b \ ef, v: VectorZ[a, r]): List[b] \ {ef, r}  = region rc {
+        toFlixIterator(rc, getter, v) |> Iterator.toList
     }
     
-    pub def toFlixSet(fromJava: ##java.lang.Object -> a, v: VectorZ[a, r]): Set[a] \ r with Order[a] = region rc {
-        toFlixIterator(rc, fromJava, v) |> Iterator.toSet
+    pub def toFlixSet(getter: ##java.lang.Object -> b \ ef, v: VectorZ[a, r]): Set[b] \ {ef, r} with Order[b] = region rc {
+        toFlixIterator(rc, getter, v) |> Iterator.toSet
     }
 
 

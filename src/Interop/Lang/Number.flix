@@ -24,9 +24,12 @@ mod Interop.Lang {
     ///
     pub enum Number(##java.lang.Number)
 
-    pub class SubNumber[x: Type] {
-        pub def toNumber(s: x): Number
-        pub def fromNumber(s: Number): x
+    pub class SubNumber[t: Type] {
+        pub def toNumber(s: t): Number
+        pub def fromNumber(s: Number): t
+
+        pub def toNumberHH(n: t): ##java.lang.Number = 
+            SubNumber.toNumber(n) |> Interop.Lang.Number.getHH
     }
 
     instance Interop.Flix.GoesToJava[Number] {

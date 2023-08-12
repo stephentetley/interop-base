@@ -28,6 +28,9 @@ mod Interop.Lang {
     pub class ImpIterable[t: Type -> Region -> Type] {
         pub def toIterable(s: t[a, r]): IterableZ[a, r]
         pub def fromIterable(s: IterableZ[a, r]): t[a, r]
+
+        pub def toIterableHH(s: t[a, r]): ##java.lang.Iterable = 
+           ImpIterable.toIterable(s) |> Interop.Lang.IterableZ.getHH
     }
 
 }
