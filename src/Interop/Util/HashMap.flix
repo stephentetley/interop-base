@@ -53,7 +53,6 @@ mod Interop.Util.HashMap {
     use Interop.Util.Collection.{Collection}
     use Interop.Util.SetZ
     use Interop.Util.SetZ.{SetZ}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
     pub def getHH(m: HashMap[k, v, r]): ##java.util.HashMap = 
@@ -142,11 +141,11 @@ mod Interop.Util.HashMap {
         Collection(rc, values(m1))
 
 
-    pub def remove!(k: k, m: HashMap[k, v, r]): Option[v] \  r with GoesToJava[k], ComesFromJava[v] =
-        import java.util.HashMap.remove(##java.lang.Object): ##java.lang.Object \ r; 
+    pub def remove!(getterVal: ##java.lang.Object -> v1 \ ef, k: k, m: HashMap[k, v, r]): Option[v1] \  {ef, r} with GoesToJava[k] =
+        import java.util.HashMap.remove(##java.lang.Object): ##java.lang.Object \ {ef, r}; 
         let HashMap(_, m1) = m;
         let k1 = Interop.Flix.GoesToJava.toJavaObject(k);        
-        remove(m1, k1) |> Object.toOption |>  Option.map(Interop.Flix.ComesFromJava.fromJavaObject)
+        remove(m1, k1) |> Object.toOption |>  Option.map(getterVal)
 
 
     pub def fromFlixMap(r: Region[r], t: Map[k, v]): HashMap[k, v, r] \ r with GoesToJava[k], GoesToJava[v] =

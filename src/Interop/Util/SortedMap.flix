@@ -150,9 +150,9 @@ mod Interop.Util.SortedMap {
     /// Can't use RawIterator because no Marshal instance for MapEntry
     ///
     pub def toFlixIterator(rc: Region[r1],
-                            fromJavaKey: ##java.lang.Object -> k, 
-                            fromJavaValue: ##java.lang.Object -> v,  
-                            m: SortedMap[k, v, r]): Iterator[(k, v), r1, r1] \ { r } =
+                            getterKey: ##java.lang.Object -> k1 \ ef1, 
+                            getterVal: ##java.lang.Object -> v1 \ ef2,  
+                            m: SortedMap[k, v, r]): Iterator[(k1, v1), ef1 + ef2 + r1, r1] \ r =
         import java.util.SortedMap.entrySet(): ##java.util.Set \ r;
         import java.util.Set.iterator(): ##java.util.Iterator \ r;
         import java.util.Iterator.hasNext(): Bool \ r1;
@@ -162,7 +162,7 @@ mod Interop.Util.SortedMap {
         let getNext = () -> match hasNext(iter) {
             case true  => {
                 let entry = next(iter) |> Interop.Util.MapEntry.castObject(rc);
-                Interop.Util.MapEntry.toKeyValueWith(fromJavaKey, fromJavaValue, entry) |> Some
+                Interop.Util.MapEntry.toKeyValue(getterKey, getterVal, entry) |> Some
             }
             case false => None
         };

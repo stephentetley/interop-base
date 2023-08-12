@@ -158,13 +158,13 @@ mod Interop.Util.MapZ {
             get(m1, k1) |> Object.toOption |> Option.map(getterVal)
         })
 
-    pub def put!(k: k, v: v, m: MapZ[k, v, r]): Result[String, Option[v]] \ r with GoesToJava[k], GoesToJava[v], ComesFromJava[v] =
+    pub def put!(getterVal: ##java.lang.Object -> v1 \ ef, k: k, v: v, m: MapZ[k, v, r]): Result[String, Option[v1]] \ {ef, r} with GoesToJava[k], GoesToJava[v] =
         Result.tryCatch(_ -> {
             import java.util.Map.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
             let MapZ(_, m1) = m;
             let k1 = Interop.Flix.GoesToJava.toJavaObject(k);
             let v1 = Interop.Flix.GoesToJava.toJavaObject(v);
-            put(m1, k1, v1) |> Object.toOption |> Option.map(Interop.Flix.ComesFromJava.fromJavaObject)
+            put(m1, k1, v1) |> Object.toOption |> Option.map(getterVal)
         })
 
     pub def containsKey(k: k, m: MapZ[k, v, r]): Result[String, Bool] \ r with GoesToJava[k] =
@@ -196,21 +196,20 @@ mod Interop.Util.MapZ {
         let MapZ(_, m1) = m;
         Collection(rc, values(m1))
 
-    pub def remove!(k: k, m: MapZ[k, v, r]): Result[String, Option[v]] \ r with GoesToJava[k], ComesFromJava[v] =
+    pub def remove!(getterVal: ##java.lang.Object -> v1 \ ef, k: k, m: MapZ[k, v, r]): Result[String, Option[v1]] \ {ef, r} with GoesToJava[k] =
         Result.tryCatch(_ -> {
-            import java.util.Map.remove(##java.lang.Object): ##java.lang.Object \ r; 
+            import java.util.Map.remove(##java.lang.Object): ##java.lang.Object \ {ef, r}; 
             let MapZ(_, m1) = m;
             let k1 = Interop.Flix.GoesToJava.toJavaObject(k);        
-            remove(m1, k1) |> Object.toOption |> Option.map(Interop.Flix.ComesFromJava.fromJavaObject)
+            remove(m1, k1) |> Object.toOption |> Option.map(getterVal)
         })
 
     /// Note - needs kinds specifying...
-    pub def forEach[k: Type, v: Type, ef: Eff, r: Region]
-                    (f: (k, v) -> Unit \ ef, m: MapZ[k, v, r]): Result[String, Unit] \  {ef, r} with ComesFromJava[k], GoesToJava[v], ComesFromJava[v] =
+    pub def forEach(f: BiConsumer[k, v, ef], m: MapZ[k, v, r]): Result[String, Unit] \ {ef, r} with GoesToJava[v] =
         Result.tryCatch(_ -> {
             import java.util.Map.forEach(##java.util.function.BiConsumer): Unit \ {ef, r}; 
             let MapZ(_, m1) = m;
-            let BiConsumer(f1) = Interop.Util.Function.BiConsumer.makeBiConsumer(f);
+            let BiConsumer(f1) = f;
             forEach(m1, f1)
         })
 
@@ -249,9 +248,9 @@ mod Interop.Util.MapZ {
     /// Can't use RawIterator because no Marshal instance for MapEntry
     ///
     pub def toFlixIterator(rc: Region[r1], 
-                            fromJavaKey: ##java.lang.Object -> k, 
-                            fromJavaValue: ##java.lang.Object -> v, 
-                            m: MapZ[k, v, r]): Iterator[(k, v), r1, r1] \ r =
+                            getterKey: ##java.lang.Object -> k1 \ ef1, 
+                            getterVal: ##java.lang.Object -> v1 \ ef2, 
+                            m: MapZ[k, v, r]): Iterator[(k1, v1), ef1 + ef2 + r1, r1] \ r =
         import java.util.Map.entrySet(): ##java.util.Set \ r;
         import java.util.Set.iterator(): ##java.util.Iterator \ r;
         import java.util.Iterator.hasNext(): Bool \ r1;
@@ -261,7 +260,7 @@ mod Interop.Util.MapZ {
         let getNext = () -> match hasNext(iter) {
             case true  => {
                 let entry = next(iter) |> Interop.Util.MapEntry.castObject(rc);
-                Interop.Util.MapEntry.toKeyValueWith(fromJavaKey, fromJavaValue, entry) |> Some
+                Interop.Util.MapEntry.toKeyValue(getterKey, getterVal, entry) |> Some
             }
             case false => None
         };

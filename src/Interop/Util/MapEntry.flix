@@ -54,15 +54,15 @@ mod Interop.Util.MapEntry {
         let MapEntry(e1) = e;
         hashCode(e1) 
 
-    pub def getKey(e: MapEntry[k, v, r]): k \ r with ComesFromJava[k] = 
+    pub def getKey(getterKey: ##java.lang.Object -> k1 \ ef, e: MapEntry[k, v, r]): k1 \ {ef, r} = 
         import java.util.Map$Entry.getKey(): ##java.lang.Object \ r;
         let MapEntry(e1) = e;
-        getKey(e1) |> Interop.Flix.ComesFromJava.fromJavaObject
+        getKey(e1) |> getterKey
 
-    pub def getValue(e: MapEntry[k, v, r]): v \ r with ComesFromJava[v] = 
+    pub def getValue(getterVal: ##java.lang.Object -> v1 \ ef, e: MapEntry[k, v, r]): v1 \ {ef, r} = 
         import java.util.Map$Entry.getValue(): ##java.lang.Object \ r;
         let MapEntry(e1) = e;
-        getValue(e1) |> Interop.Flix.ComesFromJava.fromJavaObject
+        getValue(e1) |> getterVal
 
     pub def copyOf(_: Region[r1], e: MapEntry[k, v, r]): Result[String, MapEntry[k, v, r1]] \ { r, r1 } = 
         Result.tryCatch(_ -> {
@@ -75,19 +75,16 @@ mod Interop.Util.MapEntry {
     /// We don't need the inverse function "MapEntry from (k,v)" because Java's API for building maps is `m.put(k, v)`
     /// so we never need to create a MapEntry.
     ///
-    pub def toKeyValue(e: MapEntry[k, v, r]): (k, v) \ r with ComesFromJava[k], ComesFromJava[v] =
-        toKeyValueWith(Interop.Flix.ComesFromJava.fromJavaObject, Interop.Flix.ComesFromJava.fromJavaObject, e)
-
-    pub def toKeyValueWith(kcast:  ##java.lang.Object -> k, 
-                                    vcast: ##java.lang.Object -> v,
-                                    e: MapEntry[k, v, r]): (k, v) \ r =
+    pub def toKeyValue(getterKey: ##java.lang.Object -> k1 \ ef1, 
+                        getterVal: ##java.lang.Object -> v1 \ ef2, 
+                        e: MapEntry[k, v, r]): (k1, v1) \ {ef1, ef2, r} =
         import java.util.Map$Entry.getKey(): ##java.lang.Object \ r;
         import java.util.Map$Entry.getValue(): ##java.lang.Object \ r;
         let MapEntry(e1) = e;
         let k = getKey(e1);
         let v = getValue(e1);                
-        let k1 = kcast(k);
-        let v1 = vcast(v);
+        let k1 = getterKey(k);
+        let v1 = getterVal(v);
         (k1, v1)
 
 }
