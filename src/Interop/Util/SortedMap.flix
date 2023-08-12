@@ -86,20 +86,23 @@ mod Interop.Util.SortedMap {
         let SortedMap(_, m1) = m;
         hashCode(m1)
 
-    pub def get(k: k, m: SortedMap[k, v, r]): Result[String, Option[v]] \ r with GoesToJava[k], ComesFromJava[v] =
+    /// Gets a `v1` not a `v` !
+    pub def get(getterVal: ##java.lang.Object -> v1 \ ef, k: k, m: SortedMap[k, v, r]): Result[String, Option[v1]] \ {ef, r} with GoesToJava[k] =
         Result.tryCatch(_ -> {
-            import java.util.SortedMap.get(##java.lang.Object): ##java.lang.Object \ r; 
+            import java.util.SortedMap.get(##java.lang.Object): ##java.lang.Object \ {ef, r}; 
             let SortedMap(_, m1) = m;
             let k1 = Interop.Flix.GoesToJava.toJavaObject(k);
-            get(m1, k1) |> Object.toOption |> Option.map(Interop.Flix.ComesFromJava.fromJavaObject)
+            get(m1, k1) |> Object.toOption |> Option.map(getterVal)
         })
 
-    pub def put!(k: k, v: v, m: SortedMap[k, v, r]): v \ r with GoesToJava[k], GoesToJava[v], ComesFromJava[v] =
-        import java.util.SortedMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
-        let SortedMap(_, m1) = m;
-        let k1 = Interop.Flix.GoesToJava.toJavaObject(k);
-        let v1 = Interop.Flix.GoesToJava.toJavaObject(v);
-        put(m1, k1, v1) |> Interop.Flix.ComesFromJava.fromJavaObject
+    pub def put!(getterVal: ##java.lang.Object -> v1 \ ef, k: k, v: v, m: SortedMap[k, v, r]): Result[String, v1] \ {ef, r} with GoesToJava[k], GoesToJava[v] =
+        Result.tryCatch(_ -> {
+            import java.util.SortedMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ {ef, r}; 
+            let SortedMap(_, m1) = m;
+            let k1 = Interop.Flix.GoesToJava.toJavaObject(k);
+            let v1 = Interop.Flix.GoesToJava.toJavaObject(v);
+            put(m1, k1, v1) |> getterVal
+        })
 
     /// Can't guarantee `Ord[k]` at this point...
     pub def entrySet(rc: Region[r1], m: SortedMap[k, v, r]): SetZ[MapEntry[k, v, r1], r1] \ { r, r1 } = 

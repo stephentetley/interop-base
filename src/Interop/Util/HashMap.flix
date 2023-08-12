@@ -92,20 +92,22 @@ mod Interop.Util.HashMap {
         let HashMap(_, m1) = m;
         hashCode(m1)
 
-    pub def get(k: k, m: HashMap[k, v, r]): Result[String, Option[v]] \ r with GoesToJava[k], ComesFromJava[v] =
+    pub def get(getterVal: ##java.lang.Object -> v1 \ ef, k: k, m: HashMap[k, v, r]): Result[String, Option[v1]] \ {ef, r} with GoesToJava[k] =
         Result.tryCatch(_ -> {
-            import java.util.HashMap.get(##java.lang.Object): ##java.lang.Object \ r; 
+            import java.util.HashMap.get(##java.lang.Object): ##java.lang.Object \ {ef, r}; 
             let HashMap(_, m1) = m;
             let k1 = Interop.Flix.GoesToJava.toJavaObject(k);
-            get(m1, k1) |> Object.toOption |> Option.map(Interop.Flix.ComesFromJava.fromJavaObject)
+            get(m1, k1) |> Object.toOption |> Option.map(getterVal)
         })
 
-    pub def put!(k: k, v: v, m: HashMap[k, v, r]): v \ r with GoesToJava[k], GoesToJava[v], ComesFromJava[v] =
-        import java.util.HashMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
-        let HashMap(_, m1) = m;
-        let k1 = Interop.Flix.GoesToJava.toJavaObject(k);
-        let v1 = Interop.Flix.GoesToJava.toJavaObject(v);
-        put(m1, k1, v1) |> Interop.Flix.ComesFromJava.fromJavaObject
+    pub def put!(getterVal: ##java.lang.Object -> v1 \ ef, k: k, v: v, m: HashMap[k, v, r]): Result[String, v1] \ {ef, r} with GoesToJava[k], GoesToJava[v] =
+        Result.tryCatch(_ -> {
+            import java.util.HashMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r; 
+            let HashMap(_, m1) = m;
+            let k1 = Interop.Flix.GoesToJava.toJavaObject(k);
+            let v1 = Interop.Flix.GoesToJava.toJavaObject(v);
+            put(m1, k1, v1) |> getterVal
+        })
 
     pub def putWith!(k: k, v: v, 
                         kcast: k -> ##java.lang.Object, 
@@ -147,9 +149,9 @@ mod Interop.Util.HashMap {
         remove(m1, k1) |> Object.toOption |>  Option.map(Interop.Flix.ComesFromJava.fromJavaObject)
 
 
-    pub def fromFlixMap(r: Region[r], t: Map[k, v]): HashMap[k, v, r] \ r with GoesToJava[k], GoesToJava[v], ComesFromJava[v] =
+    pub def fromFlixMap(r: Region[r], t: Map[k, v]): HashMap[k, v, r] \ r with GoesToJava[k], GoesToJava[v] =
         let map1 = new(r);
-        Map.forEach((k, v) -> discard put!(k, v, map1), t);
+        Map.forEach((k, v) -> discard put!(identity, k, v, map1), t);
         map1
 
     pub def fromFlixMapWith(r: Region[r], 
@@ -160,9 +162,9 @@ mod Interop.Util.HashMap {
         Map.forEach((k, v) -> putWith!(k, v, kcast, vcast, map1), t);
         map1
 
-    pub def fromFoldable(r: Region[r], t: t[(k, v)]): HashMap[k, v, r] \ r with Foldable[t], GoesToJava[k], GoesToJava[v], ComesFromJava[v] =
+    pub def fromFoldable(r: Region[r], t: t[(k, v)]): HashMap[k, v, r] \ r with Foldable[t], GoesToJava[k], GoesToJava[v] =
         let map1 = new(r);
-        Foldable.forEach(match (k, v) -> discard put!(k, v, map1), t);
+        Foldable.forEach(match (k, v) -> discard put!(identity, k, v, map1), t);
         map1
 
     pub def fromFoldableWith(r: Region[r], 

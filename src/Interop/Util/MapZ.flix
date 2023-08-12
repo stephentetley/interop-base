@@ -149,12 +149,13 @@ mod Interop.Util.MapZ {
         let MapZ(_, m1) = m;
         clear(m1)
 
-    pub def get(k: k, m: MapZ[k, v, r]): Result[String, Option[v]] \ r with GoesToJava[k], ComesFromJava[v] =
+    /// Gets a `v1` not a `v`!
+    pub def get(getterVal: ##java.lang.Object -> v1 \ ef, k: k, m: MapZ[k, v, r]): Result[String, Option[v1]] \ {ef, r} with GoesToJava[k] =
         Result.tryCatch(_ -> {
-            import java.util.Map.get(##java.lang.Object): ##java.lang.Object \ r; 
+            import java.util.Map.get(##java.lang.Object): ##java.lang.Object \ {ef, r}; 
             let MapZ(_, m1) = m;
             let k1 = Interop.Flix.GoesToJava.toJavaObject(k);
-            get(m1, k1) |> Object.toOption |> Option.map(Interop.Flix.ComesFromJava.fromJavaObject)
+            get(m1, k1) |> Object.toOption |> Option.map(getterVal)
         })
 
     pub def put!(k: k, v: v, m: MapZ[k, v, r]): Result[String, Option[v]] \ r with GoesToJava[k], GoesToJava[v], ComesFromJava[v] =

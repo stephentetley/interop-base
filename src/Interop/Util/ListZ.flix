@@ -160,6 +160,14 @@ mod Interop.Util.ListZ {
             let Collection(_, c1) = c;
             addAll(l1, c1)
         })
+   
+    /// Returns a `b` not an `a`!
+    pub def get(getter: ##java.lang.Object -> b \ ef, ix: Int32, l: ListZ[a, r]): Result[String, b] \ {ef, r} =
+        Result.tryCatch(_ -> {
+            import java.util.List.get(Int32): ##java.lang.Object \ {ef, r};
+            let ListZ(_, l1) = l;
+            get(l1, ix) |> getter
+        })
 
     pub def contains(x: a, l: ListZ[a, r]): Result[String, Bool] \  r with GoesToJava[a] =
         Result.tryCatch(_ -> {

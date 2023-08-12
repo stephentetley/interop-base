@@ -135,10 +135,12 @@ mod Interop.Util.LinkedList {
         size(l1)
 
 
-    pub def get(fromJava: ##java.lang.Object -> a, ix: Int32, l: LinkedList[a, r]): a \ r = 
-        import java.util.LinkedList.get(Int32): ##java.lang.Object \ r;
-        let LinkedList(_, l1) = l;
-        get(l1, ix) |> fromJava
+    pub def get(getter: ##java.lang.Object -> b \ ef, ix: Int32, l: LinkedList[a, r]): Result[String, b] \ {ef, r} = 
+        Result.tryCatch(_ -> {
+            import java.util.LinkedList.get(Int32): ##java.lang.Object \ {ef, r};
+            let LinkedList(_, l1) = l;
+            get(l1, ix) |> getter
+        })
 
     pub def add!(x: a, l: LinkedList[a, r]): Bool \ r with GoesToJava[a] = 
         import java.util.LinkedList.add(##java.lang.Object): Bool \ r;

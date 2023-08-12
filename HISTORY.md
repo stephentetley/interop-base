@@ -1,5 +1,6 @@
 ### v0.7.1
    Work on removing `ComesFromJava`.
+   Collection and Map get functions now use a "getter" to coerce the result type.
 
 ### v0.7.0
    Removed `Marshal` typeclass, it is replaced by `GoesToJava` and `ComesFromJava` (`ComesFromJava` has problems and and will itself be removed).
