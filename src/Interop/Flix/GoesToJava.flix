@@ -86,6 +86,21 @@ mod Interop.Flix {
             checked_cast(sb1)    
     }
 
+    instance GoesToJava[List[a]] with GoesToJava[a] {
+        pub def toJavaObject(xs: List[a]): ##java.lang.Object = region rc {
+            let ll = Interop.Util.LinkedList.fromFoldable(rc, xs);
+            let ls = Interop.Util.ImpListZ.toListHH(ll);
+            checked_cast(ls)
+        }
+    }
+
+    instance GoesToJava[Vector[a]] with GoesToJava[a] {
+        pub def toJavaObject(v: Vector[a]): ##java.lang.Object = region rc {
+            let ll = Interop.Util.LinkedList.fromFoldable(rc, v);
+            let ls = Interop.Util.ImpListZ.toListHH(ll);
+            checked_cast(ls)
+        }
+    }
 
 }
 

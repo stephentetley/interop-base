@@ -51,7 +51,6 @@ mod Interop.Util.MapZ {
     use Interop.Util.ImpMapZ
     use Interop.Util.Function.BiConsumer
     use Interop.Util.Function.BiConsumer.{BiConsumer}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
     pub def getHH(m: MapZ[k, v, r]): ##java.util.Map = 
@@ -213,34 +212,7 @@ mod Interop.Util.MapZ {
             forEach(m1, f1)
         })
 
-    pub def fromFlixMapViaHashMap(rc: Region[r], t: Map[k, v]): MapZ[k, v, r] \ r with GoesToJava[k], GoesToJava[v], ComesFromJava[v] =
-        Interop.Util.HashMap.fromFlixMap(rc, t) |> Interop.Util.ImpMapZ.toMapZ
 
-    /// Note - this is useful even though it breaks abstraction...
-    pub def fromFlixMapViaHashMapHH(t: Map[k, v]): ##java.util.Map with GoesToJava[k], GoesToJava[v], ComesFromJava[v] = region rc {
-        Interop.Util.HashMap.fromFlixMap(rc, t) |> Interop.Util.ImpMapZ.toMapHH
-    }
-
-
-    pub def fromFlixMapViaHashMapWith(rc: Region[r], 
-                                        kcast: k -> ##java.lang.Object, 
-                                        vcast: v -> ##java.lang.Object, 
-                                        t: Map[k, v]): MapZ[k, v, r] \ { r } =
-        Interop.Util.HashMap.fromFlixMapWith(rc, kcast, vcast, t) |> Interop.Util.ImpMapZ.toMapZ
-
-    pub def fromFlixMapViaHashMapHHWith(kcast: k -> ##java.lang.Object, 
-                                        vcast: v -> ##java.lang.Object, 
-                                        t: Map[k, v]): ##java.util.Map = region rc {
-        Interop.Util.HashMap.fromFlixMapWith(rc, kcast, vcast, t) |> Interop.Util.ImpMapZ.toMapHH
-    }
-
-
-    pub def fromFoldableViaHashMap(rc: Region[r], t: t[(k, v)]): MapZ[k, v, r] \ { r } with Foldable[t], GoesToJava[k], GoesToJava[v], ComesFromJava[v] =
-        Interop.Util.HashMap.fromFoldable(rc, t) |> Interop.Util.ImpMapZ.toMapZ
-
-    pub def fromFoldableViaHashMapHH(t: t[(k, v)]): ##java.util.Map with Foldable[t], GoesToJava[k], GoesToJava[v], ComesFromJava[v] = region rc {
-        Interop.Util.HashMap.fromFoldable(rc, t) |> Interop.Util.ImpMapZ.toMapHH
-    }
 
 
     ///
