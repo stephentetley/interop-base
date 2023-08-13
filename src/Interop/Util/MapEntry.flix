@@ -28,7 +28,6 @@ mod Interop.Util.MapEntry {
 
     use Interop.Util.MapEntry
     use Interop.Util.MapEntry.{MapEntry}
-    use Interop.Flix.ComesFromJava
 
     pub def getHH(e: MapEntry[k, v, r]): ##java.util.Map$Entry = 
         let MapEntry(e1) = e;

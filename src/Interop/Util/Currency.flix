@@ -30,11 +30,6 @@ mod Interop.Util {
             Interop.Util.Currency.toString(x)
     }
 
-    instance Interop.Flix.ComesFromJava[Currency] {
-        pub def fromJavaObject(o: ##java.lang.Object): Currency = 
-            Currency(unchecked_cast(o as ##java.util.Currency))
-    }
-
     instance Interop.Flix.GoesToJava[Currency] {
         pub def toJavaObject(x: Currency): ##java.lang.Object =
             let Currency(x1) = x;

@@ -32,7 +32,6 @@ mod Interop.Util.IteratorZ {
     use Interop.Util.IteratorZ.{IteratorZ}
     use Interop.Util.Function.ConsumerZ
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
-    use Interop.Flix.ComesFromJava
 
 
     pub def getHH(iter: IteratorZ[a, ef, r]): ##java.util.Iterator = 

@@ -32,7 +32,6 @@ mod Interop.Util.Function.ConsumerZ {
     
     use Interop.Util.Function.ConsumerZ
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
-    use Interop.Flix.ComesFromJava
 
 
     pub def makeConsumerZ(getter: ##java.lang.Object -> a \ ef1, f: a -> Unit \ ef): ConsumerZ[a, ef + ef1] = 

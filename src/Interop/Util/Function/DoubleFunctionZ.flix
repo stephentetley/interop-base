@@ -33,7 +33,6 @@ mod Interop.Util.Function.DoubleFunctionZ {
     
     use Interop.Util.Function.DoubleFunctionZ
     use Interop.Util.Function.DoubleFunctionZ.{DoubleFunctionZ}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
     pub def makeDoubleFunctionZ(f: Float64 -> a \ ef): DoubleFunctionZ[a, ef] with GoesToJava[a] = 
@@ -43,8 +42,9 @@ mod Interop.Util.Function.DoubleFunctionZ {
     pub def makeDoubleFunctionZWith(f: Float64 -> a \ ef, castToObj: a -> ##java.lang.Object): DoubleFunctionZ[a, ef] = 
         DoubleFunctionZ(unchecked_cast((i -> f(i) |> castToObj) as ##java.util.function.DoubleFunction))
 
-    pub def apply(f: DoubleFunctionZ[a, ef], value: Float64): a \ ef with ComesFromJava[a] = 
+    pub def apply(getter: ##java.lang.Object -> a1 \ ef1, 
+                    f: DoubleFunctionZ[a, ef], value: Float64): a1 \ {ef, ef1} = 
         let DoubleFunctionZ(f1) = f;
-        unchecked_cast(f1(value) as _ \ ef) |> Interop.Flix.ComesFromJava.fromJavaObject
+        unchecked_cast(f1(value) as _ \ ef) |> getter
 
 }

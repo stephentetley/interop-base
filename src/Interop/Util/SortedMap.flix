@@ -53,7 +53,6 @@ mod Interop.Util.SortedMap {
     use Interop.Util.Collection.{Collection}
     use Interop.Util.SetZ
     use Interop.Util.SetZ.{SetZ}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
 

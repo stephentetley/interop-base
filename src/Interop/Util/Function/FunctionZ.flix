@@ -31,22 +31,13 @@ mod Interop.Util.Function.FunctionZ {
     
     use Interop.Util.Function.FunctionZ
     use Interop.Util.Function.FunctionZ.{FunctionZ}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
     use Interop.Flix.ColMarshal
 
 
-    pub def makeFunctionZ(f: a -> b \ ef): FunctionZ[a, b, ef] with ComesFromJava[a], GoesToJava[b] = 
+    pub def makeFunctionZ(getter: ##java.lang.Object -> a \ ef1, f: a -> b \ ef): FunctionZ[a, b, ef + ef1] with GoesToJava[b] = 
         let f1 = obj -> {
-            let a = Interop.Flix.ComesFromJava.fromJavaObject(obj); 
-            let ans = unchecked_cast(f(a) as _ \ {});
-            Interop.Flix.GoesToJava.toJavaObject(ans) 
-        };
-        FunctionZ(unchecked_cast(f1 as ##java.util.function.Function))
-
-    pub def makeFunctionZ1(fromObject: ##java.lang.Object -> a, f: a -> b \ ef): FunctionZ[a, b, ef] with GoesToJava[b] = 
-        let f1 = obj -> {
-            let a = fromObject(obj); 
+            let a = getter(obj); 
             let ans = unchecked_cast(f(a) as _ \ {});
             Interop.Flix.GoesToJava.toJavaObject(ans) 
         };
@@ -76,11 +67,11 @@ mod Interop.Util.Function.FunctionZ {
         FunctionZ(unchecked_cast((obj -> f(toA(obj)) |> fromB) as ##java.util.function.Function))
 
 
-    pub def apply(f: FunctionZ[a, b, ef], t: a): b \ ef with GoesToJava[a], ComesFromJava[b] =
+    pub def apply(getter: ##java.lang.Object -> b1 \ ef1, f: FunctionZ[a, b, ef], t: a): b1 \ {ef, ef1} with GoesToJava[a] =
         let obj = Interop.Flix.GoesToJava.toJavaObject(t);
         let FunctionZ(f1) = f;
         let ans = unchecked_cast(f1(obj) as _ \ ef);
-        Interop.Flix.ComesFromJava.fromJavaObject(ans)
+        getter(ans)
     
 
     pub def andThen(f: FunctionZ[a, b, ef], g: FunctionZ[b, c, ef1]): FunctionZ[a, c, ef + ef1] = 

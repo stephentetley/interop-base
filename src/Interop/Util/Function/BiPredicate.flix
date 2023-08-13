@@ -29,13 +29,14 @@ mod Interop.Util.Function {
 mod Interop.Util.Function.BiPredicate {
     
     use Interop.Util.Function.BiPredicate
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
-    pub def makeBiPredicate(f: (a, b) -> Bool \ ef): BiPredicate[a, b, ef] with ComesFromJava[a], ComesFromJava[b] = 
+    pub def makeBiPredicate(getterA: ##java.lang.Object -> a \ ef1,
+                            getterB: ##java.lang.Object -> b \ ef2,
+                            f: (a, b) -> Bool \ ef): BiPredicate[a, b, ef + ef1 + ef2] = 
         let f1 = (o1, o2) -> {
-            let a = Interop.Flix.ComesFromJava.fromJavaObject(o1); 
-            let b = Interop.Flix.ComesFromJava.fromJavaObject(o2);
+            let a = getterA(o1); 
+            let b = getterB(o2);
             f(a, b)
         };
         BiPredicate(unchecked_cast(new ##java.util.function.BiPredicate {

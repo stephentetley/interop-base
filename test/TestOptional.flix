@@ -13,12 +13,12 @@ mod TestOptional {
     @test
     def map01(): Bool \ {} = 
         let prim = Interop.Util.Optional.of("hello");
-        let catF: FunctionZ[String, String, Pure] = Interop.Util.Function.FunctionZ.makeFunctionZ1(Interop.Lang.StringZ.fromJavaObject, s -> s + " world");
+        let catF: FunctionZ[String, String, Pure] = Interop.Util.Function.FunctionZ.makeFunctionZ(Interop.Lang.StringZ.fromJavaObject, s -> s + " world");
         let o1 = Interop.Util.Optional.map(catF, prim);
         Interop.Util.Optional.toOption(Interop.Lang.StringZ.fromJavaObject, o1) == Some("hello world")
 
     def mkLenF(): FunctionZ[String, Int32, Pure] = 
-        Interop.Util.Function.FunctionZ.makeFunctionZ1(Interop.Lang.StringZ.fromJavaObject, s -> String.length(s))
+        Interop.Util.Function.FunctionZ.makeFunctionZ(Interop.Lang.StringZ.fromJavaObject, s -> String.length(s))
 
     @test
     def map02(): Bool \ {} = 
@@ -29,7 +29,7 @@ mod TestOptional {
     @test
     def flatMap01(): Bool \ {} = 
         let prim = Interop.Util.Optional.of("hello");
-        let fn = Interop.Util.Function.FunctionZ.makeFunctionZ1(Interop.Lang.StringZ.fromJavaObject, s -> Interop.Util.Optional.of(s + "!"));
+        let fn = Interop.Util.Function.FunctionZ.makeFunctionZ(Interop.Lang.StringZ.fromJavaObject, s -> Interop.Util.Optional.of(s + "!"));
         let o1 = Interop.Util.Optional.flatMap(fn, prim);
         Interop.Util.Optional.toOption(Interop.Lang.StringZ.fromJavaObject, o1) == Some("hello!")
 
