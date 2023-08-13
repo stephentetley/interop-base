@@ -20,10 +20,8 @@ mod Interop.Util.Function {
     /// Represents a Java ObjDoubleConsumer.
     ///
     /// ObjDoubleConsumer is not a builtin functional Interface so it is created as a new object.
-    ///
-    /// NOTE - type alias not enum
     ///    
-    pub type alias ObjDoubleConsumer[_: Type] = ##java.util.function.ObjDoubleConsumer
+    pub enum ObjDoubleConsumer[_: Type, _: Eff](##java.util.function.ObjDoubleConsumer)
 
 
 
@@ -33,19 +31,21 @@ mod Interop.Util.Function {
 mod Interop.Util.Function.ObjDoubleConsumer {
     
     use Interop.Util.Function.ObjDoubleConsumer
-    use Interop.Flix.ComesFromJava
+    use Interop.Util.Function.ObjDoubleConsumer.{ObjDoubleConsumer}
     use Interop.Flix.GoesToJava
 
-    pub def makeObjDoubleConsumer(f: (a, Float64) -> Unit \ ef): ObjDoubleConsumer[a] \ ef with ComesFromJava[a] = 
-        unchecked_cast((new ##java.util.function.ObjDoubleConsumer {
+    pub def makeObjDoubleConsumer(getter: ##java.lang.Object -> a \ ef1, 
+                                    f: (a, Float64) -> Unit \ ef): ObjDoubleConsumer[a, ef + ef1] = 
+        ObjDoubleConsumer(unchecked_cast((new ##java.util.function.ObjDoubleConsumer {
             def accept(_this: ##java.util.function.ObjDoubleConsumer, t: ##java.lang.Object, u: Float64): Unit = 
-                f(Interop.Flix.ComesFromJava.fromJavaObject(t), u)
-        }) as _ \ ef)
+                f(getter(t), u)
+        }) as _ \ {}))
 
         
-    pub def accept(t: a, u: Float64, f: ObjDoubleConsumer[a]): Unit \ ef with GoesToJava[a] = 
-        import java.util.function.ObjDoubleConsumer.accept(##java.lang.Object, Float64): Unit \ ef;        
-        accept(f, Interop.Flix.GoesToJava.toJavaObject(t), u)
+    pub def accept(t: a, u: Float64, f: ObjDoubleConsumer[a, ef]): Unit \ ef with GoesToJava[a] = 
+        import java.util.function.ObjDoubleConsumer.accept(##java.lang.Object, Float64): Unit \ ef;
+        let ObjDoubleConsumer(f1) = f;
+        accept(f1, Interop.Flix.GoesToJava.toJavaObject(t), u)
 
 
 }

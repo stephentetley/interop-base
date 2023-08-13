@@ -63,9 +63,6 @@ mod Interop.Util.Function.FunctionZ {
 
 
 
-    pub def makeFunctionZWith(f: a -> b \ ef, toA: ##java.lang.Object -> a, fromB: b -> ##java.lang.Object): FunctionZ[a, b, ef] = 
-        FunctionZ(unchecked_cast((obj -> f(toA(obj)) |> fromB) as ##java.util.function.Function))
-
 
     pub def apply(getter: ##java.lang.Object -> b1 \ ef1, f: FunctionZ[a, b, ef], t: a): b1 \ {ef, ef1} with GoesToJava[a] =
         let obj = Interop.Flix.GoesToJava.toJavaObject(t);

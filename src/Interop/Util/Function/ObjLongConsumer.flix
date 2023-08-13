@@ -20,10 +20,8 @@ mod Interop.Util.Function {
     /// Represents a Java ObjDoubleConsumer.
     ///
     /// ObjDoubleConsumer is not a builtin functional Interface so it is created as a new object.
-    ///
-    /// NOTE - type alias not enum
     ///    
-    pub type alias ObjLongConsumer[_: Type] = ##java.util.function.ObjLongConsumer
+    pub enum ObjLongConsumer[_: Type, _: Eff](##java.util.function.ObjLongConsumer)
 
 }
 
@@ -31,19 +29,21 @@ mod Interop.Util.Function {
 mod Interop.Util.Function.ObjLongConsumer {
     
     use Interop.Util.Function.ObjLongConsumer
-    use Interop.Flix.ComesFromJava
+    use Interop.Util.Function.ObjLongConsumer.{ObjLongConsumer}
     use Interop.Flix.GoesToJava
 
-    pub def makeObjLongConsumer(f: (a, Int64) -> Unit \ ef): ObjLongConsumer[a] \ ef with ComesFromJava[a] = 
-        unchecked_cast((new ##java.util.function.ObjLongConsumer {
+    pub def makeObjLongConsumer(getter: ##java.lang.Object -> a \ ef1,
+                                f: (a, Int64) -> Unit \ ef): ObjLongConsumer[a, ef + ef1] = 
+        ObjLongConsumer(unchecked_cast((new ##java.util.function.ObjLongConsumer {
             def accept(_this: ##java.util.function.ObjLongConsumer, t: ##java.lang.Object, u: Int64): Unit = 
-                f(Interop.Flix.ComesFromJava.fromJavaObject(t), u)
-        }) as _ \ ef)
+                f(getter(t), u)
+        }) as _ \ {}))
 
         
-    pub def accept(t: a, u: Int64, f: ObjLongConsumer[a]): Unit \ ef with GoesToJava[a] = 
+    pub def accept(t: a, u: Int64, f: ObjLongConsumer[a, ef]): Unit \ ef with GoesToJava[a] = 
         import java.util.function.ObjLongConsumer.accept(##java.lang.Object, Int64): Unit \ ef;        
-        accept(f, Interop.Flix.GoesToJava.toJavaObject(t), u)
+        let ObjLongConsumer(f1) = f;
+        accept(f1, Interop.Flix.GoesToJava.toJavaObject(t), u)
 
 
 }

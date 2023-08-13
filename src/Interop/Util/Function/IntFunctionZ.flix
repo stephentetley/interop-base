@@ -30,7 +30,6 @@ mod Interop.Util.Function.IntFunctionZ {
     
     use Interop.Util.Function.IntFunctionZ
     use Interop.Util.Function.IntFunctionZ.{IntFunctionZ}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
     pub def makeIntFunctionZ(f: Int32 -> a \ ef): IntFunctionZ[a, ef] with GoesToJava[a] =  
@@ -44,9 +43,9 @@ mod Interop.Util.Function.IntFunctionZ {
     pub def makeIntFunctionZWith(f: Int32 -> a \ ef, castToObj: a -> ##java.lang.Object): IntFunctionZ[a, ef] = 
         IntFunctionZ(unchecked_cast((i -> f(i) |> castToObj) as ##java.util.function.IntFunction))
 
-    pub def apply(f: IntFunctionZ[a, ef], value: Int32): a \ ef with ComesFromJava[a] = 
+    pub def apply(getter: ##java.lang.Object -> a1 \ ef1, f: IntFunctionZ[a, ef], value: Int32): a1 \ {ef, ef1} = 
         let IntFunctionZ(f1) = f;
-        unchecked_cast(f1(value) as _ \ ef) |> Interop.Flix.ComesFromJava.fromJavaObject
+        unchecked_cast(f1(value) as _ \ ef) |> getter
     
 
 }

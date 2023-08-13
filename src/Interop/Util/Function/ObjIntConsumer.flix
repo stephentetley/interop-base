@@ -20,10 +20,8 @@ mod Interop.Util.Function {
     /// Represents a Java ObjDoubleConsumer.
     ///
     /// ObjDoubleConsumer is not a builtin functional Interface so it is created as a new object.
-    ///
-    /// NOTE - type alias not enum
     ///    
-    pub type alias ObjIntConsumer[_: Type] = ##java.util.function.ObjIntConsumer
+    pub enum ObjIntConsumer[_: Type, _: Eff](##java.util.function.ObjIntConsumer)
 
 
 
@@ -33,19 +31,21 @@ mod Interop.Util.Function {
 mod Interop.Util.Function.ObjIntConsumer {
     
     use Interop.Util.Function.ObjIntConsumer
-    use Interop.Flix.ComesFromJava
+    use Interop.Util.Function.ObjIntConsumer.{ObjIntConsumer}
     use Interop.Flix.GoesToJava
 
-    pub def makeObjIntConsumer(f: (a, Int32) -> Unit \ ef): ObjIntConsumer[a] \ ef with ComesFromJava[a] = 
-        unchecked_cast((new ##java.util.function.ObjIntConsumer {
+    pub def makeObjIntConsumer(getter: ##java.lang.Object -> a \ ef1, 
+                                f: (a, Int32) -> Unit \ ef): ObjIntConsumer[a, ef + ef1] = 
+        ObjIntConsumer(unchecked_cast((new ##java.util.function.ObjIntConsumer {
             def accept(_this: ##java.util.function.ObjIntConsumer, t: ##java.lang.Object, u: Int32): Unit = 
-                f(Interop.Flix.ComesFromJava.fromJavaObject(t), u)
-        }) as _ \ ef)
+                f(getter(t), u)
+        }) as _ \ {}))
 
         
-    pub def accept(t: a, u: Int32, f: ObjIntConsumer[a]): Unit \ ef with GoesToJava[a] = 
+    pub def accept(t: a, u: Int32, f: ObjIntConsumer[a, ef]): Unit \ ef with GoesToJava[a] = 
         import java.util.function.ObjIntConsumer.accept(##java.lang.Object, Int32): Unit \ ef;        
-        accept(f, Interop.Flix.GoesToJava.toJavaObject(t), u)
+        let ObjIntConsumer(f1) = f;
+        accept(f1, Interop.Flix.GoesToJava.toJavaObject(t), u)
 
 
 }
