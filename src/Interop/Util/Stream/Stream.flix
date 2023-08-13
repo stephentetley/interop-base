@@ -176,33 +176,33 @@ mod Interop.Util.Stream.Stream {
         noneMatch(s1, f1)
 
 
-    // pub def findFirst(s: Stream[a, ef, r]): Option[a] \ {ef, r} = 
-    //     import java.util.stream.Stream.findFirst(): ##java.util.Optional \ {ef, r};
-    //     let Stream(_, s1) = s;
-    //     findFirst(s1)
-
-    // pub def findAny(fromObject: ##java.lang.Object -> ans, s: Stream[a, ef, r]): Option[a] \ {ef, r} = 
-    //     import java.util.stream.Stream.findAny(): ##java.util.Optional \ {ef, r};
-    //     let Stream(_, s1) = s;
-    //     findAny(s1)
-
-
-    pub def collect(fromObject: ##java.lang.Object -> ans, 
-                    supp: Supplier[a, ef1], 
-                    acc: BiConsumer[a, b, ef2], 
-                    comb: BiConsumer[a, a, ef3], 
-                    s: Stream[a, ef, r]): ans \ {ef, ef1, ef2, ef3, r} = 
-        import java.util.stream.Stream.collect(##java.util.function.Supplier, ##java.util.function.BiConsumer, ##java.util.function.BiConsumer): ##java.lang.Object \ {ef, ef1, ef2, ef3, r};
+    pub def findFirst(getter: ##java.lang.Object -> a1 \ ef1, s: Stream[a, ef, r]): Option[a1] \ {ef, ef1, r} = 
+        import java.util.stream.Stream.findFirst(): ##java.util.Optional \ {ef, r};
         let Stream(_, s1) = s;
-        let Supplier(supp1) = supp;
-        let BiConsumer(acc1) = acc;
-        let BiConsumer(comb1) = comb;
-        collect(s1, supp1, acc1, comb1) |> fromObject
+        findFirst(s1) |> Interop.Util.Optional.wrapHH |> Interop.Util.Optional.toOption(getter)
 
-    pub def collectWithCollector(fromObject: ##java.lang.Object -> ans, c: Collector[t, a, ef1, ans], s: Stream[a, ef, r]): ans \ {ef, ef1, r} = 
+    pub def findAny(getter: ##java.lang.Object -> a1 \ ef1, s: Stream[a, ef, r]): Option[a1] \ {ef, ef1, r} = 
+        import java.util.stream.Stream.findAny(): ##java.util.Optional \ {ef, r};
+        let Stream(_, s1) = s;
+        findAny(s1) |> Interop.Util.Optional.wrapHH |> Interop.Util.Optional.toOption(getter)
+
+
+    // pub def collect(fromObject: ##java.lang.Object -> ans, 
+    //                 supp: Supplier[a, ef1], 
+    //                 acc: BiConsumer[a, b, ef2], 
+    //                 comb: BiConsumer[a, a, ef3], 
+    //                 s: Stream[a, ef, r]): ans \ {ef, ef1, ef2, ef3, r} = 
+    //     import java.util.stream.Stream.collect(##java.util.function.Supplier, ##java.util.function.BiConsumer, ##java.util.function.BiConsumer): ##java.lang.Object \ {ef, ef1, ef2, ef3, r};
+    //     let Stream(_, s1) = s;
+    //     let Supplier(supp1) = supp;
+    //     let BiConsumer(acc1) = acc;
+    //     let BiConsumer(comb1) = comb;
+    //     collect(s1, supp1, acc1, comb1) |> fromObject
+
+    pub def collect(getter: ##java.lang.Object -> ans1 \ ef2, c: Collector[t, a, ans, ef1], s: Stream[a, ef, r]): ans1 \ {ef, ef1, ef2, r} = 
         import java.util.stream.Stream.collect(##java.util.stream.Collector): ##java.lang.Object \ {ef, ef1, r};
         let Stream(_, s1) = s;
         let Collector(c1) = c;
-        collect(s1, c1) |> fromObject
+        collect(s1, c1) |> getter
 
 }

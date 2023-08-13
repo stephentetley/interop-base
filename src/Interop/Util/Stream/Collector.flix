@@ -23,7 +23,7 @@ mod Interop.Util.Stream {
     /// Collector contains an Effect as it is an amalgamation of functions...
     /// TODO - separate effects for supplier, accumulator, combiner and finisher?
     ///
-    pub enum Collector[_a: Type, _t: Type, _ef: Eff, _ans: Type] {
+    pub enum Collector[_a: Type, _t: Type, _ans: Type, _ef: Eff] {
         case Collector(##java.util.stream.Collector)
     }
 
@@ -50,7 +50,7 @@ mod Interop.Util.Stream.Collector {
                 accumulator: BiConsumer[a, t, ef2],
                 combiner: BinaryOperator[a, ef3],
                 finisher: FunctionZ[a, ans, ef4], 
-                characteristics: Vector[CollectorCharacteristics]): Collector[t, a, ef1 + ef2 + ef3 + ef4, ans] = 
+                characteristics: Vector[CollectorCharacteristics]): Collector[t, a, ans, ef1 + ef2 + ef3 + ef4] = 
         region rc {
             import static java.util.stream.Collector.of(##java.util.function.Supplier, 
                                                     ##java.util.function.BiConsumer,
@@ -65,7 +65,7 @@ mod Interop.Util.Stream.Collector {
             Collector(of(supplier1, accumulator1, combiner1, finisher1, characteristics1))
         } 
 
-    pub def characteristics(c: Collector[t, a, ef, ans]): Vector[CollectorCharacteristics] = region rc {
+    pub def characteristics(c: Collector[t, a, ans, ef]): Vector[CollectorCharacteristics] = region rc {
         import java.util.stream.Collector.characteristics(): ##java.util.Set \ {};
         let Collector(c1) = c;
         characteristics(c1) 
@@ -73,28 +73,28 @@ mod Interop.Util.Stream.Collector {
             |> Interop.Util.SetZ.toFlixVector(Interop.Util.Stream.CollectorCharacteristics.fromJavaObject)
     }
 
-    pub def supplier(c: Collector[t, a, ef, ans]): Supplier[a, ef] =
+    pub def supplier(c: Collector[t, a, ans, ef]): Supplier[a, ef] =
         import java.util.stream.Collector.supplier(): ##java.util.function.Supplier \ {};
         let Collector(c1) = c;
         Supplier(supplier(c1))
 
-    pub def accumulator(c: Collector[t, a, ef, ans]): BiConsumer[a, t, ef] =
+    pub def accumulator(c: Collector[t, a, ans, ef]): BiConsumer[a, t, ef] =
         import java.util.stream.Collector.accumulator(): ##java.util.function.BiConsumer \ {};
         let Collector(c1) = c;
         BiConsumer(accumulator(c1))
 
-    pub def combiner(c: Collector[t, a, ef, ans]): BinaryOperator[a, ef] =
+    pub def combiner(c: Collector[t, a, ans, ef]): BinaryOperator[a, ef] =
         import java.util.stream.Collector.combiner(): ##java.util.function.BinaryOperator \ {};
         let Collector(c1) = c;
         BinaryOperator(combiner(c1))        
 
-    pub def finisher(c: Collector[t, a, ef, ans]): FunctionZ[a, ans, ef] =
+    pub def finisher(c: Collector[t, a, ans, ef]): FunctionZ[a, ans, ef] =
         import java.util.stream.Collector.finisher(): ##java.util.function.Function \ {};
         let Collector(c1) = c;
         FunctionZ(finisher(c1))  
 
     pub def mapFinisher(f1: FunctionZ[ans, ans1, ef1],
-                        c: Collector[t, a, ef, ans]): Collector[t, a, ef + ef1, ans1] =
+                        c: Collector[t, a, ans, ef]): Collector[t, a, ans1, ef + ef1] =
         let sf = supplier(c);
         let af = accumulator(c);
         let cf = combiner(c);

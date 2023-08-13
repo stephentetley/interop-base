@@ -7,7 +7,7 @@ mod TestCollectors {
     def counting01(): Unit \ IO = region rc {
         let arr = Array#{"Hello", "world", "!"} @ rc;
         let strm = Interop.Util.Stream.Stream.ofArray(rc, arr);
-        let n = Interop.Util.Stream.Stream.collectWithCollector(Interop.Flix.ComesFromJava.int64FromJavaObject, Interop.Util.Stream.Collectors.counting(), strm);
+        let n = Interop.Util.Stream.Stream.collect(Interop.Flix.ComesFromJava.int64FromJavaObject, Interop.Util.Stream.Collectors.counting(), strm);
         println("counting01 (should be 3): ${n}")
     }
 
@@ -15,7 +15,7 @@ mod TestCollectors {
     def joining01(): Unit \ IO = region rc {
         let arr = Array#{"Hello", "world", "!"} @ rc;
         let strm = Interop.Util.Stream.Stream.ofArray(rc, arr);
-        let s = Interop.Util.Stream.Stream.collectWithCollector(Interop.Flix.ComesFromJava.stringFromJavaObject, Interop.Util.Stream.Collectors.joining(), strm);
+        let s = Interop.Util.Stream.Stream.collect(Interop.Flix.ComesFromJava.stringFromJavaObject, Interop.Util.Stream.Collectors.joining(), strm);
         println("joining01: ${s}")
     }
 

@@ -21,21 +21,35 @@ mod Interop.Util.Stream.Collectors {
     use Interop.Util.Stream.Collector.{Collector}
     use Interop.Util.Function.FunctionZ
     use Interop.Util.Function.FunctionZ.{FunctionZ}
+    use Interop.Util.Function.ToDoubleFunction
     use Interop.Util.Function.ToDoubleFunction.{ToDoubleFunction}
+    use Interop.Util.Function.ToIntFunction
+    use Interop.Util.Function.ToIntFunction.{ToIntFunction}
+    use Interop.Util.Function.ToLongFunction
+    use Interop.Util.Function.ToLongFunction.{ToLongFunction}
     use Interop.Util.SetZ
 
-    /// Effects?
-    // pub def averagingDouble(fn: a -> Float64 \ ef): Collector[a, t, ef, Float64] = 
-    //     import static java.util.stream.Collectors.averagingDouble(##java.util.function.ToDoubleFunction): ##java.util.stream.Collector \ {};
-    //     let ToDoubleFunction(fn1) = Interop.Util.Function.ToDoubleFunction.makeToDoubleFunction(fn);
-    //     Collector(averagingDouble(fn1))
+    pub def averagingDouble(f: ToDoubleFunction[a, ef]): Collector[a, t, Float64, ef] = 
+        import static java.util.stream.Collectors.averagingDouble(##java.util.function.ToDoubleFunction): ##java.util.stream.Collector \ {};
+        let ToDoubleFunction(f1) = f;
+        Collector(averagingDouble(f1))
 
-    pub def counting(): Collector[a, t, ef, Int64] = 
+    pub def averagingInt(f: ToIntFunction[a, ef]): Collector[a, t, Float64, ef] = 
+        import static java.util.stream.Collectors.averagingInt(##java.util.function.ToIntFunction): ##java.util.stream.Collector \ {};
+        let ToIntFunction(f1) = f;
+        Collector(averagingInt(f1))
+
+    pub def averagingLong(f: ToLongFunction[a, ef]): Collector[a, t, Float64, ef] = 
+        import static java.util.stream.Collectors.averagingLong(##java.util.function.ToLongFunction): ##java.util.stream.Collector \ {};
+        let ToLongFunction(f1) = f;
+        Collector(averagingLong(f1))
+
+    pub def counting(): Collector[a, t, Int64, ef] = 
         import static java.util.stream.Collectors.counting(): ##java.util.stream.Collector \ {};
         Collector(counting())
 
 
-    pub def joining(): Collector[String, t, ef, String] = 
+    pub def joining(): Collector[String, t, String, ef] = 
         import static java.util.stream.Collectors.joining(): ##java.util.stream.Collector \ {};
         Collector(joining())
 

@@ -57,14 +57,13 @@ mod Interop.Util.Optional {
         Optional(unchecked_cast(o as ##java.util.Optional))
 
 
-    /// cast must be Pure
-    pub def hhToOption(fromObject: ##java.lang.Object -> a, o: ##java.util.Optional): Option[a] = 
+    pub def hhToOption(fromObject: ##java.lang.Object -> a \ ef, o: ##java.util.Optional): Option[a] \ ef = 
         import java.util.Optional.isPresent(): Bool \ {};
         import java.util.Optional.get(): ##java.lang.Object \ {};
         if (isPresent(o))
             get(o) |> fromObject |> Some
         else 
-            None
+            checked_ecast(None)
 
 
     pub def toString(o: Optional[a]): String  =
@@ -121,9 +120,9 @@ mod Interop.Util.Optional {
         let PredicateZ(f1) = f;
         Optional(filter(x1, f1))
 
-    pub def toOption(fromObject: ##java.lang.Object -> a, o: Optional[a]): Option[a] =
+    pub def toOption(getter: ##java.lang.Object -> ans \ ef, o: Optional[a]): Option[ans] \ ef =
         let Optional(o1) = o;
-        o1 |> hhToOption(fromObject)
+        o1 |> hhToOption(getter)
     
     pub def fromOption(o: Option[a]): Optional[a] with GoesToJava[a] =
         import static java.util.Optional.empty(): ##java.util.Optional \ {};
