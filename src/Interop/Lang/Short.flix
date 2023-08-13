@@ -31,11 +31,6 @@ mod Interop.Lang {
             checked_cast(x1)
     }
 
-    instance Interop.Flix.ComesFromJava[Short] {
-        pub def fromJavaObject(o: ##java.lang.Object): Short = 
-            Short(unchecked_cast(o as ##java.lang.Short))
-    }
-
 }
 
 mod Interop.Lang.Short {

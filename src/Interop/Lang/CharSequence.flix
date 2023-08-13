@@ -37,11 +37,6 @@ mod Interop.Lang {
             checked_cast(x1)
     }
 
-    instance Interop.Flix.ComesFromJava[CharSequence] {
-        pub def fromJavaObject(o: ##java.lang.Object): CharSequence = 
-            CharSequence(unchecked_cast(o as ##java.lang.CharSequence))
-    }
-
     instance Interop.Lang.ImpCharSequence[String] {
         pub def toCharSequence(s: String): CharSequence =
             let cs: ##java.lang.CharSequence = checked_cast(s);

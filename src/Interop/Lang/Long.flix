@@ -31,11 +31,6 @@ mod Interop.Lang {
             checked_cast(x1)
     }
 
-    instance Interop.Flix.ComesFromJava[Long] {
-        pub def fromJavaObject(o: ##java.lang.Object): Long = 
-            Long(unchecked_cast(o as ##java.lang.Long))
-    }
-
 }
 
 mod Interop.Lang.Long {

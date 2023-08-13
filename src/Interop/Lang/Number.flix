@@ -38,11 +38,6 @@ mod Interop.Lang {
             checked_cast(x1)
     }
 
-    instance Interop.Flix.ComesFromJava[Number] {
-        pub def fromJavaObject(o: ##java.lang.Object): Number = 
-            Number(unchecked_cast(o as ##java.lang.Number))
-    }
-
 }
 
 

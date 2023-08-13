@@ -30,7 +30,6 @@ mod Interop.Util.Function.BiConsumer {
     
     use Interop.Util.Function.BiConsumer
     use Interop.Util.Function.BiConsumer.{BiConsumer}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
     use Interop.Flix.ColMarshal
 
@@ -48,22 +47,6 @@ mod Interop.Util.Function.BiConsumer {
             def accept(_this: ##java.util.function.BiConsumer, t: ##java.lang.Object, u: ##java.lang.Object): Unit = 
                 f1(t, u)
         } as _ \ {}))
-
-
-    // /// Collector imposes arg order: collection * element
-    // pub def makeAccumulator[a: Type, r: Region, t: Type -> Region -> Type, ef: Eff]
-    //                         (r: Region[r], f: (t[a, r], a) -> Unit \ ef): BiConsumer[t[a, r], a, ef] with ComesFromJava[a], ColMarshal[t] = 
-    //     let f1 = (o1, o2) -> {
-    //         let t = Interop.Flix.ColMarshal.colFromJavaObject(r, o1); 
-    //         let a = Interop.Flix.ComesFromJava.fromJavaObject(o2);
-    //         f(t, a)
-    //     };
-    //     BiConsumer(unchecked_cast(new ##java.util.function.BiConsumer {
-    //         def accept(_this: ##java.util.function.BiConsumer, t: ##java.lang.Object, u: ##java.lang.Object): Unit = 
-    //             f1(t, u)
-    //     } as _ \ {}))
-
-
 
         
     pub def accept(t: a, u: b, f: BiConsumer[a, b, ef]): Unit \ ef with GoesToJava[a], GoesToJava[b] = 

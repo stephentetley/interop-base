@@ -24,12 +24,6 @@ mod Interop.Lang {
     ///
     pub enum Byte(##java.lang.Byte)
 
-
-    instance Interop.Flix.ComesFromJava[Byte] {
-        pub def fromJavaObject(o: ##java.lang.Object): Byte = 
-            Byte(unchecked_cast(o as ##java.lang.Byte))
-    }
-
     instance Interop.Flix.GoesToJava[Byte] {
         pub def toJavaObject(x: Byte): ##java.lang.Object = 
             let Byte(x1) = x;

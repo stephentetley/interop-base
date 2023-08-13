@@ -31,11 +31,6 @@ mod Interop.Lang {
             checked_cast(x1)
     }
 
-    instance Interop.Flix.ComesFromJava[Float] {    
-        pub def fromJavaObject(o: ##java.lang.Object): Float = 
-            Float(unchecked_cast(o as ##java.lang.Float))
-    }
-
 }
 
 mod Interop.Lang.Float {

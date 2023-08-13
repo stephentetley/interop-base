@@ -31,11 +31,6 @@ mod Interop.Lang {
             checked_cast(x1)
     }
 
-    instance Interop.Flix.ComesFromJava[Double] {
-        pub def fromJavaObject(o: ##java.lang.Object): Double = 
-            Double(unchecked_cast(o as ##java.lang.Double))
-    }
-
 }
 
 mod Interop.Lang.Double {

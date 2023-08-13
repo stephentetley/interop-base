@@ -51,10 +51,6 @@ mod Interop.NIO.Charset {
             checked_cast(x1)
     }
 
-    instance Interop.Flix.ComesFromJava[Charset] {
-        pub def fromJavaObject(o: ##java.lang.Object): Charset = 
-            Charset(unchecked_cast(o as ##java.nio.charset.Charset))
-    }
 
 }
 

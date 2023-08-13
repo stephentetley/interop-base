@@ -30,12 +30,6 @@ mod Interop.Lang {
             let Character(x1) = x;
             checked_cast(x1)
     }
-    
-    instance Interop.Flix.ComesFromJava[Character] {
-        pub def fromJavaObject(o: ##java.lang.Object): Character = 
-            Character(unchecked_cast(o as ##java.lang.Character))
-    }
-
 
 }
 

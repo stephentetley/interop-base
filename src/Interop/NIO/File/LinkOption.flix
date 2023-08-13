@@ -35,12 +35,6 @@ mod Interop.NIO.File {
             checked_cast(x1)
     }
 
-    instance Interop.Flix.ComesFromJava[LinkOption] {
-        pub def fromJavaObject(o: ##java.lang.Object): LinkOption = 
-            LinkOption(unchecked_cast(o as ##java.nio.file.LinkOption))
-    }
-
-
     instance ImpOpenOption[LinkOption] {
         pub def toOpenOption(x: LinkOption): OpenOption = 
             let LinkOption(x1) = x;
