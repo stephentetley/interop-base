@@ -37,13 +37,13 @@ mod TestOptional {
     @test
     def ifPresent01(): Unit \ IO = 
         let prim = Interop.Util.Optional.of("hello");
-        let fn = Interop.Util.Function.ConsumerZ.makeConsumerZ1(Interop.Lang.StringZ.fromJavaObject, s -> println("ifPresent01: ${s}"));
+        let fn = Interop.Util.Function.ConsumerZ.makeConsumerZ(Interop.Lang.StringZ.fromJavaObject, s -> println("ifPresent01: ${s}"));
         Interop.Util.Optional.ifPresent(fn, prim)
 
     @test
     def ifPresent02(): Unit \ IO = 
         let prim: Optional[String] = Interop.Util.Optional.empty();
-        let fn = Interop.Util.Function.ConsumerZ.makeConsumerZ1(Interop.Lang.StringZ.fromJavaObject, s -> println("ifPresent01: ${s}"));
+        let fn = Interop.Util.Function.ConsumerZ.makeConsumerZ(Interop.Lang.StringZ.fromJavaObject, s -> println("ifPresent01: ${s}"));
         Interop.Util.Optional.ifPresent(fn, prim)
     
     @test

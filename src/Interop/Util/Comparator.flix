@@ -34,10 +34,10 @@ mod Interop.Util.Comparator {
     use Interop.Util.Comparator.{Comparator}
 
 
-    pub def makeComparator(fromJava: ##java.lang.Object -> a, f: (a, a) -> Int32 \ ef): Comparator[a, ef] = 
+    pub def makeComparator(getter: ##java.lang.Object -> a \ ef1, f: (a, a) -> Int32 \ ef): Comparator[a, ef + ef1] = 
         let f1 = (o1, o2) -> {
-            let a = fromJava(o1); 
-            let b = fromJava(o2); 
+            let a = getter(o1); 
+            let b = getter(o2); 
             f(a, b)
         };
         Comparator(unchecked_cast((new ##java.util.Comparator {

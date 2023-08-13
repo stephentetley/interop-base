@@ -35,12 +35,9 @@ mod Interop.Util.Function.ConsumerZ {
     use Interop.Flix.ComesFromJava
 
 
-    pub def makeConsumerZ(f: a -> Unit \ ef): ConsumerZ[a, ef] with ComesFromJava[a] = 
-        ConsumerZ(unchecked_cast((Interop.Flix.ComesFromJava.fromJavaObject >> f) as ##java.util.function.Consumer))
-
-    pub def makeConsumerZ1(fromObject: ##java.lang.Object -> a, f: a -> Unit \ ef): ConsumerZ[a, ef] = 
+    pub def makeConsumerZ(getter: ##java.lang.Object -> a \ ef1, f: a -> Unit \ ef): ConsumerZ[a, ef + ef1] = 
         let f1 = obj -> {
-            let a = fromObject(obj); 
+            let a = getter(obj); 
             unchecked_cast(f(a) as _ \ {})
         };
         ConsumerZ(unchecked_cast(f1 as ##java.util.function.Consumer))

@@ -37,11 +37,12 @@ mod Interop.Lang {
 
 mod Interop.Lang.IterableZ {
 
-    use Interop.Lang.IterableZ;
-    use Interop.Lang.IterableZ.{IterableZ};
+    use Interop.Lang.IterableZ
+    use Interop.Lang.IterableZ.{IterableZ}
+    use Interop.Util.Function.ConsumerZ
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
-    use Interop.Flix.ComesFromJava
-
+    use Interop.Util.IteratorZ
+    use Interop.Util.IteratorZ.{IteratorZ}
 
     pub def getHH(iter: IterableZ[a, r]): ##java.lang.Iterable = 
         let IterableZ(_, iter1) = iter;
@@ -50,24 +51,25 @@ mod Interop.Lang.IterableZ {
     pub def wrapHH(rc: Region[r], iter: ##java.lang.Iterable): IterableZ[a, r] = 
         IterableZ(rc, iter)
 
-    // Iterable to mutable (Flix iterator) 
-    pub def iterator(iter: IterableZ[a, r]): Iterator[a, r, r] \ r with ComesFromJava[a] =
-        let IterableZ(rc, _) = iter;
-        let iter1 = Interop.Util.IteratorZ.wrapHH(rc, iteratorHH(iter));
-        Interop.Util.IteratorZ.toFlixIterator(rc, Interop.Flix.ComesFromJava.fromJavaObject, iter1)
 
-    pub def iteratorHH(iter: IterableZ[a, r]): ##java.util.Iterator \ r with ComesFromJava[a] =
+    pub def iterator(iter: IterableZ[a, r]): IteratorZ[a, r, r] \ r =
         import java.lang.Iterable.iterator(): ##java.util.Iterator \ r ;
-        let IterableZ(_, iter1) = iter;
-        iterator(iter1)
+        let IterableZ(rc, iter1) = iter;
+        IteratorZ(rc, iterator(iter1))
 
 
-    pub def forEach[a: Type, ef: Eff, r: Region]
-                    (f: a -> Unit \ ef, l: IterableZ[a, r]): Result[String, Unit] \ {ef, r} with ComesFromJava[a] =
+    // Iterable to mutable (Flix iterator) 
+    pub def toFlixIterator(getter: ##java.lang.Object -> b \ ef, iter: IterableZ[a, r]): Iterator[b, ef + r, r] \ r =
+        let IterableZ(rc, _) = iter;
+        let iter1 = iterator(iter);
+        Interop.Util.IteratorZ.toFlixIterator(rc, getter, iter1)
+
+
+    pub def forEach(f: ConsumerZ[a, ef], l: IterableZ[a, r]): Result[String, Unit] \ {ef, r} =
         Result.tryCatch(_ -> {
             import java.lang.Iterable.forEach(##java.util.function.Consumer): Unit \ {ef, r}; 
             let IterableZ(_, l1) = l;
-            let ConsumerZ(f1) = Interop.Util.Function.ConsumerZ.makeConsumerZ(f);
+            let ConsumerZ(f1) = f;
             forEach(l1, f1)
         })
 
