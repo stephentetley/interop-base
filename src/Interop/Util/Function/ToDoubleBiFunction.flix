@@ -31,14 +31,15 @@ mod Interop.Util.Function.ToDoubleBiFunction {
     
     use Interop.Util.Function.ToDoubleBiFunction
     use Interop.Util.Function.ToDoubleBiFunction.{ToDoubleBiFunction}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
-    pub def makeToDoubleBiFunction(f: (a, b) -> Float64 \ ef): ToDoubleBiFunction[a, b, ef] with ComesFromJava[a], ComesFromJava[b] = 
+    pub def makeToDoubleBiFunction(getterA: ##java.lang.Object -> a \ ef1,  
+                                    getterB: ##java.lang.Object -> b \ ef2, 
+                                    f: (a, b) -> Float64 \ ef): ToDoubleBiFunction[a, b, ef + ef1 + ef2]= 
         ToDoubleBiFunction(unchecked_cast(new ##java.util.function.ToDoubleBiFunction {
             def applyAsDouble(_this: ##java.util.function.ToDoubleBiFunction, t: ##java.lang.Object, u: ##java.lang.Object): Float64 = 
-                let a1 = Interop.Flix.ComesFromJava.fromJavaObject(t);
-                let b1 = Interop.Flix.ComesFromJava.fromJavaObject(u);
+                let a1 = getterA(t);
+                let b1 = getterB(u);
                 f(a1, b1)
         } as _ \ {}))
 

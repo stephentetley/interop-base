@@ -31,14 +31,15 @@ mod Interop.Util.Function.ToIntBiFunction {
     
     use Interop.Util.Function.ToIntBiFunction
     use Interop.Util.Function.ToIntBiFunction.{ToIntBiFunction}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
-    pub def makeToIntBiFunction(f: (a, b) -> Int32 \ ef): ToIntBiFunction[a, b, ef] with ComesFromJava[a], ComesFromJava[b] = 
+    pub def makeToIntBiFunction(getterA: ##java.lang.Object -> a \ ef1,
+                                    getterB: ##java.lang.Object -> b \ ef2,
+                                    f: (a, b) -> Int32 \ ef): ToIntBiFunction[a, b, ef + ef1 + ef2] = 
         ToIntBiFunction(unchecked_cast(new ##java.util.function.ToIntBiFunction {
             def applyAsInt(_this: ##java.util.function.ToIntBiFunction, t: ##java.lang.Object, u: ##java.lang.Object): Int32 = 
-                let a1 = Interop.Flix.ComesFromJava.fromJavaObject(t);
-                let b1 = Interop.Flix.ComesFromJava.fromJavaObject(u);
+                let a1 = getterA(t);
+                let b1 = getterB(u);
                 f(a1, b1)
         } as _ \ {}))
 

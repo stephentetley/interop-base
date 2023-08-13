@@ -31,13 +31,13 @@ mod Interop.Util.Function.ToDoubleFunction {
     
     use Interop.Util.Function.ToDoubleFunction
     use Interop.Util.Function.ToDoubleFunction.{ToDoubleFunction}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
-    pub def makeToDoubleFunction(f: a -> Float64 \ ef): ToDoubleFunction[a, ef] with ComesFromJava[a] = 
+    pub def makeToDoubleFunction(getter: ##java.lang.Object -> a \ ef1, 
+                                    f: a -> Float64 \ ef): ToDoubleFunction[a, ef] = 
         ToDoubleFunction(unchecked_cast(new ##java.util.function.ToDoubleFunction {
             def applyAsDouble(_this: ##java.util.function.ToDoubleFunction, t: ##java.lang.Object): Float64 = 
-                Interop.Flix.ComesFromJava.fromJavaObject(t) |> f
+                getter(t) |> f
         } as _ \ {}))
 
 

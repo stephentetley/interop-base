@@ -31,14 +31,13 @@ mod Interop.Util.Function.ToIntFunction {
     
     use Interop.Util.Function.ToIntFunction
     use Interop.Util.Function.ToIntFunction.{ToIntFunction}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
 
-    pub def makeToIntFunction(f: a -> Int32 \ ef): ToIntFunction[a, ef] with ComesFromJava[a]= 
+    pub def makeToIntFunction(getter: ##java.lang.Object -> a \ ef1, f: a -> Int32 \ ef): ToIntFunction[a, ef + ef1] = 
         ToIntFunction(unchecked_cast(new ##java.util.function.ToIntFunction {
             def applyAsInt(_this: ##java.util.function.ToIntFunction, t: ##java.lang.Object): Int32 = 
-                Interop.Flix.ComesFromJava.fromJavaObject(t) |> f
+                getter(t) |> f
         } as _ \ {}))
 
 

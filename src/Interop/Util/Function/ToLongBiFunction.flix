@@ -31,14 +31,15 @@ mod Interop.Util.Function.ToLongBiFunction {
     
     use Interop.Util.Function.ToLongBiFunction
     use Interop.Util.Function.ToLongBiFunction.{ToLongBiFunction}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
-    pub def makeToLongBiFunction(f: (a, b) -> Int64 \ ef): ToLongBiFunction[a, b, ef] with ComesFromJava[a], ComesFromJava[b] = 
+    pub def makeToLongBiFunction(getterA: ##java.lang.Object -> a \ ef1,
+                                    getterB: ##java.lang.Object -> b \ ef2,
+                                    f: (a, b) -> Int64 \ ef): ToLongBiFunction[a, b, ef + ef1 + ef2] = 
         ToLongBiFunction(unchecked_cast(new ##java.util.function.ToLongBiFunction {
             def applyAsLong(_this: ##java.util.function.ToLongBiFunction, t: ##java.lang.Object, u: ##java.lang.Object): Int64 = 
-                let a1 = Interop.Flix.ComesFromJava.fromJavaObject(t);
-                let b1 = Interop.Flix.ComesFromJava.fromJavaObject(u);
+                let a1 = getterA(t);
+                let b1 = getterB(u);
                 f(a1, b1)
         } as _ \ {}))
 

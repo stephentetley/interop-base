@@ -49,7 +49,7 @@ mod TestOptional {
     @test
     def filter01(): Bool \ {} = 
         let prim = Interop.Util.Optional.of("hello");
-        let fn = Interop.Util.Function.PredicateZ.makePredicateZ1(Interop.Lang.StringZ.fromJavaObject, s -> not String.isEmpty(s));
+        let fn = Interop.Util.Function.PredicateZ.makePredicateZ(Interop.Lang.StringZ.fromJavaObject, s -> not String.isEmpty(s));
         let o1 = Interop.Util.Optional.filter(fn, prim);
         Interop.Util.Optional.toOption(Interop.Lang.StringZ.fromJavaObject, o1) == Some("hello")
 

@@ -31,13 +31,13 @@ mod Interop.Util.Function.ToLongFunction {
     
     use Interop.Util.Function.ToLongFunction
     use Interop.Util.Function.ToLongFunction.{ToLongFunction}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
-    pub def makeToLongFunction(f: a -> Int64 \ ef): ToLongFunction[a, ef] with ComesFromJava[a]= 
+    pub def makeToLongFunction(getter: ##java.lang.Object -> a \ ef1, 
+                                f: a -> Int64 \ ef): ToLongFunction[a, ef] = 
         ToLongFunction(unchecked_cast(new ##java.util.function.ToLongFunction {
             def applyAsLong(_this: ##java.util.function.ToLongFunction, t: ##java.lang.Object): Int64 = 
-                Interop.Flix.ComesFromJava.fromJavaObject(t) |> f
+                getter(t) |> f
         } as _ \ {}))
 
 

@@ -32,13 +32,12 @@ mod Interop.Util.Function.UnaryOperator {
     
     use Interop.Util.Function.UnaryOperator
     use Interop.Util.Function.UnaryOperator.{UnaryOperator}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
     
 
-    pub def makeUnaryOperator(f: a -> a \ ef): UnaryOperator[a, ef] with ComesFromJava[a], GoesToJava[a] = 
+    pub def makeUnaryOperator(getter: ##java.lang.Object -> a \ ef1, f: a -> a \ ef): UnaryOperator[a, ef + ef1] with GoesToJava[a] = 
         let f1 = o1 -> {
-            let a = Interop.Flix.ComesFromJava.fromJavaObject(o1); 
+            let a = getter(o1); 
             let ans = f(a);
             Interop.Flix.GoesToJava.toJavaObject(ans)
         };
@@ -48,10 +47,10 @@ mod Interop.Util.Function.UnaryOperator {
         } as _ \ {}))
 
         
-    pub def apply(t: a, f: UnaryOperator[a, ef]): a \ ef with ComesFromJava[a], GoesToJava[a] = 
+    pub def apply(getter: ##java.lang.Object -> a1 \ ef1, t: a, f: UnaryOperator[a, ef]): a1 \ {ef, ef1} with GoesToJava[a] = 
         import java.util.function.UnaryOperator.apply(##java.lang.Object): ##java.lang.Object \ ef;
         let UnaryOperator(f1) = f;
-        apply(f1, Interop.Flix.GoesToJava.toJavaObject(t)) |> Interop.Flix.ComesFromJava.fromJavaObject
+        apply(f1, Interop.Flix.GoesToJava.toJavaObject(t)) |> getter
 
     pub def identity(): UnaryOperator[a, ef] = 
         import static java.util.function.UnaryOperator.identity(): ##java.util.function.UnaryOperator \ {};

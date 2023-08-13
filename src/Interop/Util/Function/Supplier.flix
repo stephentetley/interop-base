@@ -31,9 +31,7 @@ mod Interop.Util.Function.Supplier {
     
     use Interop.Util.Function.Supplier
     use Interop.Util.Function.Supplier.{Supplier}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
-    use Interop.Flix.ColMarshal
 
     pub def makeSupplier(f: Unit -> a \ ef): Supplier[a, ef] with GoesToJava[a] = 
         Supplier(unchecked_cast(new ##java.util.function.Supplier {
@@ -56,10 +54,10 @@ mod Interop.Util.Function.Supplier {
                 f() |> castToObj
         } as _ \ {}))
 
-    pub def get(f: Supplier[a, ef]): a \ ef with ComesFromJava[a] = 
+    pub def get(getter: ##java.lang.Object -> a1 \ ef1, f: Supplier[a, ef]): a1 \ {ef, ef1} = 
         import java.util.function.Supplier.get(): ##java.lang.Object \ ef;
         let Supplier(f1) = f;
-        get(f1) |> Interop.Flix.ComesFromJava.fromJavaObject
+        get(f1) |> getter
 
 
 }

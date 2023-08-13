@@ -31,16 +31,11 @@ mod Interop.Util.Function.PredicateZ {
     
     use Interop.Util.Function.PredicateZ
     use Interop.Util.Function.PredicateZ.{PredicateZ}
-    use Interop.Flix.ComesFromJava
     use Interop.Flix.GoesToJava
 
-    pub def makePredicateZ(f: a -> Bool \ ef): PredicateZ[a, ef] with ComesFromJava[a] = 
-        PredicateZ(unchecked_cast(obj -> f(Interop.Flix.ComesFromJava.fromJavaObject(obj)) as ##java.util.function.Predicate))
-
-
-    pub def makePredicateZ1(fromObject: ##java.lang.Object -> a, f: a -> Bool \ ef): PredicateZ[a, ef] = 
+    pub def makePredicateZ(getter: ##java.lang.Object -> a \ ef1, f: a -> Bool \ ef): PredicateZ[a, ef + ef1] = 
         let f1 = obj -> {
-            let a = fromObject(obj); 
+            let a = getter(obj); 
             unchecked_cast(f(a) as _ \ {})
         };
         PredicateZ(unchecked_cast(f1 as ##java.util.function.Predicate))
