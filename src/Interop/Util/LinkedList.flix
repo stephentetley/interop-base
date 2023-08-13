@@ -85,6 +85,7 @@ mod Interop.Util.LinkedList {
     use Interop.Util.Collection
     use Interop.Util.Collection.{Collection}
     use Interop.Util.Comparator
+    use Interop.Util.Comparator.{Comparator}
     use Interop.Util.ImpCollection
     use Interop.Util.Function.ConsumerZ
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
@@ -213,16 +214,12 @@ mod Interop.Util.LinkedList {
         })
 
 
-    pub def sort!(fromJava: ##java.lang.Object -> a, f: (a, a) -> Int32, l: LinkedList[a, r]): Result[String, Unit] \ r =
-        let f1 = Interop.Util.Comparator.makeComparator(fromJava, f);
-        sortWithComparator!(f1, l)
-
-
-    pub def sortWithComparator!(c: Comparator[a], l: LinkedList[a, r]): Result[String, Unit] \ r =
+    pub def sort!(c: Comparator[a, ef], l: LinkedList[a, r]): Result[String, Unit] \ {ef, r} =
         Result.tryCatch(_ -> {
-            import java.util.LinkedList.sort(##java.util.Comparator): Unit \ r; 
+            import java.util.LinkedList.sort(##java.util.Comparator): Unit \ {ef, r}; 
             let LinkedList(_, l1) = l;
-            sort(l1, c)
+            let Comparator(c1) = c;
+            sort(l1, c1)
         })
 
     // pub def fromIterable[a: Type, t: Type -> Region -> Type, r: Region, r2: Region]

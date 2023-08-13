@@ -80,6 +80,7 @@ mod Interop.Util.VectorZ {
     use Interop.Util.VectorZ
     use Interop.Util.VectorZ.{VectorZ}
     use Interop.Util.Comparator
+    use Interop.Util.Comparator.{Comparator}
     use Interop.Flix.GoesToJava
 
 
@@ -126,16 +127,12 @@ mod Interop.Util.VectorZ {
         add(v1, Interop.Flix.GoesToJava.toJavaObject(x))
 
 
-    pub def sort!(fromJava: ##java.lang.Object -> a, f: (a, a) -> Int32, v: VectorZ[a, r]): Result[String, Unit] \ r =
-        let f1 = Interop.Util.Comparator.makeComparator(fromJava, f);
-        sortWithComparator!(f1, v)
-
-
-    pub def sortWithComparator!(c: Comparator[a], v: VectorZ[a, r]): Result[String, Unit] \ r =
+    pub def sort!(c: Comparator[a, ef], v: VectorZ[a, r]): Result[String, Unit] \ {ef, r} =
         Result.tryCatch(_ -> {
-            import java.util.Vector.sort(##java.util.Comparator): Unit \ r; 
+            import java.util.Vector.sort(##java.util.Comparator): Unit \ {ef, r}; 
             let VectorZ(_, v1) = v;
-            sort(v1, c)
+            let Comparator(c1) = c;
+            sort(v1, c1)
         })
 
 

@@ -1,6 +1,7 @@
-### v0.7.1
+### v0.8.0
    Work on removing `ComesFromJava`.
    Collection and Map `get`` functions now use a "getter" to coerce the result type.
+   Made `Comparator` an enum.
 
 ### v0.7.0
    Removed `Marshal` typeclass, it is replaced by `GoesToJava` and `ComesFromJava` (`ComesFromJava` has problems and and will itself be removed).

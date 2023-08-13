@@ -68,6 +68,7 @@ mod Interop.Util.ListZ {
     use Interop.Util.Collection
     use Interop.Util.Collection.{Collection}
     use Interop.Util.Comparator
+    use Interop.Util.Comparator.{Comparator}
     use Interop.Util.ImpListZ
     use Interop.Util.Function.ConsumerZ
     use Interop.Util.Function.ConsumerZ.{ConsumerZ}
@@ -234,16 +235,12 @@ mod Interop.Util.ListZ {
         })
 
 
-    pub def sort!(fromJava: ##java.lang.Object -> a, f: (a, a) -> Int32, l: ListZ[a, r]): Result[String, Unit] \ r =
-        let f1 = Interop.Util.Comparator.makeComparator(fromJava, f);
-        sortWithComparator!(f1, l)
-
-
-    pub def sortWithComparator!(c: Comparator[a], l: ListZ[a, r]): Result[String, Unit] \ r =
+    pub def sort!(c: Comparator[a, ef], l: ListZ[a, r]): Result[String, Unit] \ {ef, r} =
         Result.tryCatch(_ -> {
-            import java.util.List.sort(##java.util.Comparator): Unit \ r; 
+            import java.util.List.sort(##java.util.Comparator): Unit \ {ef, r}; 
             let ListZ(_, l1) = l;
-            sort(l1, c)
+            let Comparator(c1) = c;
+            sort(l1, c1)
         })
 
     pub def fromFoldableViaArrayList(rc: Region[r], t: t[a]): ListZ[a, r] \ { r } with Foldable[t], GoesToJava[a] =
@@ -265,24 +262,24 @@ mod Interop.Util.ListZ {
     ///
     /// Returns an iterator over `l`.
     ///
-    pub def toFlixIterator(rc: Region[r1], fromJava: ##java.lang.Object -> a, l: ListZ[a, r]): Iterator[a, r1, r1] \ { r} =
+    pub def toFlixIterator(rc: Region[r1], getter: ##java.lang.Object -> b \ ef, l: ListZ[a, r]): Iterator[b, ef + r1, r1] \ r =
         import java.util.List.iterator(): ##java.util.Iterator \ r;
         let ListZ(_, l1) = l;
         if (Object.isNull(l1))
-            Iterator.empty(rc)
+            Iterator.iterate(rc, _ -> checked_ecast(None))
         else 
             iterator(l1) 
                 |> Interop.Util.IteratorZ.wrapHH(rc)
-                |> Interop.Util.IteratorZ.toFlixIterator(rc, fromJava)
+                |> Interop.Util.IteratorZ.toFlixIterator(rc, getter)
 
 
 
-    pub def toFlixList(fromJava: ##java.lang.Object -> a, l: ListZ[a, r]): List[a] \ r = region rc {
-        toFlixIterator(rc, fromJava, l) |> Iterator.toList
+    pub def toFlixList(getter: ##java.lang.Object -> b \ ef, l: ListZ[a, r]): List[b] \ {ef, r} = region rc {
+        toFlixIterator(rc, getter, l) |> Iterator.toList
     }
 
-    pub def toFlixSet(fromJava: ##java.lang.Object -> a, l: ListZ[a, r]): Set[a] \ r with Order[a] = region rc {
-        toFlixIterator(rc, fromJava, l) |> Iterator.toSet
+    pub def toFlixSet(getter: ##java.lang.Object -> b \ ef, l: ListZ[a, r]): Set[b] \ {ef, r} with Order[b] = region rc {
+        toFlixIterator(rc, getter, l) |> Iterator.toSet
     }
 
 

@@ -22,7 +22,7 @@ mod Interop.Util {
     /// Functional interface
     ///
     /// TODO should comparator have an effect type param? Probably then it can handle comparing mutable objects
-    pub type alias Comparator[_: Type] = ##java.util.Comparator
+    pub enum Comparator[_: Type, _: Eff](##java.util.Comparator)
 
 
 }
@@ -30,29 +30,29 @@ mod Interop.Util {
 
 mod Interop.Util.Comparator {
     
-    use Interop.Util.Comparator;
-    use Interop.Flix.ComesFromJava
+    use Interop.Util.Comparator
+    use Interop.Util.Comparator.{Comparator}
 
 
-    pub def makeComparator(fromJava: ##java.lang.Object -> a, f: (a, a) -> Int32 \ ef): Comparator[a] \ ef = 
+    pub def makeComparator(fromJava: ##java.lang.Object -> a, f: (a, a) -> Int32 \ ef): Comparator[a, ef] = 
         let f1 = (o1, o2) -> {
             let a = fromJava(o1); 
             let b = fromJava(o2); 
             f(a, b)
         };
-        unchecked_cast((new ##java.util.Comparator {
+        Comparator(unchecked_cast((new ##java.util.Comparator {
             def compare(_this: ##java.util.Comparator, t: ##java.lang.Object, u: ##java.lang.Object): Int32 = 
                 f1(t, u)
-        }) as _ \ ef)
+        }) as _ \ {}))
 
-    pub def naturalOrder(): Comparator[a] = 
+    pub def naturalOrder(): Comparator[a, Pure] = 
         import static java.util.Comparator.naturalOrder(): ##java.util.Comparator \ {}; 
-        naturalOrder()
+        Comparator(naturalOrder())
 
     
-    pub def reverseOrder(): Comparator[a] = 
+    pub def reverseOrder(): Comparator[a, Pure] = 
         import static java.util.Comparator.reverseOrder(): ##java.util.Comparator \ {}; 
-        reverseOrder()
+        Comparator(reverseOrder())
 
 
 }
