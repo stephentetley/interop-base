@@ -32,7 +32,6 @@ mod Interop.Util.Function.FunctionZ {
     use Interop.Util.Function.FunctionZ
     use Interop.Util.Function.FunctionZ.{FunctionZ}
     use Interop.Flix.GoesToJava
-    use Interop.Flix.ColMarshal
 
 
     pub def makeFunctionZ(getter: ##java.lang.Object -> a \ ef1, f: a -> b \ ef): FunctionZ[a, b, ef + ef1] with GoesToJava[b] = 
@@ -43,23 +42,7 @@ mod Interop.Util.Function.FunctionZ {
         };
         FunctionZ(unchecked_cast(f1 as ##java.util.function.Function))
 
-    pub def makeSummaryFinisher[a: Type, b: Type, r: Region, t: Type -> Region -> Type, ef: Eff]
-                                (rc: Region[r], f: t[a, r] -> b \ ef): FunctionZ[t[a, r], b, ef] with ColMarshal[t], GoesToJava[b] = 
-        let f1 = obj -> {
-            let t1 = Interop.Flix.ColMarshal.colFromJavaObject(rc, obj);
-            let ans = unchecked_cast(f(t1) as _ \ IO);
-            Interop.Flix.GoesToJava.toJavaObject(ans) 
-        };
-        FunctionZ(unchecked_cast(f1 as ##java.util.function.Function))
 
-    pub def makeCollectionFinisher[a: Type, r: Region, t: Type -> Region -> Type, ef: Eff]
-                                    (rc: Region[r], f: t[a, r] -> t[a, r] \ ef): FunctionZ[t[a, r], t[a, r], ef] with ColMarshal[t], GoesToJava[t[a,r]], GoesToJava[a] = 
-        let f1 = obj -> {
-            let t1 = Interop.Flix.ColMarshal.colFromJavaObject(rc, obj);
-            let ans = unchecked_cast(f(t1) as _ \ IO);
-            Interop.Flix.GoesToJava.toJavaObject(ans) 
-        };
-        FunctionZ(unchecked_cast(f1 as ##java.util.function.Function))
 
 
 

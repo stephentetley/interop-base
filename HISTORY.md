@@ -1,5 +1,6 @@
 ### v0.8.0
    Removed `ComesFromJava` class.
+   Removed `ColMarshal` class.
    Collection and Map `get` functions now use a "getter" to coerce the result type.
    Changed `Comparator` and other functional objects that were type aliases to enums.
    Changed type param order of `Collector`.

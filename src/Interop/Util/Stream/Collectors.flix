@@ -16,11 +16,20 @@
 
 
 mod Interop.Util.Stream.Collectors {
-    
+
+    use Interop.Util.Comparator
+    use Interop.Util.Comparator.{Comparator}
+    use Interop.Util.ListZ
+    use Interop.Util.MapZ
+    use Interop.Util.Optional
+    use Interop.Util.Stream
+    use Interop.Util.Stream.{Stream}
     use Interop.Util.Stream.Collector
     use Interop.Util.Stream.Collector.{Collector}
     use Interop.Util.Function.FunctionZ
     use Interop.Util.Function.FunctionZ.{FunctionZ}
+    use Interop.Util.Function.PredicateZ
+    use Interop.Util.Function.PredicateZ.{PredicateZ}
     use Interop.Util.Function.ToDoubleFunction
     use Interop.Util.Function.ToDoubleFunction.{ToDoubleFunction}
     use Interop.Util.Function.ToIntFunction
@@ -44,16 +53,40 @@ mod Interop.Util.Stream.Collectors {
         let ToLongFunction(f1) = f;
         Collector(averagingLong(f1))
 
+    pub def collectingAndThen(downstream: Collector[a, t, ans, ef], finisher: FunctionZ[ans, ans1, ef1]): Collector[a, t, ans1, ef + ef1] = 
+        import static java.util.stream.Collectors.collectingAndThen(##java.util.stream.Collector, ##java.util.function.Function): ##java.util.stream.Collector \ {};
+        let Collector(c1) = downstream;
+        let FunctionZ(f1) = finisher;
+        Collector(collectingAndThen(c1, f1))
+
+
     pub def counting(): Collector[a, t, Int64, ef] = 
         import static java.util.stream.Collectors.counting(): ##java.util.stream.Collector \ {};
         Collector(counting())
 
+    pub def filtering(f: PredicateZ[a, ef1], downstream: Collector[a, t, ans, ef]): Collector[a, t, ans1, ef + ef1] = 
+        import static java.util.stream.Collectors.filtering(##java.util.function.Predicate, ##java.util.stream.Collector): ##java.util.stream.Collector \ {};
+        let Collector(c1) = downstream;
+        let PredicateZ(f1) = f;
+        Collector(filtering(f1, c1))
+
+    /// types need verifying...
+    pub def flatMapping(f: FunctionZ[t, Stream[a, ef1, r], ef2], c: Collector[a, t, ans, ef]): Collector[t, t1, ans, ef + ef1 + ef2] = 
+        import static java.util.stream.Collectors.flatMapping(##java.util.function.Function, ##java.util.stream.Collector): ##java.util.stream.Collector \ {};
+        let Collector(c1) = c;
+        let FunctionZ(f1) = f;
+        Collector(flatMapping(f1, c1))
+
+    pub def groupingBy(_: Region[r], f: FunctionZ[a, k, ef]): Collector[a, t, MapZ[k, ListZ[a, r], r], ef] = 
+        import static java.util.stream.Collectors.groupingBy(##java.util.function.Function): ##java.util.stream.Collector \ {};        
+        let FunctionZ(f1) = f;
+        Collector(groupingBy(f1))
 
     pub def joining(): Collector[String, t, String, ef] = 
         import static java.util.stream.Collectors.joining(): ##java.util.stream.Collector \ {};
         Collector(joining())
 
-    // pub def joiningWithDelimiter(delim: String): Collector[String, t, Pure, String] = 
+    // pub def joiningWithDelimiter(delim: String): Collector[String, t, String, ef] = 
     //     import static java.util.stream.Collectors.joining(##java.lang.CharSequence): ##java.util.stream.Collector \ {};
     //     let cs = checked_cast(delim);
     //     Collector(joining(cs))
@@ -66,6 +99,18 @@ mod Interop.Util.Stream.Collectors {
     //     let p1 = checked_cast(prefix.prefix);
     //     let s1 = checked_cast(suffix.suffix);
     //     Collector(joining(d1, p1, s1))
+
+
+
+    pub def maxBy(f: Comparator[a, ef]): Collector[a, t, Optional[a], ef] = 
+        import static java.util.stream.Collectors.maxBy(##java.util.Comparator): ##java.util.stream.Collector \ {};
+        let Comparator(f1) = f;
+        Collector(maxBy(f1))
+
+    pub def minBy(f: Comparator[a, ef]): Collector[a, t, Optional[a], ef] = 
+        import static java.util.stream.Collectors.minBy(##java.util.Comparator): ##java.util.stream.Collector \ {};
+        let Comparator(f1) = f;
+        Collector(minBy(f1))
 
     /// TODO...
     // // Need to extend the finisher to get from ##java.util.Set to Flix's `Set[a]`

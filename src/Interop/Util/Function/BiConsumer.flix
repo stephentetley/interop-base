@@ -31,7 +31,6 @@ mod Interop.Util.Function.BiConsumer {
     use Interop.Util.Function.BiConsumer
     use Interop.Util.Function.BiConsumer.{BiConsumer}
     use Interop.Flix.GoesToJava
-    use Interop.Flix.ColMarshal
 
 
 

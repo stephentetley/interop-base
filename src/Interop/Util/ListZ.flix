@@ -44,11 +44,6 @@ mod Interop.Util {
             unchecked_cast(t1 as ##java.lang.Object)
     }
 
-    instance Interop.Flix.ColMarshal[ListZ] {
-        pub def colFromJavaObject(rc: Region[r], o: ##java.lang.Object): ListZ[a, r] = 
-            ListZ(rc, unchecked_cast(o as ##java.util.List))
-    }
-
     instance Interop.Util.ImpCollection[ListZ] {
         pub def toCollection(t: ListZ[a, r]): Collection[a, r] = 
             let ListZ(rc, t1) = t;

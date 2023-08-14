@@ -139,7 +139,7 @@ mod Interop.Util.Stream.Stream {
         let FunctionZ(f1) = f;
         Stream(rc, map(s1, f1))
 
-    /// Warning `f1` ...
+
     pub def flatMap(f: FunctionZ[a, Stream[b, ef1, r], ef2], s: Stream[a, ef, r]): Stream[b, ef + ef1 + ef2, r] with GoesToJava[b] = 
         import java.util.stream.Stream.flatMap(##java.util.function.Function): ##java.util.stream.Stream \ {};
         let Stream(rc, s1) = s;

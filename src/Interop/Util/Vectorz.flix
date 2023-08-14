@@ -33,15 +33,6 @@ mod Interop.Util {
     }
 
 
-    // instance Interop.Flix.ColMarshal[VectorZ] {
-    //     pub def colToJavaObject(x: VectorZ[a, r]): ##java.lang.Object = 
-    //         let VectorZ(_, t1) = x;
-    //         unchecked_cast(t1 as ##java.lang.Object)
-
-    //     pub def colFromJavaObject(rc: Region[r], o: ##java.lang.Object): VectorZ[a, r] = 
-    //         VectorZ(rc, unchecked_cast(o as ##java.util.Vector))
-    // }
-
     instance Interop.Util.ImpCollection[VectorZ] {
         pub def toCollection(t: VectorZ[a, r]): Collection[a, r] = 
             let VectorZ(rc, t1) = t;

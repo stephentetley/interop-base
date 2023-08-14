@@ -42,11 +42,6 @@ mod Interop.Util {
             unchecked_cast(t1 as ##java.lang.Object)
     }
 
-    instance Interop.Flix.ColMarshal[Collection] {
-        pub def colFromJavaObject(rc: Region[r], o: ##java.lang.Object): Collection[a, r] = 
-            Collection(rc, unchecked_cast(o as ##java.util.Collection))
-    }
-
 }
 
 mod Interop.Util.Collection {
