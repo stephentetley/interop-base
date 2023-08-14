@@ -24,12 +24,12 @@ pub def arrayListCollector(r: Region[r]): Collector[String, a, ArrayList[String,
     Interop.Util.Stream.Collector.of5(supplier, accumulator, combiner, finisher, [])
 
 
-pub def test01(): Result[String, Unit] \ IO = 
-    use Result.flatMap;
-    region r {
-        let strm    = Interop.Util.Stream.Stream.ofArray(r, ["Hello", "World", "!"] @ r);
-        let coll    = arrayListCollector(r);
-        let ans     = Interop.Util.Stream.Stream.collectWith(coll, strm, Interop.Flix.MutMarshal.mmFromJavaObject(r));
-        println(Interop.Util.ArrayList.toString(ans));
-        Ok()
-    }    
+// pub def test01(): Result[String, Unit] \ IO = 
+//     use Result.flatMap;
+//     region r {
+//         let strm    = Interop.Util.Stream.Stream.ofArray(r, ["Hello", "World", "!"] @ r);
+//         let coll    = arrayListCollector(r);
+//         let ans     = Interop.Util.Stream.Stream.collectWith(coll, strm, Interop.Flix.MutMarshal.mmFromJavaObject(r));
+//         println(Interop.Util.ArrayList.toString(ans));
+//         Ok()
+//     }    

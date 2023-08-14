@@ -29,11 +29,6 @@ mod Interop.Util {
             checked_cast(x1)
     }
 
-    instance Interop.Flix.MutMarshal[DoubleSummaryStatistics] {
-        pub def mutFromJavaObject(_: Region[r], o: ##java.lang.Object): DoubleSummaryStatistics[r] = 
-            DoubleSummaryStatistics(unchecked_cast(o as ##java.util.DoubleSummaryStatistics))
-    }
-
 }
 
 

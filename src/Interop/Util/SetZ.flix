@@ -60,7 +60,6 @@ mod Interop.Util.SetZ {
     use Interop.Util.Function.PredicateZ
     use Interop.Util.Function.PredicateZ.{PredicateZ}
     use Interop.Flix.GoesToJava
-    use Interop.Flix.MutMarshal
 
     pub def getHH(s: SetZ[a, r]): ##java.util.Set = 
         let SetZ(_, s1) = s;
@@ -142,16 +141,6 @@ mod Interop.Util.SetZ {
             let x1 = Interop.Flix.GoesToJava.toJavaObject(x);        
             add(s1, x1)
         })
-
-    // pub def addMut![r: Region, t: Region -> Type]
-    //                 (x: t[r], s: SetZ[t[r], r]): Result[String, Bool] \ r with MutMarshal[t] =
-    //     Result.tryCatch(_ -> {
-    //         import java.util.Set.add(##java.lang.Object): Bool \ r; 
-    //         let SetZ(_, s1) = s;
-    //         let x1 = Interop.Flix.MutMarshal.mutToJavaObject(x);
-    //         add(s1, x1)
-    //     })
-
 
     pub def addAll!(c: Collection[a, r], s: SetZ[a, r]): Result[String, Bool] \ r with GoesToJava[a] =
         Result.tryCatch(_ -> {
