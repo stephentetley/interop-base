@@ -18,8 +18,7 @@
 
 mod Interop.Lang.StringZ {
 
-    use Interop.NIO.Charset.Charset
-    use Interop.NIO.Charset.Charset.{Charset}
+    use Charset.{Charset}
     use Interop.Util.Stream.IntStream
     use Interop.Util.Stream.IntStream.{IntStream}
 

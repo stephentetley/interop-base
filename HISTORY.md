@@ -1,3 +1,6 @@
+### v0.9.0
+   Now depends on the package `charset-locale`, removed `Charset`, `Locale` modules and submodules.
+
 ### v0.8.0
    Removed `ComesFromJava` class.
    Removed `ColMarshal` class.

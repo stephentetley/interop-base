@@ -39,8 +39,7 @@ mod Interop.Text.DecimalFormatSymbols {
     use Interop.Text.DecimalFormatSymbolsInit
 
     use Interop.Util.Currency
-    use Interop.Util.Locale
-    use Interop.Util.Locale.{Locale}
+    use Locale.{Locale}
 
     pub def getHH(dfs: DecimalFormatSymbols): ##java.text.DecimalFormatSymbols = 
         let DecimalFormatSymbols(dfs1) = dfs;

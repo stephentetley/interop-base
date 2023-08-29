@@ -42,8 +42,7 @@ mod Interop.Text.Collator {
     use Interop.Text.CollatorInit
     use Interop.Text.MutCollator
     use Interop.Text.MutCollator.{MutCollator}
-    use Interop.Util.Locale
-    use Interop.Util.Locale.{Locale}
+    use Locale.{Locale}
 
     pub def getHH(c: Collator): ##java.text.Collator = 
         let Collator(c1) = c;

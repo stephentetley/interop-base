@@ -51,8 +51,7 @@ mod Interop.Text.RuleBasedCollator {
     use Interop.Text.MutCollator
     use Interop.Text.MutCollator.{MutCollator}
     use Interop.Text.CollatorInit
-    use Interop.Util.Locale
-    use Interop.Util.Locale.{Locale}
+    use Locale.{Locale}
 
     pub def getHH(c: RuleBasedCollator): ##java.text.RuleBasedCollator = 
         let RuleBasedCollator(c1) = c;

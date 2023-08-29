@@ -43,8 +43,7 @@ mod Interop.Util.Currency {
     
     use Interop.Util.Currency
     use Interop.Util.Currency.{Currency}
-    use Interop.Util.Locale
-    use Interop.Util.Locale.{Locale}
+    use Locale.{Locale}
     use Interop.Util.SetZ
 
     pub def getHH(c: Currency): ##java.util.Currency = 
@@ -92,7 +91,7 @@ mod Interop.Util.Currency {
     pub def getSymbolWithLocale(loc: Locale, cur: Currency): String = 
         import java.util.Currency.getSymbol(##java.util.Locale): String \ {};
         let Currency(cur1) = cur;
-        let loc1 = Interop.Util.Locale.getHH(loc);
+        let Locale(loc1) = loc;
         getSymbol(cur1, loc1)
 
 

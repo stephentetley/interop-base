@@ -25,8 +25,7 @@ mod Interop.Util.LocaleBuilder {
 
     use Interop.Util.LocaleBuilder
     use Interop.Util.LocaleBuilder.{LocaleBuilder}
-    use Interop.Util.Locale
-    use Interop.Util.Locale.{Locale}
+    use Locale.{Locale}
 
     pub def getHH(b: LocaleBuilder[r]): ##java.util.Locale$Builder = 
         let LocaleBuilder(b1) = b;

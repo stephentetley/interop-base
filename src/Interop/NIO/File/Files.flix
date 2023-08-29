@@ -17,8 +17,7 @@
 
 mod Interop.NIO.File.Files {
 
-    use Interop.NIO.Charset.Charset
-    use Interop.NIO.Charset.Charset.{Charset}
+    use Charset.{Charset}
     use Interop.NIO.File.Path
     use Interop.NIO.File.Path.{Path}
     use Interop.NIO.File.LinkOption

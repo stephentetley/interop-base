@@ -59,8 +59,7 @@ mod Interop.IO.OutputStreamWriter {
     use Interop.IO.OutputStreamWriter.{OutputStreamWriter}
     use Interop.IO.OutputStream
 
-    use Interop.NIO.Charset.Charset
-    use Interop.NIO.Charset.Charset.{Charset}
+    use Charset.{Charset}
 
     pub def getHH(w: OutputStreamWriter[r]): ##java.io.OutputStreamWriter = 
         let OutputStreamWriter(w1) = w;

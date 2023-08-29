@@ -41,8 +41,7 @@ mod Interop.IO.InputStreamReader {
     use Interop.IO.InputStreamReader
     use Interop.IO.InputStreamReader.{InputStreamReader}
     use Interop.IO.InputStream
-    use Interop.NIO.Charset.Charset
-    use Interop.NIO.Charset.Charset.{Charset}
+    use Charset.{Charset}
 
     pub def getHH(rd: InputStreamReader[r]): ##java.io.InputStreamReader = 
         let InputStreamReader(rd1) = rd;

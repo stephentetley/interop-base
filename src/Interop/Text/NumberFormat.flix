@@ -62,8 +62,7 @@ mod Interop.Text.NumberFormat {
     use Interop.Math.RoundingMode.{RoundingMode}
     use Interop.Util.Currency
     use Interop.Util.Currency.{Currency}
-    use Interop.Util.Locale
-    use Interop.Util.Locale.{Locale}
+    use Locale.{Locale}
 
     pub def getHH(nf: NumberFormat): ##java.text.NumberFormat = 
         let NumberFormat(nf1) = nf;
