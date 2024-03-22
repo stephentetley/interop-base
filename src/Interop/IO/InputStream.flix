@@ -56,7 +56,7 @@ mod Interop.IO.InputStream {
         Result.tryCatch(_ -> {
             import java.io.InputStream.readAllBytes(): Array[Int8, r1] \ {r, r1};
             let InputStream(s1) = s;
-            let _ = Array.new(rc);
+            let _ = bug!("readAllBytes - todo"); // Array.new(rc);
             readAllBytes(s1)
         })
 

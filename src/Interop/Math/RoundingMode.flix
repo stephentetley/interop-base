@@ -58,35 +58,35 @@ mod Interop.Math.RoundingMode {
         equals(x1, checked_cast(y1))
 
     pub def ceiling(): RoundingMode = 
-        import static get java.math.RoundingMode.CEILING: ##java.math.RoundingMode \ {} as get_CEILING;
+        import static java_get_field java.math.RoundingMode.CEILING: ##java.math.RoundingMode \ {} as get_CEILING;
         get_CEILING() |> RoundingMode
 
     pub def down(): RoundingMode = 
-        import static get java.math.RoundingMode.DOWN: ##java.math.RoundingMode \ {} as get_DOWN;
+        import static java_get_field java.math.RoundingMode.DOWN: ##java.math.RoundingMode \ {} as get_DOWN;
         get_DOWN() |> RoundingMode
 
     pub def floor(): RoundingMode = 
-        import static get java.math.RoundingMode.FLOOR: ##java.math.RoundingMode \ {} as get_FLOOR;
+        import static java_get_field java.math.RoundingMode.FLOOR: ##java.math.RoundingMode \ {} as get_FLOOR;
         get_FLOOR() |> RoundingMode
 
     pub def half_down(): RoundingMode = 
-        import static get java.math.RoundingMode.HALF_DOWN: ##java.math.RoundingMode \ {} as get_HALF_DOWN;
+        import static java_get_field java.math.RoundingMode.HALF_DOWN: ##java.math.RoundingMode \ {} as get_HALF_DOWN;
         get_HALF_DOWN() |> RoundingMode
 
     pub def half_even(): RoundingMode = 
-        import static get java.math.RoundingMode.HALF_EVEN: ##java.math.RoundingMode \ {} as get_HALF_EVEN;
+        import static java_get_field java.math.RoundingMode.HALF_EVEN: ##java.math.RoundingMode \ {} as get_HALF_EVEN;
         get_HALF_EVEN() |> RoundingMode
 
     pub def half_up(): RoundingMode = 
-        import static get java.math.RoundingMode.HALF_UP: ##java.math.RoundingMode \ {} as get_HALF_UP;
+        import static java_get_field java.math.RoundingMode.HALF_UP: ##java.math.RoundingMode \ {} as get_HALF_UP;
         get_HALF_UP() |> RoundingMode
 
     pub def unnecessary(): RoundingMode = 
-        import static get java.math.RoundingMode.UNNECESSARY: ##java.math.RoundingMode \ {} as get_UNNECESSARY;
+        import static java_get_field java.math.RoundingMode.UNNECESSARY: ##java.math.RoundingMode \ {} as get_UNNECESSARY;
         get_UNNECESSARY() |> RoundingMode
 
     pub def up(): RoundingMode = 
-        import static get java.math.RoundingMode.UP: ##java.math.RoundingMode \ {} as get_UP;
+        import static java_get_field java.math.RoundingMode.UP: ##java.math.RoundingMode \ {} as get_UP;
         get_UP() |> RoundingMode
 
 }

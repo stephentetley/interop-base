@@ -67,7 +67,7 @@ mod Interop.NIO.File.LinkOption {
         x1
 
     pub def nofollow_links(): LinkOption = 
-        import static get java.nio.file.LinkOption.NOFOLLOW_LINKS: ##java.nio.file.LinkOption \ {} as get_NOFOLLOW_LINKS;
+        import static java_get_field java.nio.file.LinkOption.NOFOLLOW_LINKS: ##java.nio.file.LinkOption \ {} as get_NOFOLLOW_LINKS;
         get_NOFOLLOW_LINKS() |> LinkOption
 
 }

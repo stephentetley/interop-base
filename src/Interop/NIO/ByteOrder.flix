@@ -33,12 +33,12 @@ mod Interop.NIO.ByteOrder {
     // Predates Enum
 
     pub def big_endian(): ByteOrder = 
-        import static get java.nio.ByteOrder.BIG_ENDIAN: ##java.nio.ByteOrder \ {} as get_BIG_ENDIAN;
+        import static java_get_field java.nio.ByteOrder.BIG_ENDIAN: ##java.nio.ByteOrder \ {} as get_BIG_ENDIAN;
         get_BIG_ENDIAN() |> ByteOrder
 
 
     pub def little_endian(): ByteOrder = 
-        import static get java.nio.ByteOrder.LITTLE_ENDIAN: ##java.nio.ByteOrder \ {} as get_LITTLE_ENDIAN;
+        import static java_get_field java.nio.ByteOrder.LITTLE_ENDIAN: ##java.nio.ByteOrder \ {} as get_LITTLE_ENDIAN;
         get_LITTLE_ENDIAN() |> ByteOrder
 
 

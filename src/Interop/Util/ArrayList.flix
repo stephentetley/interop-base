@@ -107,7 +107,7 @@ mod Interop.Util.ArrayList {
     /// Returns a new mutable ArrayList.
     ///
     pub def new(rc: Region[r]): ArrayList[a, r] \ r =
-        import new java.util.ArrayList(): ##java.util.ArrayList \ r as newArrayList;
+        import java_new java.util.ArrayList(): ##java.util.ArrayList \ r as newArrayList;
         ArrayList(rc, newArrayList())
 
     ///
@@ -115,7 +115,7 @@ mod Interop.Util.ArrayList {
     ///
     pub def newWithCapacity(rc: Region[r], initialCapacity: Int32): Result[String, ArrayList[a, r]] \ r =
         Result.tryCatch(_ -> {
-            import new java.util.ArrayList(Int32): ##java.util.ArrayList \ r as newArrayList;
+            import java_new java.util.ArrayList(Int32): ##java.util.ArrayList \ r as newArrayList;
             ArrayList(rc, newArrayList(initialCapacity))
         })
 
@@ -124,7 +124,7 @@ mod Interop.Util.ArrayList {
     ///
     pub def newWithCollection(rc: Region[r1], c: Collection[a, r]): Result[String, ArrayList[a, r1]] \ {r, r1 } =
         Result.tryCatch(_ -> {
-            import new java.util.ArrayList(##java.util.Collection): ##java.util.ArrayList \ {r, r1} as newArrayList;
+            import java_new java.util.ArrayList(##java.util.Collection): ##java.util.ArrayList \ {r, r1} as newArrayList;
             let Collection(_, c1) = c;
             ArrayList(rc, newArrayList(c1))
         })
@@ -290,7 +290,7 @@ mod Interop.Util.ArrayList {
 
 
     pub def unfoldArrayList(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): ArrayList[a, r] \ {ef, r} with GoesToJava[a] =
-        import new java.util.ArrayList(): ##java.util.ArrayList \ r as new1;
+        import java_new java.util.ArrayList(): ##java.util.ArrayList \ r as new1;
         import java.util.ArrayList.add(##java.lang.Object): Bool \ r as add1;
         def loop(st1, acc) = match f(st1) {
             case None         => ArrayList(rc, acc)

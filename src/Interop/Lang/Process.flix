@@ -46,7 +46,7 @@ mod Interop.Lang.Process {
         Process(prim)
 
     pub def new(_: Region[r]): Process[r] \ IO =
-        import new java.lang.Process(): ##java.lang.Process \ IO as new1;
+        import java_new java.lang.Process(): ##java.lang.Process \ IO as new1;
         Process(new1())
 
 

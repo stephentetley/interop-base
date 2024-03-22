@@ -84,15 +84,15 @@ mod Interop.Util.Stream.CollectorCharacteristics {
         hashCode(x1)
 
     pub def concurrent(): CollectorCharacteristics = 
-        import static get java.util.stream.Collector$Characteristics.CONCURRENT: ##java.util.stream.Collector$Characteristics \ {} as get_CONCURRENT;
+        import static java_get_field java.util.stream.Collector$Characteristics.CONCURRENT: ##java.util.stream.Collector$Characteristics \ {} as get_CONCURRENT;
         CollectorCharacteristics(get_CONCURRENT())
 
     pub def identity_finish(): CollectorCharacteristics = 
-        import static get java.util.stream.Collector$Characteristics.IDENTITY_FINISH: ##java.util.stream.Collector$Characteristics \ {} as get_IDENTITY_FINISH;
+        import static java_get_field java.util.stream.Collector$Characteristics.IDENTITY_FINISH: ##java.util.stream.Collector$Characteristics \ {} as get_IDENTITY_FINISH;
         CollectorCharacteristics(get_IDENTITY_FINISH())
 
     pub def unordered(): CollectorCharacteristics = 
-        import static get java.util.stream.Collector$Characteristics.UNORDERED: ##java.util.stream.Collector$Characteristics \ {} as get_UNORDERED;
+        import static java_get_field java.util.stream.Collector$Characteristics.UNORDERED: ##java.util.stream.Collector$Characteristics \ {} as get_UNORDERED;
         CollectorCharacteristics(get_UNORDERED())
 
 }

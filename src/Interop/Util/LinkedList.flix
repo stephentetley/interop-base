@@ -95,7 +95,7 @@ mod Interop.Util.LinkedList {
     /// Returns a new mutable LinkedList.
     ///
     pub def new(rc: Region[r]): LinkedList[a, r] \ r =
-        import new java.util.LinkedList(): ##java.util.LinkedList \ r as newLinkedList;
+        import java_new java.util.LinkedList(): ##java.util.LinkedList \ r as newLinkedList;
         LinkedList(rc, newLinkedList())
 
 
@@ -248,7 +248,7 @@ mod Interop.Util.LinkedList {
 
 
     pub def unfoldLinkedList(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): LinkedList[a, r] \ {ef, r} with GoesToJava[a] =
-        import new java.util.LinkedList(): ##java.util.LinkedList \ r as new1;
+        import java_new java.util.LinkedList(): ##java.util.LinkedList \ r as new1;
         import java.util.LinkedList.add(##java.lang.Object): Bool \ r as add1;
         def loop(st1, acc) = match f(st1) {
             case None         => LinkedList(rc, acc)

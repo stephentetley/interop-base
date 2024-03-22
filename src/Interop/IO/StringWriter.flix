@@ -69,11 +69,11 @@ mod Interop.IO.StringWriter {
         StringWriter(prim)
 
     pub def new(_: Region[r]): StringWriter[r] \ r =
-        import new java.io.StringWriter(): ##java.io.StringWriter \ r as newStringWriter;
+        import java_new java.io.StringWriter(): ##java.io.StringWriter \ r as newStringWriter;
         StringWriter(newStringWriter())
 
     pub def newWithSize(_: Region[r], initSize: Int32): StringWriter[r] \ r =
-        import new java.io.StringWriter(Int32): ##java.io.StringWriter \ r as newStringWriter;
+        import java_new java.io.StringWriter(Int32): ##java.io.StringWriter \ r as newStringWriter;
         StringWriter(newStringWriter(initSize))
 
     pub def toString(w: StringWriter[r]): String \ r=

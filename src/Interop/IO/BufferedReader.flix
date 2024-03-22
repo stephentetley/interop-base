@@ -55,13 +55,13 @@ mod Interop.IO.BufferedReader {
 
 
     pub def newWithReader(_: Region[r1], rd: Reader[r]): BufferedReader[r1] \ { r, r1 } =  
-        import new java.io.BufferedReader(##java.io.Reader): ##java.io.BufferedReader \ {r, r1} as newBufferedReader;
+        import java_new java.io.BufferedReader(##java.io.Reader): ##java.io.BufferedReader \ {r, r1} as newBufferedReader;
         let rd1 = Interop.IO.Reader.getHH(rd); 
         BufferedReader(newBufferedReader(rd1))
 
 
     pub def newWithSize(_: Region[r1], rd: Reader[r], size: Int32): BufferedReader[r1] \ { r, r1 } = 
-        import new java.io.BufferedReader(##java.io.Reader, Int32): ##java.io.BufferedReader \ {r, r1} as newBufferedReader;
+        import java_new java.io.BufferedReader(##java.io.Reader, Int32): ##java.io.BufferedReader \ {r, r1} as newBufferedReader;
         let rd1 = Interop.IO.Reader.getHH(rd);
         BufferedReader(newBufferedReader(rd1, size))
 

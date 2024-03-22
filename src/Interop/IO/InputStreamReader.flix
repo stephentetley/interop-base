@@ -51,7 +51,7 @@ mod Interop.IO.InputStreamReader {
         InputStreamReader(prim)
 
     pub def newInputStreamReader(_: Region[r1], ins: InputStream[r], cs: Charset): InputStreamReader[r1] \ { r, r1 }= 
-        import new java.io.InputStreamReader(##java.io.InputStream, ##java.nio.charset.Charset): ##java.io.InputStreamReader \ {r, r1} as newInputStreamReader;
+        import java_new java.io.InputStreamReader(##java.io.InputStream, ##java.nio.charset.Charset): ##java.io.InputStreamReader \ {r, r1} as newInputStreamReader;
         let Charset(cs1) = cs;
         let ins1 = Interop.IO.InputStream.getHH(ins);
         InputStreamReader(newInputStreamReader(ins1, cs1))

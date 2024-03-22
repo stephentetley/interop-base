@@ -121,7 +121,7 @@ mod Interop.Util.SortedMap {
     pub def unfoldViaTreeMap(rc: Region[r], 
                                 f: s -> Option[(k, v, s)] \ ef, 
                                 st: s): SortedMap[k, v, r] \ { r, ef } with GoesToJava[k], GoesToJava[v] =
-        import new java.util.TreeMap(): ##java.util.TreeMap \ r as newTreeMap;
+        import java_new java.util.TreeMap(): ##java.util.TreeMap \ r as newTreeMap;
         import java.util.TreeMap.put(##java.lang.Object, ##java.lang.Object): ##java.lang.Object \ r as put; 
         def loop(st1, ac) = match f(st1) {
             case None            => SortedMap(rc, unchecked_cast(ac as ##java.util.SortedMap))

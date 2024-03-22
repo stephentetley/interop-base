@@ -43,11 +43,11 @@ mod Interop.Math.MathContext {
 
 
     pub def new(precision: Int32): MathContext = 
-        import new java.math.MathContext(Int32): ##java.math.MathContext \ {} as new1;
+        import java_new java.math.MathContext(Int32): ##java.math.MathContext \ {} as new1;
         MathContext(new1(precision))
 
     pub def newWithRoundingMode(precision: Int32, rm: RoundingMode): MathContext = 
-        import new java.math.MathContext(Int32, ##java.math.RoundingMode): ##java.math.MathContext \ {} as new1;
+        import java_new java.math.MathContext(Int32, ##java.math.RoundingMode): ##java.math.MathContext \ {} as new1;
         let RoundingMode(rm1) = rm;
         MathContext(new1(precision, rm1))
 
@@ -64,19 +64,19 @@ mod Interop.Math.MathContext {
         equals(x1, checked_cast(y1))
 
     pub def decimal128(): MathContext = 
-        import static get java.math.MathContext.DECIMAL128: ##java.math.MathContext \ {} as get_DECIMAL128;
+        import static java_get_field java.math.MathContext.DECIMAL128: ##java.math.MathContext \ {} as get_DECIMAL128;
         MathContext(get_DECIMAL128())
 
     pub def decimal32(): MathContext = 
-        import static get java.math.MathContext.DECIMAL32: ##java.math.MathContext \ {} as get_DECIMAL32;
+        import static java_get_field java.math.MathContext.DECIMAL32: ##java.math.MathContext \ {} as get_DECIMAL32;
         MathContext(get_DECIMAL32())
 
     pub def decimal64(): MathContext = 
-        import static get java.math.MathContext.DECIMAL64: ##java.math.MathContext \ {} as get_DECIMAL64;
+        import static java_get_field java.math.MathContext.DECIMAL64: ##java.math.MathContext \ {} as get_DECIMAL64;
         MathContext(get_DECIMAL64())
 
     pub def unlimited(): MathContext = 
-        import static get java.math.MathContext.UNLIMITED: ##java.math.MathContext \ {} as get_UNLIMITED;
+        import static java_get_field java.math.MathContext.UNLIMITED: ##java.math.MathContext \ {} as get_UNLIMITED;
         MathContext(get_UNLIMITED())
 
     pub def getPrecision(c: MathContext): Int32 = 

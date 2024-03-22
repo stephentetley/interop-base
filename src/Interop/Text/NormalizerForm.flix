@@ -47,19 +47,19 @@ mod Interop.Text.NormalizerForm {
         x1
 
     pub def nfc(): NormalizerForm = 
-        import static get java.text.Normalizer$Form.NFC: ##java.text.Normalizer$Form \ {} as get_NFC;
+        import static java_get_field java.text.Normalizer$Form.NFC: ##java.text.Normalizer$Form \ {} as get_NFC;
         get_NFC() |> NormalizerForm
 
     pub def nfd(): NormalizerForm = 
-        import static get java.text.Normalizer$Form.NFD: ##java.text.Normalizer$Form \ {} as get_NFD;
+        import static java_get_field java.text.Normalizer$Form.NFD: ##java.text.Normalizer$Form \ {} as get_NFD;
         get_NFD() |> NormalizerForm
 
     pub def nfkc(): NormalizerForm = 
-        import static get java.text.Normalizer$Form.NFKC: ##java.text.Normalizer$Form \ {} as get_NFKC;
+        import static java_get_field java.text.Normalizer$Form.NFKC: ##java.text.Normalizer$Form \ {} as get_NFKC;
         get_NFKC() |> NormalizerForm
 
     pub def nfkd(): NormalizerForm = 
-        import static get java.text.Normalizer$Form.NFKD: ##java.text.Normalizer$Form \ {} as get_NFKD;
+        import static java_get_field java.text.Normalizer$Form.NFKD: ##java.text.Normalizer$Form \ {} as get_NFKD;
         get_NFKD() |> NormalizerForm
 
 }

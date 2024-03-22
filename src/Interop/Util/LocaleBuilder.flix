@@ -36,7 +36,7 @@ mod Interop.Util.LocaleBuilder {
 
 
     pub def new(_: Region[r]): LocaleBuilder[r] \ r =
-        import new java.util.Locale$Builder(): ##java.util.Locale$Builder \ r as new1;
+        import java_new java.util.Locale$Builder(): ##java.util.Locale$Builder \ r as new1;
         LocaleBuilder(new1())
 
 

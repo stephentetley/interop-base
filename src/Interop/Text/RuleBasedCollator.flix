@@ -66,7 +66,7 @@ mod Interop.Text.RuleBasedCollator {
     ///
     pub def new(_: Region[r], rules: String, init: CollatorInit[r]): Result[String, RuleBasedCollator] \ r = 
         Result.tryCatch(_ -> {
-            import new java.text.RuleBasedCollator(String): ##java.text.RuleBasedCollator \ {} as new1;
+            import java_new java.text.RuleBasedCollator(String): ##java.text.RuleBasedCollator \ {} as new1;
             let rbc1 = new1(rules);
             let c1   = unchecked_cast(rbc1 as ##java.text.Collator); 
             let _    = MutCollator(c1) |> init;

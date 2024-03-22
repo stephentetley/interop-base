@@ -84,7 +84,7 @@ mod Interop.Text.DecimalFormat {
     /// Uses the (implicit) default locale, hence in IO
     ///
     pub def new(_: Region[r], init: DecimalFormatInit[r]): Result[String, DecimalFormat] \ IO =
-        import new java.text.DecimalFormat(): ##java.text.DecimalFormat \ IO as new1;
+        import java_new java.text.DecimalFormat(): ##java.text.DecimalFormat \ IO as new1;
         let nf1 = new1();
         MutDecimalFormat(nf1) |> init |> Result.map(_ -> DecimalFormat(nf1))
     
@@ -94,7 +94,7 @@ mod Interop.Text.DecimalFormat {
     /// Uses the (implicit) default locale, hence in IO
     ///
     pub def newWithPattern(_: Region[r], patt: String, init: DecimalFormatInit[r]): Result[String, DecimalFormat] \ IO =
-        import new java.text.DecimalFormat(String): ##java.text.DecimalFormat \ IO as new1;
+        import java_new java.text.DecimalFormat(String): ##java.text.DecimalFormat \ IO as new1;
         let nf1 = new1(patt);
         MutDecimalFormat(nf1) |> init |> Result.map(_ -> DecimalFormat(nf1))
     
@@ -108,7 +108,7 @@ mod Interop.Text.DecimalFormat {
                                         patt: String, 
                                         syms: DecimalFormatSymbols, 
                                         init: DecimalFormatInit[r]): Result[String, DecimalFormat] \ r = 
-        import new java.text.DecimalFormat(String, ##java.text.DecimalFormatSymbols): ##java.text.DecimalFormat \ {} as new1;
+        import java_new java.text.DecimalFormat(String, ##java.text.DecimalFormatSymbols): ##java.text.DecimalFormat \ {} as new1;
         let syms1 = Interop.Text.DecimalFormatSymbols.getHH(syms);
         let nf1 = new1(patt, syms1);
         MutDecimalFormat(nf1) |> init |> Result.map(_ -> DecimalFormat(nf1))

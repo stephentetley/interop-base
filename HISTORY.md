@@ -1,3 +1,6 @@
+### v0.10.0
+   Updated to work with Flix 0.45.0. (Currently in progress...)
+
 ### v0.9.0
    Now depends on the package `charset-locale`, removed `Charset`, `Locale` modules and submodules.
 

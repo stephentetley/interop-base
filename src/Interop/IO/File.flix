@@ -40,11 +40,11 @@ mod Interop.IO.File {
         File(prim)
 
     pub def new(_: Region[r], path: String): File[r] \ r = 
-        import new java.io.File(String): ##java.io.File \ r as new1;
+        import java_new java.io.File(String): ##java.io.File \ r as new1;
         File(new1(path))
 
     pub def newWithChild(_: Region[r], parent: String, child: String): File[r] \ r = 
-        import new java.io.File(String, String): ##java.io.File \ r as new1;
+        import java_new java.io.File(String, String): ##java.io.File \ r as new1;
         File(new1(parent, child))
 
 

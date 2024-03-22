@@ -41,7 +41,7 @@ mod Interop.Net.URL {
 
     pub def new(s: String): Result[String, URL] = 
         Result.tryCatch(_ -> {
-            import new java.net.URL(String): ##java.net.URL \ {} as new1;
+            import java_new java.net.URL(String): ##java.net.URL \ {} as new1;
             URL(new1(s))
         })
 

@@ -45,15 +45,15 @@ mod Interop.Lang.ProcessBuilder.Redirect {
 
 
     pub def discardz(): Redirect = 
-        import static get java.lang.ProcessBuilder$Redirect.DISCARD: ##java.lang.ProcessBuilder$Redirect \ {} as get_DISCARD;
+        import static java_get_field java.lang.ProcessBuilder$Redirect.DISCARD: ##java.lang.ProcessBuilder$Redirect \ {} as get_DISCARD;
         get_DISCARD() |> Redirect
 
     pub def inherit(): Redirect = 
-        import static get java.lang.ProcessBuilder$Redirect.INHERIT: ##java.lang.ProcessBuilder$Redirect \ {} as get_INHERIT;
+        import static java_get_field java.lang.ProcessBuilder$Redirect.INHERIT: ##java.lang.ProcessBuilder$Redirect \ {} as get_INHERIT;
         get_INHERIT() |> Redirect
 
     pub def pipe(): Redirect = 
-        import static get java.lang.ProcessBuilder$Redirect.PIPE: ##java.lang.ProcessBuilder$Redirect \ {} as get_PIPE;
+        import static java_get_field java.lang.ProcessBuilder$Redirect.PIPE: ##java.lang.ProcessBuilder$Redirect \ {} as get_PIPE;
         get_PIPE() |> Redirect
 
 }

@@ -57,7 +57,7 @@ mod Interop.Text.ChoiceFormat {
     /// Returns a new ChoiceFormat.
     ///
     pub def new(pattern: String): ChoiceFormat =
-        import new java.text.ChoiceFormat(String): ##java.text.ChoiceFormat \ {} as new1;
+        import java_new java.text.ChoiceFormat(String): ##java.text.ChoiceFormat \ {} as new1;
         ChoiceFormat(new1(pattern))
 
     ///
@@ -66,7 +66,7 @@ mod Interop.Text.ChoiceFormat {
     pub def newWithChoices(limits: List[Float64], formats: List[String]): Result[String, ChoiceFormat] =
         Result.tryCatch(_ -> {
             region rc {
-                import new java.text.ChoiceFormat(Array[Float64, rc], Array[String, rc]): ##java.text.ChoiceFormat \ {} as new1;
+                import java_new java.text.ChoiceFormat(Array[Float64, rc], Array[String, rc]): ##java.text.ChoiceFormat \ {} as new1;
                 let limits1 = List.toArray(rc, limits);
                 let formats1 = List.toArray(rc, formats);
                 ChoiceFormat(new1(limits1, formats1))

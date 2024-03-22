@@ -55,7 +55,7 @@ mod Interop.IO.StringReader {
         StringReader(prim)
 
     pub def newStringReader(_: Region[r], s: String): StringReader[r] \ r =
-        import new java.io.StringReader(String): ##java.io.StringReader \ r as newStringReader;
+        import java_new java.io.StringReader(String): ##java.io.StringReader \ r as newStringReader;
         StringReader(newStringReader(s))
 
 

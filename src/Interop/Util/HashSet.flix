@@ -88,7 +88,7 @@ mod Interop.Util.HashSet {
     /// Returns a new mutable HashSet.
     ///
     pub def new(rc: Region[r]): HashSet[a, r] \ r =
-        import new java.util.HashSet(): ##java.util.HashSet \ r as newHashSet;
+        import java_new java.util.HashSet(): ##java.util.HashSet \ r as newHashSet;
         HashSet(rc, newHashSet())
 
     pub def toString(s: HashSet[a, r]): String \ r = 

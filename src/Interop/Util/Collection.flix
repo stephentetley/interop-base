@@ -180,7 +180,7 @@ mod Interop.Util.Collection {
 
     /// remove...
     pub def unfoldCollection(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): Collection[a, r] \ {ef,  r} with GoesToJava[a] =
-        import new java.util.LinkedList(): ##java.util.LinkedList \ r as new1;
+        import java_new java.util.LinkedList(): ##java.util.LinkedList \ r as new1;
         import java.util.LinkedList.add(##java.lang.Object): Bool \ r as add1;
         def loop(st1, acc) = match f(st1) {
             case None         => Collection(rc, unchecked_cast(acc as ##java.util.Collection))

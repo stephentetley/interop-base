@@ -62,11 +62,11 @@ mod Interop.Lang.Boolean {
         compare(x, y)
 
     pub def truez(): Boolean = 
-        import static get java.lang.Boolean.TRUE: ##java.lang.Boolean \ {} as get_TRUE;
+        import static java_get_field java.lang.Boolean.TRUE: ##java.lang.Boolean \ {} as get_TRUE;
         get_TRUE() |> Boolean
 
     pub def falsez(): Boolean = 
-        import static get java.lang.Boolean.FALSE: ##java.lang.Boolean \ {} as get_FALSE;
+        import static java_get_field java.lang.Boolean.FALSE: ##java.lang.Boolean \ {} as get_FALSE;
         get_FALSE() |> Boolean
 
     pub def parseBoolean(s: String): Bool = 

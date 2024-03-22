@@ -51,7 +51,7 @@ mod Interop.Lang.ProcessBuilder {
 
 
     pub def new(_: Region[r], l: List[String]): ProcessBuilder[r] \ r =
-        import new java.lang.ProcessBuilder(##java.util.List): ##java.lang.ProcessBuilder \ r as newProcessBuilder;
+        import java_new java.lang.ProcessBuilder(##java.util.List): ##java.lang.ProcessBuilder \ r as newProcessBuilder;
         let ls1 = Interop.Util.ListZ.fromFoldableViaArrayListHH(l);
         ProcessBuilder(newProcessBuilder(ls1))
 

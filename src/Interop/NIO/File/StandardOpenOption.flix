@@ -71,43 +71,43 @@ mod Interop.NIO.File.StandardOpenOption {
 
 
     pub def append(): StandardOpenOption = 
-        import static get java.nio.file.StandardOpenOption.APPEND: ##java.nio.file.StandardOpenOption \ {} as get_APPEND;
+        import static java_get_field java.nio.file.StandardOpenOption.APPEND: ##java.nio.file.StandardOpenOption \ {} as get_APPEND;
         get_APPEND() |> StandardOpenOption
 
     pub def create(): StandardOpenOption = 
-        import static get java.nio.file.StandardOpenOption.CREATE: ##java.nio.file.StandardOpenOption \ {} as get_CREATE;
+        import static java_get_field java.nio.file.StandardOpenOption.CREATE: ##java.nio.file.StandardOpenOption \ {} as get_CREATE;
         get_CREATE() |> StandardOpenOption
 
     pub def create_new(): StandardOpenOption = 
-        import static get java.nio.file.StandardOpenOption.CREATE_NEW: ##java.nio.file.StandardOpenOption \ {} as get_CREATE_NEW;
+        import static java_get_field java.nio.file.StandardOpenOption.CREATE_NEW: ##java.nio.file.StandardOpenOption \ {} as get_CREATE_NEW;
         get_CREATE_NEW() |> StandardOpenOption
 
     pub def delete_on_close(): StandardOpenOption = 
-        import static get java.nio.file.StandardOpenOption.DELETE_ON_CLOSE: ##java.nio.file.StandardOpenOption \ {} as get_DELETE_ON_CLOSE;
+        import static java_get_field java.nio.file.StandardOpenOption.DELETE_ON_CLOSE: ##java.nio.file.StandardOpenOption \ {} as get_DELETE_ON_CLOSE;
         get_DELETE_ON_CLOSE() |> StandardOpenOption
 
     pub def dsync(): StandardOpenOption = 
-        import static get java.nio.file.StandardOpenOption.DSYNC: ##java.nio.file.StandardOpenOption \ {} as get_DSYNC;
+        import static java_get_field java.nio.file.StandardOpenOption.DSYNC: ##java.nio.file.StandardOpenOption \ {} as get_DSYNC;
         get_DSYNC() |> StandardOpenOption
 
     pub def read(): StandardOpenOption = 
-        import static get java.nio.file.StandardOpenOption.READ: ##java.nio.file.StandardOpenOption \ {} as get_READ;
+        import static java_get_field java.nio.file.StandardOpenOption.READ: ##java.nio.file.StandardOpenOption \ {} as get_READ;
         get_READ() |> StandardOpenOption
 
     pub def sparse(): StandardOpenOption = 
-        import static get java.nio.file.StandardOpenOption.SPARSE: ##java.nio.file.StandardOpenOption \ {} as get_SPARSE;
+        import static java_get_field java.nio.file.StandardOpenOption.SPARSE: ##java.nio.file.StandardOpenOption \ {} as get_SPARSE;
         get_SPARSE() |> StandardOpenOption
 
     pub def sync(): StandardOpenOption = 
-        import static get java.nio.file.StandardOpenOption.SYNC: ##java.nio.file.StandardOpenOption \ {} as get_SYNC;
+        import static java_get_field java.nio.file.StandardOpenOption.SYNC: ##java.nio.file.StandardOpenOption \ {} as get_SYNC;
         get_SYNC() |> StandardOpenOption
 
     pub def truncate_existing(): StandardOpenOption = 
-        import static get java.nio.file.StandardOpenOption.TRUNCATE_EXISTING: ##java.nio.file.StandardOpenOption \ {} as get_TRUNCATE_EXISTING;
+        import static java_get_field java.nio.file.StandardOpenOption.TRUNCATE_EXISTING: ##java.nio.file.StandardOpenOption \ {} as get_TRUNCATE_EXISTING;
         get_TRUNCATE_EXISTING() |> StandardOpenOption
 
     pub def write(): StandardOpenOption = 
-        import static get java.nio.file.StandardOpenOption.WRITE: ##java.nio.file.StandardOpenOption \ {} as get_WRITE;
+        import static java_get_field java.nio.file.StandardOpenOption.WRITE: ##java.nio.file.StandardOpenOption \ {} as get_WRITE;
         get_WRITE() |> StandardOpenOption
 
 }

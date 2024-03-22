@@ -69,7 +69,7 @@ mod Interop.IO.OutputStreamWriter {
         OutputStreamWriter(prim)
 
     pub def newOutputStreamWriter(_: Region[r1], outs: OutputStream[r], cs: Charset): OutputStreamWriter[r1] \ { r, r1 } = 
-        import new java.io.OutputStreamWriter(##java.io.OutputStream, ##java.nio.charset.Charset): ##java.io.OutputStreamWriter \ {r, r1} as newOutputStreamWriter;
+        import java_new java.io.OutputStreamWriter(##java.io.OutputStream, ##java.nio.charset.Charset): ##java.io.OutputStreamWriter \ {r, r1} as newOutputStreamWriter;
         let Charset(cs1) = cs;
         let outs1 = Interop.IO.OutputStream.getHH(outs);
         OutputStreamWriter(newOutputStreamWriter(outs1, cs1))

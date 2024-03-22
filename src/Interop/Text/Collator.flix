@@ -54,33 +54,33 @@ mod Interop.Text.Collator {
 
 
     pub def no_decomposition(): Int32 = 
-        import static get java.text.Collator.NO_DECOMPOSITION: Int32 \ {} as get_NO_DECOMPOSITION;
+        import static java_get_field java.text.Collator.NO_DECOMPOSITION: Int32 \ {} as get_NO_DECOMPOSITION;
         get_NO_DECOMPOSITION()
 
     pub def canonical_decomposition(): Int32 = 
-        import static get java.text.Collator.CANONICAL_DECOMPOSITION: Int32 \ {} as get_CANONICAL_DECOMPOSITION;
+        import static java_get_field java.text.Collator.CANONICAL_DECOMPOSITION: Int32 \ {} as get_CANONICAL_DECOMPOSITION;
         get_CANONICAL_DECOMPOSITION()
 
     pub def full_decomposition(): Int32 = 
-        import static get java.text.Collator.FULL_DECOMPOSITION: Int32 \ {} as get_FULL_DECOMPOSITION;
+        import static java_get_field java.text.Collator.FULL_DECOMPOSITION: Int32 \ {} as get_FULL_DECOMPOSITION;
         get_FULL_DECOMPOSITION()
 
 
 
     pub def identical(): Int32 = 
-        import static get java.text.Collator.IDENTICAL: Int32 \ {} as get_IDENTICAL;
+        import static java_get_field java.text.Collator.IDENTICAL: Int32 \ {} as get_IDENTICAL;
         get_IDENTICAL()
 
     pub def primary(): Int32 = 
-        import static get java.text.Collator.PRIMARY: Int32 \ {} as get_PRIMARY;
+        import static java_get_field java.text.Collator.PRIMARY: Int32 \ {} as get_PRIMARY;
         get_PRIMARY()
 
     pub def secondary(): Int32 = 
-        import static get java.text.Collator.SECONDARY: Int32 \ {} as get_SECONDARY;
+        import static java_get_field java.text.Collator.SECONDARY: Int32 \ {} as get_SECONDARY;
         get_SECONDARY()
 
     pub def tertiary(): Int32 =         
-        import static get java.text.Collator.TERTIARY: Int32 \ {} as get_TERTIARY;
+        import static java_get_field java.text.Collator.TERTIARY: Int32 \ {} as get_TERTIARY;
         get_TERTIARY()
 
 

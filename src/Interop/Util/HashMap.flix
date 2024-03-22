@@ -66,7 +66,7 @@ mod Interop.Util.HashMap {
     /// Returns a new mutable HashMap.
     ///
     pub def new(rc: Region[r]): HashMap[k, v, r] \ r =
-        import new java.util.HashMap(): ##java.util.HashMap \ r as newHashMap;
+        import java_new java.util.HashMap(): ##java.util.HashMap \ r as newHashMap;
         HashMap(rc, newHashMap())
 
 

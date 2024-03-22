@@ -87,7 +87,7 @@ mod Interop.Util.VectorZ {
     /// Returns a new mutable ArrayList.
     ///
     pub def new(rc: Region[r]): VectorZ[a, r] \ r =
-        import new java.util.Vector(): ##java.util.Vector \ r as newVector;
+        import java_new java.util.Vector(): ##java.util.Vector \ r as newVector;
         VectorZ(rc, newVector())
 
     pub def equals(v1: VectorZ[a, r], v2: VectorZ[a, r]): Bool \ r =
