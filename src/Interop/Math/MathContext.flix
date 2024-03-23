@@ -42,11 +42,11 @@ mod Interop.Math.MathContext {
         MathContext(prim)
 
 
-    pub def new(precision: Int32): MathContext = 
+    pub def make(precision: Int32): MathContext = 
         import java_new java.math.MathContext(Int32): ##java.math.MathContext \ {} as new1;
         MathContext(new1(precision))
 
-    pub def newWithRoundingMode(precision: Int32, rm: RoundingMode): MathContext = 
+    pub def makeWithRoundingMode(precision: Int32, rm: RoundingMode): MathContext = 
         import java_new java.math.MathContext(Int32, ##java.math.RoundingMode): ##java.math.MathContext \ {} as new1;
         let RoundingMode(rm1) = rm;
         MathContext(new1(precision, rm1))

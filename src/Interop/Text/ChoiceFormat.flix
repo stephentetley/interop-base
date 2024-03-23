@@ -56,14 +56,14 @@ mod Interop.Text.ChoiceFormat {
     ///
     /// Returns a new ChoiceFormat.
     ///
-    pub def new(pattern: String): ChoiceFormat =
+    pub def make(pattern: String): ChoiceFormat =
         import java_new java.text.ChoiceFormat(String): ##java.text.ChoiceFormat \ {} as new1;
         ChoiceFormat(new1(pattern))
 
     ///
     /// Returns a new ChoiceFormat.
     ///
-    pub def newWithChoices(limits: List[Float64], formats: List[String]): Result[String, ChoiceFormat] =
+    pub def makeWithChoices(limits: List[Float64], formats: List[String]): Result[String, ChoiceFormat] =
         Result.tryCatch(_ -> {
             region rc {
                 import java_new java.text.ChoiceFormat(Array[Float64, rc], Array[String, rc]): ##java.text.ChoiceFormat \ {} as new1;

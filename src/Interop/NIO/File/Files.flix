@@ -29,7 +29,7 @@ mod Interop.NIO.File.Files {
     use Interop.IO.OutputStream
     use Interop.IO.OutputStream.{OutputStream}
 
-    pub def newInputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, InputStream[r]] \ IO =
+    pub def makeInputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, InputStream[r]] \ IO =
         Result.tryCatch(_ -> {
             region rc {
                 import static java.nio.file.Files.newInputStream(##java.nio.file.Path, Array[##java.nio.file.OpenOption, rc]): ##java.io.InputStream \ {IO, r};
@@ -39,7 +39,7 @@ mod Interop.NIO.File.Files {
             }
         })
 
-    pub def newOutputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, OutputStream[r]] \ {IO, r} =
+    pub def makeOutputStream(_: Region[r], path: Path, opts: List[OpenOption]): Result[String, OutputStream[r]] \ {IO, r} =
         Result.tryCatch(_ -> {
             region rc {
                 import static java.nio.file.Files.newOutputStream(##java.nio.file.Path, Array[##java.nio.file.OpenOption, rc]): ##java.io.OutputStream \ {IO, r};

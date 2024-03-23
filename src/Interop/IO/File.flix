@@ -39,11 +39,11 @@ mod Interop.IO.File {
     pub def wrapHH(_: Region[r], prim: ##java.io.File): File[r] = 
         File(prim)
 
-    pub def new(_: Region[r], path: String): File[r] \ r = 
+    pub def make(_: Region[r], path: String): File[r] \ r = 
         import java_new java.io.File(String): ##java.io.File \ r as new1;
         File(new1(path))
 
-    pub def newWithChild(_: Region[r], parent: String, child: String): File[r] \ r = 
+    pub def makeWithChild(_: Region[r], parent: String, child: String): File[r] \ r = 
         import java_new java.io.File(String, String): ##java.io.File \ r as new1;
         File(new1(parent, child))
 

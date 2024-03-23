@@ -53,7 +53,7 @@ mod Interop.Text.DecimalFormatSymbols {
     /// Returns a new DecimalFormatSymbols object.
     /// Uses the (implicit) default locale, hence in IO
     ///
-    pub def new(_: Region[r], init: DecimalFormatSymbolsInit[r]): Result[String, DecimalFormatSymbols] \ IO =
+    pub def make(_: Region[r], init: DecimalFormatSymbolsInit[r]): Result[String, DecimalFormatSymbols] \ IO =
         import java_new java.text.DecimalFormatSymbols(): ##java.text.DecimalFormatSymbols \ IO as new1;
         let dfs1 = new1();
         MutDecimalFormatSymbols(dfs1) |> init |> Result.map(_ -> DecimalFormatSymbols(dfs1))
@@ -61,7 +61,7 @@ mod Interop.Text.DecimalFormatSymbols {
     ///
     /// Returns a new DecimalFormatSymbols object derived from the locale.
     ///
-    pub def newWithLocale(_: Region[r], loc: Locale, init: DecimalFormatSymbolsInit[r]): Result[String, DecimalFormatSymbols] \ r =
+    pub def makeWithLocale(_: Region[r], loc: Locale, init: DecimalFormatSymbolsInit[r]): Result[String, DecimalFormatSymbols] \ r =
         import java_new java.text.DecimalFormatSymbols(##java.util.Locale): ##java.text.DecimalFormatSymbols \ {} as new1;
         let Locale(loc1) = loc;
         let dfs1 = new1(loc1);

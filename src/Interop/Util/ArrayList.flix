@@ -106,14 +106,14 @@ mod Interop.Util.ArrayList {
     ///
     /// Returns a new mutable ArrayList.
     ///
-    pub def new(rc: Region[r]): ArrayList[a, r] \ r =
+    pub def empty(rc: Region[r]): ArrayList[a, r] \ r =
         import java_new java.util.ArrayList(): ##java.util.ArrayList \ r as newArrayList;
         ArrayList(rc, newArrayList())
 
     ///
     /// Returns a new mutable ArrayList.
     ///
-    pub def newWithCapacity(rc: Region[r], initialCapacity: Int32): Result[String, ArrayList[a, r]] \ r =
+    pub def makeWithCapacity(rc: Region[r], initialCapacity: Int32): Result[String, ArrayList[a, r]] \ r =
         Result.tryCatch(_ -> {
             import java_new java.util.ArrayList(Int32): ##java.util.ArrayList \ r as newArrayList;
             ArrayList(rc, newArrayList(initialCapacity))
@@ -122,7 +122,7 @@ mod Interop.Util.ArrayList {
     ///
     /// Returns a new mutable ArrayList.
     ///
-    pub def newWithCollection(rc: Region[r1], c: Collection[a, r]): Result[String, ArrayList[a, r1]] \ {r, r1 } =
+    pub def makeWithCollection(rc: Region[r1], c: Collection[a, r]): Result[String, ArrayList[a, r1]] \ {r, r1 } =
         Result.tryCatch(_ -> {
             import java_new java.util.ArrayList(##java.util.Collection): ##java.util.ArrayList \ {r, r1} as newArrayList;
             let Collection(_, c1) = c;
@@ -244,18 +244,18 @@ mod Interop.Util.ArrayList {
 
     // pub def fromIterable[a: Type, t: Type -> Region -> Type, r: Region, r2: Region]
     //                     (r: Region[r2], t: t[a, r]): ArrayList[a, r2] \ { r, Write(r2) } with Iterable[t], Marshal[a] =
-    //     let als = new(r);
+    //     let als = empty(r);
     //     let iter1 = Iterable.iterator(t);
     //     Iterator.forEach(x -> discard add!(x, als), iter1);
     //     als
 
     pub def fromFoldable(rc: Region[r], t: t[a]): ArrayList[a, r] \ r with Foldable[t], GoesToJava[a] =
-        let als = new(rc);
+        let als = empty(rc);
         Foldable.forEach(x -> discard add!(x, als), t);
         als
 
     pub def fromFoldableWith(rc: Region[r], ocast: a -> ##java.lang.Object, t: t[a]): ArrayList[a, r] \ r with Foldable[t] =
-        let als = new(rc);
+        let als = empty(rc);
         Foldable.forEach(x -> discard addWith!(x, ocast, als), t);
         als
 
@@ -290,13 +290,13 @@ mod Interop.Util.ArrayList {
 
 
     pub def unfoldArrayList(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): ArrayList[a, r] \ {ef, r} with GoesToJava[a] =
-        import java_new java.util.ArrayList(): ##java.util.ArrayList \ r as new1;
+        import java_new java.util.ArrayList(): ##java.util.ArrayList \ r as newArrayList;
         import java.util.ArrayList.add(##java.lang.Object): Bool \ r as add1;
         def loop(st1, acc) = match f(st1) {
             case None         => ArrayList(rc, acc)
             case Some(o, st2) => {discard add1(acc, Interop.Flix.GoesToJava.toJavaObject(o)); loop(st2, acc)}
         };
-        loop(st, new1())
+        loop(st, newArrayList())
 
 
 }

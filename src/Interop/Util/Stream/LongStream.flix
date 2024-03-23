@@ -61,7 +61,7 @@ mod Interop.Util.Stream.LongStream {
         LongStream(rc, prim)
 
 
-    pub def newLongStream(rc: Region[r], prim: ##java.util.stream.LongStream): LongStream[ef, r] = 
+    pub def makeLongStream(rc: Region[r], prim: ##java.util.stream.LongStream): LongStream[ef, r] = 
         LongStream(rc, prim)
 
     pub def longStreamIterator(rc: Region[r1], s: LongStream[ef, r]): Iterator[Int64, ef + r + r1, r1] =

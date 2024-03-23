@@ -64,7 +64,7 @@ mod Interop.Text.RuleBasedCollator {
     ///
     /// New RuleBasedCollator.
     ///
-    pub def new(_: Region[r], rules: String, init: CollatorInit[r]): Result[String, RuleBasedCollator] \ r = 
+    pub def make(_: Region[r], rules: String, init: CollatorInit[r]): Result[String, RuleBasedCollator] \ r = 
         Result.tryCatch(_ -> {
             import java_new java.text.RuleBasedCollator(String): ##java.text.RuleBasedCollator \ {} as new1;
             let rbc1 = new1(rules);

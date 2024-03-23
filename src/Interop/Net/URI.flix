@@ -39,7 +39,7 @@ mod Interop.Net.URI {
     pub def wrapHH(prim: ##java.net.URI): URI = 
         URI(prim)
 
-    pub def new(s: String): Result[String, URI] = 
+    pub def make(s: String): Result[String, URI] = 
         Result.tryCatch(_ -> {
             import java_new java.net.URI(String): ##java.net.URI \ {} as new1;
             URI(new1(s))

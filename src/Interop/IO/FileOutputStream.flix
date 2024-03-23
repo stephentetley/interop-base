@@ -52,14 +52,14 @@ mod Interop.IO.FileOutputStream {
         FileOutputStream(prim)
 
 
-    pub def newWithFile(_: Region[r1], file: File[r]): Result[String, FileOutputStream[r1]] \ {IO, r, r1} = 
+    pub def makeWithFile(_: Region[r1], file: File[r]): Result[String, FileOutputStream[r1]] \ {IO, r, r1} = 
         Result.tryCatch(_ -> {
             import java_new java.io.FileOutputStream(##java.io.File): ##java.io.FileOutputStream \ {IO, r, r1} as newOutputStream;
             let file1 = Interop.IO.File.getHH(file);
             FileOutputStream(newOutputStream(file1))
         })
 
-    pub def newWithPath(_: Region[r], path: String): Result[String, FileOutputStream[r]] \ {IO, r} = 
+    pub def makeWithPath(_: Region[r], path: String): Result[String, FileOutputStream[r]] \ {IO, r} = 
         Result.tryCatch(_ -> {
             import java_new java.io.FileOutputStream(String): ##java.io.FileOutputStream \ {IO, r} as newOutputStream;
             FileOutputStream(newOutputStream(path))

@@ -84,9 +84,9 @@ mod Interop.Util.VectorZ {
 
 
     ///
-    /// Returns a new mutable ArrayList.
+    /// Returns a new mutable Vector.
     ///
-    pub def new(rc: Region[r]): VectorZ[a, r] \ r =
+    pub def empty(rc: Region[r]): VectorZ[a, r] \ r =
         import java_new java.util.Vector(): ##java.util.Vector \ r as newVector;
         VectorZ(rc, newVector())
 

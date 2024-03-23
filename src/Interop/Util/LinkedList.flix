@@ -94,7 +94,7 @@ mod Interop.Util.LinkedList {
     ///
     /// Returns a new mutable LinkedList.
     ///
-    pub def new(rc: Region[r]): LinkedList[a, r] \ r =
+    pub def empty(rc: Region[r]): LinkedList[a, r] \ r =
         import java_new java.util.LinkedList(): ##java.util.LinkedList \ r as newLinkedList;
         LinkedList(rc, newLinkedList())
 
@@ -214,18 +214,18 @@ mod Interop.Util.LinkedList {
 
     // pub def fromIterable[a: Type, t: Type -> Region -> Type, r: Region, r2: Region]
     //                     (r: Region[r2], t: t[a, r]): LinkedList[a, r2] \ { r, Write(r2) } with Iterable[t], Marshal[a] =
-    //     let als = new(r);
+    //     let als = empty(r);
     //     let iter1 = Iterable.iterator(t);
     //     Iterator.forEach(x -> discard add!(x, als), iter1);
     //     als
 
     pub def fromFoldable(r: Region[r], t: t[a]): LinkedList[a, r] \ r with Foldable[t], GoesToJava[a] =
-        let als = new(r);
+        let als = empty(r);
         Foldable.forEach(x -> discard add!(x, als), t);
         als
 
     pub def fromFoldableWith(r: Region[r], ocast: a -> ##java.lang.Object, t: t[a]): LinkedList[a, r] \ r with Foldable[t] =
-        let als = new(r);
+        let als = empty(r);
         Foldable.forEach(x -> discard addWith!(x, ocast, als), t);
         als
 
@@ -248,13 +248,13 @@ mod Interop.Util.LinkedList {
 
 
     pub def unfoldLinkedList(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): LinkedList[a, r] \ {ef, r} with GoesToJava[a] =
-        import java_new java.util.LinkedList(): ##java.util.LinkedList \ r as new1;
+        import java_new java.util.LinkedList(): ##java.util.LinkedList \ r as newLinkedList;
         import java.util.LinkedList.add(##java.lang.Object): Bool \ r as add1;
         def loop(st1, acc) = match f(st1) {
             case None         => LinkedList(rc, acc)
             case Some(o, st2) => {discard add1(acc, Interop.Flix.GoesToJava.toJavaObject(o)); loop(st2, acc)}
         };
-        loop(st, new1())
+        loop(st, newLinkedList())
 
 
     pub def toFlixList(fromJava: ##java.lang.Object -> a, l: LinkedList[a, r]): List[a] \ r = region rc {

@@ -28,22 +28,22 @@ mod Interop.NIO.Channels.Channels {
     use Interop.IO.OutputStream
     use Interop.IO.OutputStream.{OutputStream}
 
-    pub def newReadableByteChannel(ins: InputStream[r]): ReadableByteChannel[r] \ r = 
+    pub def makeReadableByteChannel(ins: InputStream[r]): ReadableByteChannel[r] \ r = 
         import static java.nio.channels.Channels.newChannel(##java.io.InputStream): ##java.nio.channels.ReadableByteChannel \ r;
         let InputStream(ins1) = ins;
         ReadableByteChannel(newChannel(ins1))
 
-    pub def newWritableByteChannel(outs: OutputStream[r]): WritableByteChannel[r] \ r = 
+    pub def makeWritableByteChannel(outs: OutputStream[r]): WritableByteChannel[r] \ r = 
         import static java.nio.channels.Channels.newChannel(##java.io.OutputStream): ##java.nio.channels.WritableByteChannel \ r;
         let OutputStream(outs1) = outs;
         WritableByteChannel(newChannel(outs1))
 
-    pub def newInputStream(ch: ReadableByteChannel[r]): InputStream[r] \ r = 
+    pub def makeInputStream(ch: ReadableByteChannel[r]): InputStream[r] \ r = 
         import static java.nio.channels.Channels.newInputStream(##java.nio.channels.ReadableByteChannel): ##java.io.InputStream \ r;
         let ReadableByteChannel(ch1) = ch;
         InputStream(newInputStream(ch1))
 
-    pub def newOutputStream(ch: WritableByteChannel[r]): OutputStream[r] \ r = 
+    pub def makeOutputStream(ch: WritableByteChannel[r]): OutputStream[r] \ r = 
         import static java.nio.channels.Channels.newOutputStream(##java.nio.channels.WritableByteChannel): ##java.io.OutputStream \ r;
         let WritableByteChannel(ch1) = ch;
         OutputStream(newOutputStream(ch1))

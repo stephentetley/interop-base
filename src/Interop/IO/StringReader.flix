@@ -54,7 +54,7 @@ mod Interop.IO.StringReader {
     pub def wrapHH(_: Region[r], prim: ##java.io.StringReader): StringReader[r] =
         StringReader(prim)
 
-    pub def newStringReader(_: Region[r], s: String): StringReader[r] \ r =
+    pub def makeStringReader(_: Region[r], s: String): StringReader[r] \ r =
         import java_new java.io.StringReader(String): ##java.io.StringReader \ r as newStringReader;
         StringReader(newStringReader(s))
 

@@ -180,13 +180,13 @@ mod Interop.Util.Collection {
 
     /// remove...
     pub def unfoldCollection(rc: Region[r], f: s -> Option[(a, s)] \ ef, st: s): Collection[a, r] \ {ef,  r} with GoesToJava[a] =
-        import java_new java.util.LinkedList(): ##java.util.LinkedList \ r as new1;
+        import java_new java.util.LinkedList(): ##java.util.LinkedList \ r as newCollection;
         import java.util.LinkedList.add(##java.lang.Object): Bool \ r as add1;
         def loop(st1, acc) = match f(st1) {
             case None         => Collection(rc, unchecked_cast(acc as ##java.util.Collection))
             case Some(o, st2) => {discard add1(acc, Interop.Flix.GoesToJava.toJavaObject(o)); loop(st2, acc)}
         };
-        loop(st, new1())
+        loop(st, newCollection())
 
 
 

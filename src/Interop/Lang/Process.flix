@@ -45,7 +45,7 @@ mod Interop.Lang.Process {
     pub def wrapHH(_: Region[r], prim: ##java.lang.Process): Process[r] = 
         Process(prim)
 
-    pub def new(_: Region[r]): Process[r] \ IO =
+    pub def make(_: Region[r]): Process[r] \ IO =
         import java_new java.lang.Process(): ##java.lang.Process \ IO as new1;
         Process(new1())
 

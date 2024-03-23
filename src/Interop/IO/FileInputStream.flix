@@ -54,14 +54,14 @@ mod Interop.IO.FileInputStream {
     pub def wrapHH(_: Region[r], prim: ##java.io.FileInputStream): FileInputStream[r] =
         FileInputStream(prim)
 
-    pub def newWithFile(_: Region[r1], file: File[r]): Result[String, FileInputStream[r1]] \ {IO, r} = 
+    pub def makeWithFile(_: Region[r1], file: File[r]): Result[String, FileInputStream[r1]] \ {IO, r} = 
         Result.tryCatch(_ -> {
             import java_new java.io.FileInputStream(##java.io.File): ##java.io.FileInputStream \ {r, r1, IO} as newFileInputStream;
             let file1 = Interop.IO.File.getHH(file);
             FileInputStream(newFileInputStream(file1))
         })
 
-    pub def newWithPath(_: Region[r], path: String): Result[String, FileInputStream[r]] \ {IO, r} = 
+    pub def makeWithPath(_: Region[r], path: String): Result[String, FileInputStream[r]] \ {IO, r} = 
         Result.tryCatch(_ -> {
             import java_new java.io.FileInputStream(String): ##java.io.FileInputStream \ {IO, r} as newFileInputStream;
             FileInputStream(newFileInputStream(path))

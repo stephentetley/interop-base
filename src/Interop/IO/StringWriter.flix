@@ -68,11 +68,11 @@ mod Interop.IO.StringWriter {
     pub def wrapHH(_: Region[r], prim: ##java.io.StringWriter): StringWriter[r] =
         StringWriter(prim)
 
-    pub def new(_: Region[r]): StringWriter[r] \ r =
+    pub def make(_: Region[r]): StringWriter[r] \ r =
         import java_new java.io.StringWriter(): ##java.io.StringWriter \ r as newStringWriter;
         StringWriter(newStringWriter())
 
-    pub def newWithSize(_: Region[r], initSize: Int32): StringWriter[r] \ r =
+    pub def makeWithSize(_: Region[r], initSize: Int32): StringWriter[r] \ r =
         import java_new java.io.StringWriter(Int32): ##java.io.StringWriter \ r as newStringWriter;
         StringWriter(newStringWriter(initSize))
 

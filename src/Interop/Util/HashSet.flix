@@ -87,7 +87,7 @@ mod Interop.Util.HashSet {
     ///
     /// Returns a new mutable HashSet.
     ///
-    pub def new(rc: Region[r]): HashSet[a, r] \ r =
+    pub def empty(rc: Region[r]): HashSet[a, r] \ r =
         import java_new java.util.HashSet(): ##java.util.HashSet \ r as newHashSet;
         HashSet(rc, newHashSet())
 
@@ -171,12 +171,12 @@ mod Interop.Util.HashSet {
         })
 
     pub def fromFoldable(r: Region[r], t: t[a]): HashSet[a, r] \ r with Foldable[t], GoesToJava[a] =
-        let set1 = new(r);
+        let set1 = empty(r);
         Foldable.forEach(x -> discard add!(x, set1), t);
         set1
 
     pub def fromFoldableWith(r: Region[r], ocast: a -> ##java.lang.Object, t: t[a]): HashSet[a, r] \ { r } with Foldable[t] =
-        let set1 = new(r);
+        let set1 = empty(r);
         Foldable.forEach(x -> discard addWith!(x, ocast, set1), t);
         set1
     

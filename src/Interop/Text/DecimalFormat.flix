@@ -83,7 +83,7 @@ mod Interop.Text.DecimalFormat {
     /// Returns a new DecimalFormat.
     /// Uses the (implicit) default locale, hence in IO
     ///
-    pub def new(_: Region[r], init: DecimalFormatInit[r]): Result[String, DecimalFormat] \ IO =
+    pub def make(_: Region[r], init: DecimalFormatInit[r]): Result[String, DecimalFormat] \ IO =
         import java_new java.text.DecimalFormat(): ##java.text.DecimalFormat \ IO as new1;
         let nf1 = new1();
         MutDecimalFormat(nf1) |> init |> Result.map(_ -> DecimalFormat(nf1))
@@ -93,7 +93,7 @@ mod Interop.Text.DecimalFormat {
     /// Returns a new DecimalFormat.
     /// Uses the (implicit) default locale, hence in IO
     ///
-    pub def newWithPattern(_: Region[r], patt: String, init: DecimalFormatInit[r]): Result[String, DecimalFormat] \ IO =
+    pub def makeWithPattern(_: Region[r], patt: String, init: DecimalFormatInit[r]): Result[String, DecimalFormat] \ IO =
         import java_new java.text.DecimalFormat(String): ##java.text.DecimalFormat \ IO as new1;
         let nf1 = new1(patt);
         MutDecimalFormat(nf1) |> init |> Result.map(_ -> DecimalFormat(nf1))
@@ -104,7 +104,7 @@ mod Interop.Text.DecimalFormat {
     /// Returns a new mutable DecimalFormat.
     /// Uses DecimalFormatSymbols so not in IO
     ///
-    pub def newWithDecimalFormatSymbols(_: Region[r], 
+    pub def makeWithDecimalFormatSymbols(_: Region[r], 
                                         patt: String, 
                                         syms: DecimalFormatSymbols, 
                                         init: DecimalFormatInit[r]): Result[String, DecimalFormat] \ r = 

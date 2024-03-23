@@ -65,7 +65,7 @@ mod Interop.Util.HashMap {
     ///
     /// Returns a new mutable HashMap.
     ///
-    pub def new(rc: Region[r]): HashMap[k, v, r] \ r =
+    pub def empty(rc: Region[r]): HashMap[k, v, r] \ r =
         import java_new java.util.HashMap(): ##java.util.HashMap \ r as newHashMap;
         HashMap(rc, newHashMap())
 
@@ -149,7 +149,7 @@ mod Interop.Util.HashMap {
 
 
     pub def fromFlixMap(r: Region[r], t: Map[k, v]): HashMap[k, v, r] \ r with GoesToJava[k], GoesToJava[v] =
-        let map1 = new(r);
+        let map1 = empty(r);
         Map.forEach((k, v) -> discard put!(identity, k, v, map1), t);
         map1
 
@@ -157,12 +157,12 @@ mod Interop.Util.HashMap {
                             kcast: k -> ##java.lang.Object, 
                             vcast: v -> ##java.lang.Object, 
                             t: Map[k, v]): HashMap[k, v, r] \ r =
-        let map1 = new(r);
+        let map1 = empty(r);
         Map.forEach((k, v) -> putWith!(k, v, kcast, vcast, map1), t);
         map1
 
     pub def fromFoldable(r: Region[r], t: t[(k, v)]): HashMap[k, v, r] \ r with Foldable[t], GoesToJava[k], GoesToJava[v] =
-        let map1 = new(r);
+        let map1 = empty(r);
         Foldable.forEach(match (k, v) -> discard put!(identity, k, v, map1), t);
         map1
 
@@ -170,7 +170,7 @@ mod Interop.Util.HashMap {
                                 kcast: k -> ##java.lang.Object, 
                                 vcast: v -> ##java.lang.Object, 
                                 t: t[(k, v)]): HashMap[k, v, r] \ { r} with Foldable[t] =
-        let map1 = new(r);
+        let map1 = empty(r);
         Foldable.forEach(match (k, v) -> putWith!(k, v, kcast, vcast, map1), t);
         map1
 

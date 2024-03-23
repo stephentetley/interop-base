@@ -39,7 +39,7 @@ mod Interop.Net.URL {
     pub def wrapHH(prim: ##java.net.URL): URL = 
         URL(prim)
 
-    pub def new(s: String): Result[String, URL] = 
+    pub def make(s: String): Result[String, URL] = 
         Result.tryCatch(_ -> {
             import java_new java.net.URL(String): ##java.net.URL \ {} as new1;
             URL(new1(s))
